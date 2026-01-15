@@ -43,3 +43,17 @@ def client(db):
     with TestClient(app) as c:
         yield c
     app.dependency_overrides.clear()
+
+
+@pytest.fixture(scope="function")
+def db_document(client):
+    """Create a document for testing related entities."""
+    response = client.post(
+        "/api/v1/documents",
+        json={
+            "title": "Test Document",
+            "doc_type": "paper",
+            "content": {},
+        },
+    )
+    return response.json()
