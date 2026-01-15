@@ -25,18 +25,18 @@ npm ci --silent
 npm run build
 
 echo "3. Installing systemd services..."
-cp "$DEPLOY_DIR/scribe-backend.service" /etc/systemd/system/
-cp "$DEPLOY_DIR/scribe-frontend.service" /etc/systemd/system/
+cp "$DEPLOY_DIR/illanes00-scribe-backend.service" /etc/systemd/system/
+cp "$DEPLOY_DIR/illanes00-scribe-frontend.service" /etc/systemd/system/
 systemctl daemon-reload
 
 echo "4. Enabling and starting services..."
-systemctl enable scribe-backend scribe-frontend
-systemctl restart scribe-backend scribe-frontend
+systemctl enable illanes00-scribe-backend illanes00-scribe-frontend
+systemctl restart illanes00-scribe-backend illanes00-scribe-frontend
 
 echo "5. Checking service status..."
 sleep 3
-systemctl status scribe-backend --no-pager || true
-systemctl status scribe-frontend --no-pager || true
+systemctl status illanes00-scribe-backend --no-pager || true
+systemctl status illanes00-scribe-frontend --no-pager || true
 
 echo "6. Updating Caddy configuration..."
 if ! grep -q "scribe.illanes00.cl" /etc/caddy/Caddyfile 2>/dev/null; then
