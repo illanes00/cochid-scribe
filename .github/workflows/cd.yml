@@ -29,7 +29,7 @@ jobs:
       - name: Build frontend
         run: |
           cd $PROJECT_PATH/frontend
-          npm ci --silent
+          npm install --silent
           npm run build
 
       - name: Restart services
