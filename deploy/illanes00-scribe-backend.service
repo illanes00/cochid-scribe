@@ -8,7 +8,7 @@ Group=illanes00
 WorkingDirectory=/srv/projects/illanes00-scribe/backend
 Environment=PYTHONUNBUFFERED=1
 EnvironmentFile=/srv/projects/illanes00-scribe/.env
-ExecStart=/usr/bin/python3 -m uvicorn app.main:app --host 127.0.0.1 --port 8132
+ExecStart=/srv/projects/illanes00-scribe/backend/venv/bin/uvicorn app.main:app --host 127.0.0.1 --port 8132
 Restart=always
 RestartSec=3
 

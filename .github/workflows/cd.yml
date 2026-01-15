@@ -1,0 +1,47 @@
+name: CD - Deploy to vps-deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+env:
+  PROJECT_PATH: /srv/projects/illanes00-scribe
+
+jobs:
+  deploy:
+    runs-on: [self-hosted, vps-deploy]
+    
+    steps:
+      - name: Pull latest code
+        run: |
+          set -euo pipefail
+          cd $PROJECT_PATH
+          git fetch origin
+          git reset --hard origin/main
+
+      - name: Install backend dependencies
+        run: |
+          cd $PROJECT_PATH/backend
+          source venv/bin/activate
+          pip install -r requirements.txt --quiet
+
+      - name: Build frontend
+        run: |
+          cd $PROJECT_PATH/frontend
+          npm ci --silent
+          npm run build
+
+      - name: Restart services
+        run: |
+          # Restart user-level systemd services
+          systemctl --user restart scribe-backend scribe-frontend
+          sleep 3
+
+      - name: Health check
+        run: |
+          # Check backend health
+          curl -sf http://localhost:8132/health || exit 1
+          # Check frontend responds
+          curl -sf -o /dev/null -w '%{http_code}' http://localhost:8133/ | grep -q '200' || exit 1
+          echo "Health checks passed"
