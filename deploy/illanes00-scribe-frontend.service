@@ -1,20 +1,17 @@
 [Unit]
-Description=Scribe Frontend - Next.js
+Description=illanes00-scribe-frontend (Next.js)
 After=network.target
 
 [Service]
-Type=simple
 User=illanes00
 Group=illanes00
 WorkingDirectory=/srv/projects/illanes00-scribe/frontend
-EnvironmentFile=/srv/projects/illanes00-scribe/.env
 Environment=NODE_ENV=production
 Environment=PORT=8133
-
-ExecStart=/usr/bin/npm start
-
+Environment=PATH=/home/illanes00/.nvm/versions/node/v22.19.0/bin:/usr/bin:/bin
+ExecStart=/home/illanes00/.nvm/versions/node/v22.19.0/bin/npm start
 Restart=always
-RestartSec=5
+RestartSec=3
 
 [Install]
 WantedBy=multi-user.target

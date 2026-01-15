@@ -1,18 +1,16 @@
 [Unit]
-Description=Scribe API - FastAPI Backend
+Description=illanes00-scribe-backend (FastAPI)
 After=network.target
 
 [Service]
-Type=simple
 User=illanes00
 Group=illanes00
 WorkingDirectory=/srv/projects/illanes00-scribe/backend
+Environment=PYTHONUNBUFFERED=1
 EnvironmentFile=/srv/projects/illanes00-scribe/.env
-
 ExecStart=/usr/bin/python3 -m uvicorn app.main:app --host 127.0.0.1 --port 8132
-
 Restart=always
-RestartSec=5
+RestartSec=3
 
 [Install]
 WantedBy=multi-user.target
