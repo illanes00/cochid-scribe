@@ -1,0 +1,318 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* illanes v3 CSS Variables */
+:root {
+  /* Base colors */
+  --bg: #f6f7f8;
+  --paper: #ffffff;
+  --ink: #0f1113;
+  --muted: #4b5563;
+  --line: #d5dbe3;
+  --line-strong: #a9b3c2;
+
+  /* Semantic colors */
+  --c-green: #0b7e59;
+  --c-blue: #3763e0;
+  --c-amber: #d97706;
+  --c-red: #c0352b;
+
+  /* Spacing */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+}
+
+/* Dark mode */
+html.dark {
+  --bg: #0f1113;
+  --paper: #1a1d21;
+  --ink: #f6f7f8;
+  --muted: #9ca3af;
+  --line: #2d3239;
+  --line-strong: #4b5563;
+}
+
+/* Base styles - illanes v3 principles */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: 'IBM Plex Sans', system-ui, sans-serif;
+  font-size: 1rem;
+  line-height: 1.62;
+  color: var(--ink);
+  background-color: var(--bg);
+  margin: 0;
+  padding: 0;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 800;
+  line-height: 1.2;
+  margin: 0;
+}
+
+h1 { font-size: clamp(1.75rem, 3.2vw, 2.25rem); }
+h2 { font-size: 1.5rem; }
+h3 { font-size: 1.25rem; }
+
+a {
+  color: var(--c-blue);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+code, pre {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* No shadows, no border-radius, no gradients - illanes v3 */
+* {
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+/* Tiptap Editor Styles */
+.tiptap-editor {
+  min-height: 400px;
+  padding: var(--space-6);
+  background: var(--paper);
+  border: 1px solid var(--line);
+  outline: none;
+}
+
+.tiptap-editor:focus {
+  border-color: var(--c-blue);
+}
+
+.tiptap-editor p {
+  margin: 0 0 var(--space-4) 0;
+}
+
+.tiptap-editor h1,
+.tiptap-editor h2,
+.tiptap-editor h3 {
+  margin: var(--space-6) 0 var(--space-3) 0;
+}
+
+.tiptap-editor ul,
+.tiptap-editor ol {
+  padding-left: var(--space-6);
+  margin: 0 0 var(--space-4) 0;
+}
+
+.tiptap-editor blockquote {
+  border-left: 3px solid var(--c-blue);
+  padding-left: var(--space-4);
+  margin: var(--space-4) 0;
+  color: var(--muted);
+}
+
+.tiptap-editor code {
+  background: var(--bg);
+  padding: 0.125rem 0.25rem;
+  font-size: 0.875rem;
+}
+
+.tiptap-editor pre {
+  background: var(--bg);
+  padding: var(--space-4);
+  overflow-x: auto;
+}
+
+/* Placeholder */
+.tiptap-editor p.is-editor-empty:first-child::before {
+  color: var(--muted);
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+/* Claim highlight */
+.claim-highlight {
+  background-color: rgba(55, 99, 224, 0.1);
+  border-bottom: 2px solid var(--c-blue);
+}
+
+.claim-highlight.verified {
+  background-color: rgba(11, 126, 89, 0.1);
+  border-bottom-color: var(--c-green);
+}
+
+.claim-highlight.rejected {
+  background-color: rgba(192, 53, 43, 0.1);
+  border-bottom-color: var(--c-red);
+}
+
+/* Citation */
+.citation {
+  color: var(--c-blue);
+  cursor: pointer;
+}
+
+.citation:hover {
+  text-decoration: underline;
+}
+
+/* Components - illanes v3 style */
+@layer components {
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-2) var(--space-4);
+    font-size: 0.875rem;
+    font-weight: 600;
+    border: 1px solid var(--line);
+    background: var(--paper);
+    color: var(--ink);
+    cursor: pointer;
+    transition: border-color 0.15s;
+  }
+
+  .btn:hover {
+    border-color: var(--line-strong);
+  }
+
+  .btn-primary {
+    background: var(--c-blue);
+    color: white;
+    border-color: var(--c-blue);
+  }
+
+  .btn-primary:hover {
+    background: #2952c8;
+    border-color: #2952c8;
+  }
+
+  .btn-success {
+    background: var(--c-green);
+    color: white;
+    border-color: var(--c-green);
+  }
+
+  .btn-danger {
+    background: var(--c-red);
+    color: white;
+    border-color: var(--c-red);
+  }
+
+  .btn-sm {
+    padding: var(--space-1) var(--space-2);
+    font-size: 0.8125rem;
+  }
+
+  .card {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    padding: var(--space-5);
+  }
+
+  .card-header {
+    font-weight: 700;
+    font-size: 1.125rem;
+    margin-bottom: var(--space-4);
+    padding-bottom: var(--space-3);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .input {
+    width: 100%;
+    padding: var(--space-2) var(--space-3);
+    font-size: 1rem;
+    border: 1px solid var(--line);
+    background: var(--paper);
+    color: var(--ink);
+  }
+
+  .input:focus {
+    outline: none;
+    border-color: var(--c-blue);
+  }
+
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    padding: var(--space-1) var(--space-2);
+    font-size: 0.75rem;
+    font-weight: 600;
+    border: 1px solid;
+  }
+
+  .pill-ok {
+    color: var(--c-green);
+    border-color: var(--c-green);
+    background: rgba(11, 126, 89, 0.1);
+  }
+
+  .pill-warn {
+    color: var(--c-amber);
+    border-color: var(--c-amber);
+    background: rgba(217, 119, 6, 0.1);
+  }
+
+  .pill-err {
+    color: var(--c-red);
+    border-color: var(--c-red);
+    background: rgba(192, 53, 43, 0.1);
+  }
+
+  .pill-info {
+    color: var(--c-blue);
+    border-color: var(--c-blue);
+    background: rgba(55, 99, 224, 0.1);
+  }
+
+  /* Status dots */
+  .dot {
+    width: 8px;
+    height: 8px;
+    display: inline-block;
+  }
+
+  .dot-ok { background: var(--c-green); }
+  .dot-warn { background: var(--c-amber); }
+  .dot-err { background: var(--c-red); }
+
+  /* Containers */
+  .container {
+    max-width: 1160px;
+    margin: 0 auto;
+    padding: 0 var(--space-4);
+  }
+
+  .container-narrow {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 var(--space-4);
+  }
+
+  .container-wide {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 var(--space-4);
+  }
+}
