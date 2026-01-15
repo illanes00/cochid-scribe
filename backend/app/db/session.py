@@ -40,7 +40,7 @@ def get_db() -> Generator[Session, None, None]:
 def init_db() -> None:
     """Initialize database tables."""
     # Import all models to register them with Base
-    from app.models import bibliography, claim, document  # noqa: F401
+    from app.models import bibliography, claim, dataset, document, note  # noqa: F401
 
     Base.metadata.create_all(bind=engine)
     print(f"Database initialized: {settings.database_url}")

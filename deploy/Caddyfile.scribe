@@ -1,0 +1,31 @@
+# Scribe - Academic Writing Platform
+# Add this to /etc/caddy/Caddyfile or include it
+
+scribe.illanes00.cl {
+    # API routes go to backend
+    handle /api/* {
+        reverse_proxy localhost:8132
+    }
+
+    # Health check
+    handle /health {
+        reverse_proxy localhost:8132
+    }
+
+    # Everything else goes to frontend
+    handle {
+        reverse_proxy localhost:8133
+    }
+
+    # Security headers
+    header {
+        X-Content-Type-Options nosniff
+        X-Frame-Options DENY
+        Referrer-Policy strict-origin-when-cross-origin
+    }
+
+    # Logging
+    log {
+        output file /var/log/caddy/scribe.log
+    }
+}

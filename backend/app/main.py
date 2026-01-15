@@ -1,12 +1,25 @@
 """Main FastAPI application."""
 
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.v1 import bibliography, charts, claims, datasets, documents, graph, llm, notes
 from app.config import get_settings
+from app.db.session import init_db
 
 settings = get_settings()
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Lifespan context manager for startup/shutdown events."""
+    # Startup
+    init_db()
+    yield
+    # Shutdown (nothing to do)
+
 
 app = FastAPI(
     title=settings.app_name,
@@ -15,6 +28,7 @@ app = FastAPI(
     docs_url="/api/docs",
     redoc_url="/api/redoc",
     openapi_url="/api/openapi.json",
+    lifespan=lifespan,
 )
 
 # CORS
