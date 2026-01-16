@@ -16,9 +16,13 @@ dependencies = [
     "python-jose[cryptography]>=3.3.0",
     "passlib[bcrypt]>=1.7.0",
     "bibtexparser>=1.4.0",
-    "spacy>=3.7.0",
-    "sentence-transformers>=2.7.0",
     "httpx>=0.27.0",
+    "pypandoc>=1.13",
+    "pypandoc-binary>=1.13",
+    "google-api-python-client>=2.130.0",
+    "google-auth>=2.30.0",
+    "google-auth-oauthlib>=1.2.0",
+    "google-auth-httplib2>=0.2.0",
 ]
 
 [project.optional-dependencies]

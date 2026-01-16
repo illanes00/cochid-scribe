@@ -97,10 +97,99 @@ code, pre {
 /* Tiptap Editor Styles */
 .tiptap-editor {
   min-height: 400px;
-  padding: var(--space-6);
+  padding: var(--doc-padding, var(--space-6));
   background: var(--paper);
   border: 1px solid var(--line);
   outline: none;
+  font-family: var(--doc-font, 'IBM Plex Sans', system-ui, sans-serif);
+  font-size: var(--doc-size, 1rem);
+  line-height: var(--doc-line-height, 1.65);
+  max-width: var(--doc-width, 820px);
+}
+
+.editor-shell {
+  height: 100%;
+}
+
+.editor-shell .tiptap-editor {
+  margin: 0 auto;
+}
+
+.doc-style-modern .tiptap-editor {
+  --doc-font: 'IBM Plex Sans', system-ui, sans-serif;
+  --doc-line-height: 1.65;
+}
+
+.doc-style-classic .tiptap-editor {
+  --doc-font: Georgia, 'Times New Roman', serif;
+  --doc-line-height: 1.75;
+  --doc-size: 1.02rem;
+}
+
+.doc-style-compact .tiptap-editor {
+  --doc-font: 'IBM Plex Sans', system-ui, sans-serif;
+  --doc-line-height: 1.45;
+  --doc-size: 0.95rem;
+}
+
+.doc-format-a4 .tiptap-editor {
+  --doc-width: 820px;
+}
+
+.doc-format-letter .tiptap-editor {
+  --doc-width: 800px;
+}
+
+.doc-format-wide .tiptap-editor {
+  --doc-width: 100%;
+}
+
+.doc-font-sans .tiptap-editor {
+  --doc-font: 'IBM Plex Sans', system-ui, sans-serif;
+}
+
+.doc-font-serif .tiptap-editor {
+  --doc-font: Georgia, 'Times New Roman', serif;
+}
+
+.doc-font-mono .tiptap-editor {
+  --doc-font: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+}
+
+.doc-size-sm .tiptap-editor {
+  --doc-size: 0.92rem;
+}
+
+.doc-size-md .tiptap-editor {
+  --doc-size: 1rem;
+}
+
+.doc-size-lg .tiptap-editor {
+  --doc-size: 1.08rem;
+}
+
+.doc-leading-tight .tiptap-editor {
+  --doc-line-height: 1.45;
+}
+
+.doc-leading-normal .tiptap-editor {
+  --doc-line-height: 1.65;
+}
+
+.doc-leading-relaxed .tiptap-editor {
+  --doc-line-height: 1.85;
+}
+
+.doc-margin-narrow .tiptap-editor {
+  --doc-padding: var(--space-4);
+}
+
+.doc-margin-normal .tiptap-editor {
+  --doc-padding: var(--space-6);
+}
+
+.doc-margin-wide .tiptap-editor {
+  --doc-padding: var(--space-8);
 }
 
 .tiptap-editor:focus {
@@ -142,6 +231,59 @@ code, pre {
   overflow-x: auto;
 }
 
+.tiptap-editor img {
+  max-width: 100%;
+  height: auto;
+}
+
+.tiptap-editor img[data-align="left"] {
+  margin-left: 0;
+  margin-right: auto;
+}
+
+.tiptap-editor img[data-align="center"] {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.tiptap-editor img[data-align="right"] {
+  margin-left: auto;
+  margin-right: 0;
+}
+
+.tiptap-editor img[data-width="small"] {
+  max-width: 35%;
+}
+
+.tiptap-editor img[data-width="medium"] {
+  max-width: 60%;
+}
+
+.tiptap-editor img[data-width="large"] {
+  max-width: 85%;
+}
+
+.tiptap-editor img[data-width="full"] {
+  max-width: 100%;
+}
+
+/* Tiptap tables */
+.tiptap-editor table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: var(--space-3) 0;
+}
+.tiptap-editor th,
+.tiptap-editor td {
+  border: 1px solid var(--line);
+  padding: var(--space-2);
+  vertical-align: top;
+}
+.tiptap-editor th {
+  background: var(--bg);
+  font-weight: 600;
+}
+
 /* Placeholder */
 .tiptap-editor p.is-editor-empty:first-child::before {
   color: var(--muted);
@@ -167,6 +309,32 @@ code, pre {
   border-bottom-color: var(--c-red);
 }
 
+/* Comment highlight */
+.comment-mark {
+  background-color: rgba(255, 193, 7, 0.2);
+  border-bottom: 2px solid var(--c-amber);
+}
+
+.comment-mark[data-comment-resolved="true"] {
+  background-color: rgba(11, 126, 89, 0.1);
+  border-bottom-color: var(--c-green);
+}
+
+/* Track changes */
+.change-mark {
+  padding: 0 0.1rem;
+}
+
+.change-insert {
+  background-color: rgba(11, 126, 89, 0.15);
+  border-bottom: 1px dashed var(--c-green);
+}
+
+.change-delete {
+  background-color: rgba(192, 53, 43, 0.12);
+  text-decoration: line-through;
+}
+
 /* Citation */
 .citation {
   color: var(--c-blue);
@@ -175,6 +343,155 @@ code, pre {
 
 .citation:hover {
   text-decoration: underline;
+}
+
+/* Slash command menu */
+.slash-command-menu {
+  position: fixed;
+  z-index: 50;
+  width: 320px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  box-shadow: none;
+}
+
+.slash-command-list {
+  list-style: none;
+  padding: var(--space-2);
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.slash-command-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2);
+  font-size: 0.85rem;
+  color: var(--ink);
+  background: transparent;
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+
+.slash-command-item.is-active {
+  background: var(--bg);
+  border-color: var(--line);
+}
+
+.slash-command-icon {
+  width: 24px;
+  text-align: center;
+  color: var(--muted);
+}
+
+.slash-command-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-align: left;
+}
+
+.slash-command-title {
+  font-weight: 600;
+}
+
+.slash-command-description {
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+.slash-command-empty {
+  color: var(--muted);
+  font-size: 0.8rem;
+  padding: var(--space-2);
+}
+
+/* Version diff */
+.diff-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  border-top: 1px solid var(--line);
+}
+
+.diff-col {
+  min-height: 200px;
+  max-height: 320px;
+  overflow: auto;
+  border-right: 1px solid var(--line);
+}
+
+.diff-col:last-child {
+  border-right: none;
+}
+
+.diff-title {
+  font-size: 0.75rem;
+  color: var(--muted);
+  padding: var(--space-2);
+  border-bottom: 1px solid var(--line);
+  background: var(--bg);
+}
+
+.diff-body {
+  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  padding: var(--space-2);
+}
+
+.diff-line {
+  white-space: pre-wrap;
+  padding: 0 2px;
+}
+
+.diff-removed {
+  background: rgba(192, 53, 43, 0.12);
+}
+
+.diff-added {
+  background: rgba(11, 126, 89, 0.12);
+}
+
+.diff-muted {
+  color: var(--muted);
+}
+
+/* Comment gutter */
+.comment-gutter {
+  position: absolute;
+  top: 0;
+  right: 8px;
+  width: 24px;
+  height: 100%;
+  pointer-events: none;
+}
+
+.comment-marker {
+  position: absolute;
+  right: 0;
+  width: 22px;
+  height: 22px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 0.7rem;
+  pointer-events: auto;
+}
+
+.comment-marker.is-resolved {
+  background: var(--bg);
+  color: var(--muted);
+  border-color: var(--c-green);
+}
+
+/* Mention highlight */
+.comment-mention {
+  color: var(--c-blue);
+  font-weight: 600;
 }
 
 /* Components - illanes v3 style */

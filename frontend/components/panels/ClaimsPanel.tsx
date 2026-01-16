@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Claim, claimsApi } from '@/lib/api'
+import { Claim, claimsApi, llmApi } from '@/lib/api'
 
 interface ClaimsPanelProps {
   documentSlug: string
@@ -34,6 +34,8 @@ export function ClaimsPanel({ documentSlug, onClaimClick }: ClaimsPanelProps) {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [filter, setFilter] = useState<string>('all')
+  const [extracting, setExtracting] = useState(false)
+  const [extractError, setExtractError] = useState<string | null>(null)
 
   useEffect(() => {
     loadClaims()
@@ -70,6 +72,20 @@ export function ClaimsPanel({ documentSlug, onClaimClick }: ClaimsPanelProps) {
       setClaims((prev) => prev.filter((c) => c.claim_id !== claimId))
     } catch (err) {
       console.error('Failed to delete claim:', err)
+    }
+  }
+
+  async function handleExtractClaims() {
+    try {
+      if (!documentSlug || documentSlug === 'new') return
+      setExtracting(true)
+      setExtractError(null)
+      await llmApi.extractClaimsForDocument(documentSlug)
+      await loadClaims()
+    } catch (err) {
+      setExtractError(err instanceof Error ? err.message : 'Failed to extract claims')
+    } finally {
+      setExtracting(false)
     }
   }
 
@@ -116,6 +132,9 @@ export function ClaimsPanel({ documentSlug, onClaimClick }: ClaimsPanelProps) {
           <span className="text-muted">·</span>
           <span className="text-c-red">{stats.rejected} rejected</span>
         </div>
+        {extractError && (
+          <div className="text-xs text-c-red mt-2">{extractError}</div>
+        )}
       </div>
 
       {/* Filter */}
@@ -213,9 +232,18 @@ export function ClaimsPanel({ documentSlug, onClaimClick }: ClaimsPanelProps) {
 
       {/* Add Claim Button */}
       <div className="p-3 border-t border-line">
-        <button className="w-full py-2 text-sm text-center border border-line hover:bg-bg">
-          + Add Claim
-        </button>
+        <div className="flex flex-col gap-2">
+          <button
+            className="w-full py-2 text-sm text-center border border-line hover:bg-bg"
+            onClick={handleExtractClaims}
+            disabled={extracting}
+          >
+            {extracting ? 'Extracting...' : 'Extract Claims'}
+          </button>
+          <button className="w-full py-2 text-sm text-center border border-line hover:bg-bg">
+            + Add Claim
+          </button>
+        </div>
       </div>
     </div>
   )

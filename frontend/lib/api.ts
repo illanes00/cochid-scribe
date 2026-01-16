@@ -6,14 +6,21 @@
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
 
 // Types
+export interface DocumentContent {
+  html?: string
+  json?: Record<string, unknown>
+}
+
 export interface Document {
   id: string
   slug: string
   title: string
   doc_type: 'paper' | 'thesis' | 'policy'
-  content: Record<string, unknown>
+  content: DocumentContent
   markdown?: string
   front_matter: Record<string, unknown>
+  source_provider?: string | null
+  source_id?: string | null
   status: 'draft' | 'review' | 'final'
   version: string
   created_at: string
@@ -25,7 +32,7 @@ export interface Document {
 export interface DocumentCreate {
   title: string
   doc_type?: 'paper' | 'thesis' | 'policy'
-  content?: Record<string, unknown>
+  content?: DocumentContent
   markdown?: string
   front_matter?: Record<string, unknown>
   slug?: string
@@ -33,7 +40,7 @@ export interface DocumentCreate {
 
 export interface DocumentUpdate {
   title?: string
-  content?: Record<string, unknown>
+  content?: DocumentContent
   markdown?: string
   front_matter?: Record<string, unknown>
   status?: 'draft' | 'review' | 'final'
@@ -134,7 +141,7 @@ export interface Note {
   id: string
   slug: string
   title: string
-  content: Record<string, unknown>
+  content: DocumentContent
   markdown: string
   note_type: 'idea' | 'summary' | 'quote' | 'concept'
   tags: string[]
@@ -146,7 +153,7 @@ export interface Note {
 export interface NoteCreate {
   title: string
   slug?: string
-  content?: Record<string, unknown>
+  content?: DocumentContent
   markdown?: string
   note_type?: 'idea' | 'summary' | 'quote' | 'concept'
   tags?: string[]
@@ -154,7 +161,7 @@ export interface NoteCreate {
 
 export interface NoteUpdate {
   title?: string
-  content?: Record<string, unknown>
+  content?: DocumentContent
   markdown?: string
   note_type?: 'idea' | 'summary' | 'quote' | 'concept'
   tags?: string[]
@@ -261,6 +268,67 @@ export interface ChartList {
   per_page: number
 }
 
+export type ExportFormat = 'markdown' | 'html' | 'docx' | 'pptx' | 'latex' | 'pdf'
+
+export interface ExportJob {
+  id: string
+  document_id: string
+  format: ExportFormat
+  status: 'pending' | 'running' | 'done' | 'failed'
+  output_path?: string | null
+  error?: string | null
+  created_at: string
+  updated_at: string
+}
+
+export interface IntegrationStatus {
+  provider: string
+  connected: boolean
+  expires_at?: string | null
+}
+
+export interface Comment {
+  id: string
+  document_id: string
+  parent_id?: string | null
+  anchor_id?: string | null
+  provider: string
+  external_id?: string | null
+  author?: string | null
+  content: string
+  quote?: string | null
+  resolved: boolean
+  created_at: string
+  updated_at: string
+}
+
+export interface CommentCreate {
+  content: string
+  quote?: string
+  parent_id?: string | null
+  anchor_id?: string | null
+}
+
+export interface CommentUpdate {
+  resolved?: boolean
+}
+
+export interface DocumentVersion {
+  id: string
+  document_id: string
+  label?: string | null
+  created_at: string
+}
+
+export interface DocumentVersionDetail extends DocumentVersion {
+  content: Record<string, unknown>
+  markdown?: string | null
+}
+
+export interface DocumentVersionCreate {
+  label?: string | null
+}
+
 // API Error
 export class ApiError extends Error {
   constructor(
@@ -323,6 +391,31 @@ export const documentsApi = {
   delete: (slug: string): Promise<void> =>
     fetchApi(`/api/v1/documents/${slug}`, {
       method: 'DELETE',
+    }),
+
+  import: async (file: File, title?: string, docType?: string): Promise<Document> => {
+    const formData = new FormData()
+    formData.append('file', file)
+    if (title) formData.append('title', title)
+    if (docType) formData.append('doc_type', docType)
+
+    const response = await fetch(`${API_BASE}/api/v1/documents/import`, {
+      method: 'POST',
+      body: formData,
+    })
+
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({ detail: 'Import failed' }))
+      throw new ApiError(response.status, error.detail || 'Import failed')
+    }
+
+    return response.json()
+  },
+
+  export: (slug: string, format: ExportFormat): Promise<ExportJob> =>
+    fetchApi(`/api/v1/documents/${slug}/export`, {
+      method: 'POST',
+      body: JSON.stringify({ format }),
     }),
 }
 
@@ -408,6 +501,11 @@ export const llmApi = {
     fetchApi('/api/v1/llm/improve-hedging', {
       method: 'POST',
       body: JSON.stringify({ text }),
+    }),
+
+  extractClaimsForDocument: (slug: string): Promise<{ created: number }> =>
+    fetchApi(`/api/v1/llm/extract-claims-document/${slug}`, {
+      method: 'POST',
     }),
 }
 
@@ -534,6 +632,128 @@ export const chartsApi = {
     }),
 }
 
+// Exports API
+export const exportsApi = {
+  get: (jobId: string): Promise<ExportJob> =>
+    fetchApi(`/api/v1/exports/${jobId}`),
+
+  downloadUrl: (jobId: string): string =>
+    `${API_BASE}/api/v1/exports/${jobId}/download`,
+}
+
+// Assets API
+export const assetsApi = {
+  upload: async (file: File): Promise<{ url: string; name: string }> => {
+    const formData = new FormData()
+    formData.append('file', file)
+
+    const response = await fetch(`${API_BASE}/api/v1/assets/upload`, {
+      method: 'POST',
+      body: formData,
+    })
+
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({ detail: 'Upload failed' }))
+      throw new ApiError(response.status, error.detail || 'Upload failed')
+    }
+
+    return response.json()
+  },
+}
+
+// Integrations API
+export const integrationsApi = {
+  googleStatus: (): Promise<IntegrationStatus> =>
+    fetchApi('/api/v1/integrations/google/status'),
+
+  googleAuthUrl: (): Promise<{ url: string }> =>
+    fetchApi('/api/v1/integrations/google/auth-url', { method: 'POST' }),
+}
+
+// Google import/export API
+export const googleApi = {
+  importDoc: (
+    fileId: string,
+    title?: string,
+    format?: 'html' | 'docx'
+  ): Promise<{ slug: string; title: string }> =>
+    fetchApi('/api/v1/google/docs/import', {
+      method: 'POST',
+      body: JSON.stringify({ file_id: fileId, title, format }),
+    }),
+
+  exportDoc: (slug: string, folderId?: string): Promise<{ file_id: string; url?: string }> =>
+    fetchApi('/api/v1/google/docs/export', {
+      method: 'POST',
+      body: JSON.stringify({ slug, folder_id: folderId }),
+    }),
+
+  exportSlides: (slug: string, folderId?: string): Promise<{ file_id: string; url?: string }> =>
+    fetchApi('/api/v1/google/slides/export', {
+      method: 'POST',
+      body: JSON.stringify({ slug, folder_id: folderId }),
+    }),
+
+  importSlides: (
+    fileId: string,
+    title?: string,
+    format?: 'pptx'
+  ): Promise<{ slug: string; title: string }> =>
+    fetchApi('/api/v1/google/slides/import', {
+      method: 'POST',
+      body: JSON.stringify({ file_id: fileId, title, format }),
+    }),
+}
+
+// Comments API
+export const commentsApi = {
+  list: (slug: string): Promise<Comment[]> =>
+    fetchApi(`/api/v1/comments/document/${slug}`),
+
+  create: (slug: string, data: CommentCreate): Promise<Comment> =>
+    fetchApi(`/api/v1/comments/document/${slug}`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+
+  syncGoogle: (slug: string): Promise<{ created: number }> =>
+    fetchApi(`/api/v1/comments/document/${slug}/sync`, {
+      method: 'POST',
+    }),
+
+  createGoogle: (slug: string, data: CommentCreate): Promise<Comment> =>
+    fetchApi(`/api/v1/comments/document/${slug}/google`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+
+  update: (commentId: string, data: CommentUpdate): Promise<Comment> =>
+    fetchApi(`/api/v1/comments/${commentId}`, {
+      method: 'PATCH',
+      body: JSON.stringify(data),
+    }),
+}
+
+// Versions API
+export const versionsApi = {
+  list: (slug: string): Promise<DocumentVersion[]> =>
+    fetchApi(`/api/v1/documents/${slug}/versions`),
+
+  create: (slug: string, data: DocumentVersionCreate): Promise<DocumentVersion> =>
+    fetchApi(`/api/v1/documents/${slug}/versions`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+
+  restore: (slug: string, versionId: string): Promise<Document> =>
+    fetchApi(`/api/v1/documents/${slug}/versions/${versionId}/restore`, {
+      method: 'POST',
+    }),
+
+  get: (slug: string, versionId: string): Promise<DocumentVersionDetail> =>
+    fetchApi(`/api/v1/documents/${slug}/versions/${versionId}`),
+}
+
 // Export all APIs
 export const api = {
   documents: documentsApi,
@@ -544,6 +764,12 @@ export const api = {
   graph: graphApi,
   datasets: datasetsApi,
   charts: chartsApi,
+  exports: exportsApi,
+  assets: assetsApi,
+  integrations: integrationsApi,
+  google: googleApi,
+  comments: commentsApi,
+  versions: versionsApi,
 }
 
 export default api

@@ -4,8 +4,24 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from pathlib import Path
 
-from app.api.v1 import bibliography, charts, claims, datasets, documents, graph, llm, notes
+from app.api.v1 import (
+    assets,
+    bibliography,
+    charts,
+    claims,
+    comments,
+    datasets,
+    documents,
+    exports,
+    google,
+    graph,
+    integrations,
+    llm,
+    notes,
+)
 from app.config import get_settings
 from app.db.session import init_db
 
@@ -49,12 +65,23 @@ app.include_router(notes.router, prefix="/api/v1/notes", tags=["notes"])
 app.include_router(graph.router, prefix="/api/v1/graph", tags=["graph"])
 app.include_router(datasets.router, prefix="/api/v1/datasets", tags=["datasets"])
 app.include_router(charts.router, prefix="/api/v1/charts", tags=["charts"])
+app.include_router(exports.router, prefix="/api/v1/exports", tags=["exports"])
+app.include_router(integrations.router, prefix="/api/v1/integrations", tags=["integrations"])
+app.include_router(google.router, prefix="/api/v1/google", tags=["google"])
+app.include_router(comments.router, prefix="/api/v1/comments", tags=["comments"])
+app.include_router(assets.router, prefix="/api/v1/assets", tags=["assets"])
+
+# Static uploads
+UPLOAD_DIR = Path(__file__).resolve().parents[1] / "uploads"
+UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
+app.mount("/uploads", StaticFiles(directory=str(UPLOAD_DIR)), name="uploads")
 
 
 @app.get("/health")
 async def health_check():
     """Health check endpoint for infrastructure monitoring."""
-    return {"status": "healthy", "service": settings.app_name}
+    import socket
+    return {"status": "healthy", "service": settings.app_name, "host": socket.gethostname()}
 
 
 @app.get("/api/health")

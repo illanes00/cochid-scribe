@@ -95,8 +95,8 @@ export default function NotePage() {
   )
 
   const handleContentChange = useCallback(
-    (html: string) => {
-      updateNote({ content: { type: 'doc', content: [] }, markdown: html })
+    (payload: { html: string; json: Record<string, unknown> }) => {
+      updateNote({ content: { html: payload.html, json: payload.json } })
     },
     [updateNote]
   )
@@ -237,7 +237,7 @@ export default function NotePage() {
         {/* Editor */}
         <main className="flex-1 overflow-hidden">
           <TiptapEditor
-            content={note?.markdown || ''}
+            content={note?.content || note?.markdown || ''}
             onChange={handleContentChange}
             onReady={handleEditorReady}
             placeholder="Start writing your note..."

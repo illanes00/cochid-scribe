@@ -34,6 +34,8 @@ class Document(Base):
     status = Column(String(20), default="draft")
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    source_provider = Column(String(50), nullable=True)
+    source_id = Column(String(200), nullable=True)
 
     # Relationships
     claims = relationship("Claim", back_populates="document", cascade="all, delete-orphan")

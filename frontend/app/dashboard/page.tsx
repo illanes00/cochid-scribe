@@ -14,6 +14,7 @@ import {
   RefreshCw,
 } from 'lucide-react'
 import { Document, documentsApi } from '@/lib/api'
+import { templates } from '@/lib/templates'
 
 export default function Dashboard() {
   const router = useRouter()
@@ -23,6 +24,8 @@ export default function Dashboard() {
   const [searchQuery, setSearchQuery] = useState('')
   const [page, setPage] = useState(1)
   const [total, setTotal] = useState(0)
+  const [importing, setImporting] = useState(false)
+  const [templateMenuOpen, setTemplateMenuOpen] = useState(false)
   const perPage = 20
 
   useEffect(() => {
@@ -70,6 +73,33 @@ export default function Dashboard() {
     }
   }
 
+  async function handleCreateFromTemplate(templateId: string) {
+    const template = templates.find((t) => t.id === templateId)
+    if (!template) return
+    try {
+      const doc = await documentsApi.create({
+        title: template.title,
+        doc_type: template.doc_type,
+        markdown: template.markdown,
+      })
+      router.push(`/editor/${doc.slug}`)
+    } catch (err) {
+      alert('Failed to create document from template')
+    }
+  }
+
+  async function handleImport(file: File) {
+    try {
+      setImporting(true)
+      const doc = await documentsApi.import(file)
+      router.push(`/editor/${doc.slug}`)
+    } catch (err) {
+      alert('Failed to import document')
+    } finally {
+      setImporting(false)
+    }
+  }
+
   const filteredDocs = documents.filter((doc) =>
     doc.title.toLowerCase().includes(searchQuery.toLowerCase())
   )
@@ -88,6 +118,9 @@ export default function Dashboard() {
             </Link>
             <Link href="/data" className="text-sm text-muted hover:text-ink">
               Data
+            </Link>
+            <Link href="/integrations" className="text-sm text-muted hover:text-ink">
+              Integrations
             </Link>
           </div>
         </div>
@@ -112,6 +145,47 @@ export default function Dashboard() {
             >
               <RefreshCw size={16} className={loading ? 'animate-spin' : ''} />
             </button>
+            <label className="btn" title="Import">
+              <input
+                type="file"
+                accept=".md,.markdown,.docx,.pptx"
+                className="hidden"
+                onChange={(e) => {
+                  const file = e.target.files?.[0]
+                  if (file) {
+                    handleImport(file)
+                    e.currentTarget.value = ''
+                  }
+                }}
+              />
+              {importing ? 'Importing...' : 'Import'}
+            </label>
+            <div className="relative">
+              <button
+                onClick={() => setTemplateMenuOpen((v) => !v)}
+                className="btn"
+              >
+                <FileText size={16} className="mr-2" />
+                New from template
+              </button>
+              {templateMenuOpen && (
+                <div className="absolute right-0 mt-2 w-64 bg-paper border border-line shadow-sm z-10">
+                  {templates.map((template) => (
+                    <button
+                      key={template.id}
+                      className="w-full text-left px-3 py-2 text-sm hover:bg-bg"
+                      onClick={() => {
+                        setTemplateMenuOpen(false)
+                        handleCreateFromTemplate(template.id)
+                      }}
+                    >
+                      <div className="font-medium text-ink">{template.title}</div>
+                      <div className="text-xs text-muted">{template.description}</div>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
             <button onClick={handleCreate} className="btn btn-primary">
               <Plus size={16} className="mr-2" />
               New Document

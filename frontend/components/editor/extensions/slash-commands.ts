@@ -73,7 +73,154 @@ const slashCommands: SlashCommandItem[] = [
       editor.chain().focus().deleteRange(range).setHorizontalRule().run()
     },
   },
+  {
+    title: 'Task List',
+    description: 'Create a checklist',
+    icon: '☑',
+    command: ({ editor, range }) => {
+      editor.chain().focus().deleteRange(range).toggleTaskList().run()
+    },
+  },
+  {
+    title: 'Image',
+    description: 'Insert an image by URL',
+    icon: '🖼',
+    command: ({ editor, range }) => {
+      const url = window.prompt('Image URL')
+      if (!url) return
+      editor.chain().focus().deleteRange(range).setImage({ src: url }).run()
+    },
+  },
+  {
+    title: 'Table',
+    description: 'Insert a 3x3 table',
+    icon: '▦',
+    command: ({ editor, range }) => {
+      editor
+        .chain()
+        .focus()
+        .deleteRange(range)
+        .insertTable({ rows: 3, cols: 3, withHeaderRow: true })
+        .run()
+    },
+  },
 ]
+
+function createSlashMenu() {
+  let component: HTMLDivElement | null = null
+  let list: HTMLUListElement | null = null
+  let items: SlashCommandItem[] = []
+  let selectedIndex = 0
+
+  const renderItems = (props: { command: (item: SlashCommandItem) => void }) => {
+    if (!list) return
+    list.innerHTML = ''
+
+    if (items.length === 0) {
+      const empty = document.createElement('li')
+      empty.className = 'slash-command-empty'
+      empty.textContent = 'No results'
+      list.appendChild(empty)
+      return
+    }
+
+    items.forEach((item, index) => {
+      const button = document.createElement('button')
+      button.type = 'button'
+      button.className = `slash-command-item ${index === selectedIndex ? 'is-active' : ''}`
+      button.addEventListener('click', () => props.command(item))
+
+      const icon = document.createElement('span')
+      icon.className = 'slash-command-icon'
+      icon.textContent = item.icon
+
+      const content = document.createElement('span')
+      content.className = 'slash-command-content'
+
+      const title = document.createElement('span')
+      title.className = 'slash-command-title'
+      title.textContent = item.title
+
+      const description = document.createElement('span')
+      description.className = 'slash-command-description'
+      description.textContent = item.description
+
+      content.appendChild(title)
+      content.appendChild(description)
+      button.appendChild(icon)
+      button.appendChild(content)
+      list.appendChild(button)
+    })
+  }
+
+  return {
+    onStart: (props: any) => {
+      items = props.items
+      selectedIndex = 0
+      component = document.createElement('div')
+      component.className = 'slash-command-menu'
+
+      list = document.createElement('ul')
+      list.className = 'slash-command-list'
+      component.appendChild(list)
+
+      document.body.appendChild(component)
+      renderItems(props)
+
+      if (props.clientRect) {
+        const rect = props.clientRect()
+        component.style.left = `${Math.min(rect.left, window.innerWidth - 320)}px`
+        component.style.top = `${rect.bottom + 6}px`
+      }
+    },
+    onUpdate(props: any) {
+      items = props.items
+      selectedIndex = 0
+      renderItems(props)
+
+      if (props.clientRect && component) {
+        const rect = props.clientRect()
+        component.style.left = `${Math.min(rect.left, window.innerWidth - 320)}px`
+        component.style.top = `${rect.bottom + 6}px`
+      }
+    },
+    onKeyDown(props: any) {
+      if (!items.length) return false
+
+      if (props.event.key === 'ArrowDown') {
+        selectedIndex = (selectedIndex + 1) % items.length
+        renderItems(props)
+        return true
+      }
+
+      if (props.event.key === 'ArrowUp') {
+        selectedIndex = (selectedIndex - 1 + items.length) % items.length
+        renderItems(props)
+        return true
+      }
+
+      if (props.event.key === 'Enter') {
+        props.command(items[selectedIndex])
+        return true
+      }
+
+      if (props.event.key === 'Escape') {
+        return true
+      }
+
+      return false
+    },
+    onExit() {
+      if (component) {
+        component.remove()
+      }
+      component = null
+      list = null
+      items = []
+      selectedIndex = 0
+    },
+  }
+}
 
 export const SlashCommands = Extension.create({
   name: 'slashCommands',
@@ -85,6 +232,7 @@ export const SlashCommands = Extension.create({
         command: ({ editor, range, props }: { editor: any; range: any; props: SlashCommandItem }) => {
           props.command({ editor, range })
         },
+        render: createSlashMenu,
       } as Partial<SuggestionOptions>,
     }
   },

@@ -103,6 +103,9 @@ export default function KnowledgeBasePage() {
             <Link href="/data" className="text-sm text-muted hover:text-ink">
               Data
             </Link>
+            <Link href="/integrations" className="text-sm text-muted hover:text-ink">
+              Integrations
+            </Link>
           </div>
         </div>
       </header>

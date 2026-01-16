@@ -3,20 +3,59 @@
 import re
 from datetime import datetime
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, BackgroundTasks, Depends, Form, HTTPException, Query, UploadFile
 from sqlalchemy.orm import Session
 
-from app.db.session import get_db
+from app.db.session import SessionLocal, get_db
 from app.models.claim import Claim
 from app.models.document import Document
+from app.models.document_version import DocumentVersion
+from app.models.export import ExportJob
 from app.schemas.document import (
     DocumentCreate,
     DocumentList,
     DocumentResponse,
     DocumentUpdate,
 )
+from app.schemas.document_version import (
+    DocumentVersionCreate,
+    DocumentVersionDetail,
+    DocumentVersionResponse,
+)
+from app.schemas.export import ExportJobResponse, ExportRequest
+from app.services.content_links import update_document_links
+from app.services.conversion import (
+    get_default_template,
+    html_to_markdown,
+    markdown_to_binary,
+    markdown_to_html,
+    temp_output_path,
+)
 
 router = APIRouter()
+
+
+def normalize_content(
+    content: dict | None,
+    markdown: str | None,
+) -> tuple[dict, str | None]:
+    """Ensure content has HTML and markdown is available."""
+    content = content or {}
+    html = content.get("html") if isinstance(content, dict) else None
+
+    if html and not markdown:
+        try:
+            markdown = html_to_markdown(html)
+        except Exception:
+            markdown = markdown or ""
+    elif markdown and not html:
+        try:
+            html = markdown_to_html(markdown)
+            content["html"] = html
+        except Exception:
+            pass
+
+    return content, markdown
 
 
 def slugify(text: str) -> str:
@@ -88,19 +127,120 @@ async def create_document(
         # Append timestamp to make unique
         slug = f"{slug}-{int(datetime.utcnow().timestamp())}"
 
+    content, markdown = normalize_content(data.content, data.markdown)
+
     doc = Document(
         slug=slug,
         title=data.title,
         doc_type=data.doc_type,
-        content=data.content,
-        markdown=data.markdown,
+        content=content,
+        markdown=markdown,
         front_matter=data.front_matter,
+        source_provider=data.source_provider,
+        source_id=data.source_id,
     )
     db.add(doc)
     db.commit()
     db.refresh(doc)
 
+    update_document_links(db, doc.id, "document", content.get("json"), content.get("html"))
+
     return get_document_response(doc, db)
+
+
+@router.get("/{slug}/versions", response_model=list[DocumentVersionResponse])
+async def list_document_versions(
+    slug: str,
+    db: Session = Depends(get_db),
+):
+    """List version snapshots for a document."""
+    doc = db.query(Document).filter(Document.slug == slug).first()
+    if not doc:
+        raise HTTPException(status_code=404, detail="Document not found")
+
+    versions = (
+        db.query(DocumentVersion)
+        .filter(DocumentVersion.document_id == doc.id)
+        .order_by(DocumentVersion.created_at.desc())
+        .all()
+    )
+    return versions
+
+
+@router.post("/{slug}/versions", response_model=DocumentVersionResponse, status_code=201)
+async def create_document_version(
+    slug: str,
+    data: DocumentVersionCreate,
+    db: Session = Depends(get_db),
+):
+    """Create a version snapshot for a document."""
+    doc = db.query(Document).filter(Document.slug == slug).first()
+    if not doc:
+        raise HTTPException(status_code=404, detail="Document not found")
+
+    label = data.label or datetime.utcnow().strftime("snapshot-%Y%m%d-%H%M%S")
+    version = DocumentVersion(
+        document_id=doc.id,
+        label=label,
+        content=doc.content or {},
+        markdown=doc.markdown,
+    )
+    db.add(version)
+    db.commit()
+    db.refresh(version)
+    return version
+
+
+@router.post("/{slug}/versions/{version_id}/restore", response_model=DocumentResponse)
+async def restore_document_version(
+    slug: str,
+    version_id: str,
+    db: Session = Depends(get_db),
+):
+    """Restore a document to a previous version snapshot."""
+    doc = db.query(Document).filter(Document.slug == slug).first()
+    if not doc:
+        raise HTTPException(status_code=404, detail="Document not found")
+
+    version = (
+        db.query(DocumentVersion)
+        .filter(DocumentVersion.id == version_id, DocumentVersion.document_id == doc.id)
+        .first()
+    )
+    if not version:
+        raise HTTPException(status_code=404, detail="Version not found")
+
+    doc.content = version.content or {}
+    doc.markdown = version.markdown
+    doc.version = version.label or doc.version
+    db.commit()
+    db.refresh(doc)
+
+    update_document_links(db, doc.id, "document", doc.content.get("json"), doc.content.get("html"))
+
+    return get_document_response(doc, db)
+
+
+@router.get("/{slug}/versions/{version_id}", response_model=DocumentVersionDetail)
+async def get_document_version(
+    slug: str,
+    version_id: str,
+    db: Session = Depends(get_db),
+):
+    """Get a specific document version snapshot."""
+    doc = db.query(Document).filter(Document.slug == slug).first()
+    if not doc:
+        raise HTTPException(status_code=404, detail="Document not found")
+
+    version = (
+        db.query(DocumentVersion)
+        .filter(DocumentVersion.id == version_id, DocumentVersion.document_id == doc.id)
+        .first()
+    )
+    if not version:
+        raise HTTPException(status_code=404, detail="Version not found")
+
+    return version
 
 
 @router.get("/{slug}", response_model=DocumentResponse)
@@ -128,11 +268,27 @@ async def update_document(
         raise HTTPException(status_code=404, detail="Document not found")
 
     update_data = data.model_dump(exclude_unset=True)
+    if "content" in update_data or "markdown" in update_data:
+        content, markdown = normalize_content(
+            update_data.get("content"),
+            update_data.get("markdown"),
+        )
+        update_data["content"] = content
+        update_data["markdown"] = markdown
     for field, value in update_data.items():
         setattr(doc, field, value)
 
     db.commit()
     db.refresh(doc)
+
+    if "content" in update_data:
+        update_document_links(
+            db,
+            doc.id,
+            "document",
+            update_data.get("content", {}).get("json"),
+            update_data.get("content", {}).get("html"),
+        )
 
     return get_document_response(doc, db)
 
@@ -149,3 +305,152 @@ async def delete_document(
 
     db.delete(doc)
     db.commit()
+
+
+@router.post("/import", response_model=DocumentResponse, status_code=201)
+async def import_document(
+    file: UploadFile,
+    title: str | None = Form(default=None),
+    doc_type: str | None = Form(default=None),
+    db: Session = Depends(get_db),
+):
+    """Import a document file (md, docx, pptx) into Scribe."""
+    import tempfile
+
+    import pypandoc
+
+    raw = await file.read()
+    filename = file.filename or "document"
+    suffix = filename.split(".")[-1].lower()
+    base_title = title or filename.rsplit(".", 1)[0]
+
+    content_html = ""
+    markdown = ""
+
+    if suffix in {"md", "markdown"}:
+        markdown = raw.decode("utf-8", errors="ignore")
+        content_html = markdown_to_html(markdown)
+    elif suffix in {"docx", "pptx"}:
+        try:
+            with tempfile.NamedTemporaryFile(suffix=f".{suffix}", delete=False) as tmp:
+                tmp.write(raw)
+                tmp_path = tmp.name
+            content_html = pypandoc.convert_file(tmp_path, "html", format=suffix)
+            try:
+                import os
+
+                os.remove(tmp_path)
+            except OSError:
+                pass
+        except Exception:
+            content_html = ""
+    else:
+        markdown = raw.decode("utf-8", errors="ignore")
+        content_html = markdown_to_html(markdown)
+
+    content = {"html": content_html}
+    content, markdown = normalize_content(content, markdown)
+
+    slug = slugify(base_title)
+    existing = db.query(Document).filter(Document.slug == slug).first()
+    if existing:
+        slug = f"{slug}-{int(datetime.utcnow().timestamp())}"
+
+    doc = Document(
+        slug=slug,
+        title=base_title,
+        doc_type=doc_type or "paper",
+        content=content,
+        markdown=markdown,
+        front_matter={},
+    )
+    db.add(doc)
+    db.commit()
+    db.refresh(doc)
+
+    update_document_links(db, doc.id, "document", content.get("json"), content.get("html"))
+
+    return get_document_response(doc, db)
+
+
+def run_export_job(job_id: str, doc_id: str, export_format: str) -> None:
+    """Execute an export job and update status."""
+    db = SessionLocal()
+    try:
+        job = db.query(ExportJob).filter(ExportJob.id == job_id).first()
+        doc = db.query(Document).filter(Document.id == doc_id).first()
+        if not job or not doc:
+            return
+        job.status = "running"
+        db.commit()
+
+        html = ""
+        if isinstance(doc.content, dict):
+            html = str(doc.content.get("html") or "")
+
+        try:
+            if export_format == "markdown":
+                output = doc.markdown or html_to_markdown(html or "")
+                output_path = temp_output_path(".md")
+                output_path.write_text(output, encoding="utf-8")
+            elif export_format == "html":
+                output = html or markdown_to_html(doc.markdown or "")
+                output_path = temp_output_path(".html")
+                output_path.write_text(output, encoding="utf-8")
+            elif export_format == "latex":
+                output_path = temp_output_path(".tex")
+                markdown_to_binary(
+                    doc.markdown or html_to_markdown(html or ""),
+                    "latex",
+                    output_path,
+                    extra_args=["--template", str(get_default_template())],
+                )
+            elif export_format == "docx":
+                output_path = temp_output_path(".docx")
+                markdown_to_binary(doc.markdown or html_to_markdown(html or ""), "docx", output_path)
+            elif export_format == "pptx":
+                output_path = temp_output_path(".pptx")
+                markdown_to_binary(doc.markdown or html_to_markdown(html or ""), "pptx", output_path)
+            elif export_format == "pdf":
+                output_path = temp_output_path(".pdf")
+                markdown_to_binary(
+                    doc.markdown or html_to_markdown(html or ""),
+                    "pdf",
+                    output_path,
+                    extra_args=["--template", str(get_default_template())],
+                )
+            else:
+                raise ValueError("Unsupported export format")
+
+            job.status = "done"
+            job.output_path = str(output_path)
+            job.error = None
+        except Exception as exc:
+            job.status = "failed"
+            job.error = str(exc)
+
+        db.commit()
+    finally:
+        db.close()
+
+
+@router.post("/{slug}/export", response_model=ExportJobResponse)
+async def export_document(
+    slug: str,
+    request: ExportRequest,
+    background_tasks: BackgroundTasks,
+    db: Session = Depends(get_db),
+):
+    """Export a document to a given format as a background job."""
+    doc = db.query(Document).filter(Document.slug == slug).first()
+    if not doc:
+        raise HTTPException(status_code=404, detail="Document not found")
+
+    job = ExportJob(document_id=doc.id, format=request.format, status="pending")
+    db.add(job)
+    db.commit()
+    db.refresh(job)
+
+    background_tasks.add_task(run_export_job, job.id, doc.id, request.format)
+
+    return job

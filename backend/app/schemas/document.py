@@ -15,6 +15,8 @@ class DocumentBase(BaseModel):
     content: dict[str, Any] = Field(default_factory=dict)
     markdown: str | None = None
     front_matter: dict[str, Any] = Field(default_factory=dict)
+    source_provider: str | None = None
+    source_id: str | None = None
 
 
 class DocumentCreate(DocumentBase):
@@ -32,6 +34,8 @@ class DocumentUpdate(BaseModel):
     markdown: str | None = None
     front_matter: dict[str, Any] | None = None
     status: Literal["draft", "review", "final"] | None = None
+    source_provider: str | None = None
+    source_id: str | None = None
 
 
 class DocumentResponse(DocumentBase):

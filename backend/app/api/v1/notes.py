@@ -1,7 +1,5 @@
 """Notes API endpoints for Knowledge Base."""
 
-import re
-
 from fastapi import APIRouter, Depends, HTTPException, Query
 from slugify import slugify
 from sqlalchemy import or_
@@ -16,6 +14,8 @@ from app.schemas.note import (
     NoteResponse,
     NoteUpdate,
 )
+from app.services.content_links import update_document_links
+from app.services.conversion import html_to_markdown, markdown_to_html
 
 router = APIRouter()
 
@@ -37,24 +37,27 @@ def generate_unique_slug(db: Session, title: str, existing_slug: str | None = No
         counter += 1
 
 
-def extract_wiki_links(content: dict) -> list[str]:
-    """Extract [[wiki links]] from Tiptap content."""
-    links = []
+def normalize_content(
+    content: dict | None,
+    markdown: str | None,
+) -> tuple[dict, str | None]:
+    """Ensure content has HTML and markdown is available."""
+    content = content or {}
+    html = content.get("html") if isinstance(content, dict) else None
 
-    def traverse(node):
-        if isinstance(node, dict):
-            # Check for text nodes with wiki link pattern
-            if node.get("type") == "text" and node.get("text"):
-                # Find [[link]] patterns
-                matches = re.findall(r"\[\[([^\]]+)\]\]", node["text"])
-                links.extend(matches)
+    if html and not markdown:
+        try:
+            markdown = html_to_markdown(html)
+        except Exception:
+            markdown = markdown or ""
+    elif markdown and not html:
+        try:
+            html = markdown_to_html(markdown)
+            content["html"] = html
+        except Exception:
+            pass
 
-            # Traverse children
-            for child in node.get("content", []):
-                traverse(child)
-
-    traverse(content)
-    return links
+    return content, markdown
 
 
 @router.get("", response_model=NoteList)
@@ -131,11 +134,13 @@ async def create_note(
     """Create a new note."""
     slug = note_in.slug or generate_unique_slug(db, note_in.title)
 
+    content, markdown = normalize_content(note_in.content, note_in.markdown)
+
     note = Note(
         slug=slug,
         title=note_in.title,
-        content=note_in.content,
-        markdown=note_in.markdown,
+        content=content,
+        markdown=markdown or "",
         note_type=note_in.note_type,
         tags=note_in.tags,
     )
@@ -144,22 +149,7 @@ async def create_note(
     db.commit()
     db.refresh(note)
 
-    # Process wiki links and create Link records
-    wiki_links = extract_wiki_links(note_in.content)
-    for linked_slug in wiki_links:
-        # Find target note by slug
-        target_note = db.query(Note).filter(Note.slug == linked_slug).first()
-        if target_note:
-            link = Link(
-                source_type="note",
-                source_id=note.id,
-                target_type="note",
-                target_id=target_note.id,
-                link_type="reference",
-            )
-            db.add(link)
-
-    db.commit()
+    update_document_links(db, note.id, "note", content.get("json"), content.get("html"))
 
     return NoteResponse(
         id=note.id,
@@ -217,35 +207,27 @@ async def update_note(
         raise HTTPException(status_code=404, detail="Note not found")
 
     update_data = note_in.model_dump(exclude_unset=True)
+    if "content" in update_data or "markdown" in update_data:
+        content, markdown = normalize_content(
+            update_data.get("content"),
+            update_data.get("markdown"),
+        )
+        update_data["content"] = content
+        update_data["markdown"] = markdown
     for field, value in update_data.items():
         setattr(note, field, value)
 
     db.commit()
     db.refresh(note)
 
-    # Update links if content changed
     if "content" in update_data:
-        # Remove old outgoing links
-        db.query(Link).filter(
-            Link.source_type == "note",
-            Link.source_id == note.id,
-        ).delete()
-
-        # Create new links
-        wiki_links = extract_wiki_links(update_data["content"])
-        for linked_slug in wiki_links:
-            target_note = db.query(Note).filter(Note.slug == linked_slug).first()
-            if target_note:
-                link = Link(
-                    source_type="note",
-                    source_id=note.id,
-                    target_type="note",
-                    target_id=target_note.id,
-                    link_type="reference",
-                )
-                db.add(link)
-
-        db.commit()
+        update_document_links(
+            db,
+            note.id,
+            "note",
+            update_data.get("content", {}).get("json"),
+            update_data.get("content", {}).get("html"),
+        )
 
     backlink_count = (
         db.query(Link)
