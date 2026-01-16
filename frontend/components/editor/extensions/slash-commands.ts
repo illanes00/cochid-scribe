@@ -114,13 +114,17 @@ function createSlashMenu() {
 
   const renderItems = (props: { command: (item: SlashCommandItem) => void }) => {
     if (!list) return
-    list.innerHTML = ''
+    const listEl = list
+    // Clear existing items by removing all children
+    while (listEl.firstChild) {
+      listEl.removeChild(listEl.firstChild)
+    }
 
     if (items.length === 0) {
       const empty = document.createElement('li')
       empty.className = 'slash-command-empty'
       empty.textContent = 'No results'
-      list.appendChild(empty)
+      listEl.appendChild(empty)
       return
     }
 
@@ -149,7 +153,7 @@ function createSlashMenu() {
       content.appendChild(description)
       button.appendChild(icon)
       button.appendChild(content)
-      list.appendChild(button)
+      listEl.appendChild(button)
     })
   }
 
