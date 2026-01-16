@@ -494,6 +494,171 @@ code, pre {
   font-weight: 600;
 }
 
+/* Espacio Público Theme */
+:root {
+  --ep-primary: #1a365d;      /* Azul oscuro institucional */
+  --ep-secondary: #c53030;    /* Rojo institucional */
+  --ep-accent: #2b6cb0;       /* Azul medio */
+  --ep-light: #ebf8ff;        /* Azul claro para fondos */
+}
+
+/* Slide Editor Styles */
+.slide-editor-container {
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.slide-navigator {
+  background: var(--paper);
+}
+
+.slide-thumbnail {
+  cursor: pointer;
+  transition: border-color 0.15s, background-color 0.15s;
+}
+
+.slide-thumbnail:hover {
+  border-color: var(--line-strong);
+}
+
+.slide-preview {
+  background: linear-gradient(to bottom, var(--paper), var(--bg));
+}
+
+/* Presentation mode - full screen slides */
+.presentation-mode {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.presentation-mode .slide-editor-container {
+  max-width: 90vw;
+  max-height: 90vh;
+  width: 100%;
+  height: auto;
+}
+
+/* Slide layouts */
+.slide-layout-title {
+  background: linear-gradient(135deg, var(--ep-light) 0%, var(--paper) 100%);
+}
+
+.slide-layout-content .slide-heading,
+.slide-layout-twocol .slide-heading,
+.slide-layout-image .slide-heading {
+  border-bottom: 2px solid var(--ep-secondary);
+  padding-bottom: 0.5rem;
+}
+
+/* Slide navigation controls */
+.slide-nav-controls {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  padding: 0.5rem 1rem;
+  z-index: 101;
+}
+
+/* Slide content scrollbar */
+.slide-layout-content::-webkit-scrollbar {
+  width: 4px;
+}
+
+.slide-layout-content::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+.slide-layout-content::-webkit-scrollbar-thumb {
+  background: var(--line-strong);
+}
+
+/* Document with Espacio Público branding */
+.doc-theme-ep .tiptap-editor {
+  --doc-font: 'IBM Plex Sans', system-ui, sans-serif;
+}
+
+.doc-theme-ep .tiptap-editor h1,
+.doc-theme-ep .tiptap-editor h2,
+.doc-theme-ep .tiptap-editor h3 {
+  color: var(--ep-primary);
+}
+
+.doc-theme-ep .tiptap-editor blockquote {
+  border-left-color: var(--ep-secondary);
+}
+
+.doc-theme-ep .claim-highlight {
+  background-color: rgba(26, 54, 93, 0.1);
+  border-bottom-color: var(--ep-primary);
+}
+
+/* Presentation view wrapper */
+.presentation-view {
+  display: flex;
+  height: 100%;
+  background: var(--bg);
+}
+
+.presentation-view .slide-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  overflow: hidden;
+}
+
+.presentation-view .slide-container {
+  width: 100%;
+  max-width: 900px;
+}
+
+/* Slide editor toolbar */
+.slide-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: var(--paper);
+  border-bottom: 1px solid var(--line);
+}
+
+.slide-toolbar button {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+}
+
+/* Speaker notes */
+.speaker-notes {
+  background: var(--bg);
+  border-top: 1px solid var(--line);
+  padding: 1rem;
+  max-height: 150px;
+  overflow-y: auto;
+}
+
+.speaker-notes textarea {
+  width: 100%;
+  min-height: 80px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  padding: 0.5rem;
+  font-size: 0.875rem;
+  resize: none;
+}
+
 /* Components - illanes v3 style */
 @layer components {
   .btn {

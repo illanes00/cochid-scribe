@@ -1,7 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  output: 'standalone',
   async rewrites() {
     // Production uses port 8132, development uses 8000
     const backendUrl = process.env.BACKEND_URL ||

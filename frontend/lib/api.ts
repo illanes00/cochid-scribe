@@ -3,7 +3,9 @@
  * Handles all communication with the FastAPI backend
  */
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
+// Use relative path so Next.js rewrites work in production
+// The rewrites in next.config.mjs handle proxying to the correct backend port
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || ''
 
 // Types
 export interface DocumentContent {
@@ -15,7 +17,7 @@ export interface Document {
   id: string
   slug: string
   title: string
-  doc_type: 'paper' | 'thesis' | 'policy'
+  doc_type: 'paper' | 'thesis' | 'policy' | 'presentation'
   content: DocumentContent
   markdown?: string
   front_matter: Record<string, unknown>

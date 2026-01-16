@@ -11,7 +11,7 @@ class DocumentBase(BaseModel):
     """Base document schema."""
 
     title: str = Field(..., min_length=1, max_length=500)
-    doc_type: Literal["paper", "thesis", "policy"] = "paper"
+    doc_type: Literal["paper", "thesis", "policy", "presentation"] = "paper"
     content: dict[str, Any] = Field(default_factory=dict)
     markdown: str | None = None
     front_matter: dict[str, Any] = Field(default_factory=dict)
@@ -29,7 +29,7 @@ class DocumentUpdate(BaseModel):
     """Schema for updating a document."""
 
     title: str | None = None
-    doc_type: Literal["paper", "thesis", "policy"] | None = None
+    doc_type: Literal["paper", "thesis", "policy", "presentation"] | None = None
     content: dict[str, Any] | None = None
     markdown: str | None = None
     front_matter: dict[str, Any] | None = None

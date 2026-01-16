@@ -16,6 +16,8 @@ import {
 } from 'lucide-react'
 import { Editor } from '@tiptap/core'
 import { TiptapEditor } from '@/components/editor/TiptapEditor'
+import { PresentationView } from '@/components/editor/PresentationView'
+import { Slide } from '@/components/editor/SlideNavigator'
 import { ClaimsPanel } from '@/components/panels/ClaimsPanel'
 import { BibliographyPanel } from '@/components/panels/BibliographyPanel'
 import { AIAssistantPanel } from '@/components/panels/AIAssistantPanel'
@@ -562,33 +564,74 @@ export default function EditorPage() {
 
       {/* Main content */}
       <div className="flex-1 flex overflow-hidden">
-        {/* Left sidebar - Outline */}
-        <aside className="w-56 border-r border-line bg-paper flex-shrink-0 overflow-hidden">
-          <OutlinePanel editor={editorRef.current} />
-        </aside>
-
-        {/* Editor */}
-        <main className="flex-1 overflow-hidden">
-          <TiptapEditor
-            content={
-              typeof document?.content === 'object' && document?.content
-                ? document.content
-                : document?.markdown || ''
+        {document?.doc_type === 'presentation' ? (
+          /* Presentation mode */
+          <PresentationView
+            slidesData={
+              (document?.front_matter as Record<string, unknown>)?.slides_data as {
+                slides: Slide[]
+                theme: {
+                  primaryColor: string
+                  secondaryColor: string
+                  fontFamily: string
+                  logoUrl?: string
+                }
+              } || {
+                slides: [],
+                theme: {
+                  primaryColor: '#1a365d',
+                  secondaryColor: '#c53030',
+                  fontFamily: 'IBM Plex Sans, system-ui, sans-serif',
+                },
+              }
             }
-            onChange={handleContentChange}
-            onReady={handleEditorReady}
-            placeholder="Start writing your document..."
-            documentSlug={slug}
-            trackChangesEnabled={trackChanges}
-            docStyle={docStyle}
-            docFormat={docFormat}
-            docFont={docFont}
-            docSize={docSize}
-            docLeading={docLeading}
-            docMargin={docMargin}
-            commentAnchors={commentAnchors}
+            documentTitle={document?.title}
+            onSlidesChange={(slides) => {
+              const currentFrontMatter = (document?.front_matter || {}) as Record<string, unknown>
+              const currentSlidesData = (currentFrontMatter.slides_data || {}) as Record<string, unknown>
+              updateDocument({
+                front_matter: {
+                  ...currentFrontMatter,
+                  slides_data: {
+                    ...currentSlidesData,
+                    slides,
+                  },
+                },
+              })
+            }}
           />
-        </main>
+        ) : (
+          /* Regular document mode */
+          <>
+            {/* Left sidebar - Outline */}
+            <aside className="w-56 border-r border-line bg-paper flex-shrink-0 overflow-hidden">
+              <OutlinePanel editor={editorRef.current} />
+            </aside>
+
+            {/* Editor */}
+            <main className="flex-1 overflow-hidden">
+              <TiptapEditor
+                content={
+                  typeof document?.content === 'object' && document?.content
+                    ? document.content
+                    : document?.markdown || ''
+                }
+                onChange={handleContentChange}
+                onReady={handleEditorReady}
+                placeholder="Start writing your document..."
+                documentSlug={slug}
+                trackChangesEnabled={trackChanges}
+                docStyle={docStyle}
+                docFormat={docFormat}
+                docFont={docFont}
+                docSize={docSize}
+                docLeading={docLeading}
+                docMargin={docMargin}
+                commentAnchors={commentAnchors}
+              />
+            </main>
+          </>
+        )}
 
         {/* Right sidebar */}
         <aside className="w-80 border-l border-line bg-paper flex-shrink-0 flex flex-col">

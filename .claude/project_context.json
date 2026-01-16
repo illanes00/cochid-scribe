@@ -1,0 +1,284 @@
+{
+  "project": {
+    "name": "Scribe",
+    "description": "Academic writing platform for policy researchers with claims verification, bibliography management, and presentation authoring",
+    "version": "1.0.0-beta",
+    "status": "active_development",
+    "productionUrl": "https://scribe.illanes00.cl",
+    "lastUpdated": "2026-01-16"
+  },
+
+  "techStack": {
+    "frontend": {
+      "framework": "Next.js 14",
+      "language": "TypeScript",
+      "styling": "TailwindCSS",
+      "editor": "TipTap (ProseMirror)",
+      "stateManagement": "React hooks + context",
+      "port": 3000
+    },
+    "backend": {
+      "framework": "FastAPI",
+      "language": "Python 3.10+",
+      "orm": "SQLAlchemy 2.0",
+      "validation": "Pydantic",
+      "port": 8000
+    },
+    "database": {
+      "development": "SQLite",
+      "production": "PostgreSQL",
+      "path": "backend/scribe.db"
+    },
+    "ai": {
+      "provider": "Anthropic",
+      "model": "claude-sonnet-4-20250514",
+      "features": ["rewriting", "claim_extraction", "hedging", "summarization"]
+    },
+    "integrations": ["Google Docs", "Google Slides", "Google Drive"]
+  },
+
+  "directories": {
+    "backend": {
+      "path": "backend/",
+      "entryPoint": "run.py",
+      "mainApp": "app/main.py",
+      "config": "app/config.py",
+      "models": "app/models/",
+      "schemas": "app/schemas/",
+      "api": "app/api/v1/",
+      "services": "app/services/",
+      "tests": "tests/"
+    },
+    "frontend": {
+      "path": "frontend/",
+      "pages": "app/",
+      "components": "components/",
+      "editor": "components/editor/",
+      "extensions": "components/editor/extensions/",
+      "panels": "components/panels/",
+      "api": "lib/api.ts",
+      "styles": "styles/globals.css"
+    },
+    "scripts": {
+      "path": "scripts/",
+      "enrichDocuments": "enrich_and_structure.py"
+    },
+    "documentation": {
+      "path": "docs/",
+      "handover": "PROJECT_HANDOVER.md",
+      "architecture": "ARCHITECTURE.md",
+      "backlog": "BACKLOG.json",
+      "implementation": "docs/IMPLEMENTATION_GUIDE.md",
+      "api": "docs/API_REFERENCE.md",
+      "database": "docs/DATABASE_SCHEMA.md",
+      "testing": "docs/TESTING_PLAN.md"
+    }
+  },
+
+  "keyFiles": {
+    "editorPage": "frontend/app/editor/[slug]/page.tsx",
+    "tiptapEditor": "frontend/components/editor/TiptapEditor.tsx",
+    "claimExtension": "frontend/components/editor/extensions/claim.ts",
+    "citationExtension": "frontend/components/editor/extensions/citation.ts",
+    "apiClient": "frontend/lib/api.ts",
+    "slideEditor": "frontend/components/editor/SlideEditor.tsx",
+    "slideNavigator": "frontend/components/editor/SlideNavigator.tsx",
+    "presentationView": "frontend/components/editor/PresentationView.tsx",
+    "claimsPanel": "frontend/components/panels/ClaimsPanel.tsx",
+    "bibliographyPanel": "frontend/components/panels/BibliographyPanel.tsx",
+    "documentsApi": "backend/app/api/v1/documents.py",
+    "claimsApi": "backend/app/api/v1/claims.py",
+    "llmApi": "backend/app/api/v1/llm.py",
+    "googleApi": "backend/app/api/v1/google.py",
+    "documentModel": "backend/app/models/document.py",
+    "claimModel": "backend/app/models/claim.py"
+  },
+
+  "features": {
+    "complete": [
+      "document_crud",
+      "tiptap_editor",
+      "claims_panel",
+      "bibliography_panel",
+      "ai_rewriting",
+      "ai_claim_extraction_endpoint",
+      "export_pdf_docx_pptx",
+      "google_docs_import",
+      "google_docs_export",
+      "google_slides_export",
+      "knowledge_base",
+      "document_versions",
+      "comments",
+      "track_changes"
+    ],
+    "incomplete": [
+      {
+        "id": "auto_claim_extraction",
+        "description": "Extract claims automatically on document save",
+        "priority": "HIGH",
+        "file": "backend/app/api/v1/documents.py",
+        "function": "update_document"
+      },
+      {
+        "id": "claim_highlighting",
+        "description": "Visual highlighting of claims in TipTap editor",
+        "priority": "HIGH",
+        "files": [
+          "frontend/components/editor/TiptapEditor.tsx",
+          "frontend/styles/globals.css"
+        ]
+      },
+      {
+        "id": "slide_tiptap",
+        "description": "TipTap rich editor for slide content",
+        "priority": "MEDIUM",
+        "file": "frontend/components/editor/SlideEditor.tsx"
+      },
+      {
+        "id": "asset_model",
+        "description": "Database model for storing document images",
+        "priority": "MEDIUM",
+        "newFile": "backend/app/models/asset.py"
+      },
+      {
+        "id": "pptx_export",
+        "description": "Professional PPTX export with python-pptx",
+        "priority": "MEDIUM",
+        "newFile": "backend/app/services/slides_export.py"
+      },
+      {
+        "id": "google_slides_import",
+        "description": "Import from Google Slides preserving images",
+        "priority": "LOW"
+      },
+      {
+        "id": "bidirectional_sync",
+        "description": "Sync changes from Google back to Scribe",
+        "priority": "LOW"
+      }
+    ]
+  },
+
+  "documentTypes": ["paper", "thesis", "policy", "presentation"],
+
+  "claimTypes": ["DATA", "LITERATURE", "MIXED", "HYPOTHESIS"],
+
+  "claimStatuses": ["draft", "verified", "rejected", "needs_revision"],
+
+  "exportFormats": ["pdf", "docx", "pptx", "md", "html", "latex"],
+
+  "theme": {
+    "name": "Espacio Público",
+    "colors": {
+      "primary": "#1a365d",
+      "secondary": "#c53030",
+      "accent": "#2b6cb0",
+      "background": "#ffffff",
+      "text": "#1a202c"
+    },
+    "fonts": {
+      "heading": "IBM Plex Sans",
+      "body": "IBM Plex Sans"
+    }
+  },
+
+  "environmentVariables": {
+    "required": [
+      "DATABASE_URL",
+      "ANTHROPIC_API_KEY"
+    ],
+    "optional": [
+      "GOOGLE_CLIENT_ID",
+      "GOOGLE_CLIENT_SECRET",
+      "GOOGLE_REDIRECT_URI",
+      "SECRET_KEY",
+      "CORS_ORIGINS",
+      "DEBUG"
+    ]
+  },
+
+  "commands": {
+    "runBackend": "cd backend && source .venv/bin/activate && python run.py",
+    "runFrontend": "cd frontend && npm run dev",
+    "runTests": "cd backend && pytest -v",
+    "buildFrontend": "cd frontend && npm run build",
+    "startProduction": "cd frontend && npm start"
+  },
+
+  "apiEndpoints": {
+    "base": "/api/v1",
+    "routers": [
+      { "prefix": "/documents", "file": "documents.py" },
+      { "prefix": "/claims", "file": "claims.py" },
+      { "prefix": "/bibliography", "file": "bibliography.py" },
+      { "prefix": "/llm", "file": "llm.py" },
+      { "prefix": "/google", "file": "google.py" },
+      { "prefix": "/comments", "file": "comments.py" },
+      { "prefix": "/exports", "file": "exports.py" },
+      { "prefix": "/notes", "file": "notes.py" },
+      { "prefix": "/datasets", "file": "datasets.py" },
+      { "prefix": "/charts", "file": "charts.py" },
+      { "prefix": "/integrations", "file": "integrations.py" },
+      { "prefix": "/assets", "file": "assets.py" },
+      { "prefix": "/graph", "file": "graph.py" }
+    ]
+  },
+
+  "databaseTables": [
+    "documents",
+    "claims",
+    "bibliography_entries",
+    "comments",
+    "document_versions",
+    "notes",
+    "datasets",
+    "charts",
+    "export_jobs",
+    "integrations"
+  ],
+
+  "slidesDataStructure": {
+    "slides": [
+      {
+        "id": "string",
+        "slideNumber": "number",
+        "layout": "title | content | two-column | image-full | blank",
+        "title": "string",
+        "content": "string (markdown)",
+        "notes": "string"
+      }
+    ],
+    "theme": {
+      "primaryColor": "string (hex)",
+      "secondaryColor": "string (hex)",
+      "fontFamily": "string",
+      "logoUrl": "string | null"
+    }
+  },
+
+  "tiptapExtensions": [
+    "StarterKit",
+    "Heading",
+    "BulletList",
+    "OrderedList",
+    "Blockquote",
+    "CodeBlock",
+    "HorizontalRule",
+    "Bold",
+    "Italic",
+    "Claim",
+    "Citation",
+    "Comment",
+    "TrackChanges",
+    "SlashCommands"
+  ],
+
+  "nextSteps": [
+    "1. Implement auto claim extraction on document save",
+    "2. Add visual claim highlighting in TipTap editor",
+    "3. Create Asset model for image storage",
+    "4. Implement python-pptx export for professional slides",
+    "5. Add TipTap to SlideEditor component",
+    "6. Write missing tests (LLM, Google, exports)"
+  ]
+}
