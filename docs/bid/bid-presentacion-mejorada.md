@@ -217,6 +217,28 @@ Chile (ajustado)   ████████████████░░░░�
 
 ---
 
+# Chile en contexto regional
+
+## Gasto per cápita PPA (US$, 2022)
+
+```
+Brasil          ████████████████████████████████  $607
+Costa Rica      █████████████████████████████░░░  $572
+El Salvador     █████████████████████████░░░░░░░  $496
+Chile           ████████████████████████░░░░░░░░  $490
+Colombia        ███████████████████████░░░░░░░░░  $467
+Mediana LATAM   ████████████████████░░░░░░░░░░░░  $434
+```
+
+**La anomalía chilena**: Alto desarrollo (PIB per cápita $32.801) pero gasto en seguridad similar a países con menor ingreso.
+
+Note:
+- Chile tiene el mayor PIB per cápita de la región, pero gasta similar a El Salvador.
+- Esto refuerza el mensaje: no es un problema de recursos, es de gestión.
+- Brasil y Costa Rica gastan más en términos absolutos.
+
+---
+
 # HALLAZGO 2
 
 ## La composición del gasto
@@ -486,7 +508,7 @@ Note:
 
 # RECOMENDACIONES
 
-## Cinco líneas de acción
+## Seis líneas de acción
 
 ---
 
@@ -584,6 +606,29 @@ Este informe como **línea base** para programa permanente:
 - Benchmarking regional continuo
 
 **Oferta a BID:** Programa de asistencia técnica 2026-2028
+
+---
+
+# Recomendación 6
+
+## Inversión en tecnología
+
+**Diagnóstico:**
+- Chile invierte <3% del presupuesto de seguridad en tecnología
+- OCDE: 5-8% promedio
+- Déficit en análisis predictivo, integración de sistemas, equipamiento
+
+**Propuesta:**
+- Meta: 6% del presupuesto en tecnología al 2028
+- Inversión estimada: ~$50 mil millones CLP/año adicionales
+- Prioridades: sistemas integrados, analítica de datos, equipamiento policial
+
+**Indicador:** % del gasto en bienes y servicios tecnológicos
+
+Note:
+- Esta recomendación complementa las anteriores.
+- La tecnología es habilitante para trazabilidad, métricas y evaluación.
+- Sin inversión tecnológica, las otras recomendaciones son difíciles de implementar.
 
 ---
 
