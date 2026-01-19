@@ -77,9 +77,8 @@ Create `/etc/caddy/sites.d/illanes00-scribe.caddy`:
 scribe.illanes00.cl {
     import tls_cf
 
-    # API backend
+    # API backend - DO NOT use uri strip_prefix, backend expects /api/v1/* paths
     handle /api/* {
-        uri strip_prefix /api
         reverse_proxy localhost:8121
     }
 
@@ -94,6 +93,10 @@ scribe.illanes00.cl {
     }
 }
 ```
+
+**Important:** Do NOT use `uri strip_prefix /api` - the FastAPI backend expects
+the full path including `/api/v1/...`. Client-side fetch requests go directly
+to Caddy, not through Next.js rewrites.
 
 ## Environment Variables
 
