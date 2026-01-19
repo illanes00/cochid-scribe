@@ -1,6 +1,6 @@
 """Integration endpoints."""
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, Response
 from sqlalchemy.orm import Session
 
 from app.config import get_settings
@@ -11,10 +11,19 @@ from app.services.google import exchange_code_for_tokens, get_auth_url, save_cre
 
 router = APIRouter()
 
+# Cache-control headers to prevent CDN caching of API responses
+NO_CACHE_HEADERS = {
+    "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0",
+    "Pragma": "no-cache",
+    "Expires": "0",
+}
+
 
 @router.get("/google/status", response_model=IntegrationStatus)
-async def google_status(db: Session = Depends(get_db)):
+async def google_status(response: Response, db: Session = Depends(get_db)):
     """Check Google integration status."""
+    for key, value in NO_CACHE_HEADERS.items():
+        response.headers[key] = value
     integration = db.query(Integration).filter(Integration.provider == "google").first()
     return IntegrationStatus(
         provider="google",
@@ -24,8 +33,10 @@ async def google_status(db: Session = Depends(get_db)):
 
 
 @router.post("/google/auth-url")
-async def google_auth_url():
+async def google_auth_url(response: Response):
     """Generate Google OAuth URL."""
+    for key, value in NO_CACHE_HEADERS.items():
+        response.headers[key] = value
     settings = get_settings()
     if not settings.google_client_id or not settings.google_client_secret:
         raise HTTPException(status_code=400, detail="Google OAuth not configured")

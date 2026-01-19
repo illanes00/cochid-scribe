@@ -1,11 +1,11 @@
 """Main FastAPI application."""
 
 from contextlib import asynccontextmanager
+from pathlib import Path
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from pathlib import Path
 
 from app.api.v1 import (
     assets,
@@ -81,6 +81,7 @@ app.mount("/uploads", StaticFiles(directory=str(UPLOAD_DIR)), name="uploads")
 async def health_check():
     """Health check endpoint for infrastructure monitoring."""
     import socket
+
     return {"status": "healthy", "service": settings.app_name, "host": socket.gethostname()}
 
 

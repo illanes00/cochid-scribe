@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-from datetime import datetime
-
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import Flow
@@ -16,6 +14,7 @@ from app.models.integration import Integration
 SCOPES = [
     "https://www.googleapis.com/auth/drive",
     "https://www.googleapis.com/auth/documents",
+    "https://www.googleapis.com/auth/presentations",
 ]
 
 
@@ -118,3 +117,11 @@ def build_docs_service(db: Session):
     if not creds:
         return None
     return build("docs", "v1", credentials=creds)
+
+
+def build_slides_service(db: Session):
+    """Build Google Slides API service."""
+    creds = get_google_credentials(db)
+    if not creds:
+        return None
+    return build("slides", "v1", credentials=creds)
