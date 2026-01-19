@@ -24,6 +24,8 @@ class ClaimBase(BaseModel):
     claim_text: str = Field(..., min_length=1)
     claim_type: Literal["DATA", "LITERATURE", "MIXED", "HYPOTHESIS"]
     section: str | None = None
+    start_offset: int | None = None
+    end_offset: int | None = None
     evidence: list[Evidence] = Field(default_factory=list)
 
 
@@ -40,6 +42,8 @@ class ClaimUpdate(BaseModel):
     claim_type: Literal["DATA", "LITERATURE", "MIXED", "HYPOTHESIS"] | None = None
     status: Literal["draft", "verified", "rejected", "needs_revision"] | None = None
     section: str | None = None
+    start_offset: int | None = None
+    end_offset: int | None = None
     evidence: list[Evidence] | None = None
 
 

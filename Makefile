@@ -41,7 +41,7 @@ db-reset:
 test: test-frontend test-backend
 
 test-frontend:
-	cd frontend && npm test
+	cd frontend && npm test -- --run
 
 test-backend:
 	cd backend && pytest

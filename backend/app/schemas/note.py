@@ -58,6 +58,7 @@ class NoteList(BaseModel):
 
 # Link schemas
 
+
 class LinkBase(BaseModel):
     """Base link schema."""
 
@@ -86,6 +87,7 @@ class LinkResponse(LinkBase):
 
 
 # Graph schemas
+
 
 class GraphNode(BaseModel):
     """A node in the knowledge graph."""

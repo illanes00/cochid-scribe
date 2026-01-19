@@ -65,7 +65,9 @@ async def get_full_graph(
         claims = db.query(Claim).all()
         for claim in claims:
             # Truncate claim text for label
-            label = claim.claim_text[:50] + "..." if len(claim.claim_text) > 50 else claim.claim_text
+            label = (
+                claim.claim_text[:50] + "..." if len(claim.claim_text) > 50 else claim.claim_text
+            )
             nodes.append(
                 GraphNode(
                     id=claim.id,
@@ -180,23 +182,17 @@ async def get_local_graph(
         next_level: set[str] = set()
 
         # Find outgoing links
-        outgoing = (
-            db.query(Link)
-            .filter(Link.source_id.in_(current_level))
-            .all()
-        )
+        outgoing = db.query(Link).filter(Link.source_id.in_(current_level)).all()
 
         # Find incoming links
-        incoming = (
-            db.query(Link)
-            .filter(Link.target_id.in_(current_level))
-            .all()
-        )
+        incoming = db.query(Link).filter(Link.target_id.in_(current_level)).all()
 
         for link in outgoing + incoming:
             # Determine the neighbor
             neighbor_id = link.target_id if link.source_id in current_level else link.source_id
-            neighbor_type = link.target_type if link.source_id in current_level else link.source_type
+            neighbor_type = (
+                link.target_type if link.source_id in current_level else link.source_type
+            )
 
             if neighbor_id not in node_ids:
                 # Fetch the neighbor entity
@@ -221,7 +217,11 @@ async def get_local_graph(
                             metadata={"slug": doc.slug},
                         )
                 elif neighbor_type == "bib":
-                    entry = db.query(BibliographyEntry).filter(BibliographyEntry.id == neighbor_id).first()
+                    entry = (
+                        db.query(BibliographyEntry)
+                        .filter(BibliographyEntry.id == neighbor_id)
+                        .first()
+                    )
                     if entry:
                         neighbor_node = GraphNode(
                             id=entry.id,
@@ -259,12 +259,7 @@ async def search_graph(
     node_ids: set[str] = set()
 
     # Search notes
-    notes = (
-        db.query(Note)
-        .filter(Note.title.ilike(f"%{query}%"))
-        .limit(20)
-        .all()
-    )
+    notes = db.query(Note).filter(Note.title.ilike(f"%{query}%")).limit(20).all()
     for note in notes:
         nodes.append(
             GraphNode(
@@ -277,12 +272,7 @@ async def search_graph(
         node_ids.add(note.id)
 
     # Search documents
-    documents = (
-        db.query(Document)
-        .filter(Document.title.ilike(f"%{query}%"))
-        .limit(20)
-        .all()
-    )
+    documents = db.query(Document).filter(Document.title.ilike(f"%{query}%")).limit(20).all()
     for doc in documents:
         nodes.append(
             GraphNode(

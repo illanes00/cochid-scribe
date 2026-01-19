@@ -1,5 +1,4 @@
 """Tests for notes API (Knowledge Base)."""
-import pytest
 
 
 class TestNotesAPI:

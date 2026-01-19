@@ -1,5 +1,4 @@
 """Tests for bibliography API."""
-import pytest
 
 
 class TestBibliographyAPI:

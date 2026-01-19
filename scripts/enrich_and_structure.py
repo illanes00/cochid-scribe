@@ -4,6 +4,7 @@ Enrich documents with claims detection and structure slides.
 Works without external APIs using pattern matching.
 """
 import json
+import hashlib
 import re
 import sqlite3
 import uuid
@@ -21,6 +22,8 @@ CLAIM_PATTERNS = [
     r'[\$US]+\s*[\d,.]+(?: billones| millones| mil)?',
     # Years with data: "en 2024", "2018-2022"
     r'(?:en|desde|hasta|entre)\s+\d{4}(?:\s*[-–]\s*\d{4})?',
+    # Year ranges without prepositions: "2018-2022", "2022–2023"
+    r'\b\d{4}\s*[-–]\s*\d{4}\b',
     # Numeric comparisons: "de 4,7 a 6,7", "aumentó de X a Y"
     r'(?:de|desde)\s+[\d,.]+ (?:a|hasta) [\d,.]+',
     # Rankings/positions: "1,43% del PIB", "5,82% del gasto"
@@ -39,11 +42,95 @@ CLAIM_KEYWORDS = [
 def detect_claims_in_text(text: str) -> list[dict]:
     """Detect claims using pattern matching."""
     claims = []
-    sentences = re.split(r'[.!?]\s+', text)
+    lines = (text or "").splitlines()
+    skip_section_level: int | None = None
+    skip_section = False
+    skip_keywords = ("referencias", "bibliografía", "fuentes", "anexo")
+
+    # Extract candidate text blocks while skipping markdown tables/headings
+    blocks: list[str] = []
+    i = 0
+    while i < len(lines):
+        raw = lines[i]
+        stripped = raw.strip()
+        if not stripped:
+            i += 1
+            continue
+
+        # Headings: manage skip sections (references/annex)
+        if stripped.startswith("#"):
+            level = len(stripped) - len(stripped.lstrip("#"))
+            heading_text = stripped[level:].strip().lower()
+            if any(k in heading_text for k in skip_keywords):
+                skip_section = True
+                skip_section_level = level
+            elif skip_section and skip_section_level is not None and level <= skip_section_level:
+                # Leaving references/annex section
+                skip_section = False
+                skip_section_level = None
+            i += 1
+            continue
+
+        if skip_section:
+            i += 1
+            continue
+        if stripped == "---":
+            i += 1
+            continue
+
+        # Skip markdown table blocks entirely (claims should be captured in narrative bullets)
+        if "|" in stripped and i + 1 < len(lines) and is_markdown_table_separator(lines[i + 1]):
+            i += 2  # skip header + separator
+            while i < len(lines) and lines[i].strip() and "|" in lines[i]:
+                i += 1
+            continue
+
+        # Bullet/ordered list items are good atomic claim candidates
+        if stripped.startswith("- ") or stripped.startswith("* "):
+            blocks.append(stripped[2:].strip())
+            i += 1
+            continue
+        if re.match(r"^\d+\. ", stripped):
+            blocks.append(re.sub(r"^\d+\. ", "", stripped).strip())
+            i += 1
+            continue
+
+        # Paragraph block: collect contiguous non-empty lines until a structural boundary
+        para_lines = [stripped]
+        i += 1
+        while i < len(lines):
+            nxt = lines[i].strip()
+            if not nxt:
+                break
+            if nxt.startswith("#") or nxt == "---":
+                break
+            if nxt.startswith("- ") or nxt.startswith("* ") or re.match(r"^\d+\. ", nxt):
+                break
+            if "|" in nxt and i + 1 < len(lines) and is_markdown_table_separator(lines[i + 1]):
+                break
+            if nxt.startswith("|"):
+                break
+            para_lines.append(nxt)
+            i += 1
+
+        blocks.append(" ".join(para_lines).strip())
+
+    # Split blocks into sentences (keeps bullets atomic while splitting paragraphs)
+    sentences: list[str] = []
+    for block in blocks:
+        # Protect common abbreviations that contain a dot and shouldn't split sentences
+        safe_block = re.sub(r"\bvs\.\s*", "vs ", block, flags=re.IGNORECASE)
+        for sentence in re.split(r"[.!?]\s+", safe_block):
+            sentence = sentence.strip()
+            if sentence:
+                sentences.append(sentence)
 
     for sentence in sentences:
-        sentence = sentence.strip()
         if len(sentence) < 20:
+            continue
+
+        # Avoid labeling section headers as claims (colons typically introduce lists/tables)
+        if sentence.endswith(":"):
             continue
 
         # Check for patterns
@@ -61,8 +148,9 @@ def detect_claims_in_text(text: str) -> list[dict]:
 
         # Check for keywords
         has_keyword = any(kw in sentence.lower() for kw in CLAIM_KEYWORDS)
+        has_digit = bool(re.search(r"\d", sentence))
 
-        if has_pattern or has_keyword:
+        if has_pattern or (has_keyword and has_digit):
             claims.append({
                 "text": sentence[:500],  # Limit length
                 "type": claim_type,
@@ -70,6 +158,80 @@ def detect_claims_in_text(text: str) -> list[dict]:
             })
 
     return claims
+
+
+def normalize_for_match(text: str) -> str:
+    """Normalize text for loose matching (strip markdown emphasis, collapse whitespace)."""
+    text = (text or "").lower()
+    text = re.sub(r"[*_`]+", "", text)
+    text = re.sub(r"\s+", " ", text).strip()
+    return text
+
+
+def normalize_for_match_loose(text: str) -> str:
+    """More permissive normalization for matching text spans (keeps claim_id stability)."""
+    text = normalize_for_match(text)
+    # Drop most punctuation so minor formatting changes don't break matches
+    text = re.sub(r"[^\w\s%$]", "", text)
+    text = re.sub(r"\s+", " ", text).strip()
+    return text
+
+
+def stable_claim_id(doc_slug: str, claim_text: str) -> str:
+    """Stable claim_id per document, derived from normalized text."""
+    payload = f"{doc_slug}|{normalize_for_match(claim_text)}".encode("utf-8")
+    digest = hashlib.sha1(payload).hexdigest()[:12]
+    return f"C-{digest}"
+
+
+def is_markdown_table_separator(line: str) -> bool:
+    """Return True if line looks like a markdown table separator row."""
+    if "|" not in line:
+        return False
+    candidate = line.strip().replace("|", "").strip()
+    if not candidate:
+        return False
+    # Typical separator contains only dashes/colons/spaces
+    return "-" in candidate and set(candidate) <= set("-: ")
+
+
+def split_markdown_table_row(line: str) -> list[str]:
+    """Split a markdown table row into cell strings."""
+    # Remove leading/trailing pipes, then split
+    raw = line.strip().strip("|")
+    return [cell.strip() for cell in raw.split("|")]
+
+
+def create_table(headers: list[str], rows: list[list[str]]) -> dict:
+    """Create a TipTap table node from header + rows."""
+    max_cols = max(
+        len(headers),
+        max((len(r) for r in rows), default=0),
+    )
+    headers = (headers + [""] * max_cols)[:max_cols]
+    normalized_rows = [(r + [""] * max_cols)[:max_cols] for r in rows]
+
+    header_row = {
+        "type": "tableRow",
+        "content": [
+            {"type": "tableHeader", "content": [create_paragraph(cell)]}
+            for cell in headers
+        ],
+    }
+
+    body_rows = []
+    for row in normalized_rows:
+        body_rows.append(
+            {
+                "type": "tableRow",
+                "content": [
+                    {"type": "tableCell", "content": [create_paragraph(cell)]}
+                    for cell in row
+                ],
+            }
+        )
+
+    return {"type": "table", "content": [header_row, *body_rows]}
 
 
 def parse_inline_formatting(text: str) -> list:
@@ -147,11 +309,25 @@ def markdown_to_tiptap_with_claims(markdown: str, claims: list[dict]) -> dict:
     lines = markdown.split("\n")
     i = 0
 
-    # Build a map of claim texts to IDs
-    claim_map = {}
+    # Build a map of claim texts to stable IDs (provided by caller)
+    claim_map: dict[str, str] = {}
     for claim in claims:
-        claim_id = f"C-{uuid.uuid4().hex[:10]}"
-        claim_map[claim["text"][:100]] = claim_id  # Use first 100 chars as key
+        claim_text = str(claim.get("text") or "").strip()
+        claim_id = str(claim.get("claim_id") or "").strip()
+        if not claim_text or not claim_id:
+            continue
+        key = normalize_for_match_loose(claim_text)[:80]
+        if key:
+            claim_map[key] = claim_id
+
+    def match_claim_id(text: str) -> str | None:
+        candidate = normalize_for_match_loose(text)
+        if not candidate:
+            return None
+        for key, cid in claim_map.items():
+            if key and key in candidate:
+                return cid
+        return None
 
     while i < len(lines):
         line = lines[i].rstrip()
@@ -180,7 +356,18 @@ def markdown_to_tiptap_with_claims(markdown: str, claims: list[dict]) -> dict:
             while i < len(lines) and (lines[i].startswith("- ") or lines[i].startswith("* ")):
                 list_items.append(lines[i][2:])
                 i += 1
-            content.append(create_bullet_list(list_items))
+            content.append(
+                {
+                    "type": "bulletList",
+                    "content": [
+                        {
+                            "type": "listItem",
+                            "content": [create_paragraph(item, match_claim_id(item))],
+                        }
+                        for item in list_items
+                    ],
+                }
+            )
             continue
 
         # Ordered lists
@@ -192,7 +379,7 @@ def markdown_to_tiptap_with_claims(markdown: str, claims: list[dict]) -> dict:
             content.append({
                 "type": "orderedList",
                 "content": [
-                    {"type": "listItem", "content": [create_paragraph(item)]}
+                    {"type": "listItem", "content": [create_paragraph(item, match_claim_id(item))]}
                     for item in list_items
                 ]
             })
@@ -230,13 +417,24 @@ def markdown_to_tiptap_with_claims(markdown: str, claims: list[dict]) -> dict:
             })
             continue
 
-        # Tables (simplified - as paragraphs)
-        if "|" in line:
-            table_lines = []
-            while i < len(lines) and "|" in lines[i]:
-                table_lines.append(lines[i])
+        # Tables (markdown pipes) -> TipTap table nodes
+        if (
+            "|" in line
+            and i + 1 < len(lines)
+            and is_markdown_table_separator(lines[i + 1])
+        ):
+            header_cells = split_markdown_table_row(line)
+            i += 2  # skip header + separator
+            row_cells: list[list[str]] = []
+            while i < len(lines):
+                row_line = lines[i].rstrip()
+                if not row_line.strip():
+                    break
+                if "|" not in row_line:
+                    break
+                row_cells.append(split_markdown_table_row(row_line))
                 i += 1
-            content.append(create_paragraph(" | ".join([l.strip() for l in table_lines])))
+            content.append(create_table(header_cells, row_cells))
             continue
 
         # Regular paragraph - check if it's a claim
@@ -252,15 +450,7 @@ def markdown_to_tiptap_with_claims(markdown: str, claims: list[dict]) -> dict:
 
         if para_lines:
             para_text = " ".join(para_lines)
-
-            # Check if this paragraph matches a detected claim
-            claim_id = None
-            for claim_key, cid in claim_map.items():
-                if claim_key in para_text[:150]:
-                    claim_id = cid
-                    break
-
-            content.append(create_paragraph(para_text, claim_id))
+            content.append(create_paragraph(para_text, match_claim_id(para_text)))
 
     return {"type": "doc", "content": content}
 
@@ -286,12 +476,9 @@ def parse_presentation_slides(markdown: str) -> list[dict]:
         lines = slide_content.split("\n")
         first_line = lines[0] if lines else ""
 
+        # Map to layouts supported by the UI
         if first_line.startswith("# ") and len(lines) <= 5:
             layout = "title"
-        elif "```" in slide_content:
-            layout = "code"
-        elif "|" in slide_content and "---" in slide_content:
-            layout = "table"
         else:
             layout = "content"
 
@@ -317,6 +504,60 @@ def parse_presentation_slides(markdown: str) -> list[dict]:
     return slides
 
 
+def extract_title_from_markdown(markdown: str, fallback: str) -> str:
+    """Extract a reasonable document title from the first markdown heading."""
+    text = (markdown or "").strip()
+    if text.startswith("---"):
+        end_idx = text.find("---", 3)
+        if end_idx > 0:
+            text = text[end_idx + 3 :].strip()
+    for line in text.splitlines():
+        stripped = line.strip()
+        if not stripped:
+            continue
+        if stripped.startswith("#"):
+            return stripped.lstrip("#").strip() or fallback
+    return fallback
+
+
+def ensure_document(slug: str, title: str, doc_type: str, conn: sqlite3.Connection) -> str:
+    """Ensure a document row exists for a slug; returns document id."""
+    cursor = conn.cursor()
+    cursor.execute("SELECT id FROM documents WHERE slug = ?", (slug,))
+    row = cursor.fetchone()
+    if row:
+        return row[0]
+
+    doc_id = str(uuid.uuid4())
+    now = datetime.utcnow().isoformat(sep=" ")
+    empty_doc = {"type": "doc", "content": []}
+    content = json.dumps({"json": empty_doc, "html": ""})
+    cursor.execute(
+        """
+        INSERT INTO documents
+            (id, slug, title, doc_type, content, markdown, front_matter, version, status, created_at, updated_at, source_provider, source_id)
+        VALUES
+            (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """,
+        (
+            doc_id,
+            slug,
+            title,
+            doc_type,
+            content,
+            "",
+            json.dumps({}),
+            "1.0.0",
+            "final",
+            now,
+            now,
+            None,
+            None,
+        ),
+    )
+    return doc_id
+
+
 def process_policy_brief(slug: str, markdown: str, conn: sqlite3.Connection):
     """Process a policy brief document with claims detection."""
     cursor = conn.cursor()
@@ -331,14 +572,18 @@ def process_policy_brief(slug: str, markdown: str, conn: sqlite3.Connection):
     claims = detect_claims_in_text(markdown)
     print(f"  Found {len(claims)} potential claims")
 
+    # Assign stable claim IDs so marks match stored claim records
+    for claim in claims:
+        claim["claim_id"] = stable_claim_id(slug, claim.get("text") or "")
+
     # Convert to TipTap with claims marked
     tiptap_json = markdown_to_tiptap_with_claims(markdown, claims)
 
-    # Update document content
+    # Update document content + markdown
     content = json.dumps({"json": tiptap_json, "html": ""})
     cursor.execute(
-        "UPDATE documents SET content = ?, doc_type = ? WHERE slug = ?",
-        (content, "policy", slug)
+        "UPDATE documents SET content = ?, markdown = ?, doc_type = ?, updated_at = ? WHERE slug = ?",
+        (content, markdown, "policy", datetime.utcnow().isoformat(sep=" "), slug),
     )
 
     # Create claim records
@@ -346,24 +591,71 @@ def process_policy_brief(slug: str, markdown: str, conn: sqlite3.Connection):
     doc_row = cursor.fetchone()
     if doc_row:
         doc_id = doc_row[0]
+        # Cache existing fields so we can preserve manual work and ids
+        cursor.execute(
+            "SELECT id, claim_id, status, evidence, source_sentences, created_at FROM claims WHERE document_id = ?",
+            (doc_id,),
+        )
+        existing = {
+            row[1]: {
+                "id": row[0],
+                "status": row[2] or "draft",
+                "evidence": row[3] or json.dumps([]),
+                "source_sentences": row[4] or json.dumps([]),
+                "created_at": row[5] or datetime.utcnow().isoformat(),
+            }
+            for row in cursor.fetchall()
+        }
+
+        detected_ids: set[str] = set()
         for claim in claims:
-            claim_id = f"C-{uuid.uuid4().hex[:10]}"
-            cursor.execute("""
-                INSERT OR IGNORE INTO claims
-                (id, claim_id, document_id, claim_text, claim_type, status, evidence, source_sentences, created_at, updated_at)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            """, (
-                str(uuid.uuid4()),
-                claim_id,
-                doc_id,
-                claim["text"][:500],
-                claim["type"],
-                "draft",
-                json.dumps([]),
-                json.dumps([]),
-                datetime.utcnow().isoformat(),
-                datetime.utcnow().isoformat()
-            ))
+            claim_id = claim["claim_id"]
+            detected_ids.add(claim_id)
+            prev = existing.get(claim_id) or {}
+            claim_db_id = prev.get("id") or str(uuid.uuid4())
+            created_at = prev.get("created_at") or datetime.utcnow().isoformat()
+            status = prev.get("status") or "draft"
+            evidence = prev.get("evidence") or json.dumps([])
+            source_sentences = prev.get("source_sentences") or json.dumps([])
+
+            cursor.execute(
+                """
+                INSERT INTO claims
+                    (id, claim_id, document_id, claim_text, claim_type, status, evidence, source_sentences, created_at, updated_at)
+                VALUES
+                    (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ON CONFLICT(claim_id) DO UPDATE SET
+                    document_id = excluded.document_id,
+                    claim_text = excluded.claim_text,
+                    claim_type = excluded.claim_type,
+                    updated_at = excluded.updated_at
+                """,
+                (
+                    claim_db_id,
+                    claim_id,
+                    doc_id,
+                    claim["text"][:500],
+                    claim["type"],
+                    status,
+                    evidence,
+                    source_sentences,
+                    created_at,
+                    datetime.utcnow().isoformat(),
+                ),
+            )
+
+        # Prune stale auto-detected claims (keeps verified/manual ones)
+        if detected_ids:
+            placeholders = ",".join("?" for _ in detected_ids)
+            cursor.execute(
+                f"""
+                DELETE FROM claims
+                WHERE document_id = ?
+                  AND status = 'draft'
+                  AND claim_id NOT IN ({placeholders})
+                """,
+                (doc_id, *sorted(detected_ids)),
+            )
 
     return len(claims)
 
@@ -399,16 +691,21 @@ def process_presentation(slug: str, markdown: str, conn: sqlite3.Connection):
 
     # Update document
     content = json.dumps({"json": tiptap_json, "html": ""})
-    cursor.execute("""
+    cursor.execute(
+        """
         UPDATE documents
-        SET content = ?, doc_type = ?, front_matter = ?
+        SET content = ?, markdown = ?, doc_type = ?, front_matter = ?, updated_at = ?
         WHERE slug = ?
-    """, (
-        content,
-        "presentation",
-        json.dumps({"slides_data": slides_data}),
-        slug
-    ))
+    """,
+        (
+            content,
+            markdown,
+            "presentation",
+            json.dumps({"slides_data": slides_data}),
+            datetime.utcnow().isoformat(sep=" "),
+            slug,
+        ),
+    )
 
     return len(slides)
 
@@ -423,6 +720,7 @@ def main():
     PRESENTATIONS = {
         "bid-seguridad-presentacion": "bid-presentacion-final.md",
         "bid-seguridad-final": "bid-presentacion-mejorada.md",
+        "cif-medicamentos-presentacion": "cif-medicamentos-presentacion.md",
     }
 
     conn = sqlite3.connect(str(DB_PATH))
@@ -439,6 +737,12 @@ def main():
 
         print(f"\n{slug}:")
         markdown = filepath.read_text(encoding="utf-8")
+        ensure_document(
+            slug,
+            extract_title_from_markdown(markdown, slug),
+            "policy",
+            conn,
+        )
         claims_count = process_policy_brief(slug, markdown, conn)
         print(f"  OK: {claims_count} claims detected")
 
@@ -454,6 +758,12 @@ def main():
 
         print(f"\n{slug}:")
         markdown = filepath.read_text(encoding="utf-8")
+        ensure_document(
+            slug,
+            extract_title_from_markdown(markdown, slug),
+            "presentation",
+            conn,
+        )
         slides_count = process_presentation(slug, markdown, conn)
         print(f"  OK: {slides_count} slides structured")
 

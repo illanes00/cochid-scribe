@@ -1,9 +1,13 @@
 'use client'
 
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
+import { useEditor, EditorContent } from '@tiptap/react'
+import StarterKit from '@tiptap/starter-kit'
+import TextAlign from '@tiptap/extension-text-align'
+import Image from '@tiptap/extension-image'
+import Placeholder from '@tiptap/extension-placeholder'
 import { Slide } from './SlideNavigator'
 
-// Simple text sanitizer - removes potentially dangerous HTML
 function sanitizeHtml(text: string): string {
   return text
     .replace(/&/g, '&amp;')
@@ -13,13 +17,79 @@ function sanitizeHtml(text: string): string {
     .replace(/'/g, '&#039;')
 }
 
-// Format markdown text to safe HTML
-function formatText(text: string): string {
+function formatInline(text: string): string {
   const sanitized = sanitizeHtml(text)
   return sanitized
     .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
     .replace(/\*([^*]+)\*/g, '<em>$1</em>')
     .replace(/_([^_]+)_/g, '<em>$1</em>')
+}
+
+function markdownToHtml(markdown: string): string {
+  if (!markdown) return ''
+  const lines = markdown.split('\n')
+  const htmlParts: string[] = []
+  let listType: 'ul' | 'ol' | null = null
+
+  const closeList = () => {
+    if (listType) {
+      htmlParts.push(`</${listType}>`)
+      listType = null
+    }
+  }
+
+  lines.forEach((line) => {
+    const trimmed = line.trim()
+    if (!trimmed) {
+      closeList()
+      return
+    }
+
+    const bulletMatch = /^[-*]\s+(.+)$/.exec(trimmed)
+    const numberedMatch = /^\d+\.\s+(.+)$/.exec(trimmed)
+
+    if (bulletMatch) {
+      if (listType !== 'ul') {
+        closeList()
+        listType = 'ul'
+        htmlParts.push('<ul>')
+      }
+      htmlParts.push(`<li>${formatInline(bulletMatch[1])}</li>`)
+      return
+    }
+
+    if (numberedMatch) {
+      if (listType !== 'ol') {
+        closeList()
+        listType = 'ol'
+        htmlParts.push('<ol>')
+      }
+      htmlParts.push(`<li>${formatInline(numberedMatch[1])}</li>`)
+      return
+    }
+
+    closeList()
+
+    if (trimmed.startsWith('### ')) {
+      htmlParts.push(`<h3>${formatInline(trimmed.slice(4))}</h3>`)
+    } else if (trimmed.startsWith('## ')) {
+      htmlParts.push(`<h2>${formatInline(trimmed.slice(3))}</h2>`)
+    } else if (trimmed.startsWith('# ')) {
+      htmlParts.push(`<h1>${formatInline(trimmed.slice(2))}</h1>`)
+    } else if (trimmed.startsWith('> ')) {
+      htmlParts.push(`<blockquote>${formatInline(trimmed.slice(2))}</blockquote>`)
+    } else {
+      htmlParts.push(`<p>${formatInline(trimmed)}</p>`)
+    }
+  })
+
+  closeList()
+
+  return htmlParts.join('')
+}
+
+function isHtmlContent(text: string): boolean {
+  return /<\/?[a-z][\s\S]*>/i.test(text)
 }
 
 interface SlideEditorProps {
@@ -31,222 +101,90 @@ interface SlideEditorProps {
     logoUrl?: string
   }
   isEditing?: boolean
-  onContentChange?: (content: string) => void
+  onSlideChange?: (slide: Slide) => void
 }
 
-export function SlideEditor({
-  slide,
-  theme,
-  isEditing = false,
-  onContentChange,
-}: SlideEditorProps) {
-  // Parse markdown content into structured elements
-  const parsedContent = useMemo(() => {
-    const lines = slide.content.split('\n').filter(Boolean)
-    const elements: Array<{
-      type: 'heading' | 'bullet' | 'numbered' | 'paragraph' | 'quote'
-      level?: number
-      text: string
-    }> = []
-
-    lines.forEach((line) => {
-      const trimmed = line.trim()
-
-      if (trimmed.startsWith('# ')) {
-        elements.push({ type: 'heading', level: 1, text: trimmed.slice(2) })
-      } else if (trimmed.startsWith('## ')) {
-        elements.push({ type: 'heading', level: 2, text: trimmed.slice(3) })
-      } else if (trimmed.startsWith('### ')) {
-        elements.push({ type: 'heading', level: 3, text: trimmed.slice(4) })
-      } else if (trimmed.startsWith('- ') || trimmed.startsWith('* ')) {
-        elements.push({ type: 'bullet', text: trimmed.slice(2) })
-      } else if (/^\d+\. /.test(trimmed)) {
-        elements.push({ type: 'numbered', text: trimmed.replace(/^\d+\. /, '') })
-      } else if (trimmed.startsWith('> ')) {
-        elements.push({ type: 'quote', text: trimmed.slice(2) })
-      } else if (trimmed) {
-        elements.push({ type: 'paragraph', text: trimmed })
-      }
-    })
-
-    return elements
+export function SlideEditor({ slide, theme, isEditing = false, onSlideChange }: SlideEditorProps) {
+  const initialContent = useMemo(() => {
+    const content = slide.content || ''
+    return isHtmlContent(content) ? content : markdownToHtml(content)
   }, [slide.content])
 
-  const renderElement = (
-    el: { type: string; level?: number; text: string },
-    key: number
-  ) => {
-    const formattedText = formatText(el.text)
+  const editor = useEditor({
+    extensions: [
+      StarterKit.configure({
+        heading: { levels: [1, 2, 3] },
+      }),
+      TextAlign.configure({ types: ['heading', 'paragraph'] }),
+      Image.configure({ inline: false, allowBase64: true }),
+      Placeholder.configure({ placeholder: 'Write your slide content…' }),
+    ],
+    content: initialContent,
+    editable: isEditing,
+    onUpdate: ({ editor }) => {
+      const html = editor.getHTML()
+      onSlideChange?.({ ...slide, content: html })
+    },
+  })
 
-    switch (el.type) {
-      case 'heading':
-        const HeadingTag = `h${Math.min((el.level || 1) + 1, 6)}` as keyof JSX.IntrinsicElements
-        return (
-          <HeadingTag
-            key={key}
-            className={`font-bold ${
-              el.level === 1 ? 'text-2xl' : el.level === 2 ? 'text-xl' : 'text-lg'
-            }`}
-            style={{ color: theme.primaryColor }}
-          >
-            <span dangerouslySetInnerHTML={{ __html: formattedText }} />
-          </HeadingTag>
-        )
-      case 'bullet':
-        return (
-          <div key={key} className="flex items-start gap-2 text-base">
-            <span
-              className="mt-1.5 w-2 h-2 shrink-0"
-              style={{ backgroundColor: theme.secondaryColor }}
-            />
-            <span dangerouslySetInnerHTML={{ __html: formattedText }} />
-          </div>
-        )
-      case 'numbered':
-        return (
-          <div key={key} className="flex items-start gap-2 text-base">
-            <span
-              className="font-bold shrink-0"
-              style={{ color: theme.secondaryColor }}
-            >
-              {key + 1}.
-            </span>
-            <span dangerouslySetInnerHTML={{ __html: formattedText }} />
-          </div>
-        )
-      case 'quote':
-        return (
-          <blockquote
-            key={key}
-            className="border-l-4 pl-4 italic text-muted text-base"
-            style={{ borderColor: theme.secondaryColor }}
-          >
-            <span dangerouslySetInnerHTML={{ __html: formattedText }} />
-          </blockquote>
-        )
-      case 'paragraph':
-      default:
-        return (
-          <p key={key} className="text-base">
-            <span dangerouslySetInnerHTML={{ __html: formattedText }} />
-          </p>
-        )
+  // Keep editor content in sync when switching slides
+  useEffect(() => {
+    if (!editor) return
+    const nextContent = isHtmlContent(slide.content || '')
+      ? slide.content || ''
+      : markdownToHtml(slide.content || '')
+    if (editor.getHTML() !== nextContent) {
+      editor.commands.setContent(nextContent)
     }
-  }
+    editor.setEditable(isEditing)
+  }, [editor, slide.id, slide.content, isEditing])
 
-  const renderLayout = () => {
-    const titleFormatted = formatText(slide.title || '')
-
+  const layoutClass = useMemo(() => {
     switch (slide.layout) {
       case 'title':
-        return (
-          <div className="slide-layout-title flex flex-col items-center justify-center h-full text-center p-8">
-            <h1
-              className="slide-title text-4xl font-bold mb-4"
-              style={{ color: theme.primaryColor }}
-            >
-              <span dangerouslySetInnerHTML={{ __html: titleFormatted }} />
-            </h1>
-            {parsedContent.filter(e => e.type === 'paragraph').slice(0, 1).map((el, i) => (
-              <p key={i} className="slide-subtitle text-xl text-muted">
-                <span dangerouslySetInnerHTML={{ __html: formatText(el.text) }} />
-              </p>
-            ))}
-          </div>
-        )
-
+        return 'slide-title-layout'
       case 'two-column':
-        const midPoint = Math.ceil(parsedContent.length / 2)
-        const leftContent = parsedContent.slice(0, midPoint)
-        const rightContent = parsedContent.slice(midPoint)
-
-        return (
-          <div className="slide-layout-twocol h-full flex flex-col">
-            <h2
-              className="slide-heading text-2xl font-bold mb-4 px-6 pt-6"
-              style={{ color: theme.primaryColor }}
-            >
-              <span dangerouslySetInnerHTML={{ __html: titleFormatted }} />
-            </h2>
-            <div className="flex-1 grid grid-cols-2 gap-6 px-6 pb-6">
-              <div className="space-y-2">
-                {leftContent.map((el, i) => renderElement(el, i))}
-              </div>
-              <div className="space-y-2">
-                {rightContent.map((el, i) => renderElement(el, i))}
-              </div>
-            </div>
-          </div>
-        )
-
+        return 'slide-two-column-layout'
       case 'image-full':
-        return (
-          <div className="slide-layout-image h-full flex flex-col">
-            <h2
-              className="slide-heading text-2xl font-bold mb-4 px-6 pt-6"
-              style={{ color: theme.primaryColor }}
-            >
-              <span dangerouslySetInnerHTML={{ __html: titleFormatted }} />
-            </h2>
-            <div className="flex-1 flex items-center justify-center bg-bg mx-6 mb-6">
-              <div className="text-muted text-center">
-                <div className="text-4xl mb-2">🖼</div>
-                <div className="text-sm">Image placeholder</div>
-              </div>
-            </div>
-          </div>
-        )
-
+        return 'slide-image-layout'
       case 'blank':
-        return (
-          <div className="slide-layout-blank h-full flex items-center justify-center">
-            <div className="text-muted text-sm">Empty slide</div>
-          </div>
-        )
-
-      case 'content':
+        return 'slide-blank-layout'
       default:
-        return (
-          <div className="slide-layout-content h-full flex flex-col px-6 py-6">
-            <h2
-              className="slide-heading text-2xl font-bold mb-4"
-              style={{ color: theme.primaryColor }}
-            >
-              <span dangerouslySetInnerHTML={{ __html: titleFormatted }} />
-            </h2>
-            <div className="flex-1 space-y-2 overflow-y-auto">
-              {parsedContent.map((el, i) => renderElement(el, i))}
-            </div>
-          </div>
-        )
+        return 'slide-content-layout'
     }
-  }
+  }, [slide.layout])
 
   return (
     <div
-      className="slide-editor-container aspect-[16/9] bg-paper border border-line shadow-none overflow-hidden"
-      style={{
-        fontFamily: theme.fontFamily,
-      }}
+      className={`slide-editor h-full w-full bg-paper border border-line p-6 ${layoutClass}`}
+      style={{ fontFamily: theme.fontFamily }}
     >
-      {/* Slide header bar */}
-      <div
-        className="slide-header h-2"
-        style={{ backgroundColor: theme.primaryColor }}
+      {/* Title input */}
+      <input
+        type="text"
+        value={slide.title}
+        disabled={!isEditing}
+        onChange={(e) => onSlideChange?.({ ...slide, title: e.target.value })}
+        placeholder="Slide title"
+        className="w-full text-2xl font-bold mb-4 bg-transparent border-b border-line outline-none disabled:text-ink/60"
+        style={{ color: theme.primaryColor }}
       />
 
-      {/* Slide content */}
-      <div className="slide-body h-[calc(100%-0.5rem-2rem)]">
-        {renderLayout()}
+      {/* Content editor */}
+      <div className="flex-1 min-h-[280px] bg-bg/60 border border-line p-4">
+        {editor && <EditorContent editor={editor} className="prose max-w-none" />}
       </div>
 
-      {/* Slide footer */}
-      <div
-        className="slide-footer h-8 flex items-center justify-between px-4 text-xs"
-        style={{ backgroundColor: theme.primaryColor, color: 'white' }}
-      >
-        <span className="opacity-75">Espacio Publico</span>
-        <span className="font-bold">{slide.slideNumber}</span>
+      {/* Speaker notes */}
+      <div className="mt-4">
+        <label className="text-xs text-muted block mb-1">Speaker notes</label>
+        <textarea
+          value={slide.notes || ''}
+          disabled={!isEditing}
+          onChange={(e) => onSlideChange?.({ ...slide, notes: e.target.value })}
+          className="w-full h-20 border border-line p-2 text-sm bg-transparent outline-none disabled:text-ink/60"
+          placeholder="Notes for this slide"
+        />
       </div>
     </div>
   )

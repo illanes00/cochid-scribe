@@ -1,11 +1,16 @@
 """Documents API endpoints."""
 
+import difflib
 import re
+import uuid
 from datetime import datetime
 
 from fastapi import APIRouter, BackgroundTasks, Depends, Form, HTTPException, Query, UploadFile
+from fastapi.concurrency import run_in_threadpool
 from sqlalchemy.orm import Session
 
+from app.api.v1.llm import extract_claims_from_text
+from app.config import get_settings
 from app.db.session import SessionLocal, get_db
 from app.models.claim import Claim
 from app.models.document import Document
@@ -23,6 +28,7 @@ from app.schemas.document_version import (
     DocumentVersionResponse,
 )
 from app.schemas.export import ExportJobResponse, ExportRequest
+from app.services.claim_positions import find_claim_offsets
 from app.services.content_links import update_document_links
 from app.services.conversion import (
     get_default_template,
@@ -31,8 +37,10 @@ from app.services.conversion import (
     markdown_to_html,
     temp_output_path,
 )
+from app.services.slides_export import create_presentation
 
 router = APIRouter()
+settings = get_settings()
 
 
 def normalize_content(
@@ -88,6 +96,23 @@ def get_document_response(doc: Document, db: Session) -> DocumentResponse:
     )
 
 
+def is_significant_change(old_text: str, new_text: str) -> bool:
+    """Check if content changed enough to re-run claim extraction."""
+    old_text = (old_text or "").strip()
+    new_text = (new_text or "").strip()
+
+    if not new_text:
+        return False
+    if not old_text:
+        return len(new_text) > 50
+    if old_text == new_text:
+        return False
+
+    length_delta = abs(len(new_text) - len(old_text))
+    similarity = difflib.SequenceMatcher(None, old_text, new_text).ratio()
+    return length_delta > 50 or similarity < 0.85
+
+
 @router.get("", response_model=DocumentList)
 async def list_documents(
     page: int = Query(1, ge=1),
@@ -98,11 +123,7 @@ async def list_documents(
     offset = (page - 1) * per_page
     total = db.query(Document).count()
     docs = (
-        db.query(Document)
-        .order_by(Document.updated_at.desc())
-        .offset(offset)
-        .limit(per_page)
-        .all()
+        db.query(Document).order_by(Document.updated_at.desc()).offset(offset).limit(per_page).all()
     )
 
     return DocumentList(
@@ -267,6 +288,8 @@ async def update_document(
     if not doc:
         raise HTTPException(status_code=404, detail="Document not found")
 
+    old_markdown = doc.markdown or ""
+
     update_data = data.model_dump(exclude_unset=True)
     if "content" in update_data or "markdown" in update_data:
         content, markdown = normalize_content(
@@ -289,6 +312,56 @@ async def update_document(
             update_data.get("content", {}).get("json"),
             update_data.get("content", {}).get("html"),
         )
+
+    if (
+        settings.anthropic_api_key
+        and ("content" in update_data or "markdown" in update_data)
+        and is_significant_change(old_markdown, doc.markdown or "")
+    ):
+        try:
+            text = doc.markdown or ""
+            if not text and isinstance(doc.content, dict):
+                text = str(doc.content.get("html") or "")
+
+            claims = await run_in_threadpool(extract_claims_from_text, text)
+            existing_texts = {
+                row[0]
+                for row in db.query(Claim.claim_text).filter(Claim.document_id == doc.id).all()
+            }
+            created = 0
+            for claim in claims:
+                claim_text = str(claim.get("claim_text") or claim.get("text") or "").strip()
+                if not claim_text or claim_text in existing_texts:
+                    continue
+                start_offset, end_offset = find_claim_offsets(text, claim_text)
+
+                claim_type = str(claim.get("claim_type") or claim.get("type") or "MIXED").upper()
+                evidence_needed = claim.get("evidence_needed")
+                evidence = (
+                    [{"kind": "OBSERVATION", "ref": "LLM", "notes": str(evidence_needed)}]
+                    if evidence_needed
+                    else []
+                )
+
+                claim_obj = Claim(
+                    claim_id=f"C-{datetime.utcnow().strftime('%Y%m%d')}-{uuid.uuid4().hex[:6]}",
+                    document_id=doc.id,
+                    claim_text=claim_text,
+                    claim_type=claim_type,
+                    start_offset=start_offset,
+                    end_offset=end_offset,
+                    section=str(claim.get("section") or "").strip() or None,
+                    evidence=evidence,
+                    source_sentences=[],
+                )
+                db.add(claim_obj)
+                existing_texts.add(claim_text)
+                created += 1
+
+            if created:
+                db.commit()
+        except Exception as exc:
+            print(f"Claim extraction failed: {exc}")
 
     return get_document_response(doc, db)
 
@@ -407,10 +480,21 @@ def run_export_job(job_id: str, doc_id: str, export_format: str) -> None:
                 )
             elif export_format == "docx":
                 output_path = temp_output_path(".docx")
-                markdown_to_binary(doc.markdown or html_to_markdown(html or ""), "docx", output_path)
+                markdown_to_binary(
+                    doc.markdown or html_to_markdown(html or ""), "docx", output_path
+                )
             elif export_format == "pptx":
                 output_path = temp_output_path(".pptx")
-                markdown_to_binary(doc.markdown or html_to_markdown(html or ""), "pptx", output_path)
+                slides_data = {}
+                if isinstance(doc.front_matter, dict):
+                    slides_data = doc.front_matter.get("slides_data") or {}
+                if doc.doc_type == "presentation":
+                    buffer = create_presentation(slides_data or {"slides": [], "theme": {}})
+                    output_path.write_bytes(buffer.getvalue())
+                else:
+                    markdown_to_binary(
+                        doc.markdown or html_to_markdown(html or ""), "pptx", output_path
+                    )
             elif export_format == "pdf":
                 output_path = temp_output_path(".pdf")
                 markdown_to_binary(

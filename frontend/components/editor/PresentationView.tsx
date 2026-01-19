@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useCallback, useEffect, useMemo } from 'react'
-import { Maximize2, Minimize2, Play, ChevronLeft, ChevronRight, Edit3, Eye } from 'lucide-react'
+import { Maximize2, Minimize2, Play, ChevronLeft, ChevronRight, Edit3, Eye, ExternalLink } from 'lucide-react'
 import { SlideNavigator, Slide } from './SlideNavigator'
 import { SlideEditor } from './SlideEditor'
 
@@ -20,6 +20,7 @@ interface PresentationViewProps {
   documentTitle?: string
   onSlidesChange?: (slides: Slide[]) => void
   readOnly?: boolean
+  googleSlidesUrl?: string
 }
 
 // Default Espacio Publico theme
@@ -35,14 +36,15 @@ export function PresentationView({
   documentTitle,
   onSlidesChange,
   readOnly = false,
+  googleSlidesUrl,
 }: PresentationViewProps) {
   const [currentSlide, setCurrentSlide] = useState(0)
   const [isFullscreen, setIsFullscreen] = useState(false)
   const [isPresenting, setIsPresenting] = useState(false)
   const [isEditMode, setIsEditMode] = useState(false)
 
-  const slides = slidesData?.slides || []
-  const theme = slidesData?.theme || DEFAULT_THEME
+  const slides = useMemo(() => slidesData?.slides || [], [slidesData])
+  const theme = useMemo(() => slidesData?.theme || DEFAULT_THEME, [slidesData])
 
   // Keyboard navigation
   useEffect(() => {
@@ -121,6 +123,50 @@ export function PresentationView({
       onSlidesChange?.(updatedSlides)
     },
     [slides, onSlidesChange, readOnly]
+  )
+
+  const handleSlideChange = useCallback(
+    (updatedSlide: Slide) => {
+      if (readOnly) return
+      const updatedSlides = slides.map((slide) =>
+        slide.id === updatedSlide.id ? { ...updatedSlide } : slide
+      )
+      onSlidesChange?.(updatedSlides)
+    },
+    [slides, onSlidesChange, readOnly]
+  )
+
+  const handleReorderSlide = useCallback(
+    (fromIndex: number, toIndex: number) => {
+      if (readOnly) return
+      if (fromIndex === toIndex) return
+      if (fromIndex < 0 || toIndex < 0) return
+      if (fromIndex >= slides.length || toIndex >= slides.length) return
+
+      const nextSlides = [...slides]
+      const [moved] = nextSlides.splice(fromIndex, 1)
+      if (!moved) return
+      nextSlides.splice(toIndex, 0, moved)
+
+      const normalized = nextSlides.map((slide, idx) => ({
+        ...slide,
+        slideNumber: idx + 1,
+      }))
+
+      // Keep current selection stable relative to reorder
+      let nextCurrent = currentSlide
+      if (fromIndex === currentSlide) {
+        nextCurrent = toIndex
+      } else if (fromIndex < currentSlide && toIndex >= currentSlide) {
+        nextCurrent = currentSlide - 1
+      } else if (fromIndex > currentSlide && toIndex <= currentSlide) {
+        nextCurrent = currentSlide + 1
+      }
+
+      onSlidesChange?.(normalized)
+      setCurrentSlide(nextCurrent)
+    },
+    [currentSlide, onSlidesChange, readOnly, slides]
   )
 
   const handleStartPresentation = useCallback(() => {
@@ -217,6 +263,7 @@ export function PresentationView({
           onAddSlide={handleAddSlide}
           onDeleteSlide={handleDeleteSlide}
           onLayoutChange={handleLayoutChange}
+          onReorderSlide={handleReorderSlide}
           readOnly={readOnly}
         />
       </aside>
@@ -237,6 +284,19 @@ export function PresentationView({
             {isEditMode ? <Eye size={14} /> : <Edit3 size={14} />}
             <span className="ml-1">{isEditMode ? 'Preview' : 'Edit'}</span>
           </button>
+
+          {googleSlidesUrl && (
+            <a
+              href={googleSlidesUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn-sm bg-blue-600 text-white hover:bg-blue-700"
+              title="Open in Google Slides"
+            >
+              <ExternalLink size={14} />
+              <span className="ml-1">Google Slides</span>
+            </a>
+          )}
 
           <button
             onClick={handleStartPresentation}
@@ -264,6 +324,7 @@ export function PresentationView({
                 slide={currentSlideData}
                 theme={theme}
                 isEditing={isEditMode}
+                onSlideChange={handleSlideChange}
               />
             )}
           </div>

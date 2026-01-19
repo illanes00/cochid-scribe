@@ -5,7 +5,6 @@ from typing import Literal
 
 from pydantic import BaseModel
 
-
 ExportFormat = Literal["markdown", "html", "docx", "pptx", "latex", "pdf"]
 
 

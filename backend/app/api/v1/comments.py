@@ -85,7 +85,14 @@ async def sync_google_comments(slug: str, db: Session = Depends(get_db)):
         if c.external_id
     }
 
-    comments = drive.comments().list(fileId=doc.source_id, fields="comments(id,author,content,quotedFileContent,createdTime,resolved)").execute()
+    comments = (
+        drive.comments()
+        .list(
+            fileId=doc.source_id,
+            fields="comments(id,author,content,quotedFileContent,createdTime,resolved)",
+        )
+        .execute()
+    )
     created = 0
 
     for item in comments.get("comments", []):
@@ -134,11 +141,15 @@ async def create_google_comment(
     if not drive:
         raise HTTPException(status_code=400, detail="Google integration not connected")
 
-    created = drive.comments().create(
-        fileId=doc.source_id,
-        body={"content": payload.content},
-        fields="id,author,content,createdTime,resolved",
-    ).execute()
+    created = (
+        drive.comments()
+        .create(
+            fileId=doc.source_id,
+            body={"content": payload.content},
+            fields="id,author,content,createdTime,resolved",
+        )
+        .execute()
+    )
 
     external_id = created.get("id")
     comment = Comment(

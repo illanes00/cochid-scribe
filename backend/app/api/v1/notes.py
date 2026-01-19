@@ -90,19 +90,14 @@ async def list_notes(
 
     total = query.count()
     notes = (
-        query.order_by(Note.updated_at.desc())
-        .offset((page - 1) * per_page)
-        .limit(per_page)
-        .all()
+        query.order_by(Note.updated_at.desc()).offset((page - 1) * per_page).limit(per_page).all()
     )
 
     # Add backlink counts
     note_responses = []
     for note in notes:
         backlink_count = (
-            db.query(Link)
-            .filter(Link.target_type == "note", Link.target_id == note.id)
-            .count()
+            db.query(Link).filter(Link.target_type == "note", Link.target_id == note.id).count()
         )
         response = NoteResponse(
             id=note.id,
@@ -176,9 +171,7 @@ async def get_note(
         raise HTTPException(status_code=404, detail="Note not found")
 
     backlink_count = (
-        db.query(Link)
-        .filter(Link.target_type == "note", Link.target_id == note.id)
-        .count()
+        db.query(Link).filter(Link.target_type == "note", Link.target_id == note.id).count()
     )
 
     return NoteResponse(
@@ -230,9 +223,7 @@ async def update_note(
         )
 
     backlink_count = (
-        db.query(Link)
-        .filter(Link.target_type == "note", Link.target_id == note.id)
-        .count()
+        db.query(Link).filter(Link.target_type == "note", Link.target_id == note.id).count()
     )
 
     return NoteResponse(
@@ -281,10 +272,6 @@ async def get_backlinks(
     if not note:
         raise HTTPException(status_code=404, detail="Note not found")
 
-    links = (
-        db.query(Link)
-        .filter(Link.target_type == "note", Link.target_id == note.id)
-        .all()
-    )
+    links = db.query(Link).filter(Link.target_type == "note", Link.target_id == note.id).all()
 
     return links

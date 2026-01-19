@@ -53,6 +53,45 @@ def create_bullet_list(items):
 def create_ordered_list(items):
     return {"type": "orderedList", "content": [{"type": "listItem", "content": [create_paragraph(item)]} for item in items]}
 
+def is_markdown_table_separator(line: str) -> bool:
+    if "|" not in line:
+        return False
+    candidate = line.strip().replace("|", "").strip()
+    if not candidate:
+        return False
+    return "-" in candidate and set(candidate) <= set("-: ")
+
+def split_markdown_table_row(line: str) -> list[str]:
+    raw = line.strip().strip("|")
+    return [cell.strip() for cell in raw.split("|")]
+
+def create_table(headers: list[str], rows: list[list[str]]) -> dict:
+    max_cols = max(len(headers), max((len(r) for r in rows), default=0))
+    headers = (headers + [""] * max_cols)[:max_cols]
+    normalized_rows = [(r + [""] * max_cols)[:max_cols] for r in rows]
+
+    header_row = {
+        "type": "tableRow",
+        "content": [
+            {"type": "tableHeader", "content": [create_paragraph(cell)]}
+            for cell in headers
+        ],
+    }
+
+    body_rows = []
+    for row in normalized_rows:
+        body_rows.append(
+            {
+                "type": "tableRow",
+                "content": [
+                    {"type": "tableCell", "content": [create_paragraph(cell)]}
+                    for cell in row
+                ],
+            }
+        )
+
+    return {"type": "table", "content": [header_row, *body_rows]}
+
 def markdown_to_tiptap(markdown):
     """Convert markdown to TipTap JSON format."""
     content = []
@@ -113,6 +152,22 @@ def markdown_to_tiptap(markdown):
             i += 1
             continue
 
+        # Markdown tables
+        if "|" in line and i + 1 < len(lines) and is_markdown_table_separator(lines[i + 1]):
+            headers = split_markdown_table_row(line)
+            i += 2  # skip header + separator
+            rows = []
+            while i < len(lines):
+                row_line = lines[i].rstrip()
+                if not row_line.strip():
+                    break
+                if "|" not in row_line:
+                    break
+                rows.append(split_markdown_table_row(row_line))
+                i += 1
+            content.append(create_table(headers, rows))
+            continue
+
         # Paragraph - collect lines until we hit something else
         para_lines = []
         while i < len(lines):
@@ -120,6 +175,8 @@ def markdown_to_tiptap(markdown):
             if not current:
                 break
             if current.startswith("#"):
+                break
+            if "|" in current and i + 1 < len(lines) and is_markdown_table_separator(lines[i + 1]):
                 break
             if current.startswith("- ") or current.startswith("* "):
                 break

@@ -34,11 +34,7 @@ async def create_bibliography_entry(
 ):
     """Create a bibliography entry."""
     # Check if key exists
-    existing = (
-        db.query(BibliographyEntry)
-        .filter(BibliographyEntry.bib_key == data.bib_key)
-        .first()
-    )
+    existing = db.query(BibliographyEntry).filter(BibliographyEntry.bib_key == data.bib_key).first()
     if existing:
         raise HTTPException(status_code=409, detail="Bibliography key already exists")
 
@@ -77,11 +73,7 @@ async def get_bibliography_entry(
     db: Session = Depends(get_db),
 ):
     """Get a bibliography entry by key."""
-    entry = (
-        db.query(BibliographyEntry)
-        .filter(BibliographyEntry.bib_key == bib_key)
-        .first()
-    )
+    entry = db.query(BibliographyEntry).filter(BibliographyEntry.bib_key == bib_key).first()
     if not entry:
         raise HTTPException(status_code=404, detail="Bibliography entry not found")
 
@@ -94,11 +86,7 @@ async def delete_bibliography_entry(
     db: Session = Depends(get_db),
 ):
     """Delete a bibliography entry."""
-    entry = (
-        db.query(BibliographyEntry)
-        .filter(BibliographyEntry.bib_key == bib_key)
-        .first()
-    )
+    entry = db.query(BibliographyEntry).filter(BibliographyEntry.bib_key == bib_key).first()
     if not entry:
         raise HTTPException(status_code=404, detail="Bibliography entry not found")
 
@@ -127,11 +115,7 @@ async def import_bibtex(
             continue
 
         # Check if exists
-        existing = (
-            db.query(BibliographyEntry)
-            .filter(BibliographyEntry.bib_key == bib_key)
-            .first()
-        )
+        existing = db.query(BibliographyEntry).filter(BibliographyEntry.bib_key == bib_key).first()
         if existing:
             continue
 
@@ -150,9 +134,7 @@ async def import_bibtex(
             doi=bib_entry.get("doi"),
             url=bib_entry.get("url"),
             abstract=bib_entry.get("abstract"),
-            bibtex=bibtexparser.dumps(
-                bibtexparser.bibdatabase.BibDatabase(entries=[bib_entry])
-            ),
+            bibtex=bibtexparser.dumps(bibtexparser.bibdatabase.BibDatabase(entries=[bib_entry])),
         )
         db.add(entry)
         created_entries.append(entry)

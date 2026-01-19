@@ -1,7 +1,6 @@
 """Tests for documents API."""
 
 
-
 class TestDocumentsAPI:
     """Test document CRUD operations."""
 

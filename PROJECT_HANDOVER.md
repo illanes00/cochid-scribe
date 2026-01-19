@@ -120,20 +120,17 @@
 
 | Feature | Status | What's Missing |
 |---------|--------|----------------|
-| Presentation Editor | 🟡 80% | Edit mode needs TipTap integration for slide content editing |
+| Presentation Editor | ✅ Complete | TipTap-based slide content editing + layouts + image support |
 | Claim Marks in Editor | 🟡 70% | Claims created but not visually linked in TipTap JSON |
-| Google Slides Import | 🟡 50% | Images not preserved |
-| Asset Management | 🟡 40% | Upload works, but no asset model in DB |
+| Google Slides Import | 🟡 70% | Images + basic structure preserved; advanced formatting TBD |
+| Asset Management | 🟡 70% | DB-backed assets + upload/list/delete endpoints; UI polish TBD |
 | Bidirectional Sync | 🟡 30% | One-way export only |
 
 ### 3.3 Not Yet Implemented
 
 | Feature | Priority | Effort |
 |---------|----------|--------|
-| LLM-based claim extraction on document save | HIGH | 2 days |
 | Visual claim highlighting in editor | HIGH | 3 days |
-| Asset model for images | MEDIUM | 2 days |
-| Slide content editing with TipTap | MEDIUM | 5 days |
 | Google → Scribe sync (bidirectional) | MEDIUM | 5 days |
 | Real-time collaboration (Yjs) | LOW | 2 weeks |
 | Multi-user authentication | LOW | 1 week |

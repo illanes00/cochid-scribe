@@ -63,6 +63,8 @@ export interface Claim {
   claim_type: 'DATA' | 'LITERATURE' | 'MIXED' | 'HYPOTHESIS'
   status: 'draft' | 'verified' | 'rejected' | 'needs_revision'
   section?: string
+  start_offset?: number | null
+  end_offset?: number | null
   evidence: Evidence[]
   source_sentences: string[]
   created_at: string
@@ -644,8 +646,19 @@ export const exportsApi = {
 }
 
 // Assets API
+export interface AssetResponse {
+  id: string
+  document_id?: string | null
+  filename: string
+  mime_type: string
+  size_bytes: number
+  url: string
+  source_url?: string | null
+  created_at: string
+}
+
 export const assetsApi = {
-  upload: async (file: File): Promise<{ url: string; name: string }> => {
+  upload: async (file: File): Promise<AssetResponse> => {
     const formData = new FormData()
     formData.append('file', file)
 

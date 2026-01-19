@@ -10,6 +10,7 @@ from app.config import get_settings
 from app.db.session import get_db
 from app.models.claim import Claim
 from app.models.document import Document
+from app.services.claim_positions import find_claim_offsets
 
 router = APIRouter()
 settings = get_settings()
@@ -162,31 +163,41 @@ async def extract_claims_for_document(
     if not doc:
         raise HTTPException(status_code=404, detail="Document not found")
 
-    text = doc.markdown or (
-        doc.content.get("html") if isinstance(doc.content, dict) else ""
-    ) or ""
+    text = doc.markdown or (doc.content.get("html") if isinstance(doc.content, dict) else "") or ""
     claims = extract_claims_from_text(text)
 
     import uuid
 
+    existing_texts = {
+        row[0] for row in db.query(Claim.claim_text).filter(Claim.document_id == doc.id).all()
+    }
     created = []
     for claim in claims:
         claim_text = str(claim.get("claim_text") or claim.get("text") or "").strip()
-        if not claim_text:
+        if not claim_text or claim_text in existing_texts:
             continue
+        start_offset, end_offset = find_claim_offsets(text, claim_text)
         claim_type = str(claim.get("claim_type") or claim.get("type") or "MIXED").upper()
+        evidence_needed = claim.get("evidence_needed")
+        evidence = (
+            [{"kind": "OBSERVATION", "ref": "LLM", "notes": str(evidence_needed)}]
+            if evidence_needed
+            else []
+        )
         claim_obj = Claim(
-            claim_id=f"C-{uuid.uuid4().hex[:10]}",
+            claim_id=f"C-{datetime.utcnow().strftime('%Y%m%d')}-{uuid.uuid4().hex[:6]}",
             document_id=doc.id,
             claim_text=claim_text,
             claim_type=claim_type,
-            evidence=[{"description": claim.get("evidence_needed")}]
-            if claim.get("evidence_needed")
-            else [],
+            start_offset=start_offset,
+            end_offset=end_offset,
+            section=str(claim.get("section") or "").strip() or None,
+            evidence=evidence,
             source_sentences=[],
         )
         db.add(claim_obj)
         created.append(claim_obj)
+        existing_texts.add(claim_text)
 
     db.commit()
 

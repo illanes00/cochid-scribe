@@ -9,6 +9,7 @@ from app.db.session import Base
 
 def generate_uuid():
     import uuid
+
     return str(uuid.uuid4())
 
 

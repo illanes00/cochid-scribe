@@ -1,11 +1,17 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Claim, claimsApi, llmApi } from '@/lib/api'
 
 interface ClaimsPanelProps {
   documentSlug: string
-  onClaimClick?: (claimId: string) => void
+  onClaimClick?: (
+    claimId: string,
+    claimText?: string,
+    startOffset?: number | null,
+    endOffset?: number | null
+  ) => void
+  activeClaimId?: string | null
 }
 
 const claimTypeColors: Record<string, string> = {
@@ -29,7 +35,11 @@ const statusColors: Record<string, string> = {
   needs_revision: 'text-c-amber',
 }
 
-export function ClaimsPanel({ documentSlug, onClaimClick }: ClaimsPanelProps) {
+export function ClaimsPanel({
+  documentSlug,
+  onClaimClick,
+  activeClaimId = null,
+}: ClaimsPanelProps) {
   const [claims, setClaims] = useState<Claim[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -37,11 +47,7 @@ export function ClaimsPanel({ documentSlug, onClaimClick }: ClaimsPanelProps) {
   const [extracting, setExtracting] = useState(false)
   const [extractError, setExtractError] = useState<string | null>(null)
 
-  useEffect(() => {
-    loadClaims()
-  }, [documentSlug])
-
-  async function loadClaims() {
+  const loadClaims = useCallback(async () => {
     try {
       setLoading(true)
       setError(null)
@@ -52,7 +58,11 @@ export function ClaimsPanel({ documentSlug, onClaimClick }: ClaimsPanelProps) {
     } finally {
       setLoading(false)
     }
-  }
+  }, [documentSlug])
+
+  useEffect(() => {
+    loadClaims()
+  }, [loadClaims])
 
   async function handleVerify(claimId: string) {
     try {
@@ -165,8 +175,19 @@ export function ClaimsPanel({ documentSlug, onClaimClick }: ClaimsPanelProps) {
             {filteredClaims.map((claim) => (
               <li
                 key={claim.claim_id}
-                className="p-3 hover:bg-bg cursor-pointer"
-                onClick={() => onClaimClick?.(claim.claim_id)}
+                className={`p-3 hover:bg-bg cursor-pointer ${
+                  claim.claim_id === activeClaimId
+                    ? 'bg-blue-50 border-l-2 border-blue-500'
+                    : ''
+                }`}
+                onClick={() => {
+                  onClaimClick?.(
+                    claim.claim_id,
+                    claim.claim_text,
+                    claim.start_offset ?? null,
+                    claim.end_offset ?? null
+                  )
+                }}
               >
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex-1 min-w-0">

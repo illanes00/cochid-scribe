@@ -1,13 +1,16 @@
 """Export job endpoints."""
 
-from fastapi import APIRouter, Depends, HTTPException
-from fastapi.responses import FileResponse
-from sqlalchemy.orm import Session
 from pathlib import Path
 
+from fastapi import APIRouter, Depends, HTTPException
+from fastapi.responses import FileResponse, StreamingResponse
+from sqlalchemy.orm import Session
+
 from app.db.session import get_db
+from app.models.document import Document
 from app.models.export import ExportJob
 from app.schemas.export import ExportJobResponse
+from app.services.slides_export import create_presentation
 
 router = APIRouter()
 
@@ -32,3 +35,23 @@ async def download_export(job_id: str, db: Session = Depends(get_db)):
     if not Path(job.output_path).exists():
         raise HTTPException(status_code=404, detail="Export file missing")
     return FileResponse(job.output_path, filename=job.output_path.split("/")[-1])
+
+
+@router.post("/{slug}/export-pptx")
+async def export_presentation(slug: str, db: Session = Depends(get_db)):
+    """Export a document's slides_data as a branded PPTX using python-pptx."""
+    document = db.query(Document).filter(Document.slug == slug).first()
+    if not document:
+        raise HTTPException(status_code=404, detail="Document not found")
+
+    slides_data = {}
+    if isinstance(document.front_matter, dict):
+        slides_data = document.front_matter.get("slides_data") or {}
+
+    pptx_buffer = create_presentation(slides_data or {"slides": [], "theme": {}})
+
+    return StreamingResponse(
+        pptx_buffer,
+        media_type="application/vnd.openxmlformats-officedocument.presentationml.presentation",
+        headers={"Content-Disposition": f'attachment; filename="{slug}.pptx"'},
+    )

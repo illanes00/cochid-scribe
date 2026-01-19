@@ -21,6 +21,12 @@ El análisis de la IX Encuesta de Presupuestos Familiares (EPF 2022-2023) revela
 
 **Implicancia**: Las políticas de cobertura farmacéutica deben focalizarse en los quintiles de menores ingresos, donde la carga relativa es desproporcionadamente alta.
 
+**En síntesis**:
+- **Regresividad**: la carga del gasto en medicamentos cae desproporcionadamente en hogares vulnerables.
+- **Brecha de acceso**: la menor incidencia observada en quintiles bajos es consistente con barreras, pero también puede reflejar provisión pública no capturada por EPF (ver sección 6.1).
+- **Foco terapéutico**: el gasto se concentra en pocos subgrupos, lo que permite priorización por morbilidad.
+- **Orden de magnitud fiscal**: un esquema focalizado puede eliminar la regresividad con costos acotados (estimación preliminar en sección 6.3).
+
 ---
 
 ## 1. Introducción y Contexto
@@ -81,6 +87,7 @@ Los gastos en medicamentos se identificaron mediante la clasificación CCIF (Cla
 2. No captura medicamentos obtenidos gratuitamente (programas públicos)
 3. Variabilidad temporal en consumo
 4. No distingue entre gasto preventivo y curativo
+5. La incidencia de gasto (gasto positivo) no permite distinguir entre “no necesitó”, “recibió cobertura pública” o “no accedió por barrera económica”
 
 ---
 
@@ -107,7 +114,9 @@ El gasto promedio mensual en medicamentos aumenta significativamente con el nive
    - Menor prevalencia de enfermedades crónicas diagnosticadas
    - Mayor cobertura pública en algunos grupos
 
-**3. Mediana cero en quintiles bajos**: La mediana del gasto es $0 en Q1-Q3, indicando que más de la mitad de estos hogares no reporta gasto. En Q5, la mediana es $19.552 CLP.
+**3. Mediana cero en quintiles bajos**: La mediana del gasto es $0 en Q1-Q3, mientras en Q5 es $19.552 CLP.
+
+Esto sugiere que más de la mitad de los hogares de menores ingresos no reporta gasto en medicamentos.
 
 ---
 
@@ -180,9 +189,9 @@ Chile se encuentra en una **posición intermedia** en América Latina pero **sig
 
 1. **Inequidad regresiva**: Los hogares más pobres enfrentan una carga financiera desproporcionada (9,8% vs. 1,9% del ingreso).
 
-2. **Barreras de acceso**: La menor incidencia de gasto en quintiles bajos (37,5% vs. 63,6%) sugiere que muchos hogares no acceden a medicamentos necesarios.
+2. **Brecha de acceso (no observable directamente)**: La menor incidencia de gasto en quintiles bajos (37,5% vs. 63,6%) es consistente con barreras económicas, pero también puede reflejar medicamentos obtenidos vía programas públicos o estrategias de sustitución (no capturadas por EPF como “gasto”).
 
-3. **Brecha en medicamentos de alto costo**: La ausencia de antineoplásicos en Q1 evidencia barreras para tratamientos costosos.
+3. **Brecha en medicamentos de alto costo (gasto reportado)**: La ausencia de antineoplásicos en Q1 en el gasto observado sugiere barreras para tratamientos costosos o cobertura fuera de la medición (programas, compras institucionales).
 
 4. **Concentración terapéutica**: Pocos subgrupos (digestivo, nervioso, respiratorio) concentran >50% del gasto.
 
@@ -207,6 +216,12 @@ Chile se encuentra en una **posición intermedia** en América Latina pero **sig
 - Estandarizar codificación CCIF en registros
 - Desarrollar sistema de seguimiento de precios
 - Evaluar impacto de programas existentes
+
+### 6.3 Orden de magnitud fiscal (estimación preliminar)
+
+Como referencia para discusión de política pública, un esquema de subsidio focalizado por quintil (ej. cobertura plena para Q1, subsidio alto en Q2 y parcial en Q3, más cobertura reforzada para crónicos) podría ubicarse en el orden de **0,13% del PIB** (≈ **$410 mil millones CLP**; ≈ **US$430 millones**), sujeto a calibración por supuestos de demanda, precios y cobertura efectiva.
+
+**Clave**: el objetivo no es aumentar el gasto agregado, sino **reducir la carga relativa** en hogares vulnerables y cerrar brechas de acceso.
 
 ---
 

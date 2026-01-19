@@ -53,10 +53,7 @@ async def list_charts(
 
     total = query.count()
     charts = (
-        query.order_by(Chart.updated_at.desc())
-        .offset((page - 1) * per_page)
-        .limit(per_page)
-        .all()
+        query.order_by(Chart.updated_at.desc()).offset((page - 1) * per_page).limit(per_page).all()
     )
 
     return ChartList(

@@ -10,7 +10,6 @@ from sqlalchemy.orm import Session
 from app.models.bibliography import BibliographyEntry
 from app.models.note import Link, Note
 
-
 WIKI_LINK_RE = re.compile(r"\[\[([^\]]+)\]\]")
 QUOTE_RE = re.compile(r'"([^"]+)"')
 BIB_KEY_RE = re.compile(r'data-bib-key="([^"]+)"')
@@ -80,11 +79,7 @@ def update_document_links(
     if source_type == "document":
         html_keys = extract_citation_keys(content_html or "")
         for bib_key in list(set(html_keys + citation_keys)):
-            entry = (
-                db.query(BibliographyEntry)
-                .filter(BibliographyEntry.bib_key == bib_key)
-                .first()
-            )
+            entry = db.query(BibliographyEntry).filter(BibliographyEntry.bib_key == bib_key).first()
             if entry:
                 db.add(
                     Link(

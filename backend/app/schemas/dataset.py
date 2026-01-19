@@ -7,6 +7,7 @@ from pydantic import BaseModel, Field
 
 # Dataset schemas
 
+
 class ColumnInfo(BaseModel):
     """Information about a dataset column."""
 
@@ -82,6 +83,7 @@ class DatasetSummary(BaseModel):
 
 
 # Chart schemas
+
 
 class ChartConfig(BaseModel):
     """Configuration for a chart."""

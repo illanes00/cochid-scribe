@@ -25,7 +25,7 @@ import { OutlinePanel } from '@/components/panels/OutlinePanel'
 import { CommentsPanel } from '@/components/panels/CommentsPanel'
 import { VersionsPanel } from '@/components/panels/VersionsPanel'
 import { useDocument } from '@/hooks/useDocument'
-import { Comment, documentsApi, exportsApi, ExportFormat } from '@/lib/api'
+import { Claim, Comment, claimsApi, documentsApi, exportsApi, ExportFormat } from '@/lib/api'
 import { googleApi } from '@/lib/api'
 
 type PanelType = 'claims' | 'bib' | 'ai' | 'comments' | 'versions' | 'outline'
@@ -51,9 +51,13 @@ export default function EditorPage() {
   const [docLeading, setDocLeading] = useState('normal')
   const [docMargin, setDocMargin] = useState('normal')
   const [layoutMenuOpen, setLayoutMenuOpen] = useState(false)
+  const [activeClaimId, setActiveClaimId] = useState<string | null>(null)
+  const [editorReady, setEditorReady] = useState(false)
   const [commentAnchors, setCommentAnchors] = useState<
     { id: string; resolved: boolean; count: number }[]
   >([])
+  const [claims, setClaims] = useState<Claim[]>([])
+  const appliedClaimIds = useRef<Set<string>>(new Set())
 
   const {
     document,
@@ -89,6 +93,15 @@ export default function EditorPage() {
     if (layout.margin) setDocMargin(layout.margin)
   }, [document?.front_matter])
 
+  useEffect(() => {
+    setActiveClaimId(null)
+    setEditorReady(false)
+  }, [slug])
+
+  useEffect(() => {
+    appliedClaimIds.current = new Set()
+  }, [slug, document?.updated_at])
+
   const handleContentChange = useCallback(
     (payload: { html: string; json: Record<string, unknown> }) => {
       updateDocument({ content: { html: payload.html, json: payload.json } })
@@ -106,6 +119,7 @@ export default function EditorPage() {
 
   const handleEditorReady = useCallback((editor: Editor) => {
     editorRef.current = editor
+    setEditorReady(true)
 
     setWordCount(editor.storage.characterCount?.words?.() || 0)
 
@@ -152,13 +166,190 @@ export default function EditorPage() {
     []
   )
 
-  const handleClaimClick = useCallback(
-    (claimId: string) => {
-      // Scroll to claim in editor (would need claim position tracking)
-      console.log('Navigate to claim:', claimId)
-    },
-    []
-  )
+  const handleClaimClick = useCallback((
+    claimId: string,
+    claimText?: string,
+    startOffset?: number | null,
+    endOffset?: number | null
+  ) => {
+    const editor = editorRef.current
+    if (!editor) return
+
+    setActivePanel('claims')
+    setActiveClaimId(claimId)
+
+    let found: { from: number; to: number } | null = null
+    editor.state.doc.descendants((node, pos) => {
+      if (!node.isText) return
+      const mark = node.marks.find(
+        (m) => m.type.name === 'claim' && m.attrs.claimId === claimId
+      )
+      if (mark) {
+        const length = node.text?.length || 1
+        found = { from: pos, to: pos + length }
+        return false
+      }
+      return
+    })
+
+    if (!found && startOffset != null) {
+      let from: number | null = null
+      let to: number | null = null
+      let cursor = 0
+
+      editor.state.doc.descendants((node, pos) => {
+        if (!node.isText || !node.text) return
+        const nextCursor = cursor + node.text.length
+        if (from === null && startOffset >= cursor && startOffset <= nextCursor) {
+          from = pos + (startOffset - cursor)
+        }
+        if (to === null && endOffset != null && endOffset >= cursor && endOffset <= nextCursor) {
+          to = pos + (endOffset - cursor)
+        }
+        cursor = nextCursor
+        if (from !== null && (to !== null || endOffset == null)) {
+          return false
+        }
+        return
+      })
+
+      if (from !== null) {
+        found = { from, to: to ?? from + 1 }
+      }
+    }
+
+    if (!found && claimText) {
+      const needle = claimText.trim()
+      if (needle) {
+        type Segment = { start: number; end: number; pos: number; text: string }
+        const segments: Segment[] = []
+        let cursor = 0
+
+        editor.state.doc.descendants((node, pos) => {
+          if (!node.isText || !node.text) return
+          segments.push({
+            start: cursor,
+            end: cursor + node.text.length,
+            pos,
+            text: node.text,
+          })
+          cursor += node.text.length
+        })
+
+        const haystack = segments.map((s) => s.text).join('')
+        const idx = haystack.indexOf(needle)
+        if (idx !== -1) {
+          const endIdx = idx + needle.length
+          let from: number | null = null
+          let to: number | null = null
+
+          for (const seg of segments) {
+            if (from === null && idx >= seg.start && idx < seg.end) {
+              from = seg.pos + (idx - seg.start)
+            }
+            if (to === null && endIdx >= seg.start && endIdx <= seg.end) {
+              to = seg.pos + (endIdx - seg.start)
+              break
+            }
+          }
+
+          if (from !== null && to !== null) {
+            found = { from, to }
+          }
+        }
+      }
+    }
+
+    if (found) {
+      editor.chain().focus().setTextSelection(found).scrollIntoView().run()
+    }
+  }, [])
+
+  const loadClaims = useCallback(async () => {
+    if (!slug || slug === 'new') return
+    try {
+      const data = await claimsApi.listByDocument(slug)
+      setClaims(data)
+    } catch (err) {
+      console.error('Failed to load claims', err)
+    }
+  }, [slug])
+
+  useEffect(() => {
+    loadClaims()
+  }, [loadClaims])
+
+  useEffect(() => {
+    if (activePanel === 'claims') {
+      loadClaims()
+    }
+  }, [activePanel, loadClaims])
+
+  useEffect(() => {
+    if (!lastSaved) return
+    loadClaims()
+  }, [lastSaved, loadClaims])
+
+  const applyClaimMarks = useCallback(() => {
+    const editor = editorRef.current
+    if (!editor || !claims.length) return
+
+    const existingClaimIds = new Set<string>()
+    editor.state.doc.descendants((node) => {
+      if (!node.isText) return
+      node.marks.forEach((mark) => {
+        if (mark.type.name === 'claim' && mark.attrs?.claimId) {
+          existingClaimIds.add(mark.attrs.claimId as string)
+        }
+      })
+    })
+
+    const tr = editor.state.tr
+    let cursor = 0
+    editor.state.doc.descendants((node, pos) => {
+      if (!node.isText || !node.text) return
+      const nodeText = node.text
+      const nodeStart = cursor
+      const nodeEnd = cursor + nodeText.length
+
+      claims.forEach((claim) => {
+        if (existingClaimIds.has(claim.claim_id)) return
+        if (appliedClaimIds.current.has(claim.claim_id)) return
+        if (claim.start_offset == null) return
+
+        const start = claim.start_offset
+        const end =
+          claim.end_offset ?? claim.start_offset + (claim.claim_text?.length || 1)
+
+        if (start >= nodeEnd || end <= nodeStart) return
+        const from = pos + Math.max(0, start - nodeStart)
+        const to = pos + Math.min(nodeText.length, end - nodeStart)
+        if (to <= from) return
+
+        tr.addMark(
+          from,
+          to,
+          editor.schema.marks.claim.create({
+            claimId: claim.claim_id,
+            claimType: claim.claim_type,
+            status: claim.status,
+          })
+        )
+      })
+
+      cursor = nodeEnd
+    })
+
+    if (tr.docChanged) {
+      editor.view.dispatch(tr)
+      claims.forEach((claim) => appliedClaimIds.current.add(claim.claim_id))
+    }
+  }, [claims])
+
+  useEffect(() => {
+    if (!editorReady) return
+    applyClaimMarks()
+  }, [applyClaimMarks, editorReady])
 
   const handleCommentSelect = useCallback((anchorId: string) => {
     const editor = editorRef.current
@@ -586,6 +777,9 @@ export default function EditorPage() {
               }
             }
             documentTitle={document?.title}
+            googleSlidesUrl={
+              (document?.front_matter as Record<string, unknown>)?.google_slides_url as string | undefined
+            }
             onSlidesChange={(slides) => {
               const currentFrontMatter = (document?.front_matter || {}) as Record<string, unknown>
               const currentSlidesData = (currentFrontMatter.slides_data || {}) as Record<string, unknown>
@@ -618,6 +812,8 @@ export default function EditorPage() {
                 }
                 onChange={handleContentChange}
                 onReady={handleEditorReady}
+                onClaimClick={handleClaimClick}
+                activeClaimId={activeClaimId}
                 placeholder="Start writing your document..."
                 documentSlug={slug}
                 trackChangesEnabled={trackChanges}
@@ -675,6 +871,7 @@ export default function EditorPage() {
               <ClaimsPanel
                 documentSlug={slug}
                 onClaimClick={handleClaimClick}
+                activeClaimId={activeClaimId}
               />
             )}
             {activePanel === 'bib' && (

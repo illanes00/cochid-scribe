@@ -41,6 +41,7 @@ def init_db() -> None:
     """Initialize database tables."""
     # Import all models to register them with Base
     from app.models import (  # noqa: F401
+        asset,
         bibliography,
         claim,
         comment,
@@ -53,4 +54,25 @@ def init_db() -> None:
     )
 
     Base.metadata.create_all(bind=engine)
+    _ensure_claim_offsets()
     print(f"Database initialized: {settings.database_url}")
+
+
+def _ensure_claim_offsets() -> None:
+    """Add claim offset columns for databases if missing."""
+    try:
+        with engine.begin() as conn:
+            if settings.database_url.startswith("sqlite"):
+                result = conn.exec_driver_sql("PRAGMA table_info(claims)")
+                columns = {row[1] for row in result}
+                if "start_offset" not in columns:
+                    conn.exec_driver_sql("ALTER TABLE claims ADD COLUMN start_offset INTEGER")
+                if "end_offset" not in columns:
+                    conn.exec_driver_sql("ALTER TABLE claims ADD COLUMN end_offset INTEGER")
+                return
+
+            conn.exec_driver_sql("ALTER TABLE claims ADD COLUMN IF NOT EXISTS start_offset INTEGER")
+            conn.exec_driver_sql("ALTER TABLE claims ADD COLUMN IF NOT EXISTS end_offset INTEGER")
+    except Exception:
+        # Best-effort: do not block application startup.
+        return

@@ -9,6 +9,7 @@ out/
 build/
 dist/
 *.egg-info/
+*.tsbuildinfo
 
 # Environment
 .env
@@ -49,3 +50,6 @@ exports/
 
 # Test artifacts
 test.db
+
+# Tooling artifacts
+.playwright-mcp/

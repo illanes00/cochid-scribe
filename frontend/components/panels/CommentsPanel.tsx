@@ -258,7 +258,7 @@ export function CommentsPanel({
                       )}
                     </div>
                     {root.quote && (
-                      <div className="text-xs text-muted mt-1 italic">"{root.quote}"</div>
+                      <div className="text-xs text-muted mt-1 italic">&ldquo;{root.quote}&rdquo;</div>
                     )}
                     <div className={`text-sm text-ink mt-1 ${threadResolved ? 'line-through text-muted' : ''}`}>
                       {renderMentions(root.content)}

@@ -70,6 +70,13 @@ interface TiptapEditorProps {
   content?: string | TiptapEditorContent
   onChange?: (content: { html: string; json: Record<string, unknown> }) => void
   onReady?: (editor: Editor) => void
+  onClaimClick?: (
+    claimId: string,
+    claimText?: string,
+    startOffset?: number | null,
+    endOffset?: number | null
+  ) => void
+  activeClaimId?: string | null
   placeholder?: string
   documentSlug?: string
   trackChangesEnabled?: boolean
@@ -86,6 +93,8 @@ export function TiptapEditor({
   content = '',
   onChange,
   onReady,
+  onClaimClick,
+  activeClaimId = null,
   placeholder = 'Start writing...',
   documentSlug,
   trackChangesEnabled = false,
@@ -169,6 +178,27 @@ export function TiptapEditor({
       attributes: {
         class: 'tiptap-editor',
       },
+      handleClick: (_view, _pos, event) => {
+        if (!onClaimClick) return false
+        if (!(event.target instanceof HTMLElement)) return false
+        const target = event.target.closest('[data-claim-id]') as HTMLElement | null
+        const claimId = target?.dataset?.claimId
+        if (claimId) {
+          try {
+            const pos = editor?.view.posAtDOM(target, 0)
+            if (pos) {
+              const textLen = target.textContent?.length || 1
+              editor?.chain().focus().setTextSelection({ from: pos, to: pos + textLen }).run()
+              editor?.chain().scrollIntoView().run()
+            }
+          } catch (err) {
+            console.warn('Failed to scroll to claim', err)
+          }
+          const claimText = target?.textContent?.trim() || undefined
+          onClaimClick(claimId, claimText)
+        }
+        return false
+      },
     },
   })
 
@@ -183,6 +213,29 @@ export function TiptapEditor({
     if (!editor) return
     editor.commands.setTrackChanges?.(trackChangesEnabled)
   }, [editor, trackChangesEnabled])
+
+  // When a claim is selected from the sidebar, scroll to it in the editor
+  useEffect(() => {
+    if (!editor || !activeClaimId) return
+
+    let target: { from: number; to: number } | null = null
+    editor.state.doc.descendants((node, pos) => {
+      if (!node.isText) return
+      const mark = node.marks.find(
+        (m) => m.type.name === 'claim' && m.attrs.claimId === activeClaimId
+      )
+      if (mark) {
+        const length = node.text?.length || 1
+        target = { from: pos, to: pos + length }
+        return false
+      }
+      return
+    })
+
+    if (target) {
+      editor.chain().focus().setTextSelection(target).scrollIntoView().run()
+    }
+  }, [activeClaimId, editor])
 
   // Update content when it changes from outside (only if different)
   useEffect(() => {
@@ -205,6 +258,16 @@ export function TiptapEditor({
       editor.commands.setContent(content.html)
     }
   }, [content, editor])
+
+  useEffect(() => {
+    if (!editor) return
+    const root = editor.view.dom
+    const claimNodes = root.querySelectorAll<HTMLElement>('[data-claim-id]')
+    claimNodes.forEach((node) => {
+      const isActive = activeClaimId && node.dataset.claimId === activeClaimId
+      node.classList.toggle('active', Boolean(isActive))
+    })
+  }, [activeClaimId, editor])
 
   const setLink = useCallback(() => {
     if (!editor) return

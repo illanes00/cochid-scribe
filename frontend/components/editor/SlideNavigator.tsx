@@ -1,7 +1,7 @@
 'use client'
 
-import { useCallback } from 'react'
-import { ChevronLeft, ChevronRight, Plus, Trash2, Layout } from 'lucide-react'
+import { useCallback, useState, type DragEvent } from 'react'
+import { ChevronLeft, ChevronRight, Plus, Trash2 } from 'lucide-react'
 
 export interface Slide {
   id: string
@@ -19,6 +19,7 @@ interface SlideNavigatorProps {
   onAddSlide?: () => void
   onDeleteSlide?: (index: number) => void
   onLayoutChange?: (index: number, layout: Slide['layout']) => void
+  onReorderSlide?: (fromIndex: number, toIndex: number) => void
   readOnly?: boolean
 }
 
@@ -29,8 +30,67 @@ export function SlideNavigator({
   onAddSlide,
   onDeleteSlide,
   onLayoutChange,
+  onReorderSlide,
   readOnly = false,
 }: SlideNavigatorProps) {
+  const [draggedIndex, setDraggedIndex] = useState<number | null>(null)
+  const [dragOverIndex, setDragOverIndex] = useState<number | null>(null)
+
+  const getPreviewText = useCallback((content: string) => {
+    const withoutHtml = content.replace(/<[^>]+>/g, '')
+    return withoutHtml.replace(/[#*_\-]/g, '').slice(0, 100)
+  }, [])
+
+  const handleDragStart = useCallback(
+    (index: number, event: DragEvent<HTMLButtonElement>) => {
+      if (readOnly) return
+      setDraggedIndex(index)
+      setDragOverIndex(null)
+      event.dataTransfer.effectAllowed = 'move'
+      event.dataTransfer.setData('text/plain', String(index))
+    },
+    [readOnly]
+  )
+
+  const handleDragOver = useCallback(
+    (index: number, event: DragEvent<HTMLButtonElement>) => {
+      if (readOnly) return
+      event.preventDefault()
+      event.dataTransfer.dropEffect = 'move'
+      if (dragOverIndex !== index) {
+        setDragOverIndex(index)
+      }
+    },
+    [dragOverIndex, readOnly]
+  )
+
+  const cleanupDrag = useCallback(() => {
+    setDraggedIndex(null)
+    setDragOverIndex(null)
+  }, [])
+
+  const handleDrop = useCallback(
+    (toIndex: number, event: DragEvent<HTMLButtonElement>) => {
+      if (readOnly) return
+      event.preventDefault()
+      const raw = event.dataTransfer.getData('text/plain')
+      const fromIndex = Number(raw)
+      if (!Number.isFinite(fromIndex)) {
+        cleanupDrag()
+        return
+      }
+      if (fromIndex !== toIndex) {
+        onReorderSlide?.(fromIndex, toIndex)
+      }
+      cleanupDrag()
+    },
+    [cleanupDrag, onReorderSlide, readOnly]
+  )
+
+  const handleDragEnd = useCallback(() => {
+    cleanupDrag()
+  }, [cleanupDrag])
+
   const handlePrevious = useCallback(() => {
     if (currentSlide > 0) {
       onSlideSelect(currentSlide - 1)
@@ -96,12 +156,19 @@ export function SlideNavigator({
           <button
             key={slide.id}
             onClick={() => onSlideSelect(index)}
+            draggable={!readOnly}
+            onDragStart={(e) => handleDragStart(index, e)}
+            onDragOver={(e) => handleDragOver(index, e)}
+            onDrop={(e) => handleDrop(index, e)}
+            onDragEnd={handleDragEnd}
             className={`
               slide-thumbnail w-full text-left p-2 border transition-colors
               ${index === currentSlide
                 ? 'border-c-blue bg-blue-50/50'
                 : 'border-line hover:border-line-strong bg-paper'
               }
+              ${draggedIndex === index ? 'opacity-60' : ''}
+              ${dragOverIndex === index && draggedIndex !== null && draggedIndex !== index ? 'border-c-blue' : ''}
             `}
           >
             {/* Slide number and layout */}
@@ -135,7 +202,7 @@ export function SlideNavigator({
               )}
               {slide.layout !== 'title' && slide.content && (
                 <div className="text-[6px] text-muted mt-0.5 line-clamp-3">
-                  {slide.content.replace(/[#*_\-]/g, '').slice(0, 100)}
+                  {getPreviewText(slide.content)}
                 </div>
               )}
             </div>

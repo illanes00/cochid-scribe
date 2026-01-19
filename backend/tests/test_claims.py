@@ -1,5 +1,4 @@
 """Tests for claims API."""
-import pytest
 
 
 class TestClaimsAPI:

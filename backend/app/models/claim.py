@@ -3,7 +3,7 @@
 import uuid
 from datetime import datetime
 
-from sqlalchemy import JSON, Column, DateTime, ForeignKey, String, Text
+from sqlalchemy import JSON, Column, DateTime, ForeignKey, Integer, String, Text
 from sqlalchemy.orm import relationship
 
 from app.db.session import Base
@@ -26,6 +26,8 @@ class Claim(Base):
     claim_type = Column(String(20), nullable=False, default="MIXED")
     status = Column(String(20), default="draft")
     section = Column(String(100))
+    start_offset = Column(Integer, nullable=True)
+    end_offset = Column(Integer, nullable=True)
     evidence = Column(JSON, default=list)
     source_sentences = Column(JSON, default=list)
     created_at = Column(DateTime, default=datetime.utcnow)

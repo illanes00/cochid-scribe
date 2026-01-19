@@ -467,13 +467,25 @@ TOTAL                                      $410 mil millones
 
 ---
 
+# Lectura del costo
+
+## Supuestos (estimación preliminar)
+
+- Basado en gasto observado en EPF y un esquema de subsidio por quintil (orden de magnitud).
+- Requiere calibración por: precios de referencia, canasta cubierta, elegibilidad efectiva, uso/adherencia.
+- No reemplaza evaluación actuarial ni modelación con registros administrativos.
+
+**Idea fuerza**: el costo es acotado en términos macro, pero el diseño importa para maximizar equidad y efectividad.
+
+---
+
 # Retorno esperado
 
 ## Beneficios del programa
 
 **Cuantificables:**
-- Reducción carga Q1: 9,8% → 2%
-- Aumento incidencia Q1: 37,5% → 60%
+- **Meta** reducción carga Q1: 9,8% → ~2%
+- **Meta** aumento incidencia Q1: 37,5% → ~60%
 - Ahorro hospitalario por mejor adherencia
 
 **Estratégicos:**
@@ -503,7 +515,7 @@ TOTAL                                      $410 mil millones
 
 # Chile puede pagar medicamentos para todos
 
-# La pregunta es si quiere hacerlo
+# La pregunta es si prioriza hacerlo
 
 ---
 
@@ -588,7 +600,6 @@ www.espaciopublico.cl
 - OCDE. Health at a Glance 2025
 - Ministerio de Salud. Cuenta Pública 2024
 - FONASA. Estadísticas de Cobertura 2023
-- Becker, G. (1968). Economics of Health
 
 ---
 

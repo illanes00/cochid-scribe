@@ -1,5 +1,6 @@
 """SQLAlchemy models."""
 
+from app.models.asset import Asset
 from app.models.bibliography import BibliographyEntry
 from app.models.claim import Claim
 from app.models.comment import Comment
@@ -22,4 +23,5 @@ __all__ = [
     "ExportJob",
     "Integration",
     "DocumentVersion",
+    "Asset",
 ]
