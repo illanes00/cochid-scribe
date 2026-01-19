@@ -2,7 +2,7 @@
 title: Eficiencia y Calidad del Gasto Público en Seguridad Ciudadana en Chile
 subtitle: Informe Final
 author: Espacio Público para BID
-date: Diciembre 2025
+date: Enero 2026
 format: revealjs
 ---
 
@@ -11,7 +11,7 @@ format: revealjs
 ## Informe Final
 
 **Espacio Público**
-Diciembre 2025
+Enero 2026
 
 ---
 
@@ -696,7 +696,7 @@ Avanzar hacia una seguridad con mayor **calidad del gasto**:
 ## Eficiencia y Calidad del Gasto Público en Seguridad Ciudadana en Chile
 
 **Espacio Público para BID**
-Diciembre 2025
+Enero 2026
 
 ---
 

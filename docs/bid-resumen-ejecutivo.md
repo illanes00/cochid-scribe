@@ -3,7 +3,7 @@
 ## Resumen Ejecutivo
 
 **Espacio Público para el Banco Interamericano de Desarrollo**
-**Diciembre 2025**
+**Enero 2026**
 
 ---
 
@@ -19,7 +19,7 @@ En 2024, el gasto del Gobierno Central en seguridad alcanzó **$4,47 billones CL
 | Bomberos | 1,33% | $0,06 |
 | Otros servicios n.e.p. | 2,48% | $0,11 |
 
-**Hallazgo central**: El gasto en seguridad pública no aparece como "subfinanciado" en términos agregados. La normalización post-pandemia retoma niveles de 2013-2019, sin saltos estructurales permanentes.
+**Hallazgo central**: El gasto en seguridad pública no aparece como "subfinanciado" en términos agregados. La recuperación post-pandemia supera los niveles pre-COVID (2024 > 2019), sin cambios en la composición estructural.
 
 **Implicancia**: El margen de mejora no está en aumentar la escala del presupuesto, sino en mejorar el desempeño: cómo se administra la composición interna, cuán bien se ejecuta el gasto, y qué capacidades de gestión y medición existen.
 
@@ -29,13 +29,13 @@ En 2024, el gasto del Gobierno Central en seguridad alcanzó **$4,47 billones CL
 
 ### El Problema de la Seguridad Ciudadana
 
-Desde 2017, la delincuencia encabeza las preocupaciones públicas en Chile. En octubre 2025, el 61% de la población menciona la delincuencia como prioridad principal (CEP).
+Desde 2017, la delincuencia encabeza las preocupaciones públicas en Chile. En octubre 2025, aproximadamente el 60% de la población menciona la delincuencia como prioridad principal (CEP N°95).
 
 **Datos objetivos**:
 - 23,5% de hogares fue víctima de delito de mayor connotación en 2024
 - Percepción de aumento de delincuencia: 87,7% nacional, 74,5% comunal, 50,8% barrial
-- Homicidios aumentaron de 4,7 a 6,7 por 100.000 habitantes (2018-2022), ubicándose en 6,0 en 2024
-- Proporción de homicidios con arma de fuego subió de 38% a más de 50%
+- Homicidios aumentaron de 4,5 a 6,7 por 100.000 habitantes (2018-2022), ubicándose en 6,0 en 2024
+- Proporción de homicidios con arma de fuego subió de 42% (2018) a ~50% (2024: 49,5%)
 
 **Contexto complejo**: Victimización relativamente contenida, pero incremento de violencia y percepción de inseguridad muy alta con cierta independencia de los datos objetivos.
 
@@ -88,7 +88,7 @@ Siguiendo a Becker (1968), la decisión de delinquir es una comparación entre b
 
 Enfoque descriptivo-comparado del gasto público, centrado en función COFOG 703 (Orden público y seguridad) con subfunciones 7031-7036.
 
-**Alcance temporal**: 2013-2024, capturando tres ciclos presidenciales completos.
+**Alcance temporal**: 2013-2024, capturando cuatro períodos presidenciales (Piñera I parcial, Bachelet II, Piñera II, Boric).
 
 **Nivel institucional**:
 - Análisis nacional: Gobierno Central
@@ -128,7 +128,7 @@ Enfoque descriptivo-comparado del gasto público, centrado en función COFOG 703
 - Crecimiento sostenido hasta 2018-2019
 - Baja en 2020 (pandemia)
 - Retroceso adicional 2022
-- Rebote 2023-2024 hasta nivel comparable con 2019-2021
+- Rebote 2023-2024 que supera máximos pre-pandemia (2024 > 2019)
 - Cierre 2024: **$4,47 billones CLP**
 
 **Como % del PIB**:
@@ -246,7 +246,7 @@ Sin disminuir abruptamente el esfuerzo en control, avanzar en recomposición gra
 
 ### 2. Abrir Espacio para I+D en Seguridad
 
-Establecer línea de gasto en I+D con foco en:
+Establecer línea de gasto en I+D (COFOG 7035 o equivalente programático) con foco en:
 - Datos y modelos de gestión
 - Evaluación de programas
 - Desarrollo tecnológico
@@ -271,6 +271,16 @@ Este informe puede funcionar como línea base para un programa más amplio de ev
 - Estudios de eficiencia técnica
 - Evaluaciones de impacto específicas
 
+### Matriz de implementación y monitoreo (propuesta)
+
+| Recomendación | Output mínimo | Indicador sugerido | Datos requeridos |
+|--------------|---------------|--------------------|------------------|
+| Prevención y reinserción | Portafolio priorizado y escalamiento gradual | % gasto no reactivo (prevención/reinserción) | Mapeo programa→COFOG + presupuesto territorial |
+| I+D en seguridad | Fondo/línea de financiamiento + agenda de evaluación | % gasto clasificado como I+D (7035) | Clasificación funcional + cartera de proyectos |
+| Trazabilidad | Diccionario público programa→COFOG + tablero trimestral | % programas con mapeo publicado | Metadatos presupuestarios + dotaciones |
+| Métricas de desempeño | Set de indicadores por institución | Indicadores operativos trazables | Registros interoperables + definiciones comunes |
+| Evaluación continua | Actualización anual + módulos de eficiencia | Publicación periódica de series | Series largas comparables + metodología abierta |
+
 ---
 
 ## Síntesis Final
@@ -294,4 +304,4 @@ Avanzar hacia una seguridad con mayor calidad del gasto no solo es una exigencia
 ---
 
 *Documento elaborado por Espacio Público para el Banco Interamericano de Desarrollo*
-*Diciembre 2025*
+*Enero 2026*

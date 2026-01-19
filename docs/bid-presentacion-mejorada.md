@@ -19,6 +19,22 @@ Enero 2026
 
 ---
 
+# QUÉ AVANZAMOS DESDE NOVIEMBRE
+
+## Informe de Avance → Informe Final
+
+| Componente | Avance (Nov 2025) | Final (Ene 2026) |
+|------------|-------------------|------------------|
+| **Marco conceptual** | Preliminar | Eficacia/Eficiencia/Calidad consolidado |
+| **Datos** | 2013-2023 | 2013-2024 (cierre fiscal) |
+| **Comparación** | OCDE agregado | OCDE + LATAM por subfunción |
+| **Recomendaciones** | 3 generales | 5 con indicadores específicos |
+| **Propuesta BID** | Mención general | US$700K-1.8M detallado |
+
+**Valor agregado**: Marco analítico robusto + Operacionalización de recomendaciones
+
+---
+
 # LA PREGUNTA CENTRAL
 
 ---
@@ -37,6 +53,11 @@ El problema no es **cuánto** gastamos.
 
 El problema es **cómo** gastamos.
 
+Note:
+- Este es el mensaje central del informe. Pausa antes de pasar.
+- El debate público se centra en "más recursos", pero la evidencia muestra que Chile ya gasta comparable a OCDE.
+- La oportunidad está en la calidad: composición, ejecución, medición.
+
 ---
 
 # EL CONTEXTO
@@ -50,7 +71,7 @@ El problema es **cómo** gastamos.
 ```
 Prioridad ciudadana (CEP Octubre 2025)
 
-Delincuencia     ████████████████████████████████████  61%
+Delincuencia     ████████████████████████████████████  ~60%*
 Salud            ████████████████████░░░░░░░░░░░░░░░░  32%
 Economía         ███████████████░░░░░░░░░░░░░░░░░░░░░  28%
 Educación        ████████████░░░░░░░░░░░░░░░░░░░░░░░░  21%
@@ -58,6 +79,13 @@ Pensiones        ██████████░░░░░░░░░░░
 ```
 
 **La seguridad domina la agenda pública desde 2017**
+
+*Nota: CEP N°95 (Sept-Oct 2025), valor aproximado.
+
+Note:
+- La seguridad es LA prioridad ciudadana. Esto justifica por qué el estudio importa ahora.
+- Ningún gobierno puede ignorar este dato. La presión por "hacer algo" es enorme.
+- Pero: ¿sabemos si lo que estamos haciendo funciona? Ahí entra este informe.
 
 ---
 
@@ -68,11 +96,14 @@ Pensiones        ██████████░░░░░░░░░░░
 | Indicador | Tendencia | Contexto |
 |-----------|-----------|----------|
 | Victimización | 23,5% hogares | Relativamente estable |
-| Homicidios | 6,0 por 100.000 | ↑ desde 4,7 (2018) |
+| Homicidios | 6,0 por 100.000 | ↑ desde 4,5 (2018)* |
 | Percepción inseguridad | 87,7% | Muy alta vs. datos |
-| Homicidios con arma de fuego | >50% | ↑ desde 38% |
+| Homicidios con arma de fuego | ~50% | ↑ desde 42% (2018)** |
 
 **Violencia más letal + percepción desacoplada de realidad**
+
+*Fuente: CEAD/SPD, Informe Nacional de Homicidios 2024.
+**2024: 49,5% (superó 50% en 2022-2023, luego bajó). Fuente: CEAD/SPD.
 
 ---
 
@@ -117,10 +148,12 @@ Pensiones        ██████████░░░░░░░░░░░
 
 | Dimensión | Cobertura |
 |-----------|-----------|
-| **Temporal** | 2013-2024 (3 ciclos presidenciales) |
+| **Temporal** | 2013-2024 (4 períodos presidenciales*) |
 | **Institucional** | Gobierno Central (análisis nacional) |
 | **Comparativo** | Gobierno General (OCDE, LATAM) |
 | **Fuentes** | DIPRES, OCDE, FMI, OMS |
+
+*Piñera I (2013-14), Bachelet II (2014-18), Piñera II (2018-22), Boric (2022-24)
 
 ---
 
@@ -160,25 +193,27 @@ $3.5─┼◆───┘                 ◆──┘  ← Pandemia
 $3.0─┴───────────────────────────────────────────
 ```
 
-**Normalización post-pandemia, sin salto estructural**
+**Recuperación post-pandemia: 2024 supera máximos pre-COVID, sin cambio estructural en composición**
 
 ---
 
 # Comparación internacional
 
-## Chile en contexto OCDE (2023)
+## Chile en contexto OCDE (2022)
 
 ```
-Gasto como % del PIB
+Gasto como % del PIB (Gobierno General)
 
 Mediana LATAM      ████████████████████████  1,9%
 Mediana OCDE       ██████████████████████░░  1,8%
-Chile              ████████████████░░░░░░░░  1,56%
+Chile (ajustado)   ████████████████░░░░░░░░  ~1,6%
                                     ↑
                               Brecha acotada
 ```
 
-**Chile NO está subfinanciado en términos agregados**
+**Hallazgo**: Chile NO aparece subfinanciado en términos agregados comparado con OCDE.
+
+*Fuente: OCDE Government at a Glance 2023. Chile ajustado de GC a GG.*
 
 ---
 
@@ -204,7 +239,7 @@ Prisiones    ████████████████████░░�
 
 Bomberos     █░  1,3%
 Otros        ██░ 2,5%
-I+D          ░   0%  ← CERO
+I+D (7035)   ░   0%  ← Sin clasificación
 ```
 
 ---
@@ -222,24 +257,38 @@ I+D          ░   0%  ← CERO
 **La asignación responde a trayectorias históricas,**
 **no a evidencia sobre efectividad**
 
+Note:
+- Este es uno de los hallazgos más importantes. La mezcla NO cambia en 11 años.
+- Pregunta retórica: ¿El delito de 2024 es igual al de 2013? No. Pero el presupuesto sí.
+- Esto sugiere inercia institucional, no decisiones basadas en evidencia.
+- No es necesariamente "malo" — pero tampoco sabemos si es óptimo.
+
 ---
 
-# Hallazgo crítico: I+D = 0%
+# Hallazgo crítico: Sin clasificación de I+D
 
-## Chile no invierte en innovación en seguridad
+## Chile no clasifica gasto en COFOG 7035 (I+D en seguridad)
 
 ```
-Gasto en I+D (subfunción 7035)
+Gasto clasificado en I+D (subfunción 7035)
 
-Países OCDE con I+D    ████████  $5-15 USD PPA
-Chile                  ░░░░░░░░  $0 USD PPA
+Países OCDE con I+D    ████████  $5-15 USD PPA per cápita
+Chile                  ░░░░░░░░  $0 USD PPA clasificado
 ```
 
-**Sin I+D no hay:**
-- Evaluación de programas
-- Desarrollo tecnológico
-- Modelos predictivos
-- Mejora continua
+**Nota metodológica**: Esto no significa ausencia total de investigación, sino que el gasto existente no se clasifica en la subfunción correspondiente.
+
+**Consecuencias de la no clasificación:**
+- Sin línea presupuestaria dedicada
+- Evaluaciones de impacto dispersas o ausentes
+- Desarrollo tecnológico sin priorización
+- Dificultad para medir y mejorar
+
+Note:
+- Este dato suele sorprender. Chile, con su tradición de rigor fiscal, no clasifica I+D en seguridad.
+- Importante matizar: no significa que NO haya evaluación, sino que no está sistematizada ni priorizada.
+- Comparar con salud o educación, donde sí hay líneas de investigación claras.
+- Esta es una oportunidad concreta para el BID: crear capacidad de evaluación.
 
 ---
 
@@ -366,7 +415,7 @@ Otros              ██░░░░░░░░░░░░░░░░░░�
 
 | # | Hallazgo | Implicancia |
 |---|----------|-------------|
-| 1 | Esfuerzo comparable a OCDE | No hay subfinanciamiento |
+| 1 | Esfuerzo comparable a OCDE | No hay evidencia de subfinanciamiento agregado |
 | 2 | Composición con inercia | Asignación no responde a evidencia |
 | 3 | Alto en prisiones, nulo en I+D | Desequilibrio funcional |
 | 4 | 70% en personal | Rigidez presupuestaria |
@@ -377,6 +426,61 @@ Otros              ██░░░░░░░░░░░░░░░░░░�
 # El mensaje central
 
 > **Dado que Chile ya realiza un esfuerzo relevante en seguridad, el margen de mejora está en CÓMO se gastan los recursos, no en aumentar el presupuesto.**
+
+Note:
+- Este es el mensaje que queremos que recuerden. Repetirlo con convicción.
+- No estamos diciendo "no gasten más" — estamos diciendo "primero entiendan qué funciona".
+- Es un mensaje políticamente viable: no pide más plata, pide mejor gestión.
+- Abre la puerta a la propuesta del BID: ayudar a mejorar la gestión.
+
+---
+
+# LIMITACIONES Y SUPUESTOS
+
+## Transparencia metodológica
+
+---
+
+# Lo que este estudio NO dice
+
+## Alcance y limitaciones
+
+| Limitación | Implicancia |
+|------------|-------------|
+| **COFOG es clasificación funcional** | No captura calidad ni efectividad del gasto |
+| **Datos Gobierno Central** | Excluye gobiernos subnacionales y empresas públicas |
+| **Sin mapeo programa→pilar** | Estimación "control vs prevención" es aproximada |
+| **Comparación OCDE** | Ajuste GC→GG introduce incertidumbre (~5-10%) |
+
+**Este estudio describe composición y tendencias, no evalúa eficiencia causal.**
+
+---
+
+# Supuestos clave
+
+## Condiciones para las recomendaciones
+
+1. **Continuidad institucional**: Nuevo Ministerio de Seguridad se consolida
+2. **Disponibilidad de datos**: DIPRES publica desagregación territorial
+3. **Capacidad de absorción**: Instituciones pueden implementar cambios graduales
+4. **Contexto delictual**: Sin shocks externos que alteren prioridades
+
+**Si estos supuestos no se cumplen, las recomendaciones requieren ajuste.**
+
+---
+
+# Contrafactuales no explorados
+
+## Preguntas abiertas para investigación futura
+
+| Pregunta | Por qué importa |
+|----------|-----------------|
+| ¿Qué pasaría si se aumentara 20% prevención? | Justifica reasignación |
+| ¿Cuál es el costo de no hacer nada? | Fortalece propuesta |
+| ¿Por qué la composición es tan estable? | Distingue inercia vs equilibrio óptimo |
+| ¿Hay gasto en evaluación no clasificado? | Matiza hallazgo I+D = 0 |
+
+**El análisis cuantitativo muestra correlación gasto-homicidios de +0.54, sugiriendo gasto reactivo (no preventivo).**
 
 ---
 
@@ -391,15 +495,24 @@ Otros              ██░░░░░░░░░░░░░░░░░░�
 ## Reequilibrar hacia prevención
 
 **Diagnóstico:**
-- 96% del gasto en control reactivo
-- Retornos decrecientes según literatura
+- Concentración del gasto en control reactivo (policías, justicia, prisiones)*
+- Literatura internacional documenta retornos marginales decrecientes del gasto en control (Sherman et al., 1997; Chalfin & McCrary, 2018)
 
 **Propuesta:**
 - Meta: 5% del gasto a prevención en 5 años
-- Priorizar programas con evidencia (Cure Violence, etc.)
+- Priorizar intervenciones con evidencia internacional (prevención situacional y social)
 - Fortalecer Subsecretaría de Prevención del Delito
 
-**Indicador:** % del gasto en subfunción 7036
+**Indicador:** % del gasto en subfunción 7036 y programas de prevención mapeados
+
+*Nota: Estimación basada en composición COFOG. Requiere mapeo detallado de programas para cálculo preciso.
+
+Note:
+- Esta recomendación puede generar debate. Anticipar objeciones:
+- "¿Cómo saben que prevención funciona?" → Literatura internacional (Sherman et al.)
+- "¿De dónde sale el 5%?" → Es meta gradual y conservadora, no recorte abrupto
+- "¿Qué programas específicos?" → Eso es parte del trabajo futuro (mapeo)
+- El 5% en 5 años es ~$90 mil millones CLP/año — orden de magnitud significativo
 
 ---
 
@@ -408,15 +521,17 @@ Otros              ██░░░░░░░░░░░░░░░░░░�
 ## Crear línea de I+D en seguridad
 
 **Diagnóstico:**
-- Chile: 0% en I+D
-- OCDE: 1-2% promedio
+- Chile: Sin gasto clasificado en COFOG 7035 (I+D en seguridad)
+- Países OCDE con clasificación: 1-2% del gasto en seguridad
 
 **Propuesta:**
-- Establecer Fondo de Innovación en Seguridad
-- Financiar evaluaciones de impacto
-- Desarrollar capacidad analítica (datos, modelos)
+- Establecer Fondo de Innovación en Seguridad con línea presupuestaria específica
+- Financiar evaluaciones de impacto de programas existentes
+- Desarrollar capacidad analítica institucional (datos, modelos predictivos)
 
-**Meta:** 0,5% del gasto en seguridad para I+D al 2028
+**Meta:** 0,5% del gasto en seguridad clasificado en I+D al 2028
+
+**Referencia:** La evidencia internacional muestra que la inversión en evaluación y mejora continua optimiza la efectividad del gasto (Welsh & Farrington, 2012)
 
 ---
 
@@ -522,7 +637,7 @@ Q4  ░░░░░░░░░░░░     ░░░░░░░░▓▓▓�
 ## Beneficios del programa
 
 **Cuantificables:**
-- Reasignación 2% hacia programas efectivos = ~$90 mil millones CLP
+- Reasignación 2% hacia programas efectivos = orden de magnitud ~$90 mil millones CLP/año
 - Reducción 10% reincidencia = ahorro carcelario significativo
 
 **Estratégicos:**
@@ -549,6 +664,12 @@ Q4  ░░░░░░░░░░░░     ░░░░░░░░▓▓▓�
 
 **Total portafolio potencial: US$ 1,8 millones**
 
+Note:
+- El programa base (US$700K) es el mínimo para implementar las recomendaciones.
+- Las líneas adicionales son oportunidades de expansión según interés del BID.
+- El estudio regional es especialmente atractivo: Chile como piloto, luego escalar a LATAM.
+- El laboratorio de innovación puede ser co-financiado con gobierno de Chile.
+
 ---
 
 # ¿Por qué Espacio Público?
@@ -560,6 +681,22 @@ Q4  ░░░░░░░░░░░░     ░░░░░░░░▓▓▓�
 - ✓ **Track record** con BID, Banco Mundial, PNUD
 - ✓ **Equipo multidisciplinario** (economistas, abogados, data scientists)
 - ✓ **Independencia** y credibilidad técnica
+
+---
+
+# Riesgos y Mitigaciones
+
+## Gestión del programa
+
+| Riesgo | Probabilidad | Impacto | Mitigación |
+|--------|--------------|---------|------------|
+| **Cambio de gobierno 2026** | Alta | Alto | Diseño institucional no partidista; anclar en DIPRES |
+| **Resistencia institucional** | Media | Alto | Involucrar contrapartes desde diseño; quick wins tempranos |
+| **Datos no disponibles** | Media | Medio | Plan B con fuentes alternativas; priorizar datos existentes |
+| **Rotación de equipos** | Media | Medio | Documentación exhaustiva; transferencia de conocimiento |
+| **Contexto delictual adverso** | Baja | Alto | Flexibilidad en cronograma; comunicación de avances parciales |
+
+**Estrategia general**: Diseño modular que permita avances independientes por componente.
 
 ---
 
@@ -583,6 +720,12 @@ Q4  ░░░░░░░░░░░░     ░░░░░░░░▓▓▓�
 
 # Con el BID, podemos transformar el sistema.
 
+Note:
+- Cerrar con energía. Este es el llamado a la acción.
+- La línea base ya existe (este informe). El siguiente paso es la implementación.
+- Invitar preguntas sobre cualquier aspecto: metodología, hallazgos, propuesta.
+- Tener listos los anexos por si piden más detalle.
+
 ---
 
 # Gracias
@@ -598,6 +741,32 @@ Contacto:
 
 ---
 
+# FUENTES Y METODOLOGÍA
+
+## Base analítica del informe
+
+---
+
+# Marco Metodológico
+
+## Clasificación y comparabilidad
+
+| Aspecto | Especificación |
+|---------|----------------|
+| **Clasificación** | COFOG (FMI GFSM 2014), función 703 |
+| **Nivel institucional** | Gobierno Central (Chile), Gobierno General (OCDE) |
+| **Período** | 2013-2024 (4 períodos presidenciales: Piñera I, Bachelet II, Piñera II, Boric) |
+| **Conversión internacional** | US$ PPA (FMI WEO) |
+
+**Notas importantes:**
+- Chile usa adaptación de COFOG (COFOG-Chile vía DIPRES)
+- Comparación OCDE ajustada por diferencia GC/GG
+- Datos 2024 corresponden a ejecución presupuestaria
+
+Ver anexo metodológico completo en documentación técnica.
+
+---
+
 # ANEXOS
 
 ---
@@ -609,16 +778,18 @@ Contacto:
 | Fuente | Variables | Período |
 |--------|-----------|---------|
 | DIPRES | Gasto por subfunción COFOG | 2013-2024 |
-| OCDE | Government at a Glance | 2015-2023 |
+| OCDE | Government at a Glance 2023/2025 | 2015-2022 |
 | FMI | Government Finance Statistics | 2013-2022 |
 | INE | ENUSC | 2013-2024 |
 | CEP | Encuestas de opinión | 2013-2025 |
+
+**Fuente primaria Chile:** DIPRES, Estadísticas de Finanzas Públicas, Clasificación Funcional
 
 ---
 
 # Anexo 2: Series completas
 
-## Gasto por subfunción (billones CLP 2024)
+## Gasto por subfunción (billones CLP, términos reales 2024)
 
 | Año | Policías | Justicia | Prisiones | Total |
 |-----|----------|----------|-----------|-------|
@@ -630,11 +801,14 @@ Contacto:
 | 2023 | 1,86 | 1,35 | 0,86 | 4,25 |
 | 2024 | 1,97 | 1,43 | 0,91 | 4,47 |
 
+**Fuente:** DIPRES, Estadísticas de Finanzas Públicas, Clasificación Funcional COFOG.
+**Nota:** Valores ajustados a pesos de 2024 usando IPC.
+
 ---
 
 # Anexo 3: Comparación OCDE
 
-## Gasto per cápita US$ PPA (2022-2023)
+## Gasto per cápita US$ PPA (2022)
 
 | País | Total | Policías | Justicia | Prisiones |
 |------|-------|----------|----------|-----------|
@@ -645,6 +819,9 @@ Contacto:
 | Chile | 511 | 220 | 120 | 105 |
 | México | 380 | 170 | 90 | 60 |
 | Brasil | 340 | 150 | 85 | 55 |
+
+**Fuente:** OCDE, Government at a Glance 2023; FMI GFS para países no OCDE.
+**Nota:** Nivel Gobierno General. Chile ajustado desde Gobierno Central (+5-10% estimado).
 
 ---
 
@@ -660,17 +837,30 @@ Contacto:
 | Gendarmería | Hacinamiento | 108% | 95% |
 | Gendarmería | Reincidencia 2 años | 50% | 40% |
 
+**Fuente línea base:** Memorias institucionales y reportes públicos (valores aproximados, sujetos a verificación).
+**Nota:** Metas propuestas para programa de asistencia técnica. Requieren validación institucional.
+
 ---
 
 # Referencias
 
-- Becker, G. (1968). Crime and Punishment: An Economic Approach
-- BID (2023). El Costo del Crimen en América Latina
+## Literatura académica
+- Becker, G. (1968). "Crime and Punishment: An Economic Approach". *Journal of Political Economy*, 76(2), 169-217.
+- Chalfin, A. & McCrary, J. (2018). "Are U.S. Cities Underpoliced?". *Review of Economics and Statistics*, 100(1), 167-186.
+- Sherman, L.W. et al. (1997). *Preventing Crime: What Works, What Doesn't, What's Promising*. National Institute of Justice.
+- Welsh, B. & Farrington, D. (2012). *The Oxford Handbook of Crime Prevention*. Oxford University Press.
+
+## Organismos internacionales
+- BID (2018). *Mejor Gasto para Mejores Vidas*. Washington, DC.
+- BID (2023). *El Costo del Crimen en América Latina y el Caribe*. Washington, DC.
+- FMI (2014). *Government Finance Statistics Manual*. Washington, DC.
+- OCDE (2023). *Government at a Glance 2023*. Paris.
+
+## Fuentes de datos Chile
 - DIPRES. Estadísticas de Finanzas Públicas 2013-2024
-- OCDE. Government at a Glance 2025
-- FMI. Government Finance Statistics Manual 2014
+- INE/SPD. Encuesta Nacional Urbana de Seguridad Ciudadana 2024
 - Ministerio Público. Boletín Estadístico Anual 2024
-- INE. Encuesta Nacional Urbana de Seguridad Ciudadana 2024
+- CEP. Encuesta Nacional de Opinión Pública, octubre 2025
 
 ---
 
