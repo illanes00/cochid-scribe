@@ -409,78 +409,88 @@ class TipTapToGoogleDocs:
     def _process_table(self, node: dict):
         """Process a table node with cell content.
 
-        Google Docs tables have this structure after insertion:
-        - Table start index
+        Google Docs table structure after insertTable:
+        - Table header: 3 indices
         - For each row:
-          - Row start (paragraph marker)
-          - For each cell: cell content area
-        - Table end
+          - Each cell: 2 indices (paragraph start + newline)
+          - After each row (except last): 1 index (row boundary)
 
-        We insert the table, then insert text into each cell using
-        calculated cell indices.
+        Cell index formula (verified by testing):
+        cell[row][col] = table_start + 3 + row * (num_cols * 2 + 1) + col * 2
+
+        Table structural size (empty):
+        size = 2 + num_rows * (num_cols * 2 + 1)
+
+        We insert content in REVERSE order to maintain correct indices
+        (inserting text shifts all subsequent indices).
         """
         rows = node.get("content", [])
         if not rows:
+            self.warnings.append("Empty table skipped")
             return
 
+        # Count rows and find max columns
         num_rows = len(rows)
         num_cols = 0
         for row in rows:
-            cells = row.get("content", [])
-            num_cols = max(num_cols, len(cells))
+            row_type = row.get("type", "")
+            if row_type in ("tableRow", "tableHeader"):
+                cells = row.get("content", [])
+                num_cols = max(num_cols, len(cells))
 
         if num_rows == 0 or num_cols == 0:
             self.warnings.append("Empty table skipped")
             return
 
-        table_start = self.cursor
+        # Record table insertion point
+        table_insert_index = self.cursor
 
-        # Insert table structure first
+        # Insert empty table structure first
         self.requests.append({
             "insertTable": {
                 "rows": num_rows,
                 "columns": num_cols,
-                "location": {"index": self.cursor},
+                "location": {"index": table_insert_index},
             }
         })
 
-        # Calculate cell positions and insert content
-        # Table structure: TABLE_START + (ROW_START + CELL*cols)*rows + TABLE_END
-        # Each empty cell has 2 indices (start + newline)
-        # We need to insert content at each cell's start position
+        # Google Docs places the table starting at insert_index + 1
+        # (the insert index itself becomes a paragraph before the table)
+        table_actual_start = table_insert_index + 1
 
-        # Extract all cell content first
+        # Extract all cell content
         cell_contents: list[list[str]] = []
         for row in rows:
             row_cells = []
-            for cell in row.get("content", []):
-                cell_text = self._extract_text_from_node(cell)
-                row_cells.append(cell_text)
+            row_type = row.get("type", "")
+            if row_type in ("tableRow", "tableHeader"):
+                for cell in row.get("content", []):
+                    cell_text = self._extract_text_from_node(cell)
+                    row_cells.append(cell_text)
             # Pad row to have num_cols cells
             while len(row_cells) < num_cols:
                 row_cells.append("")
             cell_contents.append(row_cells)
 
-        # Calculate base index after table insertion
-        # After insertTable, cursor is at table_start + 1 (inside first cell)
-        current_cell_index = table_start + 1
-
-        # Insert content into cells in reverse order (to maintain correct indices)
-        # We collect all insertions first, then add them
+        # Collect all cell insertions with their calculated indices
+        # Formula: cell[row][col] = table_start + 3 + row * (cols * 2 + 1) + col * 2
         cell_insertions = []
-
         for row_idx, row_content in enumerate(cell_contents):
             for col_idx, cell_text in enumerate(row_content):
                 if cell_text:
-                    # Calculate cell index: each previous cell adds 2 to index
-                    # (1 for content area + 1 for cell end)
-                    cell_index = table_start + 1 + (row_idx * num_cols + col_idx) * 2
+                    cell_index = (
+                        table_actual_start
+                        + 3
+                        + row_idx * (num_cols * 2 + 1)
+                        + col_idx * 2
+                    )
                     cell_insertions.append({
                         "index": cell_index,
                         "text": cell_text,
                     })
 
-        # Insert cell contents (in reverse order to maintain indices)
+        # Insert cell contents in REVERSE order
+        # This ensures indices remain valid (inserting text shifts subsequent indices)
         for insertion in reversed(cell_insertions):
             self.requests.append({
                 "insertText": {
@@ -489,10 +499,15 @@ class TipTapToGoogleDocs:
                 }
             })
 
-        # Update cursor to after table
-        # Table size: 1 (start) + rows * (cols * 2) + 1 (end) + inserted text lengths
+        # Calculate total text inserted
         total_text_len = sum(len(cell) for row in cell_contents for cell in row)
-        self.cursor = table_start + 2 + num_rows * num_cols * 2 + total_text_len
+
+        # Update cursor to position after table
+        # Table structural size (empty) = 2 + num_rows * (num_cols * 2 + 1)
+        # Final cursor = table_insert_index + 1 (paragraph before table)
+        #              + table_structural_size + total_text_len
+        table_structural_size = 2 + num_rows * (num_cols * 2 + 1)
+        self.cursor = table_insert_index + 1 + table_structural_size + total_text_len
 
     def _extract_text_from_node(self, node: dict) -> str:
         """Extract plain text from a node (recursive)."""

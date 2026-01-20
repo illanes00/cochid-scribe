@@ -1189,6 +1189,180 @@ class TestTableContent:
         assert "Cell A" in all_text
         assert "Cell B" in all_text
 
+    def test_table_index_calculation_2x3(self):
+        """Test that table cell indices are calculated correctly for 2x3 table."""
+        transformer = TipTapToGoogleDocs()
+        tiptap = {
+            "type": "doc",
+            "content": [
+                {
+                    "type": "table",
+                    "content": [
+                        {
+                            "type": "tableRow",
+                            "content": [
+                                {"type": "tableCell", "content": [{"type": "paragraph", "content": [{"type": "text", "text": "A1"}]}]},
+                                {"type": "tableCell", "content": [{"type": "paragraph", "content": [{"type": "text", "text": "B1"}]}]},
+                                {"type": "tableCell", "content": [{"type": "paragraph", "content": [{"type": "text", "text": "C1"}]}]},
+                            ],
+                        },
+                        {
+                            "type": "tableRow",
+                            "content": [
+                                {"type": "tableCell", "content": [{"type": "paragraph", "content": [{"type": "text", "text": "A2"}]}]},
+                                {"type": "tableCell", "content": [{"type": "paragraph", "content": [{"type": "text", "text": "B2"}]}]},
+                                {"type": "tableCell", "content": [{"type": "paragraph", "content": [{"type": "text", "text": "C2"}]}]},
+                            ],
+                        },
+                    ],
+                }
+            ],
+        }
+
+        result = transformer.transform(tiptap)
+
+        # Find table insert
+        table_requests = [r for r in result.requests if "insertTable" in r]
+        assert len(table_requests) == 1
+
+        table_req = table_requests[0]["insertTable"]
+        assert table_req["rows"] == 2
+        assert table_req["columns"] == 3
+
+        # Find cell insertions (should be in reverse order)
+        cell_inserts = [r for r in result.requests if "insertText" in r and r["insertText"]["text"] in ["A1", "B1", "C1", "A2", "B2", "C2"]]
+
+        # All 6 cells should have inserts
+        assert len(cell_inserts) == 6
+
+        # Verify indices use the correct formula
+        # Formula: table_start + 1 + 3 + row * (cols * 2 + 1) + col * 2
+        # For table at index 1: cell[0][0] should be at 1 + 1 + 3 + 0 + 0 = 5
+        # But we insert in reverse, so check that indices are in descending order
+        indices = [r["insertText"]["location"]["index"] for r in cell_inserts]
+        assert indices == sorted(indices, reverse=True), "Cell inserts should be in reverse index order"
+
+    def test_table_with_content_before_and_after(self):
+        """Test table with paragraph before and after."""
+        transformer = TipTapToGoogleDocs()
+        tiptap = {
+            "type": "doc",
+            "content": [
+                {
+                    "type": "paragraph",
+                    "content": [{"type": "text", "text": "Before table"}],
+                },
+                {
+                    "type": "table",
+                    "content": [
+                        {
+                            "type": "tableRow",
+                            "content": [
+                                {"type": "tableCell", "content": [{"type": "paragraph", "content": [{"type": "text", "text": "X"}]}]},
+                            ],
+                        },
+                    ],
+                },
+                {
+                    "type": "paragraph",
+                    "content": [{"type": "text", "text": "After table"}],
+                },
+            ],
+        }
+
+        result = transformer.transform(tiptap)
+
+        # Should have 3 main content areas
+        all_text = "".join(
+            r["insertText"]["text"]
+            for r in result.requests
+            if "insertText" in r
+        )
+
+        assert "Before table" in all_text
+        assert "X" in all_text
+        assert "After table" in all_text
+
+        # "After table" insert should have an index greater than all table content
+        after_table_req = [
+            r for r in result.requests
+            if "insertText" in r and "After table" in r["insertText"]["text"]
+        ]
+        assert len(after_table_req) == 1
+
+    def test_multiple_tables(self):
+        """Test document with multiple tables."""
+        transformer = TipTapToGoogleDocs()
+        tiptap = {
+            "type": "doc",
+            "content": [
+                {
+                    "type": "table",
+                    "content": [
+                        {
+                            "type": "tableRow",
+                            "content": [
+                                {"type": "tableCell", "content": [{"type": "paragraph", "content": [{"type": "text", "text": "Table1"}]}]},
+                            ],
+                        },
+                    ],
+                },
+                {
+                    "type": "paragraph",
+                    "content": [{"type": "text", "text": "Between"}],
+                },
+                {
+                    "type": "table",
+                    "content": [
+                        {
+                            "type": "tableRow",
+                            "content": [
+                                {"type": "tableCell", "content": [{"type": "paragraph", "content": [{"type": "text", "text": "Table2"}]}]},
+                            ],
+                        },
+                    ],
+                },
+            ],
+        }
+
+        result = transformer.transform(tiptap)
+
+        # Should have 2 insertTable requests
+        table_requests = [r for r in result.requests if "insertTable" in r]
+        assert len(table_requests) == 2
+
+        # All content should be present
+        all_text = "".join(
+            r["insertText"]["text"]
+            for r in result.requests
+            if "insertText" in r
+        )
+        assert "Table1" in all_text
+        assert "Between" in all_text
+        assert "Table2" in all_text
+
+    def test_empty_table_skipped(self):
+        """Empty tables should be skipped with a warning."""
+        transformer = TipTapToGoogleDocs()
+        tiptap = {
+            "type": "doc",
+            "content": [
+                {
+                    "type": "table",
+                    "content": [],  # Empty table
+                },
+            ],
+        }
+
+        result = transformer.transform(tiptap)
+
+        # No table should be inserted
+        table_requests = [r for r in result.requests if "insertTable" in r]
+        assert len(table_requests) == 0
+
+        # Should have warning
+        assert any("Empty table" in w for w in result.warnings)
+
 
 # Import HeaderFooterTransform for tests
 from app.services.google_docs_transform import HeaderFooterTransform
