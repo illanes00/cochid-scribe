@@ -2,14 +2,159 @@
 
 from __future__ import annotations
 
+import random
+import time
+from functools import wraps
+from typing import TypeVar, Callable
+
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import Flow
 from googleapiclient.discovery import build
+from googleapiclient.errors import HttpError
 from sqlalchemy.orm import Session
+import structlog
 
 from app.config import get_settings
 from app.models.integration import Integration
+
+logger = structlog.get_logger()
+
+T = TypeVar("T")
+
+
+def with_retry(
+    max_retries: int = 3,
+    initial_delay: float = 1.0,
+    max_delay: float = 60.0,
+    exponential_base: float = 2.0,
+    jitter: bool = True,
+    retryable_codes: tuple[int, ...] = (429, 500, 502, 503, 504),
+) -> Callable[[Callable[..., T]], Callable[..., T]]:
+    """Decorator that adds exponential backoff retry logic for Google API calls.
+
+    Args:
+        max_retries: Maximum number of retry attempts (default: 3)
+        initial_delay: Initial delay in seconds before first retry (default: 1.0)
+        max_delay: Maximum delay between retries in seconds (default: 60.0)
+        exponential_base: Base for exponential backoff (default: 2.0)
+        jitter: Add random jitter to delays to avoid thundering herd (default: True)
+        retryable_codes: HTTP status codes that should trigger a retry
+
+    Returns:
+        Decorated function with retry logic
+    """
+
+    def decorator(func: Callable[..., T]) -> Callable[..., T]:
+        @wraps(func)
+        def wrapper(*args, **kwargs) -> T:
+            last_exception = None
+
+            for attempt in range(max_retries + 1):
+                try:
+                    return func(*args, **kwargs)
+                except HttpError as e:
+                    last_exception = e
+                    status_code = e.resp.status if e.resp else 0
+
+                    if status_code not in retryable_codes or attempt >= max_retries:
+                        logger.warning(
+                            "google.api.error",
+                            function=func.__name__,
+                            status_code=status_code,
+                            attempt=attempt + 1,
+                            max_retries=max_retries,
+                            retryable=status_code in retryable_codes,
+                        )
+                        raise
+
+                    # Calculate delay with exponential backoff
+                    delay = min(
+                        initial_delay * (exponential_base**attempt),
+                        max_delay,
+                    )
+
+                    # Add jitter (±25% of delay)
+                    if jitter:
+                        delay = delay * (0.75 + random.random() * 0.5)
+
+                    logger.info(
+                        "google.api.retry",
+                        function=func.__name__,
+                        status_code=status_code,
+                        attempt=attempt + 1,
+                        max_retries=max_retries,
+                        delay_seconds=round(delay, 2),
+                    )
+
+                    time.sleep(delay)
+
+            # Should not reach here, but just in case
+            if last_exception:
+                raise last_exception
+
+        return wrapper
+
+    return decorator
+
+
+def execute_with_retry(
+    request,
+    max_retries: int = 3,
+    initial_delay: float = 1.0,
+    operation_name: str = "google_api_call",
+):
+    """Execute a Google API request with exponential backoff retry.
+
+    Use this for individual API calls when the decorator approach isn't suitable.
+
+    Args:
+        request: A Google API request object (returned by .get(), .list(), etc.)
+        max_retries: Maximum number of retry attempts
+        initial_delay: Initial delay in seconds
+        operation_name: Name of the operation for logging
+
+    Returns:
+        The API response
+
+    Raises:
+        HttpError: If all retries fail or error is not retryable
+    """
+    retryable_codes = (429, 500, 502, 503, 504)
+    last_exception = None
+
+    for attempt in range(max_retries + 1):
+        try:
+            return request.execute()
+        except HttpError as e:
+            last_exception = e
+            status_code = e.resp.status if e.resp else 0
+
+            if status_code not in retryable_codes or attempt >= max_retries:
+                logger.warning(
+                    "google.api.error",
+                    operation=operation_name,
+                    status_code=status_code,
+                    attempt=attempt + 1,
+                    max_retries=max_retries,
+                )
+                raise
+
+            delay = min(initial_delay * (2**attempt), 60.0)
+            delay = delay * (0.75 + random.random() * 0.5)  # Add jitter
+
+            logger.info(
+                "google.api.retry",
+                operation=operation_name,
+                status_code=status_code,
+                attempt=attempt + 1,
+                delay_seconds=round(delay, 2),
+            )
+
+            time.sleep(delay)
+
+    if last_exception:
+        raise last_exception
 
 SCOPES = [
     "https://www.googleapis.com/auth/drive",

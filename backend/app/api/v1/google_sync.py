@@ -18,7 +18,12 @@ from app.schemas.google_sync import (
     ResolveResponse,
     SyncStatusResponse,
 )
-from app.services.google import build_docs_service, build_drive_service, build_slides_service
+from app.services.google import (
+    build_docs_service,
+    build_drive_service,
+    build_slides_service,
+    execute_with_retry,
+)
 from app.services.google_docs_transform import (
     GoogleDocsToTipTap,
     TipTapToGoogleDocs,
@@ -276,18 +281,24 @@ async def push_to_google(
         # Add the transformed requests
         requests.extend(result.requests)
 
-        # Execute batchUpdate
+        # Execute batchUpdate with retry for rate limits
         if requests:
-            docs_service.documents().batchUpdate(
-                documentId=doc.source_id,
-                body={"requests": requests},
-            ).execute()
+            execute_with_retry(
+                docs_service.documents().batchUpdate(
+                    documentId=doc.source_id,
+                    body={"requests": requests},
+                ),
+                operation_name="docs.batchUpdate",
+            )
 
-        # Get the new revision ID
-        file_meta = drive.files().get(
-            fileId=doc.source_id,
-            fields="headRevisionId",
-        ).execute()
+        # Get the new revision ID with retry
+        file_meta = execute_with_retry(
+            drive.files().get(
+                fileId=doc.source_id,
+                fields="headRevisionId",
+            ),
+            operation_name="drive.files.get",
+        )
         new_revision_id = file_meta.get("headRevisionId")
 
         # Update sync state
@@ -339,8 +350,11 @@ async def pull_from_google(
         raise HTTPException(status_code=400, detail="Google integration not connected")
 
     try:
-        # Fetch the Google Doc
-        google_doc = docs_service.documents().get(documentId=doc.source_id).execute()
+        # Fetch the Google Doc with retry for rate limits
+        google_doc = execute_with_retry(
+            docs_service.documents().get(documentId=doc.source_id),
+            operation_name="docs.get",
+        )
 
         # Transform to TipTap
         transformer = GoogleDocsToTipTap()
@@ -348,11 +362,14 @@ async def pull_from_google(
 
         warnings.extend(transform_warnings)
 
-        # Get the new revision ID
-        file_meta = drive.files().get(
-            fileId=doc.source_id,
-            fields="headRevisionId",
-        ).execute()
+        # Get the new revision ID with retry
+        file_meta = execute_with_retry(
+            drive.files().get(
+                fileId=doc.source_id,
+                fields="headRevisionId",
+            ),
+            operation_name="drive.files.get",
+        )
         new_revision_id = file_meta.get("headRevisionId")
 
         # Update document content

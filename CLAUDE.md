@@ -213,9 +213,51 @@ cd frontend && npm run build
 pytest backend/tests/test_documents.py -v
 ```
 
+## Deployment Architecture
+
+**IMPORTANT:** This project uses a two-server deployment model:
+
+| Server | Hostname | Purpose |
+|--------|----------|---------|
+| **vps-dev** | Development | Development, testing, CI. Does NOT deploy to production. |
+| **vps-deploy** | Production | Runs production services. Deployment via GitHub Actions CD. |
+
+### How to Deploy
+
+1. **Make changes** on vps-dev (this server)
+2. **Run tests** to verify changes work:
+   ```bash
+   cd backend && pytest -v
+   cd frontend && npm test
+   ```
+3. **Commit and push** to `main` branch:
+   ```bash
+   git add -A
+   git commit -m "feat: description of changes"
+   git push origin main
+   ```
+4. **CD automatically triggers** on vps-deploy via GitHub Actions (`.github/workflows/cd.yml`)
+5. **Verify deployment** at https://scribe.illanes00.cl
+
+### CD Pipeline Steps (on vps-deploy)
+
+1. Pull latest code from `origin/main`
+2. Install backend dependencies
+3. Run database migrations
+4. Build frontend (`npm run build`)
+5. Restart services (`sudo systemctl restart illanes00-scribe-backend illanes00-scribe-frontend`)
+6. Health check
+
+### Common Deployment Issues
+
+- **Stale cache:** If Cloudflare caches old assets, toggle Development Mode or purge cache
+- **Environment variables:** `NEXT_PUBLIC_*` vars are baked into the frontend at build time
+- **Service not restarting:** Check `sudo systemctl status illanes00-scribe-frontend`
+
 ## Don't Forget
 
 - Parse `BACKLOG.json` for structured task data
 - Check existing code patterns before creating new files
 - Run tests after changes
 - Keep code simple and focused
+- **Push to main to deploy** - vps-dev does NOT deploy to production
