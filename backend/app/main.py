@@ -24,6 +24,7 @@ from app.api.v1 import (
 )
 from app.config import get_settings
 from app.core.logging import configure_logging, get_logger
+from app.core.middleware import RequestLoggingMiddleware
 from app.db.session import init_db
 
 settings = get_settings()
@@ -63,6 +64,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Request logging (logs all HTTP requests with timing)
+app.add_middleware(RequestLoggingMiddleware)
 
 # Include routers
 app.include_router(documents.router, prefix="/api/v1/documents", tags=["documents"])
