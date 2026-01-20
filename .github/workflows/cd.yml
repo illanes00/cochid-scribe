@@ -62,24 +62,24 @@ jobs:
           ss -tlnp | grep 8132 || echo "No process found on 8132"
           ps aux | grep -E "[u]vicorn.*8132" || echo "No uvicorn found"
 
-          # Stop services first
+          # Stop systemd services
           sudo systemctl stop illanes00-scribe-backend || true
           sudo systemctl stop illanes00-scribe-frontend || true
+          sleep 2
 
-          # Wait longer for the service to fully stop
-          echo "Waiting for services to fully stop..."
-          sleep 5
+          # Kill ANY uvicorn process on port 8132 (including rogue processes not managed by systemd)
+          # This kills the old manually-started process that's blocking the port
+          echo "Killing any remaining uvicorn processes on port 8132..."
+          pkill -f "uvicorn.*8132" || true
+          sleep 2
 
-          echo "=== After stop: What's using port 8132 ==="
-          ss -tlnp | grep 8132 || echo "No process found on 8132"
-          ps aux | grep -E "[u]vicorn.*8132" || echo "No uvicorn found"
-
-          # Use systemctl kill as a more aggressive approach
-          sudo systemctl kill --signal=SIGKILL illanes00-scribe-backend || true
-          sleep 3
+          # Double-check and force kill if needed
+          pgrep -f "uvicorn.*8132" && pkill -9 -f "uvicorn.*8132" || true
+          sleep 2
 
           echo "=== After kill: What's using port 8132 ==="
-          ss -tlnp | grep 8132 || echo "No process found on 8132"
+          ss -tlnp | grep 8132 || echo "Port 8132 is now free"
+          ps aux | grep -E "[u]vicorn.*8132" || echo "No uvicorn process on 8132"
 
           # Start services fresh
           sudo systemctl start illanes00-scribe-backend
