@@ -58,8 +58,17 @@ jobs:
 
       - name: Restart services
         run: |
-          # Restart system-level systemd services
-          sudo systemctl restart illanes00-scribe-backend illanes00-scribe-frontend
+          # Stop services first to ensure ports are released
+          sudo systemctl stop illanes00-scribe-backend illanes00-scribe-frontend || true
+          sleep 2
+
+          # Kill any remaining processes on the ports (just in case)
+          sudo fuser -k 8132/tcp 2>/dev/null || true
+          sudo fuser -k 8133/tcp 2>/dev/null || true
+          sleep 1
+
+          # Start services fresh
+          sudo systemctl start illanes00-scribe-backend illanes00-scribe-frontend
           sleep 5
 
       - name: Health check
