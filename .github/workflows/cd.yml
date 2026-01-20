@@ -11,20 +11,37 @@ env:
 jobs:
   deploy:
     runs-on: [self-hosted, vps-deploy]
-    
+
     steps:
+      - name: Save current state for rollback
+        id: backup
+        run: |
+          set -euo pipefail
+          cd $PROJECT_PATH
+          CURRENT_SHA=$(git rev-parse HEAD)
+          echo "current_sha=$CURRENT_SHA" >> $GITHUB_OUTPUT
+          echo "Backed up current commit: $CURRENT_SHA"
+
       - name: Pull latest code
         run: |
           set -euo pipefail
           cd $PROJECT_PATH
           git fetch origin
           git reset --hard origin/main
+          echo "Updated to commit: $(git rev-parse HEAD)"
 
       - name: Install backend dependencies
         run: |
           cd $PROJECT_PATH/backend
           source venv/bin/activate
           pip install -r requirements.txt --quiet
+
+      - name: Run database migrations
+        run: |
+          cd $PROJECT_PATH/backend
+          source venv/bin/activate
+          alembic upgrade head
+          echo "Migrations completed successfully"
 
       - name: Build frontend
         run: |
@@ -36,12 +53,65 @@ jobs:
         run: |
           # Restart user-level systemd services
           systemctl --user restart scribe-backend scribe-frontend
-          sleep 3
+          sleep 5
 
       - name: Health check
+        id: health
         run: |
-          # Check backend health
-          curl -sf http://localhost:8132/health || exit 1
+          set -euo pipefail
+          # Wait for services to start
+          sleep 3
+
+          # Check backend health with retries
+          for i in 1 2 3; do
+            if curl -sf http://localhost:8132/health > /dev/null 2>&1; then
+              echo "Backend health check passed"
+              break
+            fi
+            echo "Backend health check attempt $i failed, retrying..."
+            sleep 2
+          done
+
+          if ! curl -sf http://localhost:8132/health > /dev/null 2>&1; then
+            echo "Backend health check failed after 3 attempts"
+            exit 1
+          fi
+
           # Check frontend responds
-          curl -sf -o /dev/null -w '%{http_code}' http://localhost:8133/ | grep -q '200' || exit 1
-          echo "Health checks passed"
+          if ! curl -sf -o /dev/null -w '%{http_code}' http://localhost:8133/ | grep -q '200'; then
+            echo "Frontend health check failed"
+            exit 1
+          fi
+
+          echo "All health checks passed"
+
+      - name: Rollback on failure
+        if: failure() && steps.backup.outputs.current_sha
+        env:
+          ROLLBACK_SHA: ${{ steps.backup.outputs.current_sha }}
+        run: |
+          set -euo pipefail
+          cd $PROJECT_PATH
+
+          echo "Rolling back to previous commit: $ROLLBACK_SHA"
+          git reset --hard "$ROLLBACK_SHA"
+
+          # Reinstall dependencies at previous version
+          cd $PROJECT_PATH/backend
+          source venv/bin/activate
+          pip install -r requirements.txt --quiet
+
+          cd $PROJECT_PATH/frontend
+          npm install --silent
+          npm run build
+
+          # Restart services with previous version
+          systemctl --user restart scribe-backend scribe-frontend
+          sleep 3
+
+          # Verify rollback health
+          if curl -sf http://localhost:8132/health > /dev/null 2>&1; then
+            echo "Rollback successful - service restored"
+          else
+            echo "WARNING: Rollback completed but service may be degraded"
+          fi
