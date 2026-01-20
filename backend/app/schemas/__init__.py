@@ -16,6 +16,15 @@ from app.schemas.document import (
     DocumentResponse,
     DocumentUpdate,
 )
+from app.schemas.google_sync import (
+    LinkRequest,
+    LinkResponse,
+    PullResponse,
+    PushResponse,
+    ResolveRequest,
+    ResolveResponse,
+    SyncStatusResponse,
+)
 
 __all__ = [
     "DocumentCreate",
@@ -28,4 +37,11 @@ __all__ = [
     "Evidence",
     "BibEntryCreate",
     "BibEntryResponse",
+    "LinkRequest",
+    "LinkResponse",
+    "SyncStatusResponse",
+    "PushResponse",
+    "PullResponse",
+    "ResolveRequest",
+    "ResolveResponse",
 ]

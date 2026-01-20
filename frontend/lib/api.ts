@@ -333,6 +333,55 @@ export interface DocumentVersionCreate {
   label?: string | null
 }
 
+// Google Sync Types
+export type SyncStatusType = 'none' | 'synced' | 'local_changed' | 'remote_changed' | 'conflict'
+export type ResolveStrategy = 'keep_local' | 'keep_remote'
+
+export interface SyncStatus {
+  linked: boolean
+  google_doc_id?: string | null
+  sync_status: SyncStatusType
+  last_synced_at?: string | null
+  google_revision_id?: string | null
+  local_version_hash?: string | null
+  warnings: string[]
+}
+
+export interface LinkResponse {
+  success: boolean
+  google_doc_id: string
+  google_revision_id?: string | null
+  message?: string | null
+}
+
+export interface PushResponse {
+  success: boolean
+  new_revision_id?: string | null
+  claims_preserved: number
+  citations_preserved: number
+  warnings: string[]
+  error?: string | null
+}
+
+export interface PullResponse {
+  success: boolean
+  claims_restored: number
+  citations_restored: number
+  warnings: string[]
+  error?: string | null
+}
+
+export interface ResolveResponse {
+  success: boolean
+  new_sync_status: SyncStatusType
+  message?: string | null
+}
+
+export interface DriveUrlResponse {
+  url: string
+  file_type: 'document' | 'presentation'
+}
+
 // API Error
 export class ApiError extends Error {
   constructor(
@@ -720,6 +769,75 @@ export const googleApi = {
     }),
 }
 
+// Google Docs Sync API
+export const googleSyncApi = {
+  // Documents
+  link: (slug: string, googleDocId: string): Promise<LinkResponse> =>
+    fetchApi(`/api/v1/google-sync/docs/${slug}/link`, {
+      method: 'POST',
+      body: JSON.stringify({ google_doc_id: googleDocId }),
+    }),
+
+  unlink: (slug: string): Promise<{ success: boolean; message: string }> =>
+    fetchApi(`/api/v1/google-sync/docs/${slug}/link`, {
+      method: 'DELETE',
+    }),
+
+  getStatus: (slug: string): Promise<SyncStatus> =>
+    fetchApi(`/api/v1/google-sync/docs/${slug}/status`),
+
+  push: (slug: string): Promise<PushResponse> =>
+    fetchApi(`/api/v1/google-sync/docs/${slug}/push`, {
+      method: 'POST',
+    }),
+
+  pull: (slug: string): Promise<PullResponse> =>
+    fetchApi(`/api/v1/google-sync/docs/${slug}/pull`, {
+      method: 'POST',
+    }),
+
+  resolve: (slug: string, strategy: ResolveStrategy): Promise<ResolveResponse> =>
+    fetchApi(`/api/v1/google-sync/docs/${slug}/resolve`, {
+      method: 'POST',
+      body: JSON.stringify({ strategy }),
+    }),
+
+  // Presentations (Google Slides)
+  linkSlides: (slug: string, googleSlidesId: string): Promise<LinkResponse> =>
+    fetchApi(`/api/v1/google-sync/slides/${slug}/link`, {
+      method: 'POST',
+      body: JSON.stringify({ google_doc_id: googleSlidesId }),
+    }),
+
+  unlinkSlides: (slug: string): Promise<{ success: boolean; message: string }> =>
+    fetchApi(`/api/v1/google-sync/slides/${slug}/link`, {
+      method: 'DELETE',
+    }),
+
+  getSlidesStatus: (slug: string): Promise<SyncStatus> =>
+    fetchApi(`/api/v1/google-sync/slides/${slug}/status`),
+
+  pushSlides: (slug: string): Promise<PushResponse> =>
+    fetchApi(`/api/v1/google-sync/slides/${slug}/push`, {
+      method: 'POST',
+    }),
+
+  pullSlides: (slug: string): Promise<PullResponse> =>
+    fetchApi(`/api/v1/google-sync/slides/${slug}/pull`, {
+      method: 'POST',
+    }),
+
+  resolveSlides: (slug: string, strategy: ResolveStrategy): Promise<ResolveResponse> =>
+    fetchApi(`/api/v1/google-sync/slides/${slug}/resolve`, {
+      method: 'POST',
+      body: JSON.stringify({ strategy }),
+    }),
+
+  // Common
+  getDriveUrl: (slug: string): Promise<DriveUrlResponse> =>
+    fetchApi(`/api/v1/google-sync/${slug}/drive-url`),
+}
+
 // Comments API
 export const commentsApi = {
   list: (slug: string): Promise<Comment[]> =>
@@ -783,6 +901,7 @@ export const api = {
   assets: assetsApi,
   integrations: integrationsApi,
   google: googleApi,
+  googleSync: googleSyncApi,
   comments: commentsApi,
   versions: versionsApi,
 }

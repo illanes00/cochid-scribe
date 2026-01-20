@@ -24,6 +24,7 @@ import { AIAssistantPanel } from '@/components/panels/AIAssistantPanel'
 import { OutlinePanel } from '@/components/panels/OutlinePanel'
 import { CommentsPanel } from '@/components/panels/CommentsPanel'
 import { VersionsPanel } from '@/components/panels/VersionsPanel'
+import { GoogleSyncPanel } from '@/components/sync/GoogleSyncPanel'
 import { useDocument } from '@/hooks/useDocument'
 import { Claim, Comment, Document, claimsApi, documentsApi, exportsApi, ExportFormat } from '@/lib/api'
 import { googleApi } from '@/lib/api'
@@ -721,6 +722,16 @@ export default function EditorPage() {
             >
               {trackChanges ? 'Tracking' : 'Track changes'}
             </button>
+            {/* Google Sync Status */}
+            {!isNew && document && (
+              <GoogleSyncPanel
+                documentSlug={slug}
+                documentType={document.doc_type}
+                sourceProvider={document?.source_provider}
+                sourceId={document?.source_id}
+                onSyncComplete={reloadDocument}
+              />
+            )}
             <button
               onClick={() => saveDocument()}
               className="btn btn-sm"

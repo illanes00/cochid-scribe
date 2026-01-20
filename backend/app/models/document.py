@@ -37,6 +37,12 @@ class Document(Base):
     source_provider = Column(String(50), nullable=True)
     source_id = Column(String(200), nullable=True)
 
+    # Google Docs sync fields
+    google_revision_id = Column(String(100), nullable=True)
+    last_synced_at = Column(DateTime, nullable=True)
+    sync_status = Column(String(20), default="none")  # none|synced|local_changed|remote_changed|conflict
+    local_version_hash = Column(String(64), nullable=True)
+
     # Relationships
     claims = relationship("Claim", back_populates="document", cascade="all, delete-orphan")
 

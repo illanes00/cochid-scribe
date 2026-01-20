@@ -17,6 +17,7 @@ from app.api.v1 import (
     documents,
     exports,
     google,
+    google_sync,
     graph,
     health,
     integrations,
@@ -81,6 +82,7 @@ app.include_router(charts.router, prefix="/api/v1/charts", tags=["charts"])
 app.include_router(exports.router, prefix="/api/v1/exports", tags=["exports"])
 app.include_router(integrations.router, prefix="/api/v1/integrations", tags=["integrations"])
 app.include_router(google.router, prefix="/api/v1/google", tags=["google"])
+app.include_router(google_sync.router, prefix="/api/v1/google-sync", tags=["google-sync"])
 app.include_router(comments.router, prefix="/api/v1/comments", tags=["comments"])
 app.include_router(assets.router, prefix="/api/v1/assets", tags=["assets"])
 app.include_router(health.router, prefix="/api/v1/health", tags=["health"])
