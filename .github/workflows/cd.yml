@@ -74,6 +74,10 @@ jobs:
           sudo systemctl status illanes00-scribe-backend --no-pager || true
 
           echo ""
+          echo "=== Backend service logs (last 30 lines) ==="
+          sudo journalctl -u illanes00-scribe-backend -n 30 --no-pager || true
+
+          echo ""
           echo "=== Code version on disk ==="
           cd $PROJECT_PATH
           git rev-parse HEAD
