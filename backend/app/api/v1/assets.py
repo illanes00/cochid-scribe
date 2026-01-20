@@ -1,6 +1,7 @@
 """Asset API endpoints."""
 
 import os
+import re
 import uuid
 from datetime import datetime
 from pathlib import Path
@@ -16,6 +17,48 @@ router = APIRouter(tags=["assets"])
 
 UPLOAD_DIR = Path(__file__).resolve().parents[3] / "uploads" / "assets"
 UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
+
+# Pattern for valid asset filenames: UUID followed by extension
+VALID_FILENAME_PATTERN = re.compile(r"^[a-f0-9\-]{36}\.[a-zA-Z0-9]+$")
+
+
+def safe_asset_path(filename: str) -> Path:
+    """
+    Safely resolve an asset path, preventing path traversal attacks.
+
+    Args:
+        filename: The filename to resolve (should be UUID + extension)
+
+    Returns:
+        Resolved Path within UPLOAD_DIR
+
+    Raises:
+        HTTPException: If the path would escape UPLOAD_DIR or filename is invalid
+    """
+    # Extract just the filename component (defense against ../../../)
+    safe_name = Path(filename).name
+
+    # Validate filename format (should be UUID.ext from our upload)
+    if not VALID_FILENAME_PATTERN.match(safe_name):
+        raise HTTPException(
+            status_code=400,
+            detail="Invalid asset filename format"
+        )
+
+    # Construct and resolve the full path
+    filepath = (UPLOAD_DIR / safe_name).resolve()
+
+    # Verify the resolved path is still within UPLOAD_DIR
+    # This catches symlink attacks and edge cases
+    try:
+        filepath.relative_to(UPLOAD_DIR.resolve())
+    except ValueError:
+        raise HTTPException(
+            status_code=400,
+            detail="Invalid asset path"
+        )
+
+    return filepath
 
 
 @router.get("", response_model=list[AssetResponse])
@@ -85,9 +128,15 @@ async def delete_asset(asset_id: str, db: Session = Depends(get_db)):
     if not asset:
         raise HTTPException(status_code=404, detail="Asset not found")
 
-    filepath = UPLOAD_DIR / Path(asset.url).name
-    if filepath.exists():
-        filepath.unlink()
+    # Safely resolve the file path, preventing path traversal
+    try:
+        filepath = safe_asset_path(Path(asset.url).name)
+        if filepath.exists():
+            filepath.unlink()
+    except HTTPException:
+        # If path validation fails, log but continue with DB deletion
+        # The file may have been manually deleted or the URL was corrupted
+        pass
 
     db.delete(asset)
     db.commit()

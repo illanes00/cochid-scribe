@@ -2,6 +2,53 @@
 
 from pathlib import Path
 
+import pytest
+from fastapi import HTTPException
+
+from app.api.v1.assets import safe_asset_path, UPLOAD_DIR
+
+
+class TestPathTraversalProtection:
+    """Tests for path traversal security."""
+
+    def test_valid_uuid_filename_accepted(self):
+        """Valid UUID.ext filenames should be accepted."""
+        result = safe_asset_path("a1b2c3d4-e5f6-7890-abcd-ef1234567890.png")
+        assert result.name == "a1b2c3d4-e5f6-7890-abcd-ef1234567890.png"
+        assert result.parent == UPLOAD_DIR.resolve()
+
+    def test_path_traversal_blocked(self):
+        """Path traversal attempts should be blocked."""
+        with pytest.raises(HTTPException) as exc_info:
+            safe_asset_path("../../../etc/passwd")
+        assert exc_info.value.status_code == 400
+        assert "Invalid asset filename" in exc_info.value.detail
+
+    def test_dotdot_in_filename_blocked(self):
+        """Filenames with .. should be blocked."""
+        with pytest.raises(HTTPException) as exc_info:
+            safe_asset_path("..%2F..%2Fetc%2Fpasswd")
+        assert exc_info.value.status_code == 400
+
+    def test_absolute_path_blocked(self):
+        """Absolute paths should be blocked."""
+        with pytest.raises(HTTPException) as exc_info:
+            safe_asset_path("/etc/passwd")
+        assert exc_info.value.status_code == 400
+
+    def test_invalid_filename_format_blocked(self):
+        """Non-UUID filenames should be blocked."""
+        with pytest.raises(HTTPException) as exc_info:
+            safe_asset_path("malicious.txt")
+        assert exc_info.value.status_code == 400
+        assert "Invalid asset filename" in exc_info.value.detail
+
+    def test_null_byte_injection_blocked(self):
+        """Null byte injection attempts should be blocked."""
+        with pytest.raises(HTTPException) as exc_info:
+            safe_asset_path("a1b2c3d4-e5f6-7890-abcd-ef1234567890.png\x00.txt")
+        assert exc_info.value.status_code == 400
+
 
 class TestAssetsAPI:
     """Test asset upload and lifecycle."""
