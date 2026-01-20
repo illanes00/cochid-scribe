@@ -25,10 +25,53 @@ import { OutlinePanel } from '@/components/panels/OutlinePanel'
 import { CommentsPanel } from '@/components/panels/CommentsPanel'
 import { VersionsPanel } from '@/components/panels/VersionsPanel'
 import { useDocument } from '@/hooks/useDocument'
-import { Claim, Comment, claimsApi, documentsApi, exportsApi, ExportFormat } from '@/lib/api'
+import { Claim, Comment, Document, claimsApi, documentsApi, exportsApi, ExportFormat } from '@/lib/api'
 import { googleApi } from '@/lib/api'
 
 type PanelType = 'claims' | 'bib' | 'ai' | 'comments' | 'versions' | 'outline'
+
+/**
+ * Default TipTap document structure for empty/new documents.
+ * Provides a valid ProseMirror schema that initializes the editor correctly.
+ */
+const DEFAULT_TIPTAP_CONTENT = {
+  json: {
+    type: 'doc',
+    content: [{ type: 'paragraph' }],
+  },
+}
+
+/**
+ * Extract valid editor content from a document, handling null/undefined/empty cases.
+ * Returns a valid content structure that TipTap can initialize with.
+ */
+function getEditorContent(document: Document | null): { html?: string; json?: Record<string, unknown> } | string {
+  // No document loaded yet
+  if (!document) {
+    return DEFAULT_TIPTAP_CONTENT
+  }
+
+  // Check if content object has actual data
+  const content = document.content
+  if (content && typeof content === 'object') {
+    // Has JSON content (preferred format)
+    if (content.json && typeof content.json === 'object' && Object.keys(content.json).length > 0) {
+      return content
+    }
+    // Has HTML content
+    if (content.html && typeof content.html === 'string' && content.html.trim()) {
+      return content
+    }
+  }
+
+  // Fallback to markdown if available
+  if (document.markdown && document.markdown.trim()) {
+    return document.markdown
+  }
+
+  // Return default empty document structure
+  return DEFAULT_TIPTAP_CONTENT
+}
 
 export default function EditorPage() {
   const params = useParams()
@@ -805,11 +848,7 @@ export default function EditorPage() {
             {/* Editor */}
             <main className="flex-1 overflow-hidden">
               <TiptapEditor
-                content={
-                  typeof document?.content === 'object' && document?.content
-                    ? document.content
-                    : document?.markdown || ''
-                }
+                content={getEditorContent(document)}
                 onChange={handleContentChange}
                 onReady={handleEditorReady}
                 onClaimClick={handleClaimClick}
