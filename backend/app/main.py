@@ -109,7 +109,7 @@ async def root():
     return {"message": "Scribe API", "docs": "/api/docs", "version": "2026-01-20-v2"}
 
 
-@app.get("/debug/routes")
+@app.get("/api/debug/routes")
 async def debug_routes():
     """Debug endpoint to list all registered routes."""
     routes = []
@@ -125,4 +125,5 @@ async def debug_routes():
         "routes": sorted(routes, key=lambda x: x["path"]),
         "google_sync_routes": len([r for r in routes if "google-sync" in r["path"]]),
         "track_changes_routes": len([r for r in routes if "changes" in r["path"]]),
+        "version": "2026-01-20-v3",
     }
