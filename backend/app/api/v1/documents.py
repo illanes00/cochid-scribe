@@ -344,7 +344,8 @@ async def update_document(
                 )
 
                 claim_obj = Claim(
-                    claim_id=f"C-{datetime.utcnow().strftime('%Y%m%d')}-{uuid.uuid4().hex[:6]}",
+                    # Use 12 hex chars from UUID for uniqueness under concurrent load
+                    claim_id=f"C-{uuid.uuid4().hex[:12]}",
                     document_id=doc.id,
                     claim_text=claim_text,
                     claim_type=claim_type,

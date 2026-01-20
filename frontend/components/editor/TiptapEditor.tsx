@@ -288,7 +288,9 @@ export function TiptapEditor({
     const { from, to } = editor.state.selection
     if (from === to) return
 
-    const claimId = `C-${Date.now().toString(36)}`
+    // Use timestamp + random suffix for uniqueness
+    // crypto.randomUUID() provides 122 bits of randomness
+    const claimId = `C-${crypto.randomUUID().replace(/-/g, '').slice(0, 12)}`
     editor.chain().focus().setClaim({ claimId }).run()
   }, [editor])
 
