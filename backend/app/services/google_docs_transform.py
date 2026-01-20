@@ -1324,6 +1324,240 @@ class GoogleDocsToTipTap:
         }
 
 
+class HeaderFooterTransform:
+    """Transform headers and footers between Scribe and Google Docs.
+
+    Google Docs headers/footers are separate segments with their own content.
+    Scribe stores header/footer as TipTap JSON in front_matter.
+    """
+
+    @staticmethod
+    def create_header_footer_requests(
+        header_content: dict | None,
+        footer_content: dict | None,
+        page_margins: dict | None = None,
+    ) -> list[dict]:
+        """Create Google Docs API requests for header/footer.
+
+        Args:
+            header_content: TipTap JSON for header (or None to skip)
+            footer_content: TipTap JSON for footer (or None to skip)
+            page_margins: Optional page margins dict {top, bottom, left, right}
+
+        Returns:
+            List of batchUpdate requests
+        """
+        requests = []
+
+        # Create header if content provided
+        if header_content:
+            # First create the header
+            requests.append({
+                "createHeader": {
+                    "type": "DEFAULT",
+                    "sectionBreakLocation": {"index": 0},
+                }
+            })
+
+        # Create footer if content provided
+        if footer_content:
+            requests.append({
+                "createFooter": {
+                    "type": "DEFAULT",
+                    "sectionBreakLocation": {"index": 0},
+                }
+            })
+
+        # Update page margins if provided
+        if page_margins:
+            margin_top = page_margins.get("top", 72)
+            margin_bottom = page_margins.get("bottom", 72)
+            margin_left = page_margins.get("left", 72)
+            margin_right = page_margins.get("right", 72)
+
+            requests.append({
+                "updateDocumentStyle": {
+                    "documentStyle": {
+                        "marginTop": {"magnitude": margin_top, "unit": "PT"},
+                        "marginBottom": {"magnitude": margin_bottom, "unit": "PT"},
+                        "marginLeft": {"magnitude": margin_left, "unit": "PT"},
+                        "marginRight": {"magnitude": margin_right, "unit": "PT"},
+                    },
+                    "fields": "marginTop,marginBottom,marginLeft,marginRight",
+                }
+            })
+
+        return requests
+
+    @staticmethod
+    def create_header_content_requests(
+        header_id: str,
+        content: dict,
+        variables: dict | None = None,
+    ) -> list[dict]:
+        """Create requests to insert content into a header.
+
+        Args:
+            header_id: The Google Docs header ID
+            content: TipTap JSON content for the header
+            variables: Optional dict with {pageNumber, totalPages, documentTitle}
+
+        Returns:
+            List of batchUpdate requests
+        """
+        # Extract text from TipTap content
+        text = HeaderFooterTransform._extract_text_with_variables(content, variables or {})
+
+        if not text:
+            return []
+
+        return [{
+            "insertText": {
+                "location": {"segmentId": header_id, "index": 0},
+                "text": text,
+            }
+        }]
+
+    @staticmethod
+    def create_footer_content_requests(
+        footer_id: str,
+        content: dict,
+        variables: dict | None = None,
+    ) -> list[dict]:
+        """Create requests to insert content into a footer.
+
+        Args:
+            footer_id: The Google Docs footer ID
+            content: TipTap JSON content for the footer
+            variables: Optional dict with {pageNumber, totalPages, documentTitle}
+
+        Returns:
+            List of batchUpdate requests
+        """
+        text = HeaderFooterTransform._extract_text_with_variables(content, variables or {})
+
+        if not text:
+            return []
+
+        return [{
+            "insertText": {
+                "location": {"segmentId": footer_id, "index": 0},
+                "text": text,
+            }
+        }]
+
+    @staticmethod
+    def _extract_text_with_variables(content: dict, variables: dict) -> str:
+        """Extract text from TipTap content, replacing variable placeholders.
+
+        Variables: {pageNumber}, {totalPages}, {documentTitle}, {date}
+        """
+        text_parts = []
+
+        def extract_from_node(node: dict):
+            if node.get("type") == "text":
+                text = node.get("text", "")
+                # Replace variables
+                text = text.replace("{pageNumber}", str(variables.get("pageNumber", "1")))
+                text = text.replace("{totalPages}", str(variables.get("totalPages", "1")))
+                text = text.replace("{documentTitle}", variables.get("documentTitle", ""))
+                text = text.replace("{date}", variables.get("date", ""))
+                text_parts.append(text)
+            elif "content" in node:
+                for child in node.get("content", []):
+                    extract_from_node(child)
+
+        extract_from_node(content)
+        return "".join(text_parts)
+
+    @staticmethod
+    def extract_header_footer_from_doc(google_doc: dict) -> tuple[dict | None, dict | None]:
+        """Extract header and footer content from Google Docs response.
+
+        Args:
+            google_doc: The Google Docs document response
+
+        Returns:
+            Tuple of (header_content, footer_content) as TipTap JSON
+        """
+        header_content = None
+        footer_content = None
+
+        # Extract headers
+        headers = google_doc.get("headers", {})
+        for header_id, header in headers.items():
+            text = HeaderFooterTransform._extract_text_from_segment(header)
+            if text:
+                header_content = {
+                    "type": "doc",
+                    "content": [{"type": "paragraph", "content": [{"type": "text", "text": text}]}],
+                }
+                break  # Use first header found
+
+        # Extract footers
+        footers = google_doc.get("footers", {})
+        for footer_id, footer in footers.items():
+            text = HeaderFooterTransform._extract_text_from_segment(footer)
+            if text:
+                footer_content = {
+                    "type": "doc",
+                    "content": [{"type": "paragraph", "content": [{"type": "text", "text": text}]}],
+                }
+                break  # Use first footer found
+
+        return header_content, footer_content
+
+    @staticmethod
+    def _extract_text_from_segment(segment: dict) -> str:
+        """Extract plain text from a Google Docs segment (header/footer)."""
+        text_parts = []
+        for element in segment.get("content", []):
+            if "paragraph" in element:
+                for elem in element["paragraph"].get("elements", []):
+                    if "textRun" in elem:
+                        content = elem["textRun"].get("content", "")
+                        if content and content != "\n":
+                            text_parts.append(content.rstrip("\n"))
+        return " ".join(text_parts)
+
+    @staticmethod
+    def extract_page_margins_from_doc(google_doc: dict) -> dict | None:
+        """Extract page margins from Google Docs response.
+
+        Args:
+            google_doc: The Google Docs document response
+
+        Returns:
+            Dict with {top, bottom, left, right} in pixels, or None
+        """
+        doc_style = google_doc.get("documentStyle", {})
+
+        margin_top = doc_style.get("marginTop", {})
+        margin_bottom = doc_style.get("marginBottom", {})
+        margin_left = doc_style.get("marginLeft", {})
+        margin_right = doc_style.get("marginRight", {})
+
+        if not any([margin_top, margin_bottom, margin_left, margin_right]):
+            return None
+
+        def get_pixels(margin: dict) -> int:
+            magnitude = margin.get("magnitude", 72)
+            unit = margin.get("unit", "PT")
+            # Convert to pixels (assuming 96 DPI)
+            if unit == "PT":
+                return int(magnitude * 96 / 72)
+            elif unit == "IN":
+                return int(magnitude * 96)
+            return int(magnitude)
+
+        return {
+            "top": get_pixels(margin_top),
+            "bottom": get_pixels(margin_bottom),
+            "left": get_pixels(margin_left),
+            "right": get_pixels(margin_right),
+        }
+
+
 def apply_claim_marks_from_footnotes(
     tiptap_json: dict,
     google_doc: dict,

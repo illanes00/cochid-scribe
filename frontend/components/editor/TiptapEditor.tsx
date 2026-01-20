@@ -59,6 +59,7 @@ import { Citation } from './extensions/citation'
 import { SlashCommands } from './extensions/slash-commands'
 import { Comment } from './extensions/comment'
 import { ChangeMark, TrackChanges } from './extensions/track-changes'
+import { ParagraphFormatting } from './extensions/paragraph-formatting'
 import { assetsApi, commentsApi } from '@/lib/api'
 
 interface TiptapEditorContent {
@@ -169,6 +170,7 @@ export function TiptapEditor({
       Comment,
       ChangeMark,
       TrackChanges,
+      ParagraphFormatting,
     ],
     content: typeof content === 'string' ? content : content?.json || content?.html || '',
     onUpdate: ({ editor }) => {

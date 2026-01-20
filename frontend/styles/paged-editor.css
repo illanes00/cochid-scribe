@@ -30,6 +30,11 @@
   align-items: center;
 }
 
+.paged-editor-pages-wrapper {
+  display: flex;
+  position: relative;
+}
+
 .paged-editor-pages {
   width: var(--page-width);
   min-height: 100%;

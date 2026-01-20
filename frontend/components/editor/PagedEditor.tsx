@@ -2,7 +2,7 @@
 
 import { useRef, useState, useCallback, useEffect, useMemo, ReactNode } from 'react'
 import { Editor } from '@tiptap/core'
-import { Ruler } from './Ruler'
+import { Ruler, VerticalRuler } from './Ruler'
 import { HeaderFooterEditor, HeaderFooterContent } from './HeaderFooterEditor'
 
 /**
@@ -28,6 +28,7 @@ export interface PageLayoutConfig {
   format: PageFormat
   margins: PageMargins
   showRuler: boolean
+  showVerticalRuler: boolean
   showPageBreaks: boolean
   showHeaderFooter: boolean
   headerContent?: HeaderFooterContent
@@ -45,6 +46,7 @@ const DEFAULT_LAYOUT: PageLayoutConfig = {
   format: 'A4',
   margins: DEFAULT_MARGINS,
   showRuler: true,
+  showVerticalRuler: false,
   showPageBreaks: true,
   showHeaderFooter: false,
 }
@@ -194,9 +196,19 @@ export function PagedEditor({
 
       {/* Page container */}
       <div className="paged-editor-scroll">
-        <div className="paged-editor-pages">
-          {/* Paper visual */}
-          <div className="page-paper">
+        <div className="paged-editor-pages-wrapper">
+          {/* Vertical ruler */}
+          {layout.showVerticalRuler && (
+            <VerticalRuler
+              pageHeight={pageFormat.height}
+              margins={{ top: layout.margins.top, bottom: layout.margins.bottom }}
+              onMarginsChange={handleMarginsChange}
+            />
+          )}
+
+          <div className="paged-editor-pages">
+            {/* Paper visual */}
+            <div className="page-paper">
             {/* Header */}
             {layout.showHeaderFooter && (
               <div className="page-header">
@@ -235,6 +247,7 @@ export function PagedEditor({
               </div>
             )}
           </div>
+        </div>
         </div>
 
         {/* Page count indicator */}
