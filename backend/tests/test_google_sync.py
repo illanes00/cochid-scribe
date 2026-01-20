@@ -930,3 +930,261 @@ class TestDeleteSlidesRequests:
         requests = delete_all_slides_requests(presentation)
 
         assert requests == []
+
+
+# ==================== Additional Feature Tests ====================
+
+class TestTaskListRoundTrip:
+    """Tests for task list (checkbox) round-trip."""
+
+    def test_push_task_list_creates_checkbox_markers(self):
+        """Task list push should create [ ] and [x] markers."""
+        transformer = TipTapToGoogleDocs()
+        tiptap = {
+            "type": "doc",
+            "content": [
+                {
+                    "type": "taskList",
+                    "content": [
+                        {
+                            "type": "taskItem",
+                            "attrs": {"checked": False},
+                            "content": [
+                                {
+                                    "type": "paragraph",
+                                    "content": [{"type": "text", "text": "Unchecked task"}],
+                                }
+                            ],
+                        },
+                        {
+                            "type": "taskItem",
+                            "attrs": {"checked": True},
+                            "content": [
+                                {
+                                    "type": "paragraph",
+                                    "content": [{"type": "text", "text": "Checked task"}],
+                                }
+                            ],
+                        },
+                    ],
+                }
+            ],
+        }
+
+        result = transformer.transform(tiptap)
+
+        # Check that text was inserted with markers
+        insert_requests = [r for r in result.requests if "insertText" in r]
+        all_text = "".join(r["insertText"]["text"] for r in insert_requests)
+
+        assert "[ ]" in all_text
+        assert "[x]" in all_text
+
+    def test_pull_task_list_restores_checked_state(self):
+        """Task list markers should restore to taskList with correct checked state."""
+        transformer = GoogleDocsToTipTap()
+        google_doc = {
+            "body": {
+                "content": [
+                    {
+                        "paragraph": {
+                            "paragraphStyle": {"namedStyleType": "NORMAL_TEXT"},
+                            "bullet": {"listId": "list1"},
+                            "elements": [
+                                {
+                                    "textRun": {
+                                        "content": "[ ] Unchecked task\n",
+                                        "textStyle": {},
+                                    }
+                                }
+                            ],
+                        }
+                    },
+                    {
+                        "paragraph": {
+                            "paragraphStyle": {"namedStyleType": "NORMAL_TEXT"},
+                            "bullet": {"listId": "list1"},
+                            "elements": [
+                                {
+                                    "textRun": {
+                                        "content": "[x] Checked task\n",
+                                        "textStyle": {},
+                                    }
+                                }
+                            ],
+                        }
+                    },
+                ]
+            },
+            "footnotes": {},
+        }
+
+        tiptap_json, claims, citations, warnings = transformer.transform(google_doc)
+
+        assert len(tiptap_json["content"]) >= 1
+        task_list = tiptap_json["content"][0]
+        assert task_list["type"] == "taskList"
+        assert len(task_list["content"]) == 2
+
+        # First item unchecked
+        assert task_list["content"][0]["type"] == "taskItem"
+        assert task_list["content"][0]["attrs"]["checked"] is False
+
+        # Second item checked
+        assert task_list["content"][1]["type"] == "taskItem"
+        assert task_list["content"][1]["attrs"]["checked"] is True
+
+
+class TestClaimMapping:
+    """Tests for claim mapping with text anchors."""
+
+    def test_push_claim_stores_text_anchor(self):
+        """Claims should store text content for restoration."""
+        transformer = TipTapToGoogleDocs()
+        tiptap = {
+            "type": "doc",
+            "content": [
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "This claim text",
+                            "marks": [
+                                {
+                                    "type": "claim",
+                                    "attrs": {
+                                        "claimId": "C-test",
+                                        "claimType": "DATA",
+                                        "status": "verified",
+                                    },
+                                }
+                            ],
+                        }
+                    ],
+                }
+            ],
+        }
+
+        result = transformer.transform(tiptap)
+
+        # Check that footnote contains text anchor
+        assert len(result.footnotes) >= 1
+        claim_footnote = result.footnotes[0]
+        assert claim_footnote["type"] == "claim"
+        assert claim_footnote["data"]["text"] == "This claim text"
+        assert "textHash" in claim_footnote["data"]
+
+
+class TestImagePlaceholders:
+    """Tests for image placeholder handling."""
+
+    def test_push_base64_image_creates_placeholder(self):
+        """Base64 images should be converted to placeholders."""
+        transformer = TipTapToGoogleDocs()
+        tiptap = {
+            "type": "doc",
+            "content": [
+                {
+                    "type": "image",
+                    "attrs": {
+                        "src": "data:image/png;base64,iVBORw0KGgo=",
+                        "alt": "Test image",
+                    },
+                }
+            ],
+        }
+
+        result = transformer.transform(tiptap)
+
+        # Should have inserted placeholder text
+        insert_requests = [r for r in result.requests if "insertText" in r]
+        all_text = "".join(r["insertText"]["text"] for r in insert_requests)
+
+        assert "[📷 Image:" in all_text
+        assert len(result.warnings) >= 1
+
+
+class TestBlockquoteStyles:
+    """Tests for blockquote styling."""
+
+    def test_blockquote_has_border_and_indentation(self):
+        """Blockquotes should have left border and indentation."""
+        transformer = TipTapToGoogleDocs()
+        tiptap = {
+            "type": "doc",
+            "content": [
+                {
+                    "type": "blockquote",
+                    "content": [
+                        {
+                            "type": "paragraph",
+                            "content": [{"type": "text", "text": "Quoted text"}],
+                        }
+                    ],
+                }
+            ],
+        }
+
+        result = transformer.transform(tiptap)
+
+        # Check for paragraph style with border
+        style_requests = [r for r in result.requests if "updateParagraphStyle" in r]
+        border_requests = [
+            r for r in style_requests
+            if "borderLeft" in r["updateParagraphStyle"]["paragraphStyle"]
+        ]
+
+        assert len(border_requests) >= 1
+
+
+class TestTableContent:
+    """Tests for table content handling."""
+
+    def test_table_cells_have_content(self):
+        """Table cells should have their content inserted."""
+        transformer = TipTapToGoogleDocs()
+        tiptap = {
+            "type": "doc",
+            "content": [
+                {
+                    "type": "table",
+                    "content": [
+                        {
+                            "type": "tableRow",
+                            "content": [
+                                {
+                                    "type": "tableCell",
+                                    "content": [
+                                        {
+                                            "type": "paragraph",
+                                            "content": [{"type": "text", "text": "Cell A"}],
+                                        }
+                                    ],
+                                },
+                                {
+                                    "type": "tableCell",
+                                    "content": [
+                                        {
+                                            "type": "paragraph",
+                                            "content": [{"type": "text", "text": "Cell B"}],
+                                        }
+                                    ],
+                                },
+                            ],
+                        }
+                    ],
+                }
+            ],
+        }
+
+        result = transformer.transform(tiptap)
+
+        # Should have insertTable and insertText for cells
+        table_requests = [r for r in result.requests if "insertTable" in r]
+        insert_requests = [r for r in result.requests if "insertText" in r]
+
+        assert len(table_requests) >= 1
+        all_text = "".join(r["insertText"]["text"] for r in insert_requests)
+        assert "Cell A" in all_text
+        assert "Cell B" in all_text

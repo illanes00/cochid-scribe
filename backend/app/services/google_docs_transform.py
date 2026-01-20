@@ -37,7 +37,13 @@ from typing import Any
 # Marker prefixes for encoding Scribe metadata in Google Docs footnotes
 CLAIM_MARKER = "[SCRIBE_CLAIM:"
 CITATION_MARKER = "[SCRIBE_CITE:"
+TASK_MARKER_CHECKED = "[x]"
+TASK_MARKER_UNCHECKED = "[ ]"
 MARKER_END = "]"
+
+# Image placeholder format
+IMAGE_PLACEHOLDER_START = "[📷 Image: "
+IMAGE_PLACEHOLDER_END = "]"
 
 # Google Docs named style mappings
 HEADING_STYLES = {
@@ -311,7 +317,7 @@ class TipTapToGoogleDocs:
         })
 
     def _process_blockquote(self, node: dict):
-        """Process a blockquote node."""
+        """Process a blockquote node with proper margins and styling."""
         start_index = self.cursor
 
         for child in node.get("content", []):
@@ -319,26 +325,42 @@ class TipTapToGoogleDocs:
 
         end_index = self.cursor
 
-        # Apply indentation for blockquote effect
+        # Apply blockquote styling: indentation, left border, italic, spacing
         if end_index > start_index:
+            # Paragraph style: indentation and border
             self.requests.append({
                 "updateParagraphStyle": {
                     "range": {"startIndex": start_index, "endIndex": end_index},
                     "paragraphStyle": {
                         "indentFirstLine": {"magnitude": 36, "unit": "PT"},
                         "indentStart": {"magnitude": 36, "unit": "PT"},
+                        "indentEnd": {"magnitude": 36, "unit": "PT"},
+                        "spaceAbove": {"magnitude": 12, "unit": "PT"},
+                        "spaceBelow": {"magnitude": 12, "unit": "PT"},
                         "borderLeft": {
-                            "color": {"color": {"rgbColor": {"red": 0.8, "green": 0.8, "blue": 0.8}}},
+                            "color": {"color": {"rgbColor": {"red": 0.6, "green": 0.6, "blue": 0.6}}},
                             "width": {"magnitude": 3, "unit": "PT"},
                             "padding": {"magnitude": 12, "unit": "PT"},
+                            "dashStyle": "SOLID",
                         },
                     },
-                    "fields": "indentFirstLine,indentStart,borderLeft",
+                    "fields": "indentFirstLine,indentStart,indentEnd,spaceAbove,spaceBelow,borderLeft",
+                }
+            })
+            # Text style: italic for blockquote content
+            self.requests.append({
+                "updateTextStyle": {
+                    "range": {"startIndex": start_index, "endIndex": end_index},
+                    "textStyle": {
+                        "italic": True,
+                        "foregroundColor": {"color": {"rgbColor": {"red": 0.3, "green": 0.3, "blue": 0.3}}},
+                    },
+                    "fields": "italic,foregroundColor",
                 }
             })
 
     def _process_code_block(self, node: dict):
-        """Process a code block node."""
+        """Process a code block node with monospace font and background."""
         start_index = self.cursor
 
         # Extract text from code block
@@ -354,21 +376,49 @@ class TipTapToGoogleDocs:
         self._insert_text("\n")
         end_index = self.cursor
 
-        # Apply monospace font and background
+        # Apply code block styling: monospace font, background, indentation
         if end_index > start_index:
+            # Paragraph style: indentation and spacing
+            self.requests.append({
+                "updateParagraphStyle": {
+                    "range": {"startIndex": start_index, "endIndex": end_index},
+                    "paragraphStyle": {
+                        "indentFirstLine": {"magnitude": 18, "unit": "PT"},
+                        "indentStart": {"magnitude": 18, "unit": "PT"},
+                        "indentEnd": {"magnitude": 18, "unit": "PT"},
+                        "spaceAbove": {"magnitude": 8, "unit": "PT"},
+                        "spaceBelow": {"magnitude": 8, "unit": "PT"},
+                        "lineSpacing": 115,  # Tighter line spacing for code
+                    },
+                    "fields": "indentFirstLine,indentStart,indentEnd,spaceAbove,spaceBelow,lineSpacing",
+                }
+            })
+            # Text style: monospace font and gray background
             self.requests.append({
                 "updateTextStyle": {
                     "range": {"startIndex": start_index, "endIndex": end_index},
                     "textStyle": {
                         "weightedFontFamily": {"fontFamily": "Consolas", "weight": 400},
+                        "fontSize": {"magnitude": 10, "unit": "PT"},
                         "backgroundColor": {"color": {"rgbColor": {"red": 0.95, "green": 0.95, "blue": 0.95}}},
                     },
-                    "fields": "weightedFontFamily,backgroundColor",
+                    "fields": "weightedFontFamily,fontSize,backgroundColor",
                 }
             })
 
     def _process_table(self, node: dict):
-        """Process a table node."""
+        """Process a table node with cell content.
+
+        Google Docs tables have this structure after insertion:
+        - Table start index
+        - For each row:
+          - Row start (paragraph marker)
+          - For each cell: cell content area
+        - Table end
+
+        We insert the table, then insert text into each cell using
+        calculated cell indices.
+        """
         rows = node.get("content", [])
         if not rows:
             return
@@ -385,7 +435,7 @@ class TipTapToGoogleDocs:
 
         table_start = self.cursor
 
-        # Insert table structure
+        # Insert table structure first
         self.requests.append({
             "insertTable": {
                 "rows": num_rows,
@@ -394,30 +444,55 @@ class TipTapToGoogleDocs:
             }
         })
 
-        # Tables in Google Docs have a complex structure
-        # After inserting, the cursor moves to the first cell
-        # Each cell has: start index, content, end index
-        # We need to track positions carefully
+        # Calculate cell positions and insert content
+        # Table structure: TABLE_START + (ROW_START + CELL*cols)*rows + TABLE_END
+        # Each empty cell has 2 indices (start + newline)
+        # We need to insert content at each cell's start position
 
-        # For now, extract all cell content and add a note
-        cell_contents = []
+        # Extract all cell content first
+        cell_contents: list[list[str]] = []
         for row in rows:
             row_cells = []
             for cell in row.get("content", []):
                 cell_text = self._extract_text_from_node(cell)
                 row_cells.append(cell_text)
+            # Pad row to have num_cols cells
+            while len(row_cells) < num_cols:
+                row_cells.append("")
             cell_contents.append(row_cells)
 
-        # Estimate cursor movement (approximate)
-        # Table takes: 1 (table start) + rows * (cols + 1) + 1 (table end)
-        self.cursor += 2 + num_rows * (num_cols + 1)
+        # Calculate base index after table insertion
+        # After insertTable, cursor is at table_start + 1 (inside first cell)
+        current_cell_index = table_start + 1
 
-        # Add warning about table content
-        if any(any(cell for cell in row) for row in cell_contents):
-            self.warnings.append(
-                f"Table with {num_rows}x{num_cols} cells inserted. "
-                "Cell content may need manual adjustment."
-            )
+        # Insert content into cells in reverse order (to maintain correct indices)
+        # We collect all insertions first, then add them
+        cell_insertions = []
+
+        for row_idx, row_content in enumerate(cell_contents):
+            for col_idx, cell_text in enumerate(row_content):
+                if cell_text:
+                    # Calculate cell index: each previous cell adds 2 to index
+                    # (1 for content area + 1 for cell end)
+                    cell_index = table_start + 1 + (row_idx * num_cols + col_idx) * 2
+                    cell_insertions.append({
+                        "index": cell_index,
+                        "text": cell_text,
+                    })
+
+        # Insert cell contents (in reverse order to maintain indices)
+        for insertion in reversed(cell_insertions):
+            self.requests.append({
+                "insertText": {
+                    "location": {"index": insertion["index"]},
+                    "text": insertion["text"],
+                }
+            })
+
+        # Update cursor to after table
+        # Table size: 1 (start) + rows * (cols * 2) + 1 (end) + inserted text lengths
+        total_text_len = sum(len(cell) for row in cell_contents for cell in row)
+        self.cursor = table_start + 2 + num_rows * num_cols * 2 + total_text_len
 
     def _extract_text_from_node(self, node: dict) -> str:
         """Extract plain text from a node (recursive)."""
@@ -439,35 +514,39 @@ class TipTapToGoogleDocs:
         """Process an image node."""
         attrs = node.get("attrs", {})
         src = attrs.get("src", "")
+        alt = attrs.get("alt", "")
+        width = attrs.get("width", "")
 
         if not src:
             self.warnings.append("Image without src skipped")
             return
 
+        # Handle base64/data URLs with placeholder
         if src.startswith("data:"):
-            self.warnings.append("Base64 images not directly supported in Google Docs sync")
-            # Insert placeholder
-            self._insert_text("[Image: base64 data]\n")
+            placeholder = f"{IMAGE_PLACEHOLDER_START}embedded image"
+            if alt:
+                placeholder += f" - {alt}"
+            placeholder += f"{IMAGE_PLACEHOLDER_END}\n"
+            self._insert_text(placeholder)
+            self.warnings.append("Base64 image converted to placeholder")
             return
 
-        # Try to insert inline image
+        # Try to insert inline image from URL
         try:
             # Calculate dimensions
-            width_attr = attrs.get("width")
             img_width = 300  # Default width in PT
-            if width_attr:
+            if width:
                 try:
-                    # width might be "50%" or "300px" or just "300"
-                    if isinstance(width_attr, str):
-                        if width_attr.endswith("%"):
-                            percent = int(width_attr.rstrip("%"))
-                            img_width = int(468 * percent / 100)  # 468 PT = ~6.5 inches page width
-                        elif width_attr.endswith("px"):
-                            img_width = int(int(width_attr.rstrip("px")) * 0.75)  # px to pt
+                    if isinstance(width, str):
+                        if width.endswith("%"):
+                            percent = int(width.rstrip("%"))
+                            img_width = int(468 * percent / 100)
+                        elif width.endswith("px"):
+                            img_width = int(int(width.rstrip("px")) * 0.75)
                         else:
-                            img_width = int(float(width_attr))
+                            img_width = int(float(width))
                     else:
-                        img_width = int(width_attr)
+                        img_width = int(width)
                 except (ValueError, TypeError):
                     pass
 
@@ -482,8 +561,10 @@ class TipTapToGoogleDocs:
             })
             self.cursor += 1
         except Exception as e:
-            self.warnings.append(f"Failed to insert image: {str(e)}")
-            self._insert_text(f"[Image: {src}]\n")
+            # Fallback to placeholder with URL
+            placeholder = f"{IMAGE_PLACEHOLDER_START}{src}{IMAGE_PLACEHOLDER_END}\n"
+            self._insert_text(placeholder)
+            self.warnings.append(f"Image converted to placeholder: {str(e)}")
 
     def _process_inline_content(self, content: list[dict]):
         """Process inline content (text, marks, etc.)."""
@@ -573,7 +654,9 @@ class TipTapToGoogleDocs:
                 fields.append("backgroundColor")
             self.claims_count += 1
 
-            # Create footnote with claim metadata
+            # Create footnote with claim metadata AND text for restoration
+            # This is the "git-like" anchor - we store the claim text so we can
+            # find and reapply the claim mark when pulling from Google Docs
             claim_attrs = claim_mark.get("attrs", {})
             self._pending_footnotes.append({
                 "index": end_index,
@@ -582,6 +665,9 @@ class TipTapToGoogleDocs:
                     "claimId": claim_attrs.get("claimId", ""),
                     "claimType": claim_attrs.get("claimType", "DATA"),
                     "status": claim_attrs.get("status", "draft"),
+                    # Store the claim text as anchor for pull restoration
+                    "text": text,
+                    "textHash": hashlib.md5(text.encode()).hexdigest()[:8],
                 },
             })
 
@@ -829,10 +915,15 @@ class GoogleDocsToTipTap:
     def _collect_list_items(
         self, all_elements: list[dict], start_index: int
     ) -> tuple[dict, int]:
-        """Collect consecutive list items into a list node."""
+        """Collect consecutive list items into a list node.
+
+        Detects task lists by looking for [ ] or [x] prefixes.
+        """
         items = []
         consumed = 0
         is_ordered = False
+        is_task_list = False
+        task_states: list[bool] = []
 
         i = start_index
         while i < len(all_elements):
@@ -845,19 +936,37 @@ class GoogleDocsToTipTap:
             if not bullet:
                 break
 
-            # Determine if ordered or unordered
-            glyph_format = bullet.get("listId", "")
-            # Check if it's a numbered list based on glyph type
-            # This is a heuristic - Google Docs uses glyphFormat for this
-            nesting_level = bullet.get("nestingLevel", 0)
-
             elements = paragraph.get("elements", [])
             inline_content = self._process_paragraph_elements(elements)
 
             if inline_content:
+                # Check if this is a task item by looking at the first text node
+                first_text = ""
+                if inline_content and inline_content[0].get("type") == "text":
+                    first_text = inline_content[0].get("text", "")
+
+                # Detect task list markers
+                is_checked = False
+                if first_text.startswith(TASK_MARKER_CHECKED + " "):
+                    is_task_list = True
+                    is_checked = True
+                    # Remove the marker from text
+                    inline_content[0]["text"] = first_text[4:]  # len("[x] ")
+                    if not inline_content[0]["text"]:
+                        inline_content.pop(0)
+                elif first_text.startswith(TASK_MARKER_UNCHECKED + " "):
+                    is_task_list = True
+                    is_checked = False
+                    # Remove the marker from text
+                    inline_content[0]["text"] = first_text[4:]  # len("[ ] ")
+                    if not inline_content[0]["text"]:
+                        inline_content.pop(0)
+
+                task_states.append(is_checked)
+
                 items.append({
                     "type": "listItem",
-                    "content": [{"type": "paragraph", "content": inline_content}],
+                    "content": [{"type": "paragraph", "content": inline_content}] if inline_content else [],
                 })
 
             consumed += 1
@@ -865,6 +974,18 @@ class GoogleDocsToTipTap:
 
         if not items:
             return None, 1
+
+        # If task list detected, convert to taskList/taskItem structure
+        if is_task_list:
+            task_items = []
+            for idx, item in enumerate(items):
+                checked = task_states[idx] if idx < len(task_states) else False
+                task_items.append({
+                    "type": "taskItem",
+                    "attrs": {"checked": checked},
+                    "content": item.get("content", []),
+                })
+            return {"type": "taskList", "content": task_items}, consumed
 
         # Determine list type (heuristic based on first character)
         first_text = ""
@@ -882,39 +1003,142 @@ class GoogleDocsToTipTap:
         return {"type": list_type, "content": items}, consumed
 
     def _process_paragraph_elements(self, elements: list[dict]) -> list[dict]:
-        """Process inline elements within a paragraph."""
-        result = []
+        """Process inline elements within a paragraph.
 
-        for element in elements:
+        Handles claim restoration using the git-like text anchor approach:
+        - When a footnote with claim metadata is found
+        - Look at the preceding text and match it against the stored claim text
+        - Apply the claim mark to the matching text
+        """
+        result = []
+        pending_claim_footnote = None  # Track claim footnotes to apply to preceding text
+
+        for idx, element in enumerate(elements):
             if "textRun" in element:
                 node = self._process_text_run(element["textRun"])
                 if node:
+                    # Check if there's a pending claim to apply to this text
+                    if pending_claim_footnote:
+                        claim_data = pending_claim_footnote["data"]
+                        stored_text = claim_data.get("text", "")
+                        stored_hash = claim_data.get("textHash", "")
+                        node_text = node.get("text", "")
+
+                        # Try to match: exact match, contains, or hash match
+                        should_apply_claim = False
+                        if stored_text and stored_text == node_text:
+                            should_apply_claim = True
+                        elif stored_text and stored_text in node_text:
+                            should_apply_claim = True
+                        elif stored_hash:
+                            node_hash = hashlib.md5(node_text.encode()).hexdigest()[:8]
+                            if node_hash == stored_hash:
+                                should_apply_claim = True
+
+                        if should_apply_claim:
+                            # Apply claim mark to this text node
+                            marks = node.get("marks", [])
+                            marks.append({
+                                "type": "claim",
+                                "attrs": {
+                                    "claimId": claim_data.get("claimId", ""),
+                                    "claimType": claim_data.get("claimType", "DATA"),
+                                    "status": claim_data.get("status", "draft"),
+                                },
+                            })
+                            node["marks"] = marks
+                            self.claims_restored += 1
+
+                        pending_claim_footnote = None
+
                     result.append(node)
+
             elif "inlineObjectElement" in element:
                 node = self._process_inline_object(element["inlineObjectElement"])
                 if node:
                     result.append(node)
+
             elif "footnoteReference" in element:
-                # Check if this footnote contains Scribe metadata
                 footnote_id = element["footnoteReference"].get("footnoteId", "")
                 footnote_info = self._footnote_data.get(footnote_id)
 
-                if footnote_info and footnote_info["type"] == "citation":
-                    # Restore citation node
-                    data = footnote_info["data"]
-                    result.append({
-                        "type": "citation",
-                        "attrs": {
-                            "bibKey": data.get("bibKey", ""),
-                            "locator": data.get("locator", ""),
-                        },
-                    })
-                    self.citations_restored += 1
+                if footnote_info:
+                    if footnote_info["type"] == "citation":
+                        # Restore citation node
+                        data = footnote_info["data"]
+                        result.append({
+                            "type": "citation",
+                            "attrs": {
+                                "bibKey": data.get("bibKey", ""),
+                                "locator": data.get("locator", ""),
+                            },
+                        })
+                        self.citations_restored += 1
+
+                    elif footnote_info["type"] == "claim":
+                        # Claims need to be applied to PRECEDING text
+                        # Look backwards in result to find text to mark
+                        claim_data = footnote_info["data"]
+                        stored_text = claim_data.get("text", "")
+                        stored_hash = claim_data.get("textHash", "")
+                        claim_applied = False
+
+                        # Search backwards through result for matching text
+                        for i in range(len(result) - 1, -1, -1):
+                            prev_node = result[i]
+                            if prev_node.get("type") == "text":
+                                prev_text = prev_node.get("text", "")
+
+                                # Check for match
+                                should_apply = False
+                                if stored_text and (stored_text == prev_text or stored_text in prev_text):
+                                    should_apply = True
+                                elif stored_hash:
+                                    prev_hash = hashlib.md5(prev_text.encode()).hexdigest()[:8]
+                                    if prev_hash == stored_hash:
+                                        should_apply = True
+
+                                # Also match by highlight color (claim highlight is distinctive)
+                                if not should_apply:
+                                    marks = prev_node.get("marks", [])
+                                    for mark in marks:
+                                        if mark.get("type") == "highlight":
+                                            color = mark.get("attrs", {}).get("color", "")
+                                            if color == "yellow":
+                                                should_apply = True
+                                                break
+
+                                if should_apply:
+                                    # Apply claim mark
+                                    marks = prev_node.get("marks", [])
+                                    # Remove highlight mark if present (claim has its own)
+                                    marks = [m for m in marks if m.get("type") != "highlight"]
+                                    marks.append({
+                                        "type": "claim",
+                                        "attrs": {
+                                            "claimId": claim_data.get("claimId", ""),
+                                            "claimType": claim_data.get("claimType", "DATA"),
+                                            "status": claim_data.get("status", "draft"),
+                                        },
+                                    })
+                                    prev_node["marks"] = marks
+                                    self.claims_restored += 1
+                                    claim_applied = True
+                                    break
+
+                        if not claim_applied:
+                            self.warnings.append(
+                                f"Could not restore claim {claim_data.get('claimId', 'unknown')}: "
+                                f"text anchor not found"
+                            )
 
         return result
 
-    def _process_text_run(self, text_run: dict) -> dict | None:
-        """Process a text run element."""
+    def _process_text_run(self, text_run: dict) -> dict | list | None:
+        """Process a text run element.
+
+        Returns a single node, a list of nodes (if splitting is needed), or None.
+        """
         content = text_run.get("content", "")
 
         # Skip pure whitespace/newlines at the end of paragraphs
@@ -927,6 +1151,25 @@ class GoogleDocsToTipTap:
 
         if not content:
             return None
+
+        # Check for image placeholder and convert back to image node
+        if IMAGE_PLACEHOLDER_START in content:
+            match = re.search(
+                rf"{re.escape(IMAGE_PLACEHOLDER_START)}(.+?){re.escape(IMAGE_PLACEHOLDER_END)}",
+                content
+            )
+            if match:
+                placeholder_content = match.group(1)
+                # Extract URL or description
+                if placeholder_content.startswith("http"):
+                    return {
+                        "type": "image",
+                        "attrs": {"src": placeholder_content},
+                    }
+                else:
+                    # It's a description (e.g., "embedded image - alt text")
+                    self.warnings.append(f"Image placeholder found: {placeholder_content}")
+                    return None
 
         text_style = text_run.get("textStyle", {})
         marks = []
