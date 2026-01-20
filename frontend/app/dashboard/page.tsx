@@ -1,38 +1,45 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 import {
   Plus,
   FileText,
+  Presentation,
   Clock,
-  MoreVertical,
   Search,
   Filter,
   Trash2,
   RefreshCw,
+  Cloud,
+  BookOpen,
+  Database,
+  Settings,
+  X,
+  ChevronDown,
 } from 'lucide-react'
 import { Document, documentsApi } from '@/lib/api'
 import { templates } from '@/lib/templates'
 
+type DocTypeFilter = 'all' | 'paper' | 'thesis' | 'policy' | 'presentation'
+
 export default function Dashboard() {
   const router = useRouter()
+  const pathname = usePathname()
   const [documents, setDocuments] = useState<Document[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [searchQuery, setSearchQuery] = useState('')
+  const [typeFilter, setTypeFilter] = useState<DocTypeFilter>('all')
+  const [filterMenuOpen, setFilterMenuOpen] = useState(false)
   const [page, setPage] = useState(1)
   const [total, setTotal] = useState(0)
   const [importing, setImporting] = useState(false)
   const [templateMenuOpen, setTemplateMenuOpen] = useState(false)
   const perPage = 20
 
-  useEffect(() => {
-    loadDocuments()
-  }, [page])
-
-  async function loadDocuments() {
+  const loadDocuments = useCallback(async () => {
     try {
       setLoading(true)
       setError(null)
@@ -44,7 +51,11 @@ export default function Dashboard() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [page, perPage])
+
+  useEffect(() => {
+    loadDocuments()
+  }, [loadDocuments])
 
   async function handleDelete(slug: string, e: React.MouseEvent) {
     e.preventDefault()
@@ -100,9 +111,26 @@ export default function Dashboard() {
     }
   }
 
-  const filteredDocs = documents.filter((doc) =>
-    doc.title.toLowerCase().includes(searchQuery.toLowerCase())
-  )
+  const filteredDocs = documents.filter((doc) => {
+    const matchesSearch = doc.title.toLowerCase().includes(searchQuery.toLowerCase())
+    const matchesType = typeFilter === 'all' || doc.doc_type === typeFilter
+    return matchesSearch && matchesType
+  })
+
+  const typeFilterLabels: Record<DocTypeFilter, string> = {
+    all: 'All Types',
+    paper: 'Papers',
+    thesis: 'Theses',
+    policy: 'Policy Briefs',
+    presentation: 'Presentations',
+  }
+
+  const navLinks = [
+    { href: '/dashboard', label: 'Documents', icon: FileText },
+    { href: '/knowledge', label: 'Knowledge', icon: BookOpen },
+    { href: '/data', label: 'Data', icon: Database },
+    { href: '/integrations', label: 'Integrations', icon: Settings },
+  ]
 
   return (
     <div className="min-h-screen bg-bg">
@@ -112,17 +140,25 @@ export default function Dashboard() {
           <Link href="/" className="flex items-center gap-2">
             <span className="text-xl font-bold text-ink">Scribe</span>
           </Link>
-          <div className="flex items-center gap-4">
-            <Link href="/knowledge" className="text-sm text-muted hover:text-ink">
-              Knowledge Base
-            </Link>
-            <Link href="/data" className="text-sm text-muted hover:text-ink">
-              Data
-            </Link>
-            <Link href="/integrations" className="text-sm text-muted hover:text-ink">
-              Integrations
-            </Link>
-          </div>
+          <nav className="flex items-center gap-1">
+            {navLinks.map(({ href, label, icon: Icon }) => {
+              const isActive = pathname === href
+              return (
+                <Link
+                  key={href}
+                  href={href}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 text-sm rounded-md transition-colors ${
+                    isActive
+                      ? 'bg-bg text-ink font-medium'
+                      : 'text-muted hover:text-ink hover:bg-bg/50'
+                  }`}
+                >
+                  <Icon size={14} />
+                  {label}
+                </Link>
+              )
+            })}
+          </nav>
         </div>
       </header>
 
@@ -207,11 +243,43 @@ export default function Dashboard() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery('')}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-ink"
+              >
+                <X size={14} />
+              </button>
+            )}
           </div>
-          <button className="btn">
-            <Filter size={16} className="mr-2" />
-            Filter
-          </button>
+          <div className="relative">
+            <button
+              onClick={() => setFilterMenuOpen((v) => !v)}
+              className={`btn flex items-center gap-2 ${typeFilter !== 'all' ? 'border-c-blue text-c-blue' : ''}`}
+            >
+              <Filter size={16} />
+              {typeFilterLabels[typeFilter]}
+              <ChevronDown size={14} />
+            </button>
+            {filterMenuOpen && (
+              <div className="absolute right-0 mt-2 w-48 bg-paper border border-line rounded-md shadow-sm z-10">
+                {(Object.keys(typeFilterLabels) as DocTypeFilter[]).map((type) => (
+                  <button
+                    key={type}
+                    className={`w-full text-left px-3 py-2 text-sm hover:bg-bg ${
+                      typeFilter === type ? 'bg-bg font-medium' : ''
+                    }`}
+                    onClick={() => {
+                      setTypeFilter(type)
+                      setFilterMenuOpen(false)
+                    }}
+                  >
+                    {typeFilterLabels[type]}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Error state */}
@@ -244,14 +312,52 @@ export default function Dashboard() {
             ))}
 
             {filteredDocs.length === 0 && (
-              <div className="card text-center py-12">
-                <FileText size={48} className="mx-auto mb-4 text-muted" />
-                <p className="text-muted">
-                  {searchQuery ? 'No documents match your search' : 'No documents yet'}
-                </p>
-                <button onClick={handleCreate} className="btn btn-primary mt-4">
-                  Create your first document
-                </button>
+              <div className="card text-center py-16">
+                {searchQuery || typeFilter !== 'all' ? (
+                  <>
+                    <Search size={48} className="mx-auto mb-4 text-muted" />
+                    <h3 className="font-semibold text-lg mb-2">No documents found</h3>
+                    <p className="text-muted mb-4">
+                      {searchQuery && typeFilter !== 'all'
+                        ? `No ${typeFilterLabels[typeFilter].toLowerCase()} matching "${searchQuery}"`
+                        : searchQuery
+                          ? `No documents matching "${searchQuery}"`
+                          : `No ${typeFilterLabels[typeFilter].toLowerCase()} yet`}
+                    </p>
+                    <button
+                      onClick={() => {
+                        setSearchQuery('')
+                        setTypeFilter('all')
+                      }}
+                      className="btn"
+                    >
+                      Clear filters
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <FileText size={48} className="mx-auto mb-4 text-muted" />
+                    <h3 className="font-semibold text-lg mb-2">Welcome to Scribe</h3>
+                    <p className="text-muted max-w-md mx-auto mb-6">
+                      Start writing your academic papers, policy briefs, and presentations
+                      with built-in claim verification and bibliography management.
+                    </p>
+                    <div className="flex items-center justify-center gap-3">
+                      <button onClick={handleCreate} className="btn btn-primary">
+                        <Plus size={16} className="mr-2" />
+                        New Document
+                      </button>
+                      <span className="text-muted">or</span>
+                      <button
+                        onClick={() => setTemplateMenuOpen(true)}
+                        className="btn"
+                      >
+                        <FileText size={16} className="mr-2" />
+                        Use a template
+                      </button>
+                    </div>
+                  </>
+                )}
               </div>
             )}
           </div>
@@ -295,6 +401,20 @@ function DocumentCard({
     paper: 'Paper',
     thesis: 'Thesis',
     policy: 'Policy Brief',
+    presentation: 'Presentation',
+  }
+
+  const typeColors: Record<string, string> = {
+    paper: 'pill-info',
+    thesis: 'bg-c-purple/10 text-c-purple',
+    policy: 'bg-c-amber/10 text-c-amber',
+    presentation: 'bg-c-green/10 text-c-green',
+  }
+
+  const statusColors: Record<string, string> = {
+    draft: 'text-muted',
+    review: 'text-c-amber',
+    final: 'text-c-green',
   }
 
   const updatedDate = new Date(document.updated_at).toLocaleDateString('en-US', {
@@ -309,18 +429,36 @@ function DocumentCard({
     ? Math.round((verifiedCount / claimCount) * 100)
     : 0
 
+  const isPresentation = document.doc_type === 'presentation'
+  const isLinkedToGoogle = document.source_provider === 'google_docs' || document.source_provider === 'google_slides'
+  const DocIcon = isPresentation ? Presentation : FileText
+
   return (
     <Link href={`/editor/${document.slug}`}>
-      <div className="card flex items-center gap-4 hover:border-line-strong transition-colors">
-        <FileText size={20} className="text-muted flex-shrink-0" />
+      <div className="card flex items-center gap-4 hover:border-line-strong transition-colors group">
+        <div className="relative flex-shrink-0">
+          <DocIcon size={20} className={isPresentation ? 'text-c-green' : 'text-muted'} />
+          {isLinkedToGoogle && (
+            <span title="Synced with Google">
+              <Cloud
+                size={10}
+                className="absolute -bottom-1 -right-1 text-c-blue"
+              />
+            </span>
+          )}
+        </div>
 
         <div className="flex-1 min-w-0">
-          <h3 className="font-semibold truncate">{document.title}</h3>
+          <h3 className="font-semibold truncate group-hover:text-c-blue transition-colors">
+            {document.title}
+          </h3>
           <div className="flex items-center gap-3 mt-1 text-sm text-muted">
-            <span className="pill pill-info">
+            <span className={`pill ${typeColors[document.doc_type] || 'pill-info'}`}>
               {typeLabels[document.doc_type] || document.doc_type}
             </span>
-            <span className="capitalize">{document.status}</span>
+            <span className={`capitalize ${statusColors[document.status] || ''}`}>
+              {document.status}
+            </span>
             <span className="flex items-center gap-1">
               <Clock size={12} />
               {updatedDate}
@@ -336,9 +474,9 @@ function DocumentCard({
                 {verifiedCount}/{claimCount} claims
               </div>
               <div className="flex items-center gap-2 mt-1">
-                <div className="w-20 h-1 bg-line">
+                <div className="w-20 h-1 bg-line rounded-full overflow-hidden">
                   <div
-                    className="h-full bg-c-green"
+                    className="h-full bg-c-green rounded-full transition-all"
                     style={{ width: `${verifiedPercent}%` }}
                   />
                 </div>
@@ -348,7 +486,7 @@ function DocumentCard({
           )}
 
           <button
-            className="p-2 hover:bg-bg text-muted hover:text-c-red"
+            className="p-2 hover:bg-bg text-muted hover:text-c-red rounded-md opacity-0 group-hover:opacity-100 transition-opacity"
             onClick={onDelete}
             title="Delete document"
           >
