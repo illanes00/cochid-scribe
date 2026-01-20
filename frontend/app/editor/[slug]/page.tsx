@@ -13,9 +13,13 @@ import {
   CheckCircle,
   Sparkles,
   MessageCircle,
+  FileText,
+  Ruler,
+  LayoutTemplate,
 } from 'lucide-react'
 import { Editor } from '@tiptap/core'
 import { TiptapEditor } from '@/components/editor/TiptapEditor'
+import { PagedEditor, usePageLayout, PageLayoutConfig, PAGE_FORMATS, PageFormat } from '@/components/editor/PagedEditor'
 import { PresentationView } from '@/components/editor/PresentationView'
 import { Slide } from '@/components/editor/SlideNavigator'
 import { ClaimsPanel } from '@/components/panels/ClaimsPanel'
@@ -494,6 +498,32 @@ export default function EditorPage() {
   )
 
   const [trackChanges, setTrackChanges] = useState(false)
+  const [showPageLayout, setShowPageLayout] = useState(false)
+
+  // Page layout configuration from front_matter
+  const pageLayoutFromDoc = (document?.front_matter as Record<string, any>)?.page_layout
+  const {
+    layout: pageLayout,
+    updateLayout: updatePageLayout,
+    toggleRuler,
+    togglePageBreaks,
+    toggleHeaderFooter,
+    setFormat: setPageFormat,
+  } = usePageLayout(pageLayoutFromDoc)
+
+  // Save page layout changes to front_matter
+  const handlePageLayoutChange = useCallback(
+    (newLayout: PageLayoutConfig) => {
+      updatePageLayout(newLayout)
+      updateDocument({
+        front_matter: {
+          ...(document?.front_matter || {}),
+          page_layout: newLayout,
+        },
+      })
+    },
+    [document?.front_matter, updateDocument, updatePageLayout]
+  )
 
   const applyCommentStates = useCallback((list: Comment[]) => {
     const editor = editorRef.current
@@ -712,6 +742,64 @@ export default function EditorPage() {
                     <option value="normal">Normal</option>
                     <option value="wide">Wide</option>
                   </select>
+
+                  {/* Page Layout Options (visible when page view is enabled) */}
+                  {showPageLayout && (
+                    <>
+                      <div className="border-t border-line my-2 pt-2">
+                        <div className="text-xs text-muted mb-2">Page Layout</div>
+                      </div>
+                      <div className="text-xs text-muted">Page Size</div>
+                      <select
+                        className="input text-xs w-full"
+                        value={pageLayout.format}
+                        onChange={(e) => handlePageLayoutChange({
+                          ...pageLayout,
+                          format: e.target.value as PageFormat,
+                        })}
+                      >
+                        {Object.entries(PAGE_FORMATS).map(([key, value]) => (
+                          <option key={key} value={key}>{value.name}</option>
+                        ))}
+                      </select>
+                      <label className="flex items-center gap-2 text-xs cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={pageLayout.showRuler}
+                          onChange={() => handlePageLayoutChange({
+                            ...pageLayout,
+                            showRuler: !pageLayout.showRuler,
+                          })}
+                          className="w-3.5 h-3.5"
+                        />
+                        Show Ruler
+                      </label>
+                      <label className="flex items-center gap-2 text-xs cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={pageLayout.showPageBreaks}
+                          onChange={() => handlePageLayoutChange({
+                            ...pageLayout,
+                            showPageBreaks: !pageLayout.showPageBreaks,
+                          })}
+                          className="w-3.5 h-3.5"
+                        />
+                        Show Page Breaks
+                      </label>
+                      <label className="flex items-center gap-2 text-xs cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={pageLayout.showHeaderFooter}
+                          onChange={() => handlePageLayoutChange({
+                            ...pageLayout,
+                            showHeaderFooter: !pageLayout.showHeaderFooter,
+                          })}
+                          className="w-3.5 h-3.5"
+                        />
+                        Show Header/Footer
+                      </label>
+                    </>
+                  )}
                 </div>
               )}
             </div>
@@ -721,6 +809,14 @@ export default function EditorPage() {
               title="Track changes"
             >
               {trackChanges ? 'Tracking' : 'Track changes'}
+            </button>
+            <button
+              className={`btn btn-sm ${showPageLayout ? 'btn-primary' : ''}`}
+              onClick={() => setShowPageLayout((v) => !v)}
+              title="Toggle page layout view"
+            >
+              <FileText size={14} className="mr-1" />
+              {showPageLayout ? 'Page View' : 'Continuous'}
             </button>
             {/* Google Sync Status */}
             {!isNew && document && (
@@ -858,23 +954,50 @@ export default function EditorPage() {
 
             {/* Editor */}
             <main className="flex-1 overflow-hidden">
-              <TiptapEditor
-                content={getEditorContent(document)}
-                onChange={handleContentChange}
-                onReady={handleEditorReady}
-                onClaimClick={handleClaimClick}
-                activeClaimId={activeClaimId}
-                placeholder="Start writing your document..."
-                documentSlug={slug}
-                trackChangesEnabled={trackChanges}
-                docStyle={docStyle}
-                docFormat={docFormat}
-                docFont={docFont}
-                docSize={docSize}
-                docLeading={docLeading}
-                docMargin={docMargin}
-                commentAnchors={commentAnchors}
-              />
+              {showPageLayout ? (
+                <PagedEditor
+                  editor={editorRef.current}
+                  layout={pageLayout}
+                  documentTitle={document?.title || 'Untitled'}
+                  onLayoutChange={handlePageLayoutChange}
+                >
+                  <TiptapEditor
+                    content={getEditorContent(document)}
+                    onChange={handleContentChange}
+                    onReady={handleEditorReady}
+                    onClaimClick={handleClaimClick}
+                    activeClaimId={activeClaimId}
+                    placeholder="Start writing your document..."
+                    documentSlug={slug}
+                    trackChangesEnabled={trackChanges}
+                    docStyle={docStyle}
+                    docFormat={docFormat}
+                    docFont={docFont}
+                    docSize={docSize}
+                    docLeading={docLeading}
+                    docMargin={docMargin}
+                    commentAnchors={commentAnchors}
+                  />
+                </PagedEditor>
+              ) : (
+                <TiptapEditor
+                  content={getEditorContent(document)}
+                  onChange={handleContentChange}
+                  onReady={handleEditorReady}
+                  onClaimClick={handleClaimClick}
+                  activeClaimId={activeClaimId}
+                  placeholder="Start writing your document..."
+                  documentSlug={slug}
+                  trackChangesEnabled={trackChanges}
+                  docStyle={docStyle}
+                  docFormat={docFormat}
+                  docFont={docFont}
+                  docSize={docSize}
+                  docLeading={docLeading}
+                  docMargin={docMargin}
+                  commentAnchors={commentAnchors}
+                />
+              )}
             </main>
           </>
         )}

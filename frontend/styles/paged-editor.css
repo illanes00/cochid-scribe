@@ -1,0 +1,571 @@
+/**
+ * Paged Editor Styles
+ *
+ * Google Docs-like visual pagination for TipTap editor.
+ * Uses CSS-based pagination (no document mutation) for stability.
+ */
+
+/* ============================================
+   PAGED EDITOR WRAPPER
+   ============================================ */
+
+.paged-editor-wrapper {
+  --ruler-height: 24px;
+  --page-bg: #525659;
+  --paper-bg: var(--paper);
+  --page-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--page-bg);
+}
+
+.paged-editor-scroll {
+  flex: 1;
+  overflow: auto;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.paged-editor-pages {
+  width: var(--page-width);
+  min-height: 100%;
+}
+
+/* ============================================
+   PAGE PAPER
+   ============================================ */
+
+.page-paper {
+  width: var(--page-width);
+  min-height: var(--page-height);
+  background: var(--paper-bg);
+  box-shadow: var(--page-shadow);
+  margin-bottom: 40px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.page-content {
+  flex: 1;
+  padding: var(--margin-top) var(--margin-right) var(--margin-bottom) var(--margin-left);
+  position: relative;
+  overflow: visible;
+}
+
+/* When page layout is active, override editor styles */
+.paged-editor-wrapper .tiptap-editor {
+  border: none;
+  min-height: auto;
+  padding: 0;
+  max-width: 100%;
+  background: transparent;
+}
+
+.paged-editor-wrapper .tiptap-editor:focus {
+  border: none;
+}
+
+/* ============================================
+   PAGE BREAK INDICATOR
+   ============================================ */
+
+.page-break-indicator {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 0;
+  border-top: 1px dashed var(--line-strong);
+  pointer-events: none;
+  z-index: 10;
+}
+
+.page-break-indicator::before,
+.page-break-indicator::after {
+  content: '';
+  position: absolute;
+  top: -1px;
+  width: 40px;
+  height: 2px;
+  background: var(--line-strong);
+}
+
+.page-break-indicator::before {
+  left: -40px;
+}
+
+.page-break-indicator::after {
+  right: -40px;
+}
+
+.page-break-label {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--page-bg);
+  color: var(--muted);
+  padding: 0 8px;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+/* Page count indicator */
+.page-count-indicator {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 11px;
+  padding: 8px;
+  margin-top: -20px;
+}
+
+/* ============================================
+   RULER
+   ============================================ */
+
+.ruler {
+  height: var(--ruler-height);
+  background: linear-gradient(to bottom, #f8f9fa, #e9ecef);
+  border-bottom: 1px solid var(--line);
+  position: relative;
+  user-select: none;
+  margin: 0 auto;
+  cursor: default;
+}
+
+.ruler.dragging {
+  cursor: ew-resize;
+}
+
+.ruler-track {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Tick marks */
+.ruler-tick {
+  position: absolute;
+  bottom: 0;
+  width: 1px;
+  background: var(--line-strong);
+}
+
+.ruler-tick.major {
+  height: 12px;
+}
+
+.ruler-tick.minor {
+  height: 6px;
+  background: var(--line);
+}
+
+.ruler-number {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 9px;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+/* Margin zones (shaded areas) */
+.ruler-margin-zone {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.06);
+}
+
+.ruler-margin-zone.left {
+  left: 0;
+}
+
+.ruler-margin-zone.right {
+  right: 0;
+}
+
+/* Margin handles */
+.ruler-handle {
+  position: absolute;
+  top: 2px;
+  transform: translateX(-50%);
+  cursor: ew-resize;
+  color: var(--c-blue);
+  z-index: 5;
+  transition: color 0.15s;
+}
+
+.ruler-handle:hover,
+.ruler-handle.active {
+  color: #1a45a0;
+}
+
+.ruler-handle.first-line {
+  top: -2px;
+}
+
+/* Guide line during drag */
+.ruler-guide-line {
+  position: absolute;
+  top: 100%;
+  width: 1px;
+  height: 2000px;
+  background: var(--c-blue);
+  opacity: 0.5;
+  pointer-events: none;
+  z-index: 100;
+}
+
+/* ============================================
+   VERTICAL RULER
+   ============================================ */
+
+.vruler {
+  width: 24px;
+  background: linear-gradient(to right, #f8f9fa, #e9ecef);
+  border-right: 1px solid var(--line);
+  position: absolute;
+  left: 0;
+  top: var(--ruler-height);
+  user-select: none;
+}
+
+.vruler.dragging {
+  cursor: ns-resize;
+}
+
+.vruler-track {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.vruler-tick {
+  position: absolute;
+  right: 0;
+  height: 1px;
+  background: var(--line-strong);
+}
+
+.vruler-tick.major {
+  width: 12px;
+}
+
+.vruler-tick.minor {
+  width: 6px;
+  background: var(--line);
+}
+
+.vruler-number {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 9px;
+  color: var(--muted);
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+}
+
+.vruler-margin-zone {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.06);
+}
+
+.vruler-margin-zone.top {
+  top: 0;
+}
+
+.vruler-margin-zone.bottom {
+  bottom: 0;
+}
+
+.vruler-handle {
+  position: absolute;
+  left: 2px;
+  transform: translateY(-50%);
+  cursor: ns-resize;
+  color: var(--c-blue);
+  z-index: 5;
+}
+
+.vruler-handle:hover,
+.vruler-handle.active {
+  color: #1a45a0;
+}
+
+/* ============================================
+   HEADER & FOOTER
+   ============================================ */
+
+.page-header,
+.page-footer {
+  padding: 8px var(--margin-right, 72px) 8px var(--margin-left, 72px);
+  min-height: 40px;
+  border-bottom: 1px solid transparent;
+  border-top: 1px solid transparent;
+  transition: border-color 0.15s;
+}
+
+.page-header {
+  border-bottom-color: var(--line);
+}
+
+.page-footer {
+  border-top-color: var(--line);
+}
+
+.page-header:hover,
+.page-footer:hover {
+  background: rgba(55, 99, 224, 0.03);
+}
+
+/* Header/Footer Editor */
+.header-footer-wrapper {
+  position: relative;
+}
+
+.header-footer-toolbar {
+  display: none;
+  position: absolute;
+  top: -28px;
+  left: 0;
+  right: 0;
+  height: 26px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-bottom: none;
+  align-items: center;
+  gap: 2px;
+  padding: 0 4px;
+  z-index: 10;
+}
+
+.header-footer-wrapper:focus-within .header-footer-toolbar,
+.header-footer-wrapper:hover .header-footer-toolbar {
+  display: flex;
+}
+
+.hf-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  background: transparent;
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+
+.hf-btn:hover {
+  background: var(--bg);
+  border-color: var(--line);
+  color: var(--ink);
+}
+
+.hf-btn.active {
+  background: var(--bg);
+  border-color: var(--c-blue);
+  color: var(--c-blue);
+}
+
+.hf-divider {
+  width: 1px;
+  height: 16px;
+  background: var(--line);
+  margin: 0 4px;
+}
+
+/* Dropdown for page variables */
+.hf-dropdown {
+  position: relative;
+}
+
+.hf-dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 140px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  z-index: 20;
+}
+
+.hf-dropdown:hover .hf-dropdown-menu,
+.hf-dropdown:focus-within .hf-dropdown-menu {
+  display: block;
+}
+
+.hf-dropdown-menu button {
+  display: block;
+  width: 100%;
+  padding: 6px 10px;
+  text-align: left;
+  font-size: 11px;
+  color: var(--ink);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.hf-dropdown-menu button:hover {
+  background: var(--bg);
+}
+
+/* Header/Footer editor content */
+.header-footer-editor {
+  min-height: 24px;
+  font-size: 11px;
+  color: var(--muted);
+  outline: none;
+}
+
+.header-footer-editor p {
+  margin: 0;
+}
+
+.header-footer-editor img {
+  max-height: 32px;
+  width: auto;
+}
+
+/* ============================================
+   LAYOUT TOGGLE TOOLBAR
+   ============================================ */
+
+.page-layout-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: var(--paper);
+  border-bottom: 1px solid var(--line);
+}
+
+.page-layout-toolbar select {
+  padding: 4px 8px;
+  font-size: 12px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.page-layout-toolbar label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.page-layout-toolbar input[type="checkbox"] {
+  width: 14px;
+  height: 14px;
+  cursor: pointer;
+}
+
+/* ============================================
+   RESPONSIVE ADJUSTMENTS
+   ============================================ */
+
+@media (max-width: 900px) {
+  .paged-editor-scroll {
+    padding: 20px;
+  }
+
+  .paged-editor-pages {
+    transform-origin: top center;
+    transform: scale(0.8);
+  }
+
+  .ruler {
+    transform: scale(0.8);
+    transform-origin: left center;
+  }
+}
+
+@media (max-width: 600px) {
+  .paged-editor-pages {
+    transform: scale(0.5);
+  }
+
+  .ruler {
+    display: none;
+  }
+}
+
+/* ============================================
+   PRINT STYLES
+   ============================================ */
+
+@media print {
+  .paged-editor-wrapper {
+    background: white;
+  }
+
+  .paged-editor-scroll {
+    padding: 0;
+    overflow: visible;
+  }
+
+  .page-paper {
+    box-shadow: none;
+    margin: 0;
+    page-break-after: always;
+  }
+
+  .ruler,
+  .vruler,
+  .page-count-indicator,
+  .header-footer-toolbar,
+  .page-layout-toolbar {
+    display: none !important;
+  }
+
+  .page-break-indicator {
+    display: none;
+  }
+
+  @page {
+    margin: 0;
+    size: A4;
+  }
+}
+
+/* ============================================
+   DARK MODE
+   ============================================ */
+
+html.dark .paged-editor-wrapper {
+  --page-bg: #1a1d21;
+  --paper-bg: #252830;
+}
+
+html.dark .ruler,
+html.dark .vruler {
+  background: linear-gradient(to bottom, #2d3139, #252830);
+}
+
+html.dark .page-break-label {
+  background: var(--page-bg);
+}
+
+html.dark .header-footer-toolbar {
+  background: #2d3139;
+}
