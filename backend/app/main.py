@@ -100,7 +100,13 @@ async def health_check():
     """Simple health check for load balancers (backward compatible)."""
     import socket
 
-    return {"status": "healthy", "service": settings.app_name, "host": socket.gethostname()}
+    return {
+        "status": "healthy",
+        "service": settings.app_name,
+        "host": socket.gethostname(),
+        "routes": len(app.routes),
+        "version": "2026-01-20-v4",
+    }
 
 
 @app.get("/")
