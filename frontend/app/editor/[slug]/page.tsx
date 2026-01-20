@@ -16,6 +16,7 @@ import {
   FileText,
   Ruler,
   LayoutTemplate,
+  GitCompare,
 } from 'lucide-react'
 import { Editor } from '@tiptap/core'
 import { TiptapEditor } from '@/components/editor/TiptapEditor'
@@ -28,12 +29,13 @@ import { AIAssistantPanel } from '@/components/panels/AIAssistantPanel'
 import { OutlinePanel } from '@/components/panels/OutlinePanel'
 import { CommentsPanel } from '@/components/panels/CommentsPanel'
 import { VersionsPanel } from '@/components/panels/VersionsPanel'
+import { TrackChangesPanel } from '@/components/panels/TrackChangesPanel'
 import { GoogleSyncPanel } from '@/components/sync/GoogleSyncPanel'
 import { useDocument } from '@/hooks/useDocument'
 import { Claim, Comment, Document, claimsApi, documentsApi, exportsApi, ExportFormat } from '@/lib/api'
 import { googleApi } from '@/lib/api'
 
-type PanelType = 'claims' | 'bib' | 'ai' | 'comments' | 'versions' | 'outline'
+type PanelType = 'claims' | 'bib' | 'ai' | 'comments' | 'versions' | 'outline' | 'changes'
 
 /**
  * Default TipTap document structure for empty/new documents.
@@ -1049,6 +1051,12 @@ export default function EditorPage() {
               icon={<Clock size={14} />}
               label="Versions"
             />
+            <PanelTab
+              active={activePanel === 'changes'}
+              onClick={() => setActivePanel('changes')}
+              icon={<GitCompare size={14} />}
+              label="Changes"
+            />
           </div>
 
           {/* Panel content */}
@@ -1082,6 +1090,12 @@ export default function EditorPage() {
                 documentSlug={slug}
                 onRestore={reloadDocument}
                 currentMarkdown={document?.markdown || ''}
+              />
+            )}
+            {activePanel === 'changes' && (
+              <TrackChangesPanel
+                documentSlug={slug}
+                onChangeResolved={reloadDocument}
               />
             )}
           </div>
