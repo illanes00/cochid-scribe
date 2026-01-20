@@ -18,6 +18,7 @@ from app.api.v1 import (
     exports,
     google,
     graph,
+    health,
     integrations,
     llm,
     notes,
@@ -82,6 +83,7 @@ app.include_router(integrations.router, prefix="/api/v1/integrations", tags=["in
 app.include_router(google.router, prefix="/api/v1/google", tags=["google"])
 app.include_router(comments.router, prefix="/api/v1/comments", tags=["comments"])
 app.include_router(assets.router, prefix="/api/v1/assets", tags=["assets"])
+app.include_router(health.router, prefix="/api/v1/health", tags=["health"])
 
 # Static uploads
 UPLOAD_DIR = Path(__file__).resolve().parents[1] / "uploads"
@@ -91,16 +93,10 @@ app.mount("/uploads", StaticFiles(directory=str(UPLOAD_DIR)), name="uploads")
 
 @app.get("/health")
 async def health_check():
-    """Health check endpoint for infrastructure monitoring."""
+    """Simple health check for load balancers (backward compatible)."""
     import socket
 
     return {"status": "healthy", "service": settings.app_name, "host": socket.gethostname()}
-
-
-@app.get("/api/health")
-async def api_health_check():
-    """API health check endpoint."""
-    return {"status": "healthy", "service": settings.app_name}
 
 
 @app.get("/")
