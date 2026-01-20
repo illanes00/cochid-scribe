@@ -41,7 +41,7 @@ export function PresentationView({
   const [currentSlide, setCurrentSlide] = useState(0)
   const [isFullscreen, setIsFullscreen] = useState(false)
   const [isPresenting, setIsPresenting] = useState(false)
-  const [isEditMode, setIsEditMode] = useState(false)
+  const [isEditMode, setIsEditMode] = useState(true)
 
   const slides = useMemo(() => slidesData?.slides || [], [slidesData])
   const theme = useMemo(() => slidesData?.theme || DEFAULT_THEME, [slidesData])
