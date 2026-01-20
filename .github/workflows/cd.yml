@@ -51,8 +51,8 @@ jobs:
 
       - name: Restart services
         run: |
-          # Restart user-level systemd services
-          systemctl --user restart scribe-backend scribe-frontend
+          # Restart system-level systemd services
+          sudo systemctl restart illanes00-scribe-backend illanes00-scribe-frontend
           sleep 5
 
       - name: Health check
@@ -106,7 +106,7 @@ jobs:
           npm run build
 
           # Restart services with previous version
-          systemctl --user restart scribe-backend scribe-frontend
+          sudo systemctl restart illanes00-scribe-backend illanes00-scribe-frontend
           sleep 3
 
           # Verify rollback health

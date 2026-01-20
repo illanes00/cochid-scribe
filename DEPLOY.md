@@ -7,13 +7,13 @@ Add to `/etc/infra/sites.yaml`:
 ```yaml
 - slug: illanes00-scribe-api
   host: scribe.illanes00.cl
-  port: 8121
+  port: 8132
   health: /health
   path: /api
 
 - slug: illanes00-scribe
   host: scribe.illanes00.cl
-  port: 8122
+  port: 8133
   health: /
   path: /
 ```
@@ -22,24 +22,20 @@ Add to `/etc/infra/sites.yaml`:
 
 ### Backend Service
 
-Create `/etc/systemd/system/illanes00-scribe-api.service`:
+Create `~/.config/systemd/user/scribe-backend.service` (user-level systemd):
 
 ```ini
 [Unit]
-Description=Scribe API (FastAPI)
+Description=illanes00-scribe-backend (FastAPI)
 After=network.target
 
 [Service]
-Type=simple
-User=www-data
-Group=www-data
-WorkingDirectory=/srv/projects/scribe/backend
-Environment=PORT=8121
-Environment=DATABASE_URL=postgresql://scribe:PASSWORD@localhost:5432/scribe
-EnvironmentFile=/etc/infra/env.d/scribe.env
-ExecStart=/srv/projects/scribe/backend/venv/bin/python run.py
+WorkingDirectory=/srv/projects/illanes00-scribe/backend
+Environment=PYTHONUNBUFFERED=1
+EnvironmentFile=/srv/projects/illanes00-scribe/.env
+ExecStart=/srv/projects/illanes00-scribe/backend/venv/bin/uvicorn app.main:app --host 127.0.0.1 --port 8132
 Restart=always
-RestartSec=5
+RestartSec=3
 
 [Install]
 WantedBy=multi-user.target
@@ -47,49 +43,50 @@ WantedBy=multi-user.target
 
 ### Frontend Service
 
-Create `/etc/systemd/system/illanes00-scribe.service`:
+Create `~/.config/systemd/user/scribe-frontend.service` (user-level systemd):
 
 ```ini
 [Unit]
-Description=Scribe Frontend (Next.js)
+Description=illanes00-scribe-frontend (Next.js)
 After=network.target
 
 [Service]
-Type=simple
-User=www-data
-Group=www-data
-WorkingDirectory=/srv/projects/scribe/frontend
-Environment=PORT=8122
-Environment=NEXT_PUBLIC_API_URL=https://scribe.illanes00.cl/api
-ExecStart=/usr/bin/node /srv/projects/scribe/frontend/.next/standalone/server.js
+WorkingDirectory=/srv/projects/illanes00-scribe/frontend
+Environment=NODE_ENV=production
+Environment=PORT=8133
+ExecStart=npm start
 Restart=always
-RestartSec=5
+RestartSec=3
 
 [Install]
 WantedBy=multi-user.target
 ```
 
+**Note:** The frontend uses relative API paths (`/api/v1/*`) which Caddy proxies to the backend.
+Do NOT set `NEXT_PUBLIC_API_URL` to a localhost address - it must be empty for production.
+
 ## Caddy Configuration
 
-Create `/etc/caddy/sites.d/illanes00-scribe.caddy`:
+Add to `/etc/caddy/sites.d/apps.caddy`:
 
 ```caddy
 scribe.illanes00.cl {
-    import tls_cf
+    encode zstd gzip
 
-    # API backend - DO NOT use uri strip_prefix, backend expects /api/v1/* paths
+    # API routes go to backend
     handle /api/* {
-        reverse_proxy localhost:8121
+        reverse_proxy localhost:8132
     }
 
-    # Health check for backend
-    handle /health {
-        reverse_proxy localhost:8121
+    # Health check
+    @scribe_health path /health /health/
+    handle @scribe_health {
+        reverse_proxy localhost:8132
     }
 
-    # Frontend
+    # Everything else goes to frontend
     handle {
-        reverse_proxy localhost:8122
+        reverse_proxy localhost:8133
     }
 }
 ```
@@ -161,8 +158,8 @@ python -c "from app.db.session import init_db; init_db()"
 
 6. **Verify health**:
    ```bash
-   curl http://localhost:8121/health
-   curl http://localhost:8122/
+   curl http://localhost:8132/health
+   curl http://localhost:8133/
    curl https://scribe.illanes00.cl/health
    ```
 
