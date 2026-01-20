@@ -58,34 +58,22 @@ jobs:
 
       - name: Restart services
         run: |
-          echo "=== Before stop: What's using port 8132 ==="
-          ss -tlnp | grep 8132 || echo "No process found on 8132"
-          ps aux | grep -E "[u]vicorn.*8132" || echo "No uvicorn found"
-
           # Stop systemd services
           sudo systemctl stop illanes00-scribe-backend || true
           sudo systemctl stop illanes00-scribe-frontend || true
           sleep 2
 
-          # Kill ANY uvicorn process on port 8132 (including rogue processes not managed by systemd)
-          # This kills the old manually-started process that's blocking the port
-          echo "Killing any remaining uvicorn processes on port 8132..."
+          # Kill any uvicorn processes on backend port (including rogue processes)
           pkill -f "uvicorn.*8132" || true
           sleep 2
 
-          # Double-check and force kill if needed
+          # Force kill if still running
           pgrep -f "uvicorn.*8132" && pkill -9 -f "uvicorn.*8132" || true
-          sleep 2
-
-          echo "=== After kill: What's using port 8132 ==="
-          ss -tlnp | grep 8132 || echo "Port 8132 is now free"
-          ps aux | grep -E "[u]vicorn.*8132" || echo "No uvicorn process on 8132"
+          sleep 1
 
           # Start services fresh
-          sudo systemctl start illanes00-scribe-backend
-          sleep 3
-          sudo systemctl start illanes00-scribe-frontend
-          sleep 3
+          sudo systemctl start illanes00-scribe-backend illanes00-scribe-frontend
+          sleep 5
 
       - name: Health check
         id: health
@@ -93,24 +81,6 @@ jobs:
           set -euo pipefail
           # Wait for services to start
           sleep 3
-
-          # Show service status
-          echo "=== Backend service status ==="
-          sudo systemctl status illanes00-scribe-backend --no-pager || true
-
-          echo ""
-          echo "=== Backend service logs (last 30 lines) ==="
-          sudo journalctl -u illanes00-scribe-backend -n 30 --no-pager || true
-
-          echo ""
-          echo "=== Code version on disk ==="
-          cd $PROJECT_PATH
-          git rev-parse HEAD
-          head -5 backend/app/main.py
-
-          echo ""
-          echo "=== Backend health response ==="
-          curl -sf http://localhost:8132/health || true
 
           # Check backend health with retries
           for i in 1 2 3; do

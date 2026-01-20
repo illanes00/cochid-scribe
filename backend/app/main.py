@@ -97,7 +97,7 @@ app.mount("/uploads", StaticFiles(directory=str(UPLOAD_DIR)), name="uploads")
 
 @app.get("/health")
 async def health_check():
-    """Simple health check for load balancers (backward compatible)."""
+    """Simple health check for load balancers."""
     import socket
 
     return {
@@ -105,31 +105,10 @@ async def health_check():
         "service": settings.app_name,
         "host": socket.gethostname(),
         "routes": len(app.routes),
-        "version": "2026-01-20-v4",
     }
 
 
 @app.get("/")
 async def root():
     """Root endpoint."""
-    return {"message": "Scribe API", "docs": "/api/docs", "version": "2026-01-20-v2"}
-
-
-@app.get("/api/debug/routes")
-async def debug_routes():
-    """Debug endpoint to list all registered routes."""
-    routes = []
-    for route in app.routes:
-        if hasattr(route, 'path'):
-            routes.append({
-                "path": route.path,
-                "methods": list(route.methods) if hasattr(route, 'methods') else None,
-                "name": route.name if hasattr(route, 'name') else None,
-            })
-    return {
-        "total_routes": len(routes),
-        "routes": sorted(routes, key=lambda x: x["path"]),
-        "google_sync_routes": len([r for r in routes if "google-sync" in r["path"]]),
-        "track_changes_routes": len([r for r in routes if "changes" in r["path"]]),
-        "version": "2026-01-20-v3",
-    }
+    return {"message": "Scribe API", "docs": "/api/docs"}
