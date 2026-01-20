@@ -5,6 +5,24 @@ const config: Config = {
     './app/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
   ],
+  // Safelist dynamic classes that are constructed at runtime
+  // These classes are used in TiptapEditor.tsx and globals.css
+  safelist: [
+    // Document styles (doc-style-modern, doc-style-classic, doc-style-compact)
+    { pattern: /^doc-style-(modern|classic|compact)$/ },
+    // Document formats (doc-format-a4, doc-format-letter, doc-format-wide)
+    { pattern: /^doc-format-(a4|letter|wide)$/ },
+    // Document fonts (doc-font-sans, doc-font-serif, doc-font-mono)
+    { pattern: /^doc-font-(sans|serif|mono)$/ },
+    // Document sizes (doc-size-sm, doc-size-md, doc-size-lg)
+    { pattern: /^doc-size-(sm|md|lg)$/ },
+    // Document line heights (doc-leading-tight, doc-leading-normal, doc-leading-relaxed)
+    { pattern: /^doc-leading-(tight|normal|relaxed)$/ },
+    // Document margins (doc-margin-narrow, doc-margin-normal, doc-margin-wide)
+    { pattern: /^doc-margin-(narrow|normal|wide)$/ },
+    // Theme classes
+    'doc-theme-ep',
+  ],
   darkMode: 'class',
   theme: {
     extend: {
