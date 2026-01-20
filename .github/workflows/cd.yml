@@ -58,14 +58,24 @@ jobs:
 
       - name: Restart services
         run: |
+          echo "=== Before stop: What's using port 8132 ==="
+          sudo lsof -i :8132 || true
+          sudo ss -tlnp | grep 8132 || true
+
           # Stop services first to ensure ports are released
           sudo systemctl stop illanes00-scribe-backend illanes00-scribe-frontend || true
           sleep 2
 
-          # Kill any remaining processes on the ports (just in case)
-          sudo fuser -k 8132/tcp 2>/dev/null || true
-          sudo fuser -k 8133/tcp 2>/dev/null || true
-          sleep 1
+          echo "=== After stop: What's using port 8132 ==="
+          sudo lsof -i :8132 || true
+
+          # Kill any remaining processes on the ports using lsof
+          sudo lsof -ti :8132 | xargs -r sudo kill -9 2>/dev/null || true
+          sudo lsof -ti :8133 | xargs -r sudo kill -9 2>/dev/null || true
+          sleep 2
+
+          echo "=== After kill: What's using port 8132 ==="
+          sudo lsof -i :8132 || true
 
           # Start services fresh
           sudo systemctl start illanes00-scribe-backend illanes00-scribe-frontend
