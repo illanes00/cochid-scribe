@@ -3,7 +3,6 @@
 from datetime import datetime, timedelta
 from unittest.mock import MagicMock, patch
 
-import pytest
 
 from app.models.integration import Integration
 from app.services.google import get_google_credentials
