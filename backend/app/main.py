@@ -23,18 +23,26 @@ from app.api.v1 import (
     notes,
 )
 from app.config import get_settings
+from app.core.logging import configure_logging, get_logger
 from app.db.session import init_db
 
 settings = get_settings()
+
+# Configure structured logging before anything else
+configure_logging()
+logger = get_logger(__name__)
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Lifespan context manager for startup/shutdown events."""
     # Startup
+    logger.info("app.startup", environment=settings.environment)
     init_db()
+    logger.info("app.ready", docs_url="/api/docs")
     yield
-    # Shutdown (nothing to do)
+    # Shutdown
+    logger.info("app.shutdown")
 
 
 app = FastAPI(

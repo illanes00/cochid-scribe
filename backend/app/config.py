@@ -11,6 +11,7 @@ class Settings(BaseSettings):
     # App
     app_name: str = "Scribe API"
     debug: bool = False
+    environment: str = "development"  # "development" | "production"
 
     # Database (SQLite for development, PostgreSQL for production)
     database_url: str = "sqlite:///./scribe.db"

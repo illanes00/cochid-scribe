@@ -11,6 +11,9 @@ from sqlalchemy.orm import Session
 
 from app.api.v1.llm import extract_claims_from_text
 from app.config import get_settings
+from app.core.logging import get_logger
+
+logger = get_logger(__name__)
 from app.db.session import SessionLocal, get_db
 from app.models.claim import Claim
 from app.models.document import Document
@@ -362,7 +365,7 @@ async def update_document(
             if created:
                 db.commit()
         except Exception as exc:
-            print(f"Claim extraction failed: {exc}")
+            logger.error("claim.extraction_failed", slug=slug, error=str(exc))
 
     return get_document_response(doc, db)
 

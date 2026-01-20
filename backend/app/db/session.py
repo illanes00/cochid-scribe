@@ -55,7 +55,11 @@ def init_db() -> None:
 
     Base.metadata.create_all(bind=engine)
     _ensure_claim_offsets()
-    print(f"Database initialized: {settings.database_url}")
+
+    from app.core.logging import get_logger
+
+    logger = get_logger(__name__)
+    logger.info("db.initialized", database_url=settings.database_url)
 
 
 def _ensure_claim_offsets() -> None:
