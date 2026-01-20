@@ -506,6 +506,7 @@ export default function EditorPage() {
     layout: pageLayout,
     updateLayout: updatePageLayout,
     toggleRuler,
+    toggleVerticalRuler,
     togglePageBreaks,
     toggleHeaderFooter,
     setFormat: setPageFormat,
@@ -772,7 +773,19 @@ export default function EditorPage() {
                           })}
                           className="w-3.5 h-3.5"
                         />
-                        Show Ruler
+                        Show Horizontal Ruler
+                      </label>
+                      <label className="flex items-center gap-2 text-xs cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={pageLayout.showVerticalRuler}
+                          onChange={() => handlePageLayoutChange({
+                            ...pageLayout,
+                            showVerticalRuler: !pageLayout.showVerticalRuler,
+                          })}
+                          className="w-3.5 h-3.5"
+                        />
+                        Show Vertical Ruler
                       </label>
                       <label className="flex items-center gap-2 text-xs cursor-pointer">
                         <input

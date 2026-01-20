@@ -1188,3 +1188,245 @@ class TestTableContent:
         all_text = "".join(r["insertText"]["text"] for r in insert_requests)
         assert "Cell A" in all_text
         assert "Cell B" in all_text
+
+
+# Import HeaderFooterTransform for tests
+from app.services.google_docs_transform import HeaderFooterTransform
+
+
+class TestHeaderFooterTransform:
+    """Tests for header/footer transformation."""
+
+    def test_create_header_footer_requests_with_header(self):
+        """Header content should create a createHeader request."""
+        header_content = {
+            "type": "doc",
+            "content": [{"type": "paragraph", "content": [{"type": "text", "text": "Header"}]}],
+        }
+
+        requests = HeaderFooterTransform.create_header_footer_requests(
+            header_content=header_content,
+            footer_content=None,
+        )
+
+        assert len(requests) == 1
+        assert "createHeader" in requests[0]
+        assert requests[0]["createHeader"]["type"] == "DEFAULT"
+
+    def test_create_header_footer_requests_with_footer(self):
+        """Footer content should create a createFooter request."""
+        footer_content = {
+            "type": "doc",
+            "content": [{"type": "paragraph", "content": [{"type": "text", "text": "Footer"}]}],
+        }
+
+        requests = HeaderFooterTransform.create_header_footer_requests(
+            header_content=None,
+            footer_content=footer_content,
+        )
+
+        assert len(requests) == 1
+        assert "createFooter" in requests[0]
+        assert requests[0]["createFooter"]["type"] == "DEFAULT"
+
+    def test_create_header_footer_requests_with_both(self):
+        """Both header and footer content should create both requests."""
+        header_content = {
+            "type": "doc",
+            "content": [{"type": "paragraph", "content": [{"type": "text", "text": "Header"}]}],
+        }
+        footer_content = {
+            "type": "doc",
+            "content": [{"type": "paragraph", "content": [{"type": "text", "text": "Footer"}]}],
+        }
+
+        requests = HeaderFooterTransform.create_header_footer_requests(
+            header_content=header_content,
+            footer_content=footer_content,
+        )
+
+        assert len(requests) == 2
+        assert "createHeader" in requests[0]
+        assert "createFooter" in requests[1]
+
+    def test_create_header_footer_requests_with_margins(self):
+        """Page margins should create updateDocumentStyle request."""
+        page_margins = {"top": 72, "bottom": 72, "left": 96, "right": 96}
+
+        requests = HeaderFooterTransform.create_header_footer_requests(
+            header_content=None,
+            footer_content=None,
+            page_margins=page_margins,
+        )
+
+        assert len(requests) == 1
+        assert "updateDocumentStyle" in requests[0]
+        style = requests[0]["updateDocumentStyle"]["documentStyle"]
+        assert style["marginTop"]["magnitude"] == 72
+        assert style["marginLeft"]["magnitude"] == 96
+
+    def test_create_header_footer_requests_empty(self):
+        """No content should produce no requests."""
+        requests = HeaderFooterTransform.create_header_footer_requests(
+            header_content=None,
+            footer_content=None,
+        )
+
+        assert requests == []
+
+    def test_create_header_content_requests(self):
+        """Header content should produce insertText request."""
+        content = {
+            "type": "doc",
+            "content": [{"type": "paragraph", "content": [{"type": "text", "text": "My Header"}]}],
+        }
+
+        requests = HeaderFooterTransform.create_header_content_requests(
+            header_id="header-123",
+            content=content,
+        )
+
+        assert len(requests) == 1
+        assert "insertText" in requests[0]
+        assert requests[0]["insertText"]["location"]["segmentId"] == "header-123"
+        assert requests[0]["insertText"]["text"] == "My Header"
+
+    def test_create_footer_content_requests(self):
+        """Footer content should produce insertText request."""
+        content = {
+            "type": "doc",
+            "content": [{"type": "paragraph", "content": [{"type": "text", "text": "My Footer"}]}],
+        }
+
+        requests = HeaderFooterTransform.create_footer_content_requests(
+            footer_id="footer-456",
+            content=content,
+        )
+
+        assert len(requests) == 1
+        assert "insertText" in requests[0]
+        assert requests[0]["insertText"]["location"]["segmentId"] == "footer-456"
+        assert requests[0]["insertText"]["text"] == "My Footer"
+
+    def test_header_with_variables(self):
+        """Variables should be replaced in header content."""
+        content = {
+            "type": "doc",
+            "content": [{"type": "paragraph", "content": [{"type": "text", "text": "Page {pageNumber} of {totalPages}"}]}],
+        }
+
+        requests = HeaderFooterTransform.create_header_content_requests(
+            header_id="header-123",
+            content=content,
+            variables={"pageNumber": 1, "totalPages": 10},
+        )
+
+        assert requests[0]["insertText"]["text"] == "Page 1 of 10"
+
+    def test_footer_with_document_title(self):
+        """Document title variable should be replaced."""
+        content = {
+            "type": "doc",
+            "content": [{"type": "paragraph", "content": [{"type": "text", "text": "Document: {documentTitle}"}]}],
+        }
+
+        requests = HeaderFooterTransform.create_footer_content_requests(
+            footer_id="footer-456",
+            content=content,
+            variables={"documentTitle": "My Test Document"},
+        )
+
+        assert requests[0]["insertText"]["text"] == "Document: My Test Document"
+
+    def test_extract_header_footer_from_doc(self):
+        """Should extract header/footer content from Google Docs response."""
+        google_doc = {
+            "headers": {
+                "header-1": {
+                    "content": [
+                        {
+                            "paragraph": {
+                                "elements": [
+                                    {"textRun": {"content": "Header text\n"}}
+                                ]
+                            }
+                        }
+                    ]
+                }
+            },
+            "footers": {
+                "footer-1": {
+                    "content": [
+                        {
+                            "paragraph": {
+                                "elements": [
+                                    {"textRun": {"content": "Footer text\n"}}
+                                ]
+                            }
+                        }
+                    ]
+                }
+            },
+        }
+
+        header_content, footer_content = HeaderFooterTransform.extract_header_footer_from_doc(google_doc)
+
+        assert header_content is not None
+        assert footer_content is not None
+        assert header_content["content"][0]["content"][0]["text"] == "Header text"
+        assert footer_content["content"][0]["content"][0]["text"] == "Footer text"
+
+    def test_extract_header_footer_empty(self):
+        """Should return None for missing headers/footers."""
+        google_doc = {}
+
+        header_content, footer_content = HeaderFooterTransform.extract_header_footer_from_doc(google_doc)
+
+        assert header_content is None
+        assert footer_content is None
+
+    def test_extract_page_margins_from_doc(self):
+        """Should extract page margins from Google Docs documentStyle."""
+        google_doc = {
+            "documentStyle": {
+                "marginTop": {"magnitude": 72, "unit": "PT"},
+                "marginBottom": {"magnitude": 72, "unit": "PT"},
+                "marginLeft": {"magnitude": 90, "unit": "PT"},
+                "marginRight": {"magnitude": 90, "unit": "PT"},
+            }
+        }
+
+        margins = HeaderFooterTransform.extract_page_margins_from_doc(google_doc)
+
+        assert margins is not None
+        # 72 PT * (96 DPI / 72 PT per inch) = 96 pixels
+        assert margins["top"] == 96
+        assert margins["bottom"] == 96
+        # 90 PT * (96 DPI / 72 PT per inch) = 120 pixels
+        assert margins["left"] == 120
+        assert margins["right"] == 120
+
+    def test_extract_page_margins_inches(self):
+        """Should convert inch margins to pixels."""
+        google_doc = {
+            "documentStyle": {
+                "marginTop": {"magnitude": 1, "unit": "IN"},
+                "marginBottom": {"magnitude": 1, "unit": "IN"},
+                "marginLeft": {"magnitude": 1, "unit": "IN"},
+                "marginRight": {"magnitude": 1, "unit": "IN"},
+            }
+        }
+
+        margins = HeaderFooterTransform.extract_page_margins_from_doc(google_doc)
+
+        # 1 inch * 96 DPI = 96 pixels
+        assert margins["top"] == 96
+        assert margins["left"] == 96
+
+    def test_extract_page_margins_empty(self):
+        """Should return None for missing margins."""
+        google_doc = {}
+
+        margins = HeaderFooterTransform.extract_page_margins_from_doc(google_doc)
+
+        assert margins is None

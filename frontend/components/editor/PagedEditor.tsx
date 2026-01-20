@@ -27,6 +27,7 @@ export interface PageMargins {
 export interface PageLayoutConfig {
   format: PageFormat
   margins: PageMargins
+  firstLineIndent: number
   showRuler: boolean
   showVerticalRuler: boolean
   showPageBreaks: boolean
@@ -45,6 +46,7 @@ const DEFAULT_MARGINS: PageMargins = {
 const DEFAULT_LAYOUT: PageLayoutConfig = {
   format: 'A4',
   margins: DEFAULT_MARGINS,
+  firstLineIndent: 0,
   showRuler: true,
   showVerticalRuler: false,
   showPageBreaks: true,
@@ -86,6 +88,7 @@ export function PagedEditor({
     ...DEFAULT_LAYOUT,
     ...layoutProp,
     margins: { ...DEFAULT_MARGINS, ...layoutProp?.margins },
+    firstLineIndent: layoutProp?.firstLineIndent ?? 0,
   }), [layoutProp])
 
   const pageFormat = PAGE_FORMATS[layout.format]
@@ -133,6 +136,15 @@ export function PagedEditor({
     const updatedLayout = {
       ...layout,
       margins: { ...layout.margins, ...newMargins },
+    }
+    onLayoutChange?.(updatedLayout)
+  }, [layout, onLayoutChange])
+
+  // Handle first-line indent changes from ruler
+  const handleFirstLineIndentChange = useCallback((indent: number) => {
+    const updatedLayout = {
+      ...layout,
+      firstLineIndent: indent,
     }
     onLayoutChange?.(updatedLayout)
   }, [layout, onLayoutChange])
@@ -191,6 +203,8 @@ export function PagedEditor({
           pageWidth={pageFormat.width}
           margins={layout.margins}
           onMarginsChange={handleMarginsChange}
+          firstLineIndent={layout.firstLineIndent}
+          onFirstLineIndentChange={handleFirstLineIndentChange}
         />
       )}
 
@@ -267,6 +281,7 @@ export function usePageLayout(initialLayout?: Partial<PageLayoutConfig>) {
     ...DEFAULT_LAYOUT,
     ...initialLayout,
     margins: { ...DEFAULT_MARGINS, ...initialLayout?.margins },
+    firstLineIndent: initialLayout?.firstLineIndent ?? 0,
   })
 
   const updateLayout = useCallback((updates: Partial<PageLayoutConfig>) => {
@@ -289,6 +304,10 @@ export function usePageLayout(initialLayout?: Partial<PageLayoutConfig>) {
     setLayout(prev => ({ ...prev, showHeaderFooter: !prev.showHeaderFooter }))
   }, [])
 
+  const toggleVerticalRuler = useCallback(() => {
+    setLayout(prev => ({ ...prev, showVerticalRuler: !prev.showVerticalRuler }))
+  }, [])
+
   const setFormat = useCallback((format: PageFormat) => {
     setLayout(prev => ({ ...prev, format }))
   }, [])
@@ -297,6 +316,7 @@ export function usePageLayout(initialLayout?: Partial<PageLayoutConfig>) {
     layout,
     updateLayout,
     toggleRuler,
+    toggleVerticalRuler,
     togglePageBreaks,
     toggleHeaderFooter,
     setFormat,
