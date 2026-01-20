@@ -138,7 +138,21 @@ export function PagedEditor({
       margins: { ...layout.margins, ...newMargins },
     }
     onLayoutChange?.(updatedLayout)
-  }, [layout, onLayoutChange])
+
+    // Also apply to editor paragraph formatting if editor has selection
+    if (editor && !editor.state.selection.empty) {
+      const marginUpdates: Record<string, string> = {}
+      if (newMargins.left !== undefined) {
+        marginUpdates.left = `${newMargins.left}px`
+      }
+      if (newMargins.right !== undefined) {
+        marginUpdates.right = `${newMargins.right}px`
+      }
+      if (Object.keys(marginUpdates).length > 0) {
+        editor.chain().focus().setParagraphMargins(marginUpdates).run()
+      }
+    }
+  }, [layout, onLayoutChange, editor])
 
   // Handle first-line indent changes from ruler
   const handleFirstLineIndentChange = useCallback((indent: number) => {
@@ -147,7 +161,12 @@ export function PagedEditor({
       firstLineIndent: indent,
     }
     onLayoutChange?.(updatedLayout)
-  }, [layout, onLayoutChange])
+
+    // Also apply to editor paragraph formatting if editor has selection
+    if (editor && !editor.state.selection.empty) {
+      editor.chain().focus().setFirstLineIndent(`${indent}px`).run()
+    }
+  }, [layout, onLayoutChange, editor])
 
   // Handle header/footer content changes
   const handleHeaderChange = useCallback((content: HeaderFooterContent) => {

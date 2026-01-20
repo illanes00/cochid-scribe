@@ -887,6 +887,114 @@ export const versionsApi = {
     fetchApi(`/api/v1/documents/${slug}/versions/${versionId}`),
 }
 
+// Track Changes types
+export type ChangeType = 'insert' | 'delete'
+export type ChangeStatus = 'pending' | 'accepted' | 'rejected'
+
+export interface TrackChange {
+  id: number
+  document_id: string
+  change_id: string
+  change_type: ChangeType
+  content: string | null
+  position_start: number | null
+  position_end: number | null
+  author_name: string | null
+  author_email: string | null
+  status: ChangeStatus
+  created_at: string
+  resolved_at: string | null
+  resolved_by: string | null
+  resolution_comment: string | null
+}
+
+export interface TrackChangesListResponse {
+  changes: TrackChange[]
+  total: number
+  pending_count: number
+  accepted_count: number
+  rejected_count: number
+}
+
+export interface TrackChangeCreate {
+  change_id: string
+  change_type: ChangeType
+  content?: string
+  position_start?: number
+  position_end?: number
+  author_name?: string
+  author_email?: string
+}
+
+// Track Changes API
+export const trackChangesApi = {
+  list: (slug: string, status?: ChangeStatus): Promise<TrackChangesListResponse> => {
+    const params = status ? `?status=${status}` : ''
+    return fetchApi(`/api/v1/documents/${slug}/changes${params}`)
+  },
+
+  create: (slug: string, change: TrackChangeCreate): Promise<TrackChange> =>
+    fetchApi(`/api/v1/documents/${slug}/changes`, {
+      method: 'POST',
+      body: JSON.stringify(change),
+    }),
+
+  get: (slug: string, changeId: string): Promise<TrackChange> =>
+    fetchApi(`/api/v1/documents/${slug}/changes/${changeId}`),
+
+  resolve: (
+    slug: string,
+    changeId: string,
+    action: 'accept' | 'reject',
+    comment?: string,
+    resolvedBy?: string
+  ): Promise<{ success: boolean; change: TrackChange; message: string }> =>
+    fetchApi(`/api/v1/documents/${slug}/changes/${changeId}/resolve`, {
+      method: 'POST',
+      body: JSON.stringify({ action, comment, resolved_by: resolvedBy }),
+    }),
+
+  bulkResolve: (
+    slug: string,
+    changeIds: string[],
+    action: 'accept' | 'reject',
+    comment?: string,
+    resolvedBy?: string
+  ): Promise<{ success: boolean; resolved_count: number; message: string }> =>
+    fetchApi(`/api/v1/documents/${slug}/changes/bulk-resolve`, {
+      method: 'POST',
+      body: JSON.stringify({ change_ids: changeIds, action, comment, resolved_by: resolvedBy }),
+    }),
+
+  acceptAll: (slug: string, resolvedBy?: string): Promise<{ success: boolean; resolved_count: number; message: string }> =>
+    fetchApi(`/api/v1/documents/${slug}/changes/accept-all`, {
+      method: 'POST',
+      body: JSON.stringify({ resolved_by: resolvedBy }),
+    }),
+
+  rejectAll: (slug: string, resolvedBy?: string): Promise<{ success: boolean; resolved_count: number; message: string }> =>
+    fetchApi(`/api/v1/documents/${slug}/changes/reject-all`, {
+      method: 'POST',
+      body: JSON.stringify({ resolved_by: resolvedBy }),
+    }),
+
+  delete: (slug: string, changeId: string): Promise<{ success: boolean; message: string }> =>
+    fetchApi(`/api/v1/documents/${slug}/changes/${changeId}`, {
+      method: 'DELETE',
+    }),
+
+  extractFromContent: (
+    slug: string,
+    content: Record<string, unknown>,
+    authorName?: string,
+    authorEmail?: string
+  ): Promise<TrackChangesListResponse> =>
+    fetchApi(`/api/v1/documents/${slug}/changes/extract`, {
+      method: 'POST',
+      body: JSON.stringify({ content, author_name: authorName, author_email: authorEmail }),
+    }),
+}
+
 // Export all APIs
 export const api = {
   documents: documentsApi,
@@ -904,6 +1012,7 @@ export const api = {
   googleSync: googleSyncApi,
   comments: commentsApi,
   versions: versionsApi,
+  trackChanges: trackChangesApi,
 }
 
 export default api

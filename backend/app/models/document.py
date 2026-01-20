@@ -45,6 +45,7 @@ class Document(Base):
 
     # Relationships
     claims = relationship("Claim", back_populates="document", cascade="all, delete-orphan")
+    track_changes = relationship("TrackChange", back_populates="document", cascade="all, delete-orphan")
 
     def __repr__(self) -> str:
         return f"<Document(slug={self.slug}, title={self.title})>"

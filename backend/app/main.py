@@ -23,6 +23,7 @@ from app.api.v1 import (
     integrations,
     llm,
     notes,
+    track_changes,
 )
 from app.config import get_settings
 from app.core.logging import configure_logging, get_logger
@@ -86,6 +87,7 @@ app.include_router(google_sync.router, prefix="/api/v1/google-sync", tags=["goog
 app.include_router(comments.router, prefix="/api/v1/comments", tags=["comments"])
 app.include_router(assets.router, prefix="/api/v1/assets", tags=["assets"])
 app.include_router(health.router, prefix="/api/v1/health", tags=["health"])
+app.include_router(track_changes.router, prefix="/api/v1/documents", tags=["track-changes"])
 
 # Static uploads
 UPLOAD_DIR = Path(__file__).resolve().parents[1] / "uploads"
