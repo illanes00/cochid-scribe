@@ -97,10 +97,17 @@ def get_google_credentials(db: Session) -> Credentials | None:
     )
 
     if creds.expired and creds.refresh_token:
-        creds.refresh(Request())
-        integration.access_token = creds.token
-        integration.expires_at = creds.expiry
-        db.commit()
+        try:
+            creds.refresh(Request())
+            integration.access_token = creds.token
+            integration.expires_at = creds.expiry
+            # Persist refreshed tokens and sync the object
+            db.commit()
+            db.refresh(integration)
+        except Exception:
+            # If refresh fails, return None to trigger re-authentication
+            db.rollback()
+            return None
 
     return creds
 
