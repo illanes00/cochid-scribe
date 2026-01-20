@@ -59,27 +59,33 @@ jobs:
       - name: Restart services
         run: |
           echo "=== Before stop: What's using port 8132 ==="
-          sudo lsof -i :8132 || true
-          sudo ss -tlnp | grep 8132 || true
+          ss -tlnp | grep 8132 || echo "No process found on 8132"
+          ps aux | grep -E "[u]vicorn.*8132" || echo "No uvicorn found"
 
-          # Stop services first to ensure ports are released
-          sudo systemctl stop illanes00-scribe-backend illanes00-scribe-frontend || true
-          sleep 2
+          # Stop services first
+          sudo systemctl stop illanes00-scribe-backend || true
+          sudo systemctl stop illanes00-scribe-frontend || true
+
+          # Wait longer for the service to fully stop
+          echo "Waiting for services to fully stop..."
+          sleep 5
 
           echo "=== After stop: What's using port 8132 ==="
-          sudo lsof -i :8132 || true
+          ss -tlnp | grep 8132 || echo "No process found on 8132"
+          ps aux | grep -E "[u]vicorn.*8132" || echo "No uvicorn found"
 
-          # Kill any remaining processes on the ports using lsof
-          sudo lsof -ti :8132 | xargs -r sudo kill -9 2>/dev/null || true
-          sudo lsof -ti :8133 | xargs -r sudo kill -9 2>/dev/null || true
-          sleep 2
+          # Use systemctl kill as a more aggressive approach
+          sudo systemctl kill --signal=SIGKILL illanes00-scribe-backend || true
+          sleep 3
 
           echo "=== After kill: What's using port 8132 ==="
-          sudo lsof -i :8132 || true
+          ss -tlnp | grep 8132 || echo "No process found on 8132"
 
           # Start services fresh
-          sudo systemctl start illanes00-scribe-backend illanes00-scribe-frontend
-          sleep 5
+          sudo systemctl start illanes00-scribe-backend
+          sleep 3
+          sudo systemctl start illanes00-scribe-frontend
+          sleep 3
 
       - name: Health check
         id: health
