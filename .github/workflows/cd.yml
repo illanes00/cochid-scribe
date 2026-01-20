@@ -69,6 +69,20 @@ jobs:
           # Wait for services to start
           sleep 3
 
+          # Show service status
+          echo "=== Backend service status ==="
+          sudo systemctl status illanes00-scribe-backend --no-pager || true
+
+          echo ""
+          echo "=== Code version on disk ==="
+          cd $PROJECT_PATH
+          git rev-parse HEAD
+          head -5 backend/app/main.py
+
+          echo ""
+          echo "=== Backend health response ==="
+          curl -sf http://localhost:8132/health || true
+
           # Check backend health with retries
           for i in 1 2 3; do
             if curl -sf http://localhost:8132/health > /dev/null 2>&1; then
