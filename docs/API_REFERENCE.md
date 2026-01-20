@@ -886,6 +886,175 @@ Currently no rate limiting is implemented. For production:
 
 ---
 
+## Health Check
+
+### Simple Health Check
+
+```http
+GET /health
+```
+
+**Response:**
+```json
+{
+  "status": "healthy",
+  "service": "Scribe API",
+  "host": "hostname"
+}
+```
+
+### API Health Check
+
+```http
+GET /api/v1/health
+```
+
+**Response:**
+```json
+{
+  "status": "healthy",
+  "service": "Scribe API",
+  "host": "hostname",
+  "environment": "production"
+}
+```
+
+### Detailed Health Check
+
+```http
+GET /api/v1/health/detailed
+```
+
+**Response:**
+```json
+{
+  "status": "healthy",
+  "service": "Scribe API",
+  "environment": "production",
+  "host": "hostname",
+  "timestamp": "2026-01-20T12:00:00Z",
+  "components": {
+    "database": {
+      "status": "healthy",
+      "latency_ms": 2.5,
+      "message": "Connected"
+    },
+    "google_integration": {
+      "status": "healthy",
+      "message": "OAuth credentials configured"
+    },
+    "llm_service": {
+      "status": "healthy",
+      "message": "Anthropic API key configured"
+    }
+  }
+}
+```
+
+Status values: `healthy`, `degraded`, `unhealthy`
+
+---
+
+## Assets
+
+### Upload Asset
+
+```http
+POST /api/v1/assets/upload
+Content-Type: multipart/form-data
+```
+
+**Form Fields:**
+| Field | Type | Description |
+|-------|------|-------------|
+| file | file | Image or file to upload |
+
+**Response:**
+```json
+{
+  "filename": "uuid.png",
+  "url": "/uploads/uuid.png",
+  "content_type": "image/png",
+  "size": 12345
+}
+```
+
+### Get Asset
+
+```http
+GET /api/v1/assets/{filename}
+```
+
+**Response:** Binary file stream
+
+### Delete Asset
+
+```http
+DELETE /api/v1/assets/{filename}
+```
+
+**Response:**
+```json
+{
+  "status": "deleted"
+}
+```
+
+---
+
+## Document Versions
+
+### List Versions
+
+```http
+GET /api/v1/documents/{slug}/versions
+```
+
+**Response:**
+```json
+{
+  "versions": [
+    {
+      "id": "uuid",
+      "label": "Draft 1",
+      "created_at": "2026-01-16T12:00:00"
+    }
+  ]
+}
+```
+
+### Create Version (Snapshot)
+
+```http
+POST /api/v1/documents/{slug}/versions
+Content-Type: application/json
+```
+
+**Request Body:**
+```json
+{
+  "label": "Before major changes"
+}
+```
+
+### Get Version
+
+```http
+GET /api/v1/documents/{slug}/versions/{version_id}
+```
+
+**Response:** Full document content at that version
+
+### Restore Version
+
+```http
+POST /api/v1/documents/{slug}/versions/{version_id}/restore
+```
+
+Restores document to this version (creates new version first).
+
+---
+
 ## Authentication
 
 Currently single-user, no authentication required.
