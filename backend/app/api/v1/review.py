@@ -11,6 +11,9 @@ from app.models.comment import Comment
 from app.models.document import Document
 from app.models.track_change import ChangeStatus, ChangeType, TrackChange
 from app.services.google import build_drive_service
+from fastapi.responses import HTMLResponse
+
+from app.services.review_export import generate_review_html
 from app.services.review_respond import ReviewAnalysis, ReviewRespondService
 
 router = APIRouter()
@@ -73,6 +76,19 @@ async def analyze_comments(slug: str, db: Session = Depends(get_db)):
     )
 
     return analysis
+
+
+@router.get("/{slug}/export", response_class=HTMLResponse)
+async def export_review(slug: str, db: Session = Depends(get_db)):
+    """Export the full review as a printable A3 HTML document.
+
+    Open in browser and print to PDF (Ctrl+P → A3 landscape).
+    """
+    try:
+        html_content = generate_review_html(db, slug)
+        return HTMLResponse(content=html_content)
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
 
 
 class ApplyItem(BaseModel):
