@@ -4,13 +4,17 @@
 
 ## Project Summary
 
-**Scribe** is an academic writing platform for policy researchers. It features:
-- Rich text editing (TipTap/ProseMirror)
-- Claims management (verifiable assertions)
-- Bibliography management (BibTeX)
-- Presentation authoring (slides)
-- AI assistance (Anthropic Claude)
-- Google Workspace integration
+**Scribe** is a multi-tenant academic collaboration platform for policy researchers, think tanks, universities, and government. It features:
+- Rich text editing (TipTap/ProseMirror) with inline claims, comments, track changes
+- AI Review & Respond (Claude CLI subprocess — analyzes reviewer comments, generates argued responses)
+- AI Chat panel with full document context (claims, comments, bibliography)
+- Claims management (verifiable assertions with evidence strength indicators)
+- Bibliography management (BibTeX, 17+ verified sources)
+- Knowledge graph (D3 force simulation, interactive)
+- Google Workspace integration (bidirectional sync, comment replies)
+- Multi-user support (User, Project, ProjectMember models, Authentik SSO ready)
+- MCP server (19 tools for Claude Code CLI integration)
+- Presentation authoring (slides with PPTX export)
 
 **Production:** https://scribe.illanes00.cl
 
