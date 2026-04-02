@@ -151,7 +151,7 @@ a:hover {{ text-decoration: underline; }}
 /* Layout */
 .cols {{ display: flex; min-height: calc(100vh - 80px); }}
 .col-doc {{ flex: 1; padding: 1.5rem 2rem; overflow-wrap: break-word; }}
-.col-margin {{ width: 380px; flex-shrink: 0; padding: 1rem; background: #f8f9fa; border-left: 1px solid #d5dbe3; font-size: 0.78rem; overflow-y: auto; }}
+.col-margin {{ width: 440px; flex-shrink: 0; padding: 1rem 1.2rem; background: #f8f9fa; border-left: 1px solid #d5dbe3; font-size: 0.78rem; overflow-y: auto; }}
 
 /* Document typography */
 .col-doc h1 {{ font-size: 1.3rem; font-weight: 800; margin: 1.2rem 0 0.4rem; }}
@@ -422,11 +422,13 @@ def _build_margin_comments(
         for idx, c in inline_comments:
             parts.append(_render_margin_card(idx, c, replies_map))
 
-    # General
+    # General — place before everything as "Sobre el documento"
     if general:
-        parts.append('<div class="m-section" style="color:#4b5563">Generales</div>')
+        parts.insert(0, '<div class="m-section" style="color:#4b5563">Sobre el documento</div>')
+        insert_at = 1
         for idx, c in general:
-            parts.append(_render_margin_card(idx, c, replies_map))
+            parts.insert(insert_at, _render_margin_card(idx, c, replies_map))
+            insert_at += 1
 
     return "\n".join(parts)
 
@@ -439,10 +441,10 @@ def _render_margin_card(idx: int, c: Comment, replies_map: dict) -> str:
 
     parts = [f'<div class="m-card {status}">']
     parts.append(f'<div class="m-author">#{idx} · {html.escape(c.author or "Anon")} <span class="m-provider">{provider}</span></div>')
-    parts.append(f'<div class="m-text">{html.escape(c.content[:150])}</div>')
+    parts.append(f'<div class="m-text">{html.escape(c.content)}</div>')
 
     for reply in replies_map.get(c.id, []):
-        parts.append(f'<div class="m-reply"><strong>{html.escape(reply.author or "Scribe")[:20]}</strong>: {html.escape(reply.content[:120])}</div>')
+        parts.append(f'<div class="m-reply"><strong>{html.escape(reply.author or "Scribe")[:25]}</strong>: {html.escape(reply.content)}</div>')
 
     parts.append("</div>")
     return "\n".join(parts)
@@ -451,17 +453,27 @@ def _render_margin_card(idx: int, c: Comment, replies_map: dict) -> str:
 def _build_bib_html(entries: list[BibliographyEntry]) -> str:
     parts = []
     for e in entries:
-        url = ""
-        if e.url:
-            url = f' <a href="{html.escape(e.url)}" target="_blank">[link]</a>'
+        author = html.escape(e.author or "")
+        year = e.year or "s/f"
+        title = html.escape(e.title or "")
+        journal = html.escape(e.journal or "")
+
+        # Build APA-style citation with integrated hyperlinks
+        # Title is the clickable element (links to URL or DOI)
         if e.doi:
-            url += f' <a href="https://doi.org/{html.escape(e.doi)}" target="_blank">[DOI]</a>'
-        parts.append(
-            f'<div class="bib-entry">'
-            f'<span class="bib-key">[{html.escape(e.bib_key)}]</span> '
-            f'{html.escape(e.author or "")} ({e.year or "s/f"}). '
-            f'<em>{html.escape(e.title or "")}</em>. '
-            f'{html.escape(e.journal or "")}'
-            f'{url}</div>'
-        )
+            title_html = f'<a href="https://doi.org/{html.escape(e.doi)}" target="_blank" style="color:#3763e0"><em>{title}</em></a>'
+        elif e.url:
+            title_html = f'<a href="{html.escape(e.url)}" target="_blank" style="color:#3763e0"><em>{title}</em></a>'
+        else:
+            title_html = f'<em>{title}</em>'
+
+        # APA format: Author (Year). Title. Journal.
+        citation = f'{author} ({year}). {title_html}.'
+        if journal:
+            citation += f' <em>{journal}</em>.'
+        if e.doi:
+            citation += f' <span style="font-size:0.62rem;color:#4b5563">doi:{html.escape(e.doi)}</span>'
+
+        parts.append(f'<div class="bib-entry"><span class="bib-key">[{html.escape(e.bib_key)}]</span> {citation}</div>')
+
     return "\n".join(parts) if parts else '<div style="font-size:0.7rem;color:#4b5563">Sin bibliografía.</div>'
