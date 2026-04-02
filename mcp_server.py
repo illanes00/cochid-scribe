@@ -212,6 +212,37 @@ TOOLS = [
             "required": ["slug"],
         },
     },
+    {
+        "name": "scribe_list_projects",
+        "description": "List all projects/workspaces.",
+        "inputSchema": {"type": "object", "properties": {}, "required": []},
+    },
+    {
+        "name": "scribe_create_project",
+        "description": "Create a new project/workspace for organizing documents.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "name": {"type": "string", "description": "Project name"},
+                "slug": {"type": "string", "description": "URL-friendly slug"},
+                "description": {"type": "string"},
+                "org_name": {"type": "string", "description": "Organization name (e.g. 'Espacio Público')"},
+            },
+            "required": ["name", "slug"],
+        },
+    },
+    {
+        "name": "scribe_chat",
+        "description": "Chat about a document using Claude CLI with full context (document, comments, claims, bibliography).",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "slug": {"type": "string", "description": "Document slug"},
+                "message": {"type": "string", "description": "Question or instruction"},
+            },
+            "required": ["slug", "message"],
+        },
+    },
 ]
 
 
@@ -301,6 +332,26 @@ def handle_tool(name: str, args: dict) -> Any:
 
     elif name == "scribe_track_changes":
         return _api("GET", f"/api/v1/documents/{slug}/track-changes")
+
+    elif name == "scribe_list_projects":
+        return _api("GET", "/api/v1/projects/")
+
+    elif name == "scribe_create_project":
+        return _api("POST", "/api/v1/projects/", {
+            "name": args["name"],
+            "slug": args["slug"],
+            "description": args.get("description", ""),
+            "org_name": args.get("org_name", ""),
+        })
+
+    elif name == "scribe_chat":
+        return _api("POST", f"/api/v1/chat/{slug}", {
+            "message": args["message"],
+            "include_document": True,
+            "include_comments": True,
+            "include_claims": True,
+            "include_bibliography": True,
+        })
 
     return {"error": f"Unknown tool: {name}"}
 
