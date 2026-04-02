@@ -34,6 +34,7 @@ import { VersionsPanel } from '@/components/panels/VersionsPanel'
 import { TrackChangesPanel } from '@/components/panels/TrackChangesPanel'
 import { ReviewPanel } from '@/components/panels/ReviewPanel'
 import { GoogleSyncPanel } from '@/components/sync/GoogleSyncPanel'
+import { useAuth } from '@/lib/auth'
 import { useDocument } from '@/hooks/useDocument'
 import { Claim, Comment, Document, claimsApi, documentsApi, exportsApi, ExportFormat, reviewApi } from '@/lib/api'
 import { googleApi } from '@/lib/api'
@@ -87,6 +88,7 @@ export default function EditorPage() {
   const params = useParams()
   const slug = params.slug as string
   const isNew = slug === 'new'
+  const { user, authenticated } = useAuth()
 
   const editorRef = useRef<Editor | null>(null)
   const [activePanel, setActivePanel] = useState<PanelType>('claims')
@@ -1159,6 +1161,9 @@ export default function EditorPage() {
           </a>
           <span>Version {document?.version || '1.0.0'}</span>
           <span className="capitalize">{document?.status || 'draft'}</span>
+          {authenticated && user && (
+            <span className="text-ink">{user.name || user.email}</span>
+          )}
         </div>
       </footer>
     </div>

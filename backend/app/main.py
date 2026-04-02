@@ -6,9 +6,11 @@ from pathlib import Path
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from starlette.middleware.sessions import SessionMiddleware
 
 from app.api.v1 import (
     assets,
+    auth,
     bibliography,
     charts,
     chat,
@@ -71,10 +73,29 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Session middleware (required for OIDC and /api/v1/auth/me)
+app.add_middleware(SessionMiddleware, secret_key=settings.secret_key)
+
+# OIDC setup (only if explicitly enabled)
+if settings.oidc_enabled and settings.oidc_client_id:
+    from illanes_auth import OIDCHandler
+
+    oidc = OIDCHandler(
+        issuer=settings.oidc_issuer,
+        client_id=settings.oidc_client_id,
+        client_secret=settings.oidc_client_secret,
+        redirect_uri=settings.oidc_redirect_uri,
+    )
+    oidc.setup_fastapi()
+    app.get("/auth/login")(oidc.fastapi_login)
+    app.get("/auth/callback")(oidc.fastapi_callback)
+    app.get("/auth/logout")(oidc.fastapi_logout)
+
 # Request logging (logs all HTTP requests with timing)
 app.add_middleware(RequestLoggingMiddleware)
 
 # Include routers
+app.include_router(auth.router, prefix="/api/v1/auth", tags=["auth"])
 app.include_router(documents.router, prefix="/api/v1/documents", tags=["documents"])
 app.include_router(claims.router, prefix="/api/v1/claims", tags=["claims"])
 app.include_router(bibliography.router, prefix="/api/v1/bibliography", tags=["bibliography"])

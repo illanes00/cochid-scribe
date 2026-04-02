@@ -2,10 +2,11 @@
 
 from functools import lru_cache
 
+from illanes_auth import AuthSettingsMixin
 from pydantic_settings import BaseSettings
 
 
-class Settings(BaseSettings):
+class Settings(AuthSettingsMixin, BaseSettings):
     """Application settings."""
 
     # App
@@ -17,9 +18,16 @@ class Settings(BaseSettings):
     database_url: str = "sqlite:///./scribe.db"
 
     # Auth
-    secret_key: str = "your-secret-key-change-in-production"
+    secret_key: str = "your-secret-key-change-in-production"  # noqa: S105
     algorithm: str = "HS256"
     access_token_expire_minutes: int = 30
+
+    # OIDC (Authentik SSO) — disabled by default
+    oidc_issuer: str = "https://auth.illanes00.cl/application/o/scribe/"
+    oidc_client_id: str = ""
+    oidc_client_secret: str = ""
+    oidc_redirect_uri: str = "https://scribe.illanes00.cl/auth/callback"
+    oidc_enabled: bool = False
 
     # LLM
     anthropic_api_key: str = ""
