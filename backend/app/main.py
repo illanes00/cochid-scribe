@@ -11,6 +11,7 @@ from app.api.v1 import (
     assets,
     bibliography,
     charts,
+    chat,
     claims,
     comments,
     datasets,
@@ -23,6 +24,8 @@ from app.api.v1 import (
     integrations,
     llm,
     notes,
+    projects,
+    review,
     track_changes,
 )
 from app.config import get_settings
@@ -87,6 +90,9 @@ app.include_router(google_sync.router, prefix="/api/v1/google-sync", tags=["goog
 app.include_router(comments.router, prefix="/api/v1/comments", tags=["comments"])
 app.include_router(assets.router, prefix="/api/v1/assets", tags=["assets"])
 app.include_router(health.router, prefix="/api/v1/health", tags=["health"])
+app.include_router(review.router, prefix="/api/v1/review", tags=["review"])
+app.include_router(chat.router, prefix="/api/v1/chat", tags=["chat"])
+app.include_router(projects.router, prefix="/api/v1/projects", tags=["projects"])
 app.include_router(track_changes.router, prefix="/api/v1/documents", tags=["track-changes"])
 
 # Static uploads

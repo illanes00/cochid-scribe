@@ -5,10 +5,10 @@ After=network.target
 [Service]
 User=illanes00
 Group=illanes00
-WorkingDirectory=/srv/projects/illanes00-scribe/backend
+WorkingDirectory=/srv/projects/cochid/cochid-scribe/backend
 Environment=PYTHONUNBUFFERED=1
-EnvironmentFile=/srv/projects/illanes00-scribe/.env
-ExecStart=/srv/projects/illanes00-scribe/backend/venv/bin/uvicorn app.main:app --host 127.0.0.1 --port 8132
+EnvironmentFile=/srv/projects/cochid/cochid-scribe/.env
+ExecStart=/srv/projects/cochid/cochid-scribe/backend/.venv/bin/uvicorn app.main:app --host 127.0.0.1 --port 8132
 Restart=always
 RestartSec=3
 

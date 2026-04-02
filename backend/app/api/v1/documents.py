@@ -57,14 +57,15 @@ def normalize_content(
     if html and not markdown:
         try:
             markdown = html_to_markdown(html)
-        except Exception:
+        except (ValueError, RuntimeError) as exc:
+            logger.warning("conversion.html_to_markdown_failed", error=str(exc))
             markdown = markdown or ""
     elif markdown and not html:
         try:
             html = markdown_to_html(markdown)
             content["html"] = html
-        except Exception:
-            pass
+        except (ValueError, RuntimeError) as exc:
+            logger.warning("conversion.markdown_to_html_failed", error=str(exc))
 
     return content, markdown
 
@@ -396,8 +397,23 @@ async def import_document(
 
     import pypandoc
 
+    MAX_UPLOAD_SIZE = 50 * 1024 * 1024  # 50MB
+
     raw = await file.read()
+    if len(raw) > MAX_UPLOAD_SIZE:
+        raise HTTPException(status_code=413, detail="File too large (max 50MB)")
+
     filename = file.filename or "document"
+    ALLOWED_MIMES = {
+        "application/pdf",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+        "text/markdown",
+        "text/plain",
+        "text/html",
+    }
+    if file.content_type and file.content_type not in ALLOWED_MIMES:
+        raise HTTPException(status_code=415, detail=f"Unsupported file type: {file.content_type}")
     suffix = filename.split(".")[-1].lower()
     base_title = title or filename.rsplit(".", 1)[0]
 
@@ -419,7 +435,8 @@ async def import_document(
                 os.remove(tmp_path)
             except OSError:
                 pass
-        except Exception:
+        except (ValueError, RuntimeError, OSError) as exc:
+            logger.warning("conversion.failed", error=str(exc), filename=filename)
             content_html = ""
     else:
         markdown = raw.decode("utf-8", errors="ignore")

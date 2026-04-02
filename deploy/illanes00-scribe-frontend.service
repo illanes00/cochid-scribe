@@ -5,7 +5,7 @@ After=network.target
 [Service]
 User=illanes00
 Group=illanes00
-WorkingDirectory=/srv/projects/illanes00-scribe/frontend
+WorkingDirectory=/srv/projects/cochid/cochid-scribe/frontend
 Environment=NODE_ENV=production
 Environment=PORT=8133
 Environment=PATH=/home/illanes00/.nvm/versions/node/v22.19.0/bin:/usr/bin:/bin

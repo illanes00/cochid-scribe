@@ -92,7 +92,12 @@ async def upload_asset(
     safe_name = f"{asset_id}{ext}"
     filepath = UPLOAD_DIR / safe_name
 
+    MAX_UPLOAD_SIZE = 50 * 1024 * 1024  # 50MB
+
     content = await file.read()
+    if len(content) > MAX_UPLOAD_SIZE:
+        raise HTTPException(status_code=413, detail="File too large (max 50MB)")
+
     filepath.write_bytes(content)
 
     asset = Asset(

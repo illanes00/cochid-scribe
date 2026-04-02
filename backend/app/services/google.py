@@ -7,6 +7,7 @@ import time
 from functools import wraps
 from typing import TypeVar, Callable
 
+import google.auth.exceptions
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import Flow
@@ -246,11 +247,10 @@ def get_google_credentials(db: Session) -> Credentials | None:
             creds.refresh(Request())
             integration.access_token = creds.token
             integration.expires_at = creds.expiry
-            # Persist refreshed tokens and sync the object
             db.commit()
             db.refresh(integration)
-        except Exception:
-            # If refresh fails, return None to trigger re-authentication
+        except (google.auth.exceptions.RefreshError, google.auth.exceptions.TransportError) as exc:
+            logger.warning("google.token_refresh_failed", error=str(exc))
             db.rollback()
             return None
 

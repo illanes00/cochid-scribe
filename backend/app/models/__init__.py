@@ -10,7 +10,9 @@ from app.models.document_version import DocumentVersion
 from app.models.export import ExportJob
 from app.models.integration import Integration
 from app.models.note import Link, Note
+from app.models.project import Project, ProjectMember
 from app.models.track_change import TrackChange
+from app.models.user import User
 
 __all__ = [
     "Document",
@@ -26,4 +28,7 @@ __all__ = [
     "DocumentVersion",
     "Asset",
     "TrackChange",
+    "User",
+    "Project",
+    "ProjectMember",
 ]

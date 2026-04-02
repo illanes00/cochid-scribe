@@ -19,8 +19,8 @@ class Comment(Base):
     __tablename__ = "comments"
 
     id = Column(String(36), primary_key=True, default=generate_uuid)
-    document_id = Column(String(36), ForeignKey("documents.id", ondelete="CASCADE"))
-    parent_id = Column(String(36), ForeignKey("comments.id"), nullable=True)
+    document_id = Column(String(36), ForeignKey("documents.id", ondelete="CASCADE"), index=True)
+    parent_id = Column(String(36), ForeignKey("comments.id", ondelete="SET NULL"), nullable=True)
     anchor_id = Column(String(36), nullable=True)
     provider = Column(String(50), default="local")  # local, google
     external_id = Column(String(100), nullable=True)
@@ -28,5 +28,8 @@ class Comment(Base):
     content = Column(Text, nullable=False)
     quote = Column(Text, nullable=True)
     resolved = Column(Boolean, default=False)
+    # Multi-user: link comment to authenticated user (nullable for migration safety)
+    user_id = Column(String(36), ForeignKey("users.id"), nullable=True)
+
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)

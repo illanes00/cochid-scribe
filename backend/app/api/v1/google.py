@@ -148,7 +148,7 @@ async def export_google_doc(
         raise HTTPException(status_code=404, detail="Document not found")
 
     with tempfile.NamedTemporaryFile(suffix=".docx", delete=False) as tmp:
-        output_path = tmp.name
+        output_path = Path(tmp.name)
     html = doc.content.get("html") if isinstance(doc.content, dict) else ""
     markdown_to_binary(doc.markdown or html_to_markdown(html or ""), "docx", output_path)
 

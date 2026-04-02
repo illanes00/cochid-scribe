@@ -1,6 +1,11 @@
 """LLM API endpoints for AI-assisted writing."""
 
+import logging
+import os
+import time
+from collections import defaultdict
 
+import httpx as _httpx
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
@@ -13,6 +18,69 @@ from app.services.claim_positions import find_claim_offsets
 
 router = APIRouter()
 settings = get_settings()
+_log = logging.getLogger(__name__)
+
+_rate_limits: dict[str, list[float]] = defaultdict(list)
+RATE_LIMIT_WINDOW = 60  # seconds
+RATE_LIMIT_MAX = 10  # requests per window
+
+
+def check_rate_limit(client_id: str = "default") -> None:
+    now = time.time()
+    _rate_limits[client_id] = [t for t in _rate_limits[client_id] if now - t < RATE_LIMIT_WINDOW]
+    if len(_rate_limits[client_id]) >= RATE_LIMIT_MAX:
+        raise HTTPException(status_code=429, detail="Rate limit exceeded. Try again later.")
+    _rate_limits[client_id].append(now)
+
+# ── AI usage tracking ────────────────────────────────────────────
+
+_ANTHROPIC_COSTS: dict[str, tuple[float, float]] = {
+    # (input_per_1m, output_per_1m)
+    "claude-sonnet-4-20250514": (3.0, 15.0),
+}
+
+
+def _log_ai_usage(model: str, message, endpoint: str) -> None:
+    """Log Anthropic usage to core-server (best-effort, non-blocking).
+
+    Runs the HTTP POST in a background thread to avoid blocking the event loop.
+    """
+    import threading
+
+    try:
+        usage = message.usage
+        input_tokens = usage.input_tokens or 0
+        output_tokens = usage.output_tokens or 0
+    except Exception:
+        return
+
+    costs = _ANTHROPIC_COSTS.get(model, (3.0, 15.0))
+    cost_usd = (input_tokens / 1_000_000 * costs[0]) + (
+        output_tokens / 1_000_000 * costs[1]
+    )
+
+    def _post():
+        try:
+            _httpx.post(
+                "http://localhost:8190/api/v1/ai/log",
+                json={
+                    "project": "cochid-scribe",
+                    "provider": "anthropic",
+                    "model": model,
+                    "endpoint": endpoint,
+                    "prompt_tokens": input_tokens,
+                    "completion_tokens": output_tokens,
+                    "total_tokens": input_tokens + output_tokens,
+                    "cost_usd": round(cost_usd, 6),
+                    "task": endpoint,
+                },
+                headers={"X-API-Key": os.environ.get("ILLANES00_SERVER_API_KEY", "")},
+                timeout=5,
+            )
+        except Exception as e:
+            _log.debug("ai_usage.log_failed: %s", e)
+
+    threading.Thread(target=_post, daemon=True).start()
 
 
 class RewriteRequest(BaseModel):
@@ -79,6 +147,7 @@ class SummarizeResponse(BaseModel):
 @router.post("/rewrite", response_model=RewriteResponse)
 async def rewrite_text(request: RewriteRequest):
     """Rewrite text with AI assistance."""
+    check_rate_limit()
     if not settings.anthropic_api_key:
         raise HTTPException(status_code=503, detail="LLM service not configured")
 
@@ -89,8 +158,9 @@ async def rewrite_text(request: RewriteRequest):
 
         system_prompt = """You are an academic writing assistant. Rewrite the given text following the instruction while maintaining academic rigor and clarity. Return only the rewritten text without any explanation."""
 
+        _model = "claude-sonnet-4-20250514"
         message = client.messages.create(
-            model="claude-sonnet-4-20250514",
+            model=_model,
             max_tokens=2048,
             system=system_prompt,
             messages=[
@@ -99,7 +169,9 @@ async def rewrite_text(request: RewriteRequest):
                     "content": f"Instruction: {request.instruction}\n\nTone: {request.tone}\n\nText to rewrite:\n{request.text}",
                 }
             ],
+            timeout=60.0,
         )
+        _log_ai_usage(_model, message, "rewrite")
 
         rewritten = message.content[0].text
 
@@ -124,8 +196,9 @@ def extract_claims_from_text(text: str) -> list[dict]:
 
 Return as JSON array."""
 
+    _model = "claude-sonnet-4-20250514"
     message = client.messages.create(
-        model="claude-sonnet-4-20250514",
+        model=_model,
         max_tokens=2048,
         system=system_prompt,
         messages=[
@@ -134,7 +207,9 @@ Return as JSON array."""
                 "content": f"Extract claims from this text:\n\n{text}",
             }
         ],
+        timeout=60.0,
     )
+    _log_ai_usage(_model, message, "extract_claims")
 
     response_text = message.content[0].text
 
@@ -155,6 +230,7 @@ async def extract_claims_for_document(
     db: Session = Depends(get_db),
 ):
     """Extract claims for an entire document and persist them."""
+    check_rate_limit()
     if not settings.anthropic_api_key:
         raise HTTPException(status_code=503, detail="LLM service not configured")
 
@@ -209,6 +285,7 @@ async def extract_claims_for_document(
 @router.post("/extract-claims", response_model=ExtractClaimsResponse)
 async def extract_claims(request: ExtractClaimsRequest):
     """Extract claims from text."""
+    check_rate_limit()
     if not settings.anthropic_api_key:
         raise HTTPException(status_code=503, detail="LLM service not configured")
 
@@ -223,6 +300,7 @@ async def extract_claims(request: ExtractClaimsRequest):
 @router.post("/improve-hedging", response_model=HedgingResponse)
 async def improve_hedging(request: HedgingRequest):
     """Improve hedging in academic text."""
+    check_rate_limit()
     if not settings.anthropic_api_key:
         raise HTTPException(status_code=503, detail="LLM service not configured")
 
@@ -238,8 +316,9 @@ async def improve_hedging(request: HedgingRequest):
 
 Return the improved text followed by a list of changes made, separated by "---CHANGES---"."""
 
+        _model = "claude-sonnet-4-20250514"
         message = client.messages.create(
-            model="claude-sonnet-4-20250514",
+            model=_model,
             max_tokens=2048,
             system=system_prompt,
             messages=[
@@ -248,7 +327,9 @@ Return the improved text followed by a list of changes made, separated by "---CH
                     "content": f"Improve hedging in this text:\n\n{request.text}",
                 }
             ],
+            timeout=60.0,
         )
+        _log_ai_usage(_model, message, "improve_hedging")
 
         response = message.content[0].text
 
@@ -270,6 +351,7 @@ Return the improved text followed by a list of changes made, separated by "---CH
 @router.post("/summarize", response_model=SummarizeResponse)
 async def summarize_document(request: SummarizeRequest):
     """Summarize a document while preserving factual content."""
+    check_rate_limit()
     if not settings.anthropic_api_key:
         raise HTTPException(status_code=503, detail="LLM service not configured")
 
@@ -321,8 +403,9 @@ FORMATO:
 El documento original tiene {original_word_count:,} palabras.
 Debes producir ~{request.target_words:,} palabras (±10%)."""
 
+        _model = "claude-sonnet-4-20250514"
         message = client.messages.create(
-            model="claude-sonnet-4-20250514",
+            model=_model,
             max_tokens=16000,
             system=system_prompt,
             messages=[
@@ -331,7 +414,9 @@ Debes producir ~{request.target_words:,} palabras (±10%)."""
                     "content": f"Resume el siguiente documento preservando toda la información factual:\n\n{request.text}",
                 }
             ],
+            timeout=60.0,
         )
+        _log_ai_usage(_model, message, "summarize")
 
         summary = message.content[0].text
         summary_word_count = len(summary.split())

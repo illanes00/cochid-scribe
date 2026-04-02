@@ -51,15 +51,44 @@ def init_db() -> None:
         export,
         integration,
         note,
+        project,
+        user,
     )
 
     Base.metadata.create_all(bind=engine)
     _ensure_claim_offsets()
+    _ensure_multiuser_columns()
 
     from app.core.logging import get_logger
 
     logger = get_logger(__name__)
     logger.info("db.initialized", database_url=settings.database_url)
+
+
+def _ensure_multiuser_columns() -> None:
+    """Add nullable FK columns for multi-user support on existing tables."""
+    migrations = [
+        ("documents", "owner_id", "VARCHAR(36)"),
+        ("documents", "project_id", "VARCHAR(36)"),
+        ("comments", "user_id", "VARCHAR(36)"),
+    ]
+    try:
+        with engine.begin() as conn:
+            for table, column, col_type in migrations:
+                if settings.database_url.startswith("sqlite"):
+                    result = conn.exec_driver_sql(f"PRAGMA table_info({table})")
+                    columns = {row[1] for row in result}
+                    if column not in columns:
+                        conn.exec_driver_sql(
+                            f"ALTER TABLE {table} ADD COLUMN {column} {col_type}"
+                        )
+                else:
+                    conn.exec_driver_sql(
+                        f"ALTER TABLE {table} ADD COLUMN IF NOT EXISTS {column} {col_type}"
+                    )
+    except Exception:
+        # Best-effort: do not block application startup.
+        return
 
 
 def _ensure_claim_offsets() -> None:

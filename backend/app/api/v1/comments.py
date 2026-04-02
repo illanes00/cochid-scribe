@@ -6,10 +6,18 @@ from sqlalchemy.orm import Session
 from app.db.session import get_db
 from app.models.comment import Comment
 from app.models.document import Document
-from app.schemas.comment import CommentCreate, CommentResponse, CommentUpdate
+from app.core.logging import get_logger
+from app.schemas.comment import (
+    CommentCreate,
+    CommentResponse,
+    CommentUpdate,
+    ImportFeedbackRequest,
+    ReplyGoogleCreate,
+)
 from app.services.google import build_drive_service
 
 router = APIRouter()
+logger = get_logger(__name__)
 
 
 @router.get("/document/{slug}", response_model=list[CommentResponse])
@@ -68,7 +76,7 @@ async def create_document_comment(
 
 @router.post("/document/{slug}/sync")
 async def sync_google_comments(slug: str, db: Session = Depends(get_db)):
-    """Sync Google Docs comments into local storage."""
+    """Sync Google Docs comments and replies into local storage."""
     doc = db.query(Document).filter(Document.slug == slug).first()
     if not doc:
         raise HTTPException(status_code=404, detail="Document not found")
@@ -85,43 +93,89 @@ async def sync_google_comments(slug: str, db: Session = Depends(get_db)):
         if c.external_id
     }
 
-    comments = (
+    comments_response = (
         drive.comments()
         .list(
             fileId=doc.source_id,
-            fields="comments(id,author,content,quotedFileContent,createdTime,resolved)",
+            fields="comments(id,author,content,quotedFileContent,createdTime,resolved,replies(id,author,content,createdTime))",
+            includeDeleted=False,
         )
         .execute()
     )
-    created = 0
+    created_comments = 0
+    created_replies = 0
 
-    for item in comments.get("comments", []):
+    for item in comments_response.get("comments", []):
         external_id = item.get("id")
-        if not external_id or external_id in existing_ids:
+        if not external_id:
             continue
-        author = None
-        if isinstance(item.get("author"), dict):
-            author = item.get("author", {}).get("displayName")
-        quote = None
-        if isinstance(item.get("quotedFileContent"), dict):
-            quote = item.get("quotedFileContent", {}).get("value")
 
-        comment = Comment(
-            document_id=doc.id,
-            provider="google",
-            external_id=external_id,
-            anchor_id=external_id,
-            author=author,
-            content=item.get("content") or "",
-            quote=quote,
-            resolved=bool(item.get("resolved", False)),
-        )
-        db.add(comment)
-        created += 1
+        # Import root comment if new
+        local_comment_id = None
+        if external_id not in existing_ids:
+            author = None
+            if isinstance(item.get("author"), dict):
+                author = item["author"].get("displayName")
+            quote = None
+            if isinstance(item.get("quotedFileContent"), dict):
+                quote = item["quotedFileContent"].get("value")
+
+            comment = Comment(
+                document_id=doc.id,
+                provider="google",
+                external_id=external_id,
+                anchor_id=external_id,
+                author=author,
+                content=item.get("content") or "",
+                quote=quote,
+                resolved=bool(item.get("resolved", False)),
+            )
+            db.add(comment)
+            db.flush()
+            local_comment_id = comment.id
+            existing_ids.add(external_id)
+            created_comments += 1
+        else:
+            # Find existing local comment to use as parent for replies
+            existing = (
+                db.query(Comment)
+                .filter(Comment.external_id == external_id, Comment.document_id == doc.id)
+                .first()
+            )
+            if existing:
+                local_comment_id = existing.id
+
+        # Import replies for this comment
+        for reply in item.get("replies", []):
+            reply_ext_id = f"{external_id}:reply:{reply.get('id', '')}"
+            if reply_ext_id in existing_ids:
+                continue
+            reply_author = None
+            if isinstance(reply.get("author"), dict):
+                reply_author = reply["author"].get("displayName")
+            reply_comment = Comment(
+                document_id=doc.id,
+                parent_id=local_comment_id,
+                provider="google",
+                external_id=reply_ext_id,
+                anchor_id=external_id,
+                author=reply_author,
+                content=reply.get("content") or "",
+                resolved=False,
+            )
+            db.add(reply_comment)
+            existing_ids.add(reply_ext_id)
+            created_replies += 1
 
     db.commit()
+    logger.info(
+        "comments.sync_complete",
+        slug=slug,
+        created_comments=created_comments,
+        created_replies=created_replies,
+    )
 
-    return {"created": created}
+    return {"created_comments": created_comments, "created_replies": created_replies}
 
 
 @router.post("/document/{slug}/google")
@@ -185,3 +239,98 @@ async def update_comment(
     db.commit()
     db.refresh(comment)
     return comment
+
+
+@router.post("/document/{slug}/import-feedback")
+async def import_feedback(
+    slug: str,
+    payload: ImportFeedbackRequest,
+    db: Session = Depends(get_db),
+):
+    """Import structured feedback (from email, meetings, etc.) as comments."""
+    doc = db.query(Document).filter(Document.slug == slug).first()
+    if not doc:
+        raise HTTPException(status_code=404, detail="Document not found")
+
+    created = 0
+    for item in payload.items:
+        comment = Comment(
+            document_id=doc.id,
+            provider=payload.source,
+            author=item.author,
+            content=item.content,
+            quote=item.quote,
+            resolved=False,
+        )
+        db.add(comment)
+        db.flush()
+        comment.anchor_id = comment.id
+        created += 1
+
+    db.commit()
+    logger.info("comments.import_feedback", slug=slug, source=payload.source, created=created)
+    return {"created": created, "source": payload.source}
+
+
+@router.post("/document/{slug}/reply-google")
+async def reply_google_comment(
+    slug: str,
+    payload: ReplyGoogleCreate,
+    db: Session = Depends(get_db),
+):
+    """Push a reply to a Google Docs comment and store it locally."""
+    doc = db.query(Document).filter(Document.slug == slug).first()
+    if not doc:
+        raise HTTPException(status_code=404, detail="Document not found")
+    if doc.source_provider != "google" or not doc.source_id:
+        raise HTTPException(status_code=400, detail="Document is not linked to Google Docs")
+
+    drive = build_drive_service(db)
+    if not drive:
+        raise HTTPException(status_code=400, detail="Google integration not connected")
+
+    # Find the local parent comment
+    parent = (
+        db.query(Comment)
+        .filter(
+            Comment.external_id == payload.comment_external_id,
+            Comment.document_id == doc.id,
+        )
+        .first()
+    )
+    if not parent:
+        raise HTTPException(status_code=404, detail="Parent comment not found locally")
+
+    # Push reply to Google Docs
+    created = (
+        drive.replies()
+        .create(
+            fileId=doc.source_id,
+            commentId=payload.comment_external_id,
+            body={"content": payload.content},
+            fields="id,author,content,createdTime",
+        )
+        .execute()
+    )
+
+    reply_ext_id = f"{payload.comment_external_id}:reply:{created.get('id', '')}"
+    reply_author = None
+    if isinstance(created.get("author"), dict):
+        reply_author = created["author"].get("displayName")
+
+    reply_comment = Comment(
+        document_id=doc.id,
+        parent_id=parent.id,
+        provider="google",
+        external_id=reply_ext_id,
+        anchor_id=payload.comment_external_id,
+        author=reply_author,
+        content=created.get("content") or payload.content,
+        resolved=False,
+    )
+    db.add(reply_comment)
+    db.commit()
+    db.refresh(reply_comment)
+
+    logger.info("comments.reply_pushed", slug=slug, comment_id=payload.comment_external_id)
+    return reply_comment

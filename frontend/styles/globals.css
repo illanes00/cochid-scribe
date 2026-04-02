@@ -268,21 +268,55 @@ code, pre {
   max-width: 100%;
 }
 
-/* Tiptap tables */
+/* Tiptap tables — professional academic style */
 .tiptap-editor table {
   border-collapse: collapse;
   width: 100%;
-  margin: var(--space-3) 0;
+  margin: var(--space-6) 0;
+  font-size: 0.9em;
+  line-height: 1.5;
 }
 .tiptap-editor th,
 .tiptap-editor td {
-  border: 1px solid var(--line);
-  padding: var(--space-2);
+  border: none;
+  border-bottom: 1px solid var(--line);
+  padding: var(--space-2) var(--space-3);
   vertical-align: top;
+  text-align: left;
+}
+.tiptap-editor thead {
+  border-bottom: 2px solid var(--ink);
 }
 .tiptap-editor th {
-  background: var(--bg);
-  font-weight: 600;
+  background: transparent;
+  font-weight: 700;
+  font-size: 0.85em;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--muted);
+  padding-bottom: var(--space-2);
+}
+.tiptap-editor tbody tr:hover {
+  background: rgba(55, 99, 224, 0.03);
+}
+.tiptap-editor tbody tr:last-child td {
+  border-bottom: 2px solid var(--ink);
+}
+.tiptap-editor td:first-child {
+  font-weight: 500;
+}
+/* Numeric columns right-align */
+.tiptap-editor td[data-align="right"] {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.tiptap-editor caption {
+  caption-side: bottom;
+  text-align: left;
+  font-size: 0.85em;
+  color: var(--muted);
+  padding-top: var(--space-2);
+  font-style: italic;
 }
 
 /* Placeholder */
@@ -294,57 +328,153 @@ code, pre {
   pointer-events: none;
 }
 
-/* Claim highlight */
+/* Claim highlight — inline markers for verifiable assertions */
 .claim-highlight {
-  background-color: rgba(55, 99, 224, 0.1);
-  border-bottom: 2px solid var(--c-blue);
+  background-color: rgba(55, 99, 224, 0.08);
+  border-bottom: 2px solid rgba(55, 99, 224, 0.4);
   cursor: pointer;
-  padding: 0 0.05rem;
-  transition: background-color 0.2s ease;
+  padding: 0 0.1rem;
+  transition: all 0.15s ease;
+  position: relative;
+}
+
+.claim-highlight::before {
+  content: '';
+  position: absolute;
+  left: -2px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--c-blue);
+  opacity: 0;
+  transition: opacity 0.15s ease;
 }
 
 .claim-highlight:hover {
-  background-color: rgba(55, 99, 224, 0.2);
+  background-color: rgba(55, 99, 224, 0.15);
+  border-bottom-color: var(--c-blue);
+}
+
+.claim-highlight:hover::before {
+  opacity: 1;
 }
 
 .claim-highlight.active {
-  background-color: rgba(55, 99, 224, 0.35);
+  background-color: rgba(55, 99, 224, 0.2);
+  border-bottom-color: var(--c-blue);
+}
+
+.claim-highlight.active::before {
+  opacity: 1;
 }
 
 .claim-highlight.verified {
-  background-color: rgba(11, 126, 89, 0.1);
-  border-bottom-color: var(--c-green);
+  background-color: rgba(11, 126, 89, 0.08);
+  border-bottom-color: rgba(11, 126, 89, 0.5);
+}
+
+.claim-highlight.verified::before {
+  background: var(--c-green);
 }
 
 .claim-highlight.rejected {
-  background-color: rgba(192, 53, 43, 0.1);
-  border-bottom-color: var(--c-red);
+  background-color: rgba(192, 53, 43, 0.08);
+  border-bottom-color: rgba(192, 53, 43, 0.5);
 }
 
-/* Comment highlight */
+.claim-highlight.rejected::before {
+  background: var(--c-red);
+}
+
+/* Claim type badges (shown via data attributes) */
+.claim-highlight[data-type="DATA"]::after {
+  content: '▪';
+  color: var(--c-blue);
+  font-size: 0.6em;
+  vertical-align: super;
+  margin-left: 1px;
+}
+
+.claim-highlight[data-type="LITERATURE"]::after {
+  content: '▫';
+  color: var(--c-blue);
+  font-size: 0.6em;
+  vertical-align: super;
+  margin-left: 1px;
+}
+
+/* Comment highlight — anchored annotations */
 .comment-mark {
-  background-color: rgba(255, 193, 7, 0.2);
-  border-bottom: 2px solid var(--c-amber);
+  background-color: rgba(217, 119, 6, 0.12);
+  border-bottom: 2px solid rgba(217, 119, 6, 0.5);
+  cursor: pointer;
+  position: relative;
+}
+
+.comment-mark:hover {
+  background-color: rgba(217, 119, 6, 0.2);
 }
 
 .comment-mark[data-comment-resolved="true"] {
-  background-color: rgba(11, 126, 89, 0.1);
-  border-bottom-color: var(--c-green);
+  background-color: rgba(11, 126, 89, 0.06);
+  border-bottom-color: rgba(11, 126, 89, 0.3);
 }
 
-/* Track changes */
+.comment-mark[data-comment-count]::after {
+  content: attr(data-comment-count);
+  position: absolute;
+  top: -8px;
+  right: -4px;
+  background: var(--c-amber);
+  color: white;
+  font-size: 9px;
+  font-weight: 700;
+  min-width: 14px;
+  height: 14px;
+  line-height: 14px;
+  text-align: center;
+  border-radius: 0 !important;
+}
+
+/* Track changes — inline suggestions */
 .change-mark {
   padding: 0 0.1rem;
+  position: relative;
 }
 
 .change-insert {
-  background-color: rgba(11, 126, 89, 0.15);
-  border-bottom: 1px dashed var(--c-green);
+  background-color: rgba(11, 126, 89, 0.12);
+  border-bottom: 2px solid rgba(11, 126, 89, 0.4);
+  color: var(--c-green);
+}
+
+.change-insert::before {
+  content: '+';
+  font-size: 0.7em;
+  font-weight: 700;
+  color: var(--c-green);
+  vertical-align: super;
 }
 
 .change-delete {
-  background-color: rgba(192, 53, 43, 0.12);
+  background-color: rgba(192, 53, 43, 0.08);
   text-decoration: line-through;
+  color: var(--c-red);
+  opacity: 0.7;
+}
+
+.change-delete::before {
+  content: '−';
+  font-size: 0.7em;
+  font-weight: 700;
+  color: var(--c-red);
+  vertical-align: super;
+}
+
+/* Change mark hover — show accept/reject hint */
+.change-mark:hover {
+  outline: 1px solid var(--line-strong);
+  outline-offset: 1px;
 }
 
 /* Citation */
@@ -818,3 +948,82 @@ code, pre {
     padding: 0 var(--space-4);
   }
 }
+
+/* Comment bubbles */
+.comment-bubble {
+  position: relative;
+  padding: var(--space-3);
+  background: var(--bg);
+  border-left: 3px solid var(--c-amber);
+  margin-bottom: var(--space-2);
+}
+
+.comment-bubble.resolved {
+  border-left-color: var(--c-green);
+  opacity: 0.7;
+}
+
+.comment-bubble .comment-author {
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: var(--ink);
+}
+
+.comment-bubble .comment-content {
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--ink);
+  margin-top: var(--space-1);
+}
+
+.comment-bubble .comment-meta {
+  font-size: 0.7rem;
+  color: var(--muted);
+  margin-top: var(--space-1);
+}
+
+/* Provider badges */
+.provider-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.1rem 0.4rem;
+  border: 1px solid var(--line);
+}
+
+.provider-badge.scribe { color: var(--c-blue); border-color: var(--c-blue); }
+.provider-badge.google { color: var(--c-green); border-color: var(--c-green); }
+.provider-badge.email { color: var(--c-amber); border-color: var(--c-amber); }
+.provider-badge.ai { color: #7c3aed; border-color: #7c3aed; }
+
+/* Markdown in panels */
+.panel-markdown p { margin: 0 0 0.5rem 0; }
+.panel-markdown strong { font-weight: 700; }
+.panel-markdown em { font-style: italic; }
+.panel-markdown code {
+  background: var(--bg);
+  padding: 0.1rem 0.3rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85em;
+}
+.panel-markdown ul, .panel-markdown ol {
+  padding-left: 1.2rem;
+  margin: 0.25rem 0;
+}
+.panel-markdown li { margin: 0.15rem 0; }
+.panel-markdown blockquote {
+  border-left: 2px solid var(--line);
+  padding-left: 0.5rem;
+  color: var(--muted);
+  margin: 0.25rem 0;
+}
+.panel-markdown h1, .panel-markdown h2, .panel-markdown h3 {
+  font-weight: 700;
+  margin: 0.5rem 0 0.25rem 0;
+}
+.panel-markdown h2 { font-size: 0.95rem; }
+.panel-markdown h3 { font-size: 0.9rem; }

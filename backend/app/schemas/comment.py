@@ -32,3 +32,20 @@ class CommentCreate(BaseModel):
 
 class CommentUpdate(BaseModel):
     resolved: bool | None = None
+
+
+class ReplyGoogleCreate(BaseModel):
+    comment_external_id: str
+    content: str
+
+
+class FeedbackItem(BaseModel):
+    author: str
+    content: str
+    quote: str | None = None
+    feedback_type: str = "general"  # general | structural | factual | editorial | methodological
+
+
+class ImportFeedbackRequest(BaseModel):
+    items: list[FeedbackItem]
+    source: str = "email"  # email | document | meeting

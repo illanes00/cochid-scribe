@@ -4,7 +4,7 @@ import uuid
 from datetime import datetime
 from typing import TYPE_CHECKING
 
-from sqlalchemy import JSON, Column, DateTime, String, Text
+from sqlalchemy import JSON, Column, DateTime, ForeignKey, String, Text
 from sqlalchemy.orm import relationship
 
 from app.db.session import Base
@@ -32,10 +32,14 @@ class Document(Base):
     front_matter = Column(JSON, default=dict)
     version = Column(String(20), default="1.0.0")
     status = Column(String(20), default="draft")
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=datetime.utcnow, index=True)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     source_provider = Column(String(50), nullable=True)
     source_id = Column(String(200), nullable=True)
+
+    # Multi-user / multi-project ownership (nullable for migration safety)
+    owner_id = Column(String(36), ForeignKey("users.id"), nullable=True)
+    project_id = Column(String(36), ForeignKey("projects.id"), nullable=True)
 
     # Google Docs sync fields
     google_revision_id = Column(String(100), nullable=True)

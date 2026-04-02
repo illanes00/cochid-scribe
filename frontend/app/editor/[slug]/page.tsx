@@ -17,6 +17,7 @@ import {
   Ruler,
   LayoutTemplate,
   GitCompare,
+  Search,
 } from 'lucide-react'
 import { Editor } from '@tiptap/core'
 import { TiptapEditor } from '@/components/editor/TiptapEditor'
@@ -26,16 +27,18 @@ import { Slide } from '@/components/editor/SlideNavigator'
 import { ClaimsPanel } from '@/components/panels/ClaimsPanel'
 import { BibliographyPanel } from '@/components/panels/BibliographyPanel'
 import { AIAssistantPanel } from '@/components/panels/AIAssistantPanel'
+import { ChatPanel } from '@/components/panels/ChatPanel'
 import { OutlinePanel } from '@/components/panels/OutlinePanel'
 import { CommentsPanel } from '@/components/panels/CommentsPanel'
 import { VersionsPanel } from '@/components/panels/VersionsPanel'
 import { TrackChangesPanel } from '@/components/panels/TrackChangesPanel'
+import { ReviewPanel } from '@/components/panels/ReviewPanel'
 import { GoogleSyncPanel } from '@/components/sync/GoogleSyncPanel'
 import { useDocument } from '@/hooks/useDocument'
-import { Claim, Comment, Document, claimsApi, documentsApi, exportsApi, ExportFormat } from '@/lib/api'
+import { Claim, Comment, Document, claimsApi, documentsApi, exportsApi, ExportFormat, reviewApi } from '@/lib/api'
 import { googleApi } from '@/lib/api'
 
-type PanelType = 'claims' | 'bib' | 'ai' | 'comments' | 'versions' | 'outline' | 'changes'
+type PanelType = 'claims' | 'bib' | 'ai' | 'chat' | 'comments' | 'versions' | 'outline' | 'changes' | 'review'
 
 /**
  * Default TipTap document structure for empty/new documents.
@@ -1040,6 +1043,12 @@ export default function EditorPage() {
               label="AI"
             />
             <PanelTab
+              active={activePanel === 'chat'}
+              onClick={() => setActivePanel('chat')}
+              icon={<MessageCircle size={14} />}
+              label="Chat"
+            />
+            <PanelTab
               active={activePanel === 'comments'}
               onClick={() => setActivePanel('comments')}
               icon={<MessageCircle size={14} />}
@@ -1056,6 +1065,12 @@ export default function EditorPage() {
               onClick={() => setActivePanel('changes')}
               icon={<GitCompare size={14} />}
               label="Changes"
+            />
+            <PanelTab
+              active={activePanel === 'review'}
+              onClick={() => setActivePanel('review')}
+              icon={<Search size={14} />}
+              label="Review"
             />
           </div>
 
@@ -1075,6 +1090,12 @@ export default function EditorPage() {
               <AIAssistantPanel
                 selectedText={selectedText}
                 onApplyRewrite={handleApplyRewrite}
+              />
+            )}
+            {activePanel === 'chat' && (
+              <ChatPanel
+                documentSlug={slug}
+                documentTitle={document?.title}
               />
             )}
             {activePanel === 'comments' && (
@@ -1098,6 +1119,12 @@ export default function EditorPage() {
                 onChangeResolved={reloadDocument}
               />
             )}
+            {activePanel === 'review' && (
+              <ReviewPanel
+                documentSlug={slug}
+                sourceProvider={document?.source_provider}
+              />
+            )}
           </div>
         </aside>
       </div>
@@ -1112,6 +1139,24 @@ export default function EditorPage() {
           </span>
         </div>
         <div className="flex items-center gap-4">
+          {document?.source_provider === 'google' && (
+            <a
+              href={`https://docs.google.com/document/d/${document.source_id}/edit`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-c-blue hover:underline"
+            >
+              Google Doc
+            </a>
+          )}
+          <a
+            href={`https://claude.illanes00.cl/?project=cochid/cochid-scribe`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-c-blue hover:underline"
+          >
+            Claude Code
+          </a>
           <span>Version {document?.version || '1.0.0'}</span>
           <span className="capitalize">{document?.status || 'draft'}</span>
         </div>

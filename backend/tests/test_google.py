@@ -55,7 +55,9 @@ class TestTokenRefresh:
             mock_creds = MagicMock()
             mock_creds.expired = True
             mock_creds.refresh_token = "invalid_refresh"
-            mock_creds.refresh.side_effect = Exception("Token refresh failed")
+            import google.auth.exceptions
+
+            mock_creds.refresh.side_effect = google.auth.exceptions.RefreshError("Token refresh failed")
             mock_creds_class.return_value = mock_creds
 
             with patch("app.services.google.Request"):
