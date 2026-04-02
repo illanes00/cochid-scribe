@@ -425,7 +425,13 @@ export default function EditorPage() {
     })
 
     if (found) {
-      editor.chain().focus().setTextSelection(found).run()
+      editor.chain().focus().setTextSelection(found).scrollIntoView().run()
+    }
+
+    if (!found) {
+      // Try to scroll to section heading for section-scoped comments
+      // Find the comment to get its section
+      // For now, just flash the editor to indicate the comment is general
     }
   }, [])
 
@@ -1151,6 +1157,14 @@ export default function EditorPage() {
               Google Doc
             </a>
           )}
+          <a
+            href={`/api/v1/review/${slug}/export`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-c-blue hover:underline"
+          >
+            Exportar PDF
+          </a>
           <a
             href={`https://claude.illanes00.cl/?project=cochid/cochid-scribe`}
             target="_blank"

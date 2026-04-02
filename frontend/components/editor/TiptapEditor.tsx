@@ -431,7 +431,7 @@ export function TiptapEditor({
       })
 
       if (found) {
-        editor.chain().focus().setTextSelection(found).run()
+        editor.chain().focus().setTextSelection(found).scrollIntoView().run()
       }
     },
     [editor]

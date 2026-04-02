@@ -308,6 +308,8 @@ export interface Comment {
   content: string;
   quote?: string | null;
   resolved: boolean;
+  comment_scope?: string; // general | section | inline
+  section?: string | null; // section name
   created_at: string;
   updated_at: string;
 }

@@ -11,6 +11,7 @@ import {
   Mail,
   Globe,
   MapPin,
+  Download,
 } from 'lucide-react';
 import { Comment, CommentCreate, commentsApi } from '@/lib/api';
 import { renderMarkdown } from '@/lib/markdown';
@@ -447,7 +448,7 @@ export function CommentsPanel({
         </div>
       </div>
 
-      {/* Thread list */}
+      {/* Thread list — grouped by scope */}
       <div className="flex-1 overflow-y-auto">
         {loading ? (
           <div className="p-4 text-muted text-sm">Loading comments...</div>
@@ -461,197 +462,373 @@ export function CommentsPanel({
             </p>
           </div>
         ) : (
-          <ul>
-            {threadList.map((thread) => {
-              const root = thread.root || thread.replies[0];
-              if (!root) return null;
-              const resolved = isThreadResolved(thread);
-              const hasReplies = threadHasReplies(thread);
-              const collapsed = collapsedThreads.has(thread.anchorId);
+          <>
+            {(() => {
+              // Group threads by scope
+              const inlineThreads = threadList.filter((t) => {
+                const root = t.root || t.replies[0];
+                return root?.comment_scope === 'inline' || root?.quote;
+              });
+              const sectionThreads = threadList.filter((t) => {
+                const root = t.root || t.replies[0];
+                return root?.comment_scope === 'section' && !root?.quote;
+              });
+              const generalThreads = threadList.filter((t) => {
+                const root = t.root || t.replies[0];
+                if (!root) return true;
+                if (root.comment_scope === 'inline' || root.quote) return false;
+                if (root.comment_scope === 'section') return false;
+                return true;
+              });
+
+              // Group section threads by section name
+              const sectionGroups = new Map<string, CommentThread[]>();
+              sectionThreads.forEach((t) => {
+                const root = t.root || t.replies[0];
+                const sectionName = root?.section || 'Sin seccion';
+                if (!sectionGroups.has(sectionName)) {
+                  sectionGroups.set(sectionName, []);
+                }
+                sectionGroups.get(sectionName)!.push(t);
+              });
+
               return (
-                <li
-                  key={thread.anchorId}
-                  className={`comment-bubble ${resolved ? 'resolved' : ''}`}
-                >
-                  {/* Root comment */}
-                  <div
-                    className="cursor-pointer hover:bg-bg/30 group"
-                    onClick={() => onSelectComment?.(thread.anchorId)}
-                  >
-                    {/* Author row */}
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2 min-w-0">
-                        <span className="comment-author truncate">
-                          {root.author || (root.provider === 'local' ? 'Scribe' : root.provider)}
-                        </span>
-                        <SourceBadge provider={root.provider} />
+                <>
+                  {/* Inline comments */}
+                  {inlineThreads.length > 0 && (
+                    <div>
+                      <div className="px-3 py-2 text-xs font-semibold text-muted uppercase tracking-wider border-b border-line bg-bg/50">
+                        Inline ({inlineThreads.length})
                       </div>
-                      <div className="flex items-center gap-2">
-                        {resolved && (
-                          <CheckCircle
-                            size={12}
-                            className="text-c-green flex-shrink-0"
+                      <ul>
+                        {inlineThreads.map((thread) => (
+                          <ThreadItem
+                            key={thread.anchorId}
+                            thread={thread}
+                            onSelectComment={onSelectComment}
+                            replyFor={replyFor}
+                            setReplyFor={setReplyFor}
+                            replyContent={replyContent}
+                            setReplyContent={setReplyContent}
+                            handleReply={handleReply}
+                            creating={creating}
+                            collapsedThreads={collapsedThreads}
+                            toggleCollapse={toggleCollapse}
+                            toggleThreadResolved={toggleThreadResolved}
+                            SourceBadge={SourceBadge}
                           />
-                        )}
-                        {hasReplies && (
-                          <span className="text-xs text-muted">
-                            {thread.replies.length}
-                          </span>
-                        )}
-                        {!hasReplies && !resolved && (
-                          <span
-                            className="text-xs text-c-red font-medium"
-                            title="No reply yet"
-                          >
-                            !
-                          </span>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Meta: time + document link */}
-                    <div className="comment-meta flex items-center gap-2">
-                      <span>{timeAgo(root.created_at)}</span>
-                      {!root.anchor_id && documentSlug && (
-                        <a
-                          href={`/documents/${documentSlug}`}
-                          className="text-c-blue hover:underline"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          View document
-                        </a>
-                      )}
-                    </div>
-
-                    {/* Quoted text */}
-                    {root.quote && (
-                      <div className="text-xs text-muted mt-1.5 pl-3.5 border-l-2 border-line italic line-clamp-2">
-                        {root.quote}
-                      </div>
-                    )}
-
-                    {/* Comment content — rendered as markdown */}
-                    <div
-                      className={`comment-content ${resolved ? 'line-through opacity-60' : ''}`}
-                    >
-                      {renderMarkdown(root.content)}
-                    </div>
-                  </div>
-
-                  {/* Replies section */}
-                  {hasReplies && (
-                    <div className="px-3">
-                      <button
-                        className="flex items-center gap-1 text-xs text-muted hover:text-ink py-1"
-                        onClick={() => toggleCollapse(thread.anchorId)}
-                      >
-                        {collapsed ? (
-                          <ChevronRight size={12} />
-                        ) : (
-                          <ChevronDown size={12} />
-                        )}
-                        {thread.replies.length}{' '}
-                        {thread.replies.length === 1 ? 'reply' : 'replies'}
-                      </button>
-
-                      {!collapsed && (
-                        <div className="ml-3 border-l-2 border-line pl-3 pb-2 space-y-2">
-                          {thread.replies.map((reply) => (
-                            <div key={reply.id}>
-                              <div className="flex items-center gap-2">
-                                <span className="text-xs font-medium text-ink">
-                                  {reply.author || (reply.provider === 'local' ? 'Scribe' : reply.provider)}
-                                </span>
-                                <SourceBadge provider={reply.provider} />
-                                <span className="text-xs text-muted">
-                                  {timeAgo(reply.created_at)}
-                                </span>
-                              </div>
-                              <div className="comment-content mt-0.5 ml-3">
-                                {renderMarkdown(reply.content)}
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      )}
+                        ))}
+                      </ul>
                     </div>
                   )}
 
-                  {/* Inline reply form */}
-                  {replyFor === thread.anchorId ? (
-                    <div className="px-3 pb-3">
-                      <div className="ml-3 border-l-2 border-c-blue pl-3">
-                        <textarea
-                          className="w-full p-2 text-xs border border-line bg-paper resize-none h-14 focus:outline-none focus:border-c-blue"
-                          placeholder="Write a reply..."
-                          value={replyContent}
-                          onChange={(e) => setReplyContent(e.target.value)}
-                          onKeyDown={(e) => {
-                            if (
-                              e.key === 'Enter' &&
-                              (e.metaKey || e.ctrlKey)
-                            ) {
-                              handleReply(thread.anchorId, root.id);
-                            }
-                            if (e.key === 'Escape') {
-                              setReplyFor(null);
-                              setReplyContent('');
-                            }
-                          }}
-                          autoFocus
-                        />
-                        <div className="flex items-center gap-2 mt-1">
-                          <button
-                            className="btn btn-sm btn-primary flex items-center gap-1"
-                            onClick={() =>
-                              handleReply(thread.anchorId, root.id)
-                            }
-                            disabled={creating || !replyContent.trim()}
-                          >
-                            <Send size={10} />
-                            Reply
-                          </button>
-                          <button
-                            className="text-xs text-muted hover:text-ink"
-                            onClick={() => {
-                              setReplyFor(null);
-                              setReplyContent('');
-                            }}
-                          >
-                            Cancel
-                          </button>
-                          <span className="text-xs text-muted ml-auto">
-                            Ctrl+Enter to send
-                          </span>
-                        </div>
+                  {/* Section comments */}
+                  {sectionThreads.length > 0 && (
+                    <div>
+                      <div className="px-3 py-2 text-xs font-semibold text-muted uppercase tracking-wider border-b border-line bg-bg/50">
+                        Por seccion ({sectionThreads.length})
                       </div>
-                    </div>
-                  ) : (
-                    <div className="px-3 pb-2 flex flex-row items-center gap-3 text-xs">
-                      <button
-                        className="text-muted hover:text-ink whitespace-nowrap"
-                        onClick={() => setReplyFor(thread.anchorId)}
-                      >
-                        Reply
-                      </button>
-                      <button
-                        className="text-muted hover:text-ink whitespace-nowrap"
-                        onClick={() =>
-                          toggleThreadResolved(thread, !resolved)
-                        }
-                        disabled={creating}
-                      >
-                        {resolved ? 'Reopen' : 'Resolve'}
-                      </button>
+                      {Array.from(sectionGroups.entries()).map(([sectionName, threads]) => (
+                        <div key={sectionName}>
+                          <button
+                            className="w-full px-3 py-1.5 text-left text-xs font-medium text-c-blue bg-bg/30 border-b border-line hover:bg-bg/60 flex items-center gap-1.5"
+                            onClick={() => onSelectComment?.(threads[0]?.anchorId)}
+                            title={`Scroll to section: ${sectionName}`}
+                          >
+                            <MapPin size={10} className="flex-shrink-0" />
+                            <span className="truncate">{sectionName}</span>
+                            <span className="text-muted ml-auto flex-shrink-0">
+                              {threads.length}
+                            </span>
+                          </button>
+                          <ul>
+                            {threads.map((thread) => (
+                              <ThreadItem
+                                key={thread.anchorId}
+                                thread={thread}
+                                onSelectComment={onSelectComment}
+                                replyFor={replyFor}
+                                setReplyFor={setReplyFor}
+                                replyContent={replyContent}
+                                setReplyContent={setReplyContent}
+                                handleReply={handleReply}
+                                creating={creating}
+                                collapsedThreads={collapsedThreads}
+                                toggleCollapse={toggleCollapse}
+                                toggleThreadResolved={toggleThreadResolved}
+                                SourceBadge={SourceBadge}
+                              />
+                            ))}
+                          </ul>
+                        </div>
+                      ))}
                     </div>
                   )}
-                </li>
+
+                  {/* General comments */}
+                  {generalThreads.length > 0 && (
+                    <div>
+                      <div className="px-3 py-2 text-xs font-semibold text-muted uppercase tracking-wider border-b border-line bg-bg/50">
+                        Generales ({generalThreads.length})
+                      </div>
+                      <ul>
+                        {generalThreads.map((thread) => (
+                          <ThreadItem
+                            key={thread.anchorId}
+                            thread={thread}
+                            onSelectComment={onSelectComment}
+                            replyFor={replyFor}
+                            setReplyFor={setReplyFor}
+                            replyContent={replyContent}
+                            setReplyContent={setReplyContent}
+                            handleReply={handleReply}
+                            creating={creating}
+                            collapsedThreads={collapsedThreads}
+                            toggleCollapse={toggleCollapse}
+                            toggleThreadResolved={toggleThreadResolved}
+                            SourceBadge={SourceBadge}
+                            showGeneralBadge
+                          />
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </>
               );
-            })}
-          </ul>
+            })()}
+          </>
+        )}
+
+        {/* Export PDF button */}
+        {!loading && documentSlug && documentSlug !== 'new' && (
+          <div className="p-3 border-t border-line">
+            <a
+              href={`/api/v1/review/${documentSlug}/export`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn-sm w-full text-center flex items-center justify-center gap-2"
+            >
+              <Download size={14} />
+              Exportar Review PDF
+            </a>
+          </div>
         )}
       </div>
     </div>
+  );
+}
+
+// Extracted thread rendering component
+interface ThreadItemProps {
+  thread: CommentThread;
+  onSelectComment?: (anchorId: string) => void;
+  replyFor: string | null;
+  setReplyFor: (id: string | null) => void;
+  replyContent: string;
+  setReplyContent: (content: string) => void;
+  handleReply: (anchorId: string, parentId?: string | null) => void;
+  creating: boolean;
+  collapsedThreads: Set<string>;
+  toggleCollapse: (anchorId: string) => void;
+  toggleThreadResolved: (thread: CommentThread, resolved: boolean) => void;
+  SourceBadge: React.ComponentType<{ provider: string }>;
+  showGeneralBadge?: boolean;
+}
+
+function ThreadItem({
+  thread,
+  onSelectComment,
+  replyFor,
+  setReplyFor,
+  replyContent,
+  setReplyContent,
+  handleReply,
+  creating,
+  collapsedThreads,
+  toggleCollapse,
+  toggleThreadResolved,
+  SourceBadge,
+  showGeneralBadge,
+}: ThreadItemProps) {
+  const root = thread.root || thread.replies[0];
+  if (!root) return null;
+  const resolved = isThreadResolved(thread);
+  const hasReplies = threadHasReplies(thread);
+  const collapsed = collapsedThreads.has(thread.anchorId);
+
+  return (
+    <li className={`comment-bubble ${resolved ? 'resolved' : ''}`}>
+      {/* Root comment */}
+      <div
+        className="cursor-pointer hover:bg-bg/30 group"
+        onClick={() => onSelectComment?.(thread.anchorId)}
+      >
+        {/* Author row */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2 min-w-0">
+            <span className="comment-author truncate">
+              {root.author ||
+                (root.provider === 'local' ? 'Scribe' : root.provider)}
+            </span>
+            <SourceBadge provider={root.provider} />
+            {showGeneralBadge && (
+              <span className="text-[10px] px-1.5 py-0.5 bg-bg border border-line text-muted">
+                General
+              </span>
+            )}
+            {root.section && !root.quote && (
+              <span className="text-[10px] px-1.5 py-0.5 bg-c-blue/10 border border-c-blue/20 text-c-blue truncate max-w-[120px]">
+                {root.section}
+              </span>
+            )}
+          </div>
+          <div className="flex items-center gap-2">
+            {resolved && (
+              <CheckCircle
+                size={12}
+                className="text-c-green flex-shrink-0"
+              />
+            )}
+            {hasReplies && (
+              <span className="text-xs text-muted">
+                {thread.replies.length}
+              </span>
+            )}
+            {!hasReplies && !resolved && (
+              <span
+                className="text-xs text-c-red font-medium"
+                title="No reply yet"
+              >
+                !
+              </span>
+            )}
+          </div>
+        </div>
+
+        {/* Meta: time + document link */}
+        <div className="comment-meta flex items-center gap-2">
+          <span>{timeAgo(root.created_at)}</span>
+        </div>
+
+        {/* Quoted text — highlight style for inline comments */}
+        {root.quote && (
+          <div className="text-xs mt-1.5 pl-3.5 border-l-2 border-c-amber/50 bg-c-amber/5 py-1 italic line-clamp-2 text-ink/70">
+            {root.quote}
+          </div>
+        )}
+
+        {/* Comment content — rendered as markdown */}
+        <div
+          className={`comment-content ${resolved ? 'line-through opacity-60' : ''}`}
+        >
+          {renderMarkdown(root.content)}
+        </div>
+      </div>
+
+      {/* Replies section */}
+      {hasReplies && (
+        <div className="px-3">
+          <button
+            className="flex items-center gap-1 text-xs text-muted hover:text-ink py-1"
+            onClick={() => toggleCollapse(thread.anchorId)}
+          >
+            {collapsed ? (
+              <ChevronRight size={12} />
+            ) : (
+              <ChevronDown size={12} />
+            )}
+            {thread.replies.length}{' '}
+            {thread.replies.length === 1 ? 'reply' : 'replies'}
+          </button>
+
+          {!collapsed && (
+            <div className="ml-3 border-l-2 border-line pl-3 pb-2 space-y-2">
+              {thread.replies.map((reply) => (
+                <div key={reply.id}>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-medium text-ink">
+                      {reply.author ||
+                        (reply.provider === 'local'
+                          ? 'Scribe'
+                          : reply.provider)}
+                    </span>
+                    <SourceBadge provider={reply.provider} />
+                    <span className="text-xs text-muted">
+                      {timeAgo(reply.created_at)}
+                    </span>
+                  </div>
+                  <div className="comment-content mt-0.5 ml-3">
+                    {renderMarkdown(reply.content)}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Inline reply form */}
+      {replyFor === thread.anchorId ? (
+        <div className="px-3 pb-3">
+          <div className="ml-3 border-l-2 border-c-blue pl-3">
+            <textarea
+              className="w-full p-2 text-xs border border-line bg-paper resize-none h-14 focus:outline-none focus:border-c-blue"
+              placeholder="Write a reply..."
+              value={replyContent}
+              onChange={(e) => setReplyContent(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
+                  handleReply(thread.anchorId, root.id);
+                }
+                if (e.key === 'Escape') {
+                  setReplyFor(null);
+                  setReplyContent('');
+                }
+              }}
+              autoFocus
+            />
+            <div className="flex items-center gap-2 mt-1">
+              <button
+                className="btn btn-sm btn-primary flex items-center gap-1"
+                onClick={() => handleReply(thread.anchorId, root.id)}
+                disabled={creating || !replyContent.trim()}
+              >
+                <Send size={10} />
+                Reply
+              </button>
+              <button
+                className="text-xs text-muted hover:text-ink"
+                onClick={() => {
+                  setReplyFor(null);
+                  setReplyContent('');
+                }}
+              >
+                Cancel
+              </button>
+              <span className="text-xs text-muted ml-auto">
+                Ctrl+Enter to send
+              </span>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="px-3 pb-2 flex flex-row items-center gap-3 text-xs">
+          <button
+            className="text-muted hover:text-ink whitespace-nowrap"
+            onClick={() => setReplyFor(thread.anchorId)}
+          >
+            Reply
+          </button>
+          <button
+            className="text-muted hover:text-ink whitespace-nowrap"
+            onClick={() => toggleThreadResolved(thread, !resolved)}
+            disabled={creating}
+          >
+            {resolved ? 'Reopen' : 'Resolve'}
+          </button>
+        </div>
+      )}
+    </li>
   );
 }
 
