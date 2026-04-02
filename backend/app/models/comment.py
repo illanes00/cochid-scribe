@@ -28,6 +28,9 @@ class Comment(Base):
     content = Column(Text, nullable=False)
     quote = Column(Text, nullable=True)
     resolved = Column(Boolean, default=False)
+    # Classification: general (whole doc), section (specific section), inline (specific text)
+    comment_scope = Column(String(20), default="general")  # general | section | inline
+    section = Column(String(255), nullable=True)  # section name/heading reference
     # Multi-user: link comment to authenticated user (nullable for migration safety)
     user_id = Column(String(36), ForeignKey("users.id"), nullable=True)
 

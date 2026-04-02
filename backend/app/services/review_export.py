@@ -269,13 +269,19 @@ def _markdown_to_html(md: str) -> str:
             result.append("</tbody></table>")
             in_table = False
 
-        # Headers
+        # Headers — add id anchors for cross-reference
         if stripped.startswith("### "):
-            result.append(f"<h3>{_inline(stripped[4:])}</h3>")
+            heading_text = stripped[4:]
+            heading_id = heading_text.lower().replace(" ", "-").replace(".", "")[:40]
+            result.append(f'<h3 id="sec-{heading_id}">{_inline(heading_text)}</h3>')
         elif stripped.startswith("## "):
-            result.append(f"<h2>{_inline(stripped[3:])}</h2>")
+            heading_text = stripped[3:]
+            heading_id = heading_text.lower().replace(" ", "-").replace(".", "")[:40]
+            result.append(f'<h2 id="sec-{heading_id}">{_inline(heading_text)}</h2>')
         elif stripped.startswith("# "):
-            result.append(f"<h1>{_inline(stripped[2:])}</h1>")
+            heading_text = stripped[2:]
+            heading_id = heading_text.lower().replace(" ", "-").replace(".", "")[:40]
+            result.append(f'<h1 id="sec-{heading_id}">{_inline(heading_text)}</h1>')
         elif stripped.startswith("- "):
             if not in_list:
                 result.append("<ul>")
@@ -314,19 +320,63 @@ def _inline(text: str) -> str:
 
 
 def _build_comments_html(root_comments: list[Comment], replies_map: dict) -> str:
+    # Group by scope
+    inline = [c for c in root_comments if getattr(c, "comment_scope", "") == "inline"]
+    by_section: dict[str, list[Comment]] = {}
+    for c in root_comments:
+        if getattr(c, "comment_scope", "") == "section":
+            sec = getattr(c, "section", None) or "Sin sección"
+            by_section.setdefault(sec, []).append(c)
+    general = [c for c in root_comments if getattr(c, "comment_scope", "general") == "general"]
+
     parts = []
-    for i, c in enumerate(root_comments, 1):
-        status_class = "resolved" if c.resolved else ""
-        parts.append(f'<div class="comment-card {status_class}">')
-        parts.append(f'<div class="comment-author">#{i} · {html.escape(c.author or "Anon")} · {c.provider}</div>')
-        parts.append(f'<div class="comment-text">{html.escape(c.content)}</div>')
+    idx = 0
 
-        for reply in replies_map.get(c.id, []):
-            parts.append(f'<div class="comment-reply">')
-            parts.append(f'<strong>{html.escape(reply.author or "Scribe")}</strong>: {html.escape(reply.content[:200])}')
-            parts.append("</div>")
-
+    # Inline comments
+    if inline:
+        parts.append('<div style="margin-bottom:1rem"><div style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#d97706;margin-bottom:0.4rem">Ediciones inline (' + str(len(inline)) + ')</div>')
+        for c in inline:
+            idx += 1
+            parts.append(_render_comment(c, idx, replies_map))
         parts.append("</div>")
+
+    # Section comments
+    if by_section:
+        parts.append('<div style="margin-bottom:1rem"><div style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#3763e0;margin-bottom:0.4rem">Por sección (' + str(sum(len(v) for v in by_section.values())) + ')</div>')
+        for section_name, section_comments in by_section.items():
+            sec_id = section_name.lower().replace(" ", "-").replace(".", "")[:40]
+            parts.append(f'<div style="font-size:0.72rem;font-weight:600;color:#3763e0;margin:0.5rem 0 0.2rem;border-bottom:1px solid #d5dbe3;padding-bottom:0.15rem"><a href="#sec-{sec_id}" style="color:#3763e0">{html.escape(section_name)}</a></div>')
+            for c in section_comments:
+                idx += 1
+                parts.append(_render_comment(c, idx, replies_map))
+        parts.append("</div>")
+
+    # General comments
+    if general:
+        parts.append('<div style="margin-bottom:1rem"><div style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#4b5563;margin-bottom:0.4rem">Generales (' + str(len(general)) + ')</div>')
+        for c in general:
+            idx += 1
+            parts.append(_render_comment(c, idx, replies_map))
+        parts.append("</div>")
+
+    return "\n".join(parts)
+
+
+def _render_comment(c: Comment, idx: int, replies_map: dict) -> str:
+    status_class = "resolved" if c.resolved else ""
+    provider_label = {"email": "Email", "google-docs": "GDocs", "local": "Scribe", "scribe-ai": "AI"}.get(c.provider, c.provider)
+    parts = [f'<div class="comment-card {status_class}">']
+    parts.append(f'<div class="comment-author">#{idx} · {html.escape(c.author or "Anon")} · <span style="color:#4b5563">{provider_label}</span></div>')
+    if c.quote:
+        parts.append(f'<div style="font-size:0.7rem;color:#4b5563;font-style:italic;margin:0.2rem 0;border-left:2px solid #d5dbe3;padding-left:0.4rem">&ldquo;{html.escape(c.quote[:100])}&rdquo;</div>')
+    parts.append(f'<div class="comment-text">{html.escape(c.content[:200])}</div>')
+
+    for reply in replies_map.get(c.id, []):
+        parts.append('<div class="comment-reply">')
+        parts.append(f'<strong>{html.escape(reply.author or "Scribe")}</strong>: {html.escape(reply.content[:200])}')
+        parts.append("</div>")
+
+    parts.append("</div>")
     return "\n".join(parts)
 
 

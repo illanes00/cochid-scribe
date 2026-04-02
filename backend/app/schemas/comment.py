@@ -16,6 +16,8 @@ class CommentResponse(BaseModel):
     content: str
     quote: str | None = None
     resolved: bool
+    comment_scope: str = "general"
+    section: str | None = None
     created_at: datetime
     updated_at: datetime
 
@@ -28,10 +30,14 @@ class CommentCreate(BaseModel):
     quote: str | None = None
     parent_id: str | None = None
     anchor_id: str | None = None
+    comment_scope: str = "general"
+    section: str | None = None
 
 
 class CommentUpdate(BaseModel):
     resolved: bool | None = None
+    comment_scope: str | None = None
+    section: str | None = None
 
 
 class ReplyGoogleCreate(BaseModel):
