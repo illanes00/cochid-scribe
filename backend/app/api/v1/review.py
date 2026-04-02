@@ -13,6 +13,7 @@ from app.models.track_change import ChangeStatus, ChangeType, TrackChange
 from app.services.google import build_drive_service
 from fastapi.responses import HTMLResponse
 
+from app.services.diff_export import generate_diff_html
 from app.services.review_export import generate_review_html
 from app.services.review_respond import ReviewAnalysis, ReviewRespondService
 
@@ -87,6 +88,15 @@ async def export_review(slug: str, db: Session = Depends(get_db)):
     try:
         html_content = generate_review_html(db, slug)
         return HTMLResponse(content=html_content)
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+
+
+@router.get("/{slug}/diff", response_class=HTMLResponse)
+async def export_diff(slug: str, db: Session = Depends(get_db)):
+    """Export visual diff showing each comment with its text change (git-style)."""
+    try:
+        return HTMLResponse(content=generate_diff_html(db, slug))
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
 
