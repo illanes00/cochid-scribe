@@ -29,6 +29,9 @@ from app.models import (  # noqa: F401
     export,
     integration,
     note,
+    project,
+    track_change,
+    user,
 )
 
 # Alembic Config object
