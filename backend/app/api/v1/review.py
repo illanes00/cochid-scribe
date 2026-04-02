@@ -92,6 +92,55 @@ async def export_review(slug: str, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail=str(e))
 
 
+@router.get("/{slug}/pdf")
+async def download_pdf(slug: str, db: Session = Depends(get_db)):
+    """Generate and download the review as a PDF file."""
+    import subprocess
+    from pathlib import Path
+
+    from fastapi.responses import FileResponse
+
+    doc = db.query(Document).filter(Document.slug == slug).first()
+    if not doc:
+        raise HTTPException(status_code=404, detail="Document not found")
+
+    exports_dir = Path("/srv/projects/cochid/cochid-scribe/backend/exports")
+    exports_dir.mkdir(parents=True, exist_ok=True)
+    pdf_path = exports_dir / f"review-{slug}.pdf"
+
+    # Generate HTML to temp file first (avoids deadlock with Chrome → uvicorn)
+    html_content = generate_review_html(db, slug)
+    html_path = exports_dir / f"review-{slug}.html"
+    html_path.write_text(html_content, encoding="utf-8")
+
+    # Chrome renders the local file
+    subprocess.run(
+        [
+            "google-chrome",
+            "--headless",
+            "--disable-gpu",
+            "--no-sandbox",
+            f"--print-to-pdf={pdf_path}",
+            "--print-to-pdf-no-header",
+            "--no-pdf-header-footer",
+            "--run-all-compositor-stages-before-draw",
+            "--virtual-time-budget=5000",
+            f"file://{html_path}",
+        ],
+        capture_output=True,
+        timeout=30,
+    )
+
+    if not pdf_path.exists():
+        raise HTTPException(status_code=500, detail="PDF generation failed")
+
+    return FileResponse(
+        path=str(pdf_path),
+        media_type="application/pdf",
+        filename=f"review-{slug}.pdf",
+    )
+
+
 @router.get("/{slug}/diff", response_class=HTMLResponse)
 async def export_diff(slug: str, db: Session = Depends(get_db)):
     """Export visual diff showing each comment with its text change (git-style)."""

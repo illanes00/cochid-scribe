@@ -374,13 +374,41 @@ def _section_matches(key: str, heading: str) -> bool:
     return key.lower() in heading.lower() or heading.lower() in key.lower()
 
 
+CITATION_MAP = {
+    "INE, 2023": "ine_2023",
+    "Instituto Nacional de Estadísticas [INE], 2023, Cuadro 8.1, cálculo del autor": "ine_2023",
+    "Instituto Nacional de Estadísticas [INE], 2023": "ine_2023",
+    "OCDE, 2025": "oecd_2025",
+    "Organización para la Cooperación y el Desarrollo Económicos [OCDE], 2025": "oecd_2025",
+    "OMS, 2024": "who_ghed_2024",
+    "Organización Mundial de la Salud [OMS], 2024": "who_ghed_2024",
+    "Armijo et al., 2022": "armijo_espinoza_2022",
+    "Kirchlechner & Cohen, 2025": "kirchlechner_cohen_2025",
+    "Kirchlechner &amp; Cohen, 2025": "kirchlechner_cohen_2025",
+    "Cortez, Medici & Singh, 2023": "cortez_medici_singh_2023",
+    "Cortez, Medici &amp; Singh, 2023": "cortez_medici_singh_2023",
+    "Vargas-Pelaez et al., 2019": "vargas_pelaez_2019",
+    "Corte Suprema, 2026": "corte_suprema_2026",
+    "MINSAL, 2026": "minsal_dac_2026",
+    "FONASA, 2023": "fonasa_2023",
+}
+
+
 def _inline(text: str) -> str:
-    """Process inline markdown."""
+    """Process inline markdown + convert citations to hyperlinks."""
     text = html.escape(text)
     text = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", text)
     text = re.sub(r"(?<!\*)\*([^*]+?)\*(?!\*)", r"<em>\1</em>", text)
     text = re.sub(r"`(.+?)`", r"<code>\1</code>", text)
     text = re.sub(r"\[(.+?)\]\((.+?)\)", r'<a href="\2" target="_blank">\1</a>', text)
+
+    # Convert (Author, Year) citations to clickable links → bibliography
+    for citation_text, bib_key in CITATION_MAP.items():
+        escaped = html.escape(citation_text)
+        if escaped in text:
+            link = f'<a href="#bib-{bib_key}" style="color:#3763e0;text-decoration:none;border-bottom:1px dotted #3763e0" title="Ver referencia">{escaped}</a>'
+            text = text.replace(f"({escaped})", f"({link})")
+
     return text
 
 
@@ -474,6 +502,6 @@ def _build_bib_html(entries: list[BibliographyEntry]) -> str:
         if e.doi:
             citation += f' <span style="font-size:0.62rem;color:#4b5563">doi:{html.escape(e.doi)}</span>'
 
-        parts.append(f'<div class="bib-entry"><span class="bib-key">[{html.escape(e.bib_key)}]</span> {citation}</div>')
+        parts.append(f'<div class="bib-entry" id="bib-{html.escape(e.bib_key)}"><span class="bib-key">[{html.escape(e.bib_key)}]</span> {citation}</div>')
 
     return "\n".join(parts) if parts else '<div style="font-size:0.7rem;color:#4b5563">Sin bibliografía.</div>'
