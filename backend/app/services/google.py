@@ -161,6 +161,9 @@ SCOPES = [
     "https://www.googleapis.com/auth/drive",
     "https://www.googleapis.com/auth/documents",
     "https://www.googleapis.com/auth/presentations",
+    "https://www.googleapis.com/auth/script.projects",
+    "https://www.googleapis.com/auth/script.scriptapp",
+    "https://www.googleapis.com/auth/script.external_request",
 ]
 
 
@@ -196,6 +199,11 @@ def build_oauth_flow(state: str | None = None) -> Flow:
         redirect_uri=settings.google_redirect_uri,
         state=state,
     )
+    # Disable PKCE for confidential web app flow.
+    # Server-side apps with client_secret have equivalent security and
+    # avoid the need to persist code_verifier between auth and callback requests.
+    flow.autogenerate_code_verifier = False
+    flow.code_verifier = None
     return flow
 
 

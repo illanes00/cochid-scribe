@@ -1,12 +1,13 @@
-"""Integrated review export — document with inline diffs + margin comments.
+"""Google Docs-style review export — document with inline suggestions + margin comments.
 
-Single A3 landscape page showing:
-- Left (65%): Document with inline diff markers (green=added, red=removed)
-- Right (35%): Comments anchored to document sections, bibliography with links
+Renders a full-page document with:
+- Inline suggestions: <del>old</del> <ins>new</ins> in the text flow
+- Highlighted text where comments reference specific passages
+- Margin comments positioned at the same height as their referenced text
+- SVG connector lines from highlights to margin comments
+- JavaScript positioning for accurate alignment (works in Chrome headless for PDF)
 
-Each section header in the document shows a badge with comment count.
-Changes appear inline as colored blocks within the document text.
-Comments in the margin link back to the section they reference.
+Inspired by Google Docs review/suggestion mode.
 """
 
 from __future__ import annotations
@@ -23,54 +24,126 @@ from app.models.comment import Comment
 from app.models.document import Document
 from app.models.track_change import TrackChange
 
-# Section-level diffs: maps section heading text → list of changes
+# ── Section-level diffs ──────────────────────────────────────────────────────
+# Maps section heading text → list of inline changes to render
 SECTION_CHANGES: dict[str, list[dict]] = {
     "Resumen Ejecutivo": [
-        {"type": "alert", "text": "⚠ El resumen sigue diciendo \"propone el BFAU\" — debería alinearse con sección 4 (\"opciones de política\")"},
+        {
+            "type": "alert",
+            "text": 'El resumen sigue diciendo "propone el BFAU" — debería alinearse con sección 4 ("opciones de política")',
+        },
     ],
     "Marco Institucional": [
-        {"type": "add", "text": "DAC (Decreto de Acceso Complementario): Operativo desde 2019, cubre drogas oncológicas de alto costo para pacientes FONASA. Presupuesto 2026: $91.200M (MINSAL, 2026)."},
+        {
+            "type": "add",
+            "text": "DAC (Decreto de Acceso Complementario): Operativo desde 2019, cubre drogas oncológicas de alto costo para pacientes FONASA. Presupuesto 2026: $91.200M (MINSAL, 2026).",
+        },
         {"type": "add", "text": "GES actualizado: 90 patologías (Decreto GES 2025-2028)"},
     ],
     "Dos Dimensiones": [
-        {"type": "add", "text": "Ambos frentes responden a lógicas distintas de riesgo financiero y requieren instrumentos diferenciados de protección."},
+        {
+            "type": "add",
+            "text": "Ambos frentes responden a lógicas distintas de riesgo financiero y requieren instrumentos diferenciados de protección.",
+        },
     ],
     "Judicialización": [
-        {"type": "add", "text": "Sección nueva. Fuentes: Vargas-Pelaez et al. (2019), Corte Suprema (feb 2026)."},
+        {
+            "type": "add",
+            "text": "Sección nueva. Fuentes: Vargas-Pelaez et al. (2019), Corte Suprema (feb 2026).",
+        },
     ],
     "Comparación Internacional": [
-        {"type": "add", "text": "Nota metodológica: selección de países, años base, limitaciones de extrapolación."},
-        {"type": "alert", "text": "⚠ Dato US$206 PPA posiblemente incorrecto — OCDE 2025 reporta US$455 PPP. Verificar metodología."},
-        {"type": "replace", "before": "Reglas de sustitución por bioequivalentes y genéricos para contener costos", "after": "Reglas diferenciadas: (a) genéricos → sustitución directa; (b) biosimilares → supervisión médica (Kirchlechner & Cohen, 2025)"},
-        {"type": "replace", "before": "ETESA con criterios transparentes", "after": "ETESA como priorización por valor sanitario, social y económico — no contención de gasto (Armijo et al., 2022)"},
+        {
+            "type": "add",
+            "text": "Nota metodológica: selección de países, años base, limitaciones de extrapolación.",
+        },
+        {
+            "type": "alert",
+            "text": "Dato US$206 PPA posiblemente incorrecto — OCDE 2025 reporta US$455 PPP. Verificar metodología.",
+        },
+        {
+            "type": "replace",
+            "before": "Reglas de sustitución por bioequivalentes y genéricos para contener costos",
+            "after": "Reglas diferenciadas: (a) genéricos → sustitución directa; (b) biosimilares → supervisión médica (Kirchlechner & Cohen, 2025)",
+        },
+        {
+            "type": "replace",
+            "before": "ETESA con criterios transparentes",
+            "after": "ETESA como priorización por valor sanitario, social y económico — no contención de gasto (Armijo et al., 2022)",
+        },
     ],
     "Innovación con Valor": [
-        {"type": "add", "text": "Sección nueva. Biosimilares Europa (-20-40% costos), diabetes + digital (-15-25% hospitalizaciones). Cortez, Medici & Singh, 2023."},
+        {
+            "type": "add",
+            "text": "Sección nueva. Biosimilares Europa (-20-40% costos), diabetes + digital (-15-25% hospitalizaciones). Cortez, Medici & Singh, 2023.",
+        },
     ],
     "Lección de Costa Rica": [
-        {"type": "alert", "text": "⚠ CCSS cubre 91-93%, no 95%. Verificar dato."},
+        {"type": "alert", "text": "CCSS cubre 91-93%, no 95%. Verificar dato."},
     ],
     "Opciones de Política": [
-        {"type": "replace", "before": "## 4. Propuesta: Beneficio Farmacéutico Ambulatorio Universal", "after": "## 4. Opciones de Política: Hacia un Beneficio Farmacéutico"},
-        {"type": "add", "text": "Tabla de medidas por nivel de reforma: sin ley / ajuste regulatorio / rediseño sistémico."},
+        {
+            "type": "replace",
+            "before": "## 4. Propuesta: Beneficio Farmacéutico Ambulatorio Universal",
+            "after": "## 4. Opciones de Política: Hacia un Beneficio Farmacéutico",
+        },
+        {
+            "type": "add",
+            "text": "Tabla de medidas por nivel de reforma: sin ley / ajuste regulatorio / rediseño sistémico.",
+        },
     ],
     "Requisitos Institucionales": [
-        {"type": "add", "text": "La efectividad depende de implementación conjunta y coordinada, no aplicación aislada."},
+        {
+            "type": "add",
+            "text": "La efectividad depende de implementación conjunta y coordinada, no aplicación aislada.",
+        },
     ],
     "Marco para la Discusión": [
-        {"type": "replace", "before": "## 7. Conclusiones y Recomendaciones", "after": "## 7. Marco para la Discusión"},
+        {
+            "type": "replace",
+            "before": "## 7. Conclusiones y Recomendaciones",
+            "after": "## 7. Marco para la Discusión",
+        },
     ],
     "Seminario de Discusión": [
-        {"type": "add", "text": "Sección nueva. 5 preguntas para deliberación: cobertura, financiamiento, articulación, ETESA, innovación."},
+        {
+            "type": "add",
+            "text": "Sección nueva. 5 preguntas para deliberación: cobertura, financiamiento, articulación, ETESA, innovación.",
+        },
     ],
     "Verificación de Datos": [
-        {"type": "alert", "text": "⚠ GES dice 87 en tabla pero ya se actualizó a 90 en el texto. Tabla necesita actualización."},
+        {
+            "type": "alert",
+            "text": "GES dice 87 en tabla pero ya se actualizó a 90 en el texto. Tabla necesita actualización.",
+        },
     ],
 }
 
+CITATION_MAP = {
+    "INE, 2023": "ine_2023",
+    "Instituto Nacional de Estadísticas [INE], 2023, Cuadro 8.1, cálculo del autor": "ine_2023",
+    "Instituto Nacional de Estadísticas [INE], 2023": "ine_2023",
+    "OCDE, 2025": "oecd_2025",
+    "Organización para la Cooperación y el Desarrollo Económicos [OCDE], 2025": "oecd_2025",
+    "OMS, 2024": "who_ghed_2024",
+    "Organización Mundial de la Salud [OMS], 2024": "who_ghed_2024",
+    "Armijo et al., 2022": "armijo_espinoza_2022",
+    "Kirchlechner & Cohen, 2025": "kirchlechner_cohen_2025",
+    "Kirchlechner &amp; Cohen, 2025": "kirchlechner_cohen_2025",
+    "Cortez, Medici & Singh, 2023": "cortez_medici_singh_2023",
+    "Cortez, Medici &amp; Singh, 2023": "cortez_medici_singh_2023",
+    "Vargas-Pelaez et al., 2019": "vargas_pelaez_2019",
+    "Corte Suprema, 2026": "corte_suprema_2026",
+    "MINSAL, 2026": "minsal_dac_2026",
+    "FONASA, 2023": "fonasa_2023",
+}
+
+
+# ── Main export function ─────────────────────────────────────────────────────
+
 
 def generate_review_html(db: Session, slug: str) -> str:
-    """Generate integrated review with inline diffs and margin comments."""
+    """Generate Google Docs-style review export with inline suggestions + margin comments."""
     doc = db.query(Document).filter(Document.slug == slug).first()
     if not doc:
         raise ValueError(f"Document '{slug}' not found")
@@ -93,25 +166,43 @@ def generate_review_html(db: Session, slug: str) -> str:
         .order_by(TrackChange.created_at.asc())
         .all()
     )
-    claims = db.query(Claim).filter(Claim.document_id == doc.id).all()
     bibliography = db.query(BibliographyEntry).all()
 
-    # Group comments by section
+    # Assign sequential reference numbers to root comments
+    # Order: section comments (by section order in doc), then inline, then general
+    section_comments = [c for c in root_comments if getattr(c, "comment_scope", "") == "section"]
+    inline_comments = [c for c in root_comments if getattr(c, "comment_scope", "") == "inline"]
+    general_comments = [
+        c
+        for c in root_comments
+        if getattr(c, "comment_scope", "general") not in ("section", "inline")
+    ]
+    ordered_comments = section_comments + inline_comments + general_comments
+    comment_ref: dict[str, int] = {}
+    for i, c in enumerate(ordered_comments, 1):
+        comment_ref[c.id] = i
+
+    # Group comments by section for inline badges
     comments_by_section: dict[str, list[Comment]] = {}
-    general_comments: list[Comment] = []
     for c in root_comments:
         sec = getattr(c, "section", None)
         if sec:
             comments_by_section.setdefault(sec, []).append(c)
-        else:
-            general_comments.append(c)
 
-    # Build document HTML with inline diffs
+    # Compute section resolution status: section_key → (resolved, total)
+    section_status: dict[str, tuple[int, int]] = {}
+    for sec_key, sec_comments in comments_by_section.items():
+        res = sum(1 for c in sec_comments if c.resolved)
+        section_status[sec_key] = (res, len(sec_comments))
+
+    # Build document HTML
     md = doc.markdown or ""
-    doc_html = _markdown_to_html_with_diffs(md, comments_by_section, root_comments, replies_map)
+    doc_html = _markdown_to_html_with_suggestions(
+        md, comments_by_section, comment_ref, section_status
+    )
 
-    # Build margin comments
-    margin_html = _build_margin_comments(root_comments, replies_map, general_comments)
+    # Build margin comment cards
+    margin_cards = _build_margin_cards(ordered_comments, replies_map, comment_ref)
 
     # Bibliography
     bib_html = _build_bib_html(bibliography)
@@ -119,130 +210,78 @@ def generate_review_html(db: Session, slug: str) -> str:
     # Stats
     resolved = sum(1 for c in root_comments if c.resolved)
     pending = len(root_comments) - resolved
-    inline_count = sum(1 for c in root_comments if getattr(c, "comment_scope", "") == "inline")
-    section_count = sum(1 for c in root_comments if getattr(c, "comment_scope", "") == "section")
-    general_count = len(general_comments)
+
+    title_escaped = html.escape(doc.title)
+    source_link = ""
+    if doc.source_id:
+        source_link = f' &middot; <a href="https://docs.google.com/document/d/{html.escape(doc.source_id)}/edit">Google Doc</a>'
 
     return f"""<!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<title>Review: {html.escape(doc.title)}</title>
+<title>Review: {title_escaped}</title>
 <style>
-@page {{ size: A3 landscape; margin: 1.2cm; }}
-@media print {{ body {{ font-size: 8.5pt; }} .no-print {{ display: none; }} }}
-* {{ box-sizing: border-box; margin: 0; padding: 0; }}
-body {{
-  font-family: 'IBM Plex Sans', -apple-system, sans-serif;
-  font-size: 9.5pt; line-height: 1.55; color: #0f1113; background: #fff;
-}}
-a {{ color: #3763e0; text-decoration: none; }}
-a:hover {{ text-decoration: underline; }}
-
-/* Header */
-.hdr {{ padding: 0.8rem 1.5rem; border-bottom: 2px solid #0f1113; display: flex; justify-content: space-between; align-items: baseline; }}
-.hdr h1 {{ font-size: 1.2rem; font-weight: 800; }}
-.hdr .meta {{ font-size: 0.7rem; color: #4b5563; }}
-.stats {{ display: flex; gap: 1.5rem; padding: 0.5rem 1.5rem; border-bottom: 1px solid #d5dbe3; font-size: 0.7rem; background: #fafbfc; }}
-.stat {{ display: flex; align-items: center; gap: 0.25rem; }}
-.dot {{ width: 7px; height: 7px; display: inline-block; }}
-.dot-g {{ background: #0b7e59; }} .dot-a {{ background: #d97706; }} .dot-b {{ background: #3763e0; }} .dot-r {{ background: #c0352b; }} .dot-y {{ background: #6b7280; }}
-
-/* Layout */
-.cols {{ display: flex; min-height: calc(100vh - 80px); }}
-.col-doc {{ flex: 1; padding: 1.5rem 2rem; overflow-wrap: break-word; }}
-.col-margin {{ width: 440px; flex-shrink: 0; padding: 1rem 1.2rem; background: #f8f9fa; border-left: 1px solid #d5dbe3; font-size: 0.78rem; overflow-y: auto; }}
-
-/* Document typography */
-.col-doc h1 {{ font-size: 1.3rem; font-weight: 800; margin: 1.2rem 0 0.4rem; }}
-.col-doc h2 {{ font-size: 1.05rem; font-weight: 700; margin: 1rem 0 0.3rem; padding-bottom: 0.2rem; border-bottom: 1px solid #d5dbe3; }}
-.col-doc h3 {{ font-size: 0.95rem; font-weight: 600; margin: 0.8rem 0 0.25rem; }}
-.col-doc p {{ margin: 0 0 0.5rem; }}
-.col-doc table {{ border-collapse: collapse; width: 100%; margin: 0.6rem 0; font-size: 0.85em; }}
-.col-doc th {{ border-bottom: 2px solid #0f1113; padding: 0.25rem 0.4rem; text-align: left; font-weight: 700; font-size: 0.8em; text-transform: uppercase; letter-spacing: 0.03em; color: #4b5563; }}
-.col-doc td {{ border-bottom: 1px solid #d5dbe3; padding: 0.25rem 0.4rem; }}
-.col-doc ul, .col-doc ol {{ padding-left: 1.3rem; margin: 0.3rem 0; }}
-.col-doc blockquote {{ border-left: 3px solid #3763e0; padding-left: 0.6rem; color: #4b5563; margin: 0.4rem 0; font-style: italic; }}
-.col-doc em {{ font-style: italic; }} .col-doc strong {{ font-weight: 700; }}
-.col-doc code {{ background: #f0f1f3; padding: 0.1rem 0.2rem; font-size: 0.85em; font-family: 'JetBrains Mono', monospace; }}
-
-/* Inline diff markers */
-.diff-add {{ background: #dcfce7; border-left: 3px solid #0b7e59; padding: 0.3rem 0.5rem; margin: 0.3rem 0; font-size: 0.85em; }}
-.diff-del {{ background: #fef2f2; border-left: 3px solid #c0352b; padding: 0.3rem 0.5rem; margin: 0.3rem 0; font-size: 0.85em; text-decoration: line-through; color: #c0352b; }}
-.diff-replace {{ margin: 0.3rem 0; }}
-.diff-replace .old {{ background: #fef2f2; border-left: 3px solid #c0352b; padding: 0.2rem 0.5rem; font-size: 0.82em; text-decoration: line-through; color: #991b1b; }}
-.diff-replace .new {{ background: #dcfce7; border-left: 3px solid #0b7e59; padding: 0.2rem 0.5rem; font-size: 0.82em; color: #065f46; }}
-.diff-alert {{ background: #fef9c3; border-left: 3px solid #d97706; padding: 0.3rem 0.5rem; margin: 0.3rem 0; font-size: 0.82em; color: #92400e; }}
-.diff-label {{ font-size: 0.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.1rem; }}
-.diff-label-add {{ color: #0b7e59; }} .diff-label-del {{ color: #c0352b; }} .diff-label-alert {{ color: #d97706; }}
-
-/* Section comment badge */
-.sec-badge {{ display: inline-flex; align-items: center; gap: 0.2rem; font-size: 0.6rem; font-weight: 600; padding: 0.1rem 0.3rem; border: 1px solid #3763e0; color: #3763e0; vertical-align: middle; margin-left: 0.4rem; }}
-.sec-badge-amber {{ border-color: #d97706; color: #d97706; }}
-
-/* Margin comments */
-.m-section {{ font-weight: 700; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em; color: #3763e0; margin: 0.8rem 0 0.3rem; padding-bottom: 0.15rem; border-bottom: 1px solid #d5dbe3; }}
-.m-card {{ padding: 0.4rem 0.5rem; margin-bottom: 0.4rem; border-left: 3px solid #d97706; background: #fff; }}
-.m-card.resolved {{ border-left-color: #0b7e59; opacity: 0.85; }}
-.m-author {{ font-weight: 600; font-size: 0.68rem; }}
-.m-text {{ font-size: 0.72rem; line-height: 1.5; margin-top: 0.15rem; }}
-.m-reply {{ margin-top: 0.2rem; padding: 0.25rem 0.4rem; background: #f0f4ff; border-left: 2px solid #3763e0; font-size: 0.68rem; }}
-.m-provider {{ font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.04em; color: #4b5563; }}
-.m-scope {{ font-size: 0.55rem; font-weight: 600; padding: 0.05rem 0.25rem; border: 1px solid; display: inline-block; margin-left: 0.3rem; }}
-
-/* Bibliography */
-.bib-entry {{ font-size: 0.7rem; margin-bottom: 0.25rem; line-height: 1.4; }}
-.bib-key {{ font-weight: 600; color: #3763e0; }}
+{_get_css()}
 </style>
 </head>
 <body>
 
-<div class="hdr">
-  <div>
-    <h1>{html.escape(doc.title)}</h1>
-    <div class="meta">Espacio Público · Review integrado · {datetime.now().strftime('%d/%m/%Y %H:%M')}</div>
+<header class="doc-header">
+  <div class="doc-header-left">
+    <h1 class="doc-title">{title_escaped}</h1>
+    <div class="doc-meta">Espacio Publico &middot; {datetime.now().strftime('%d/%m/%Y %H:%M')}</div>
   </div>
-  <div class="meta">
-    <a href="https://scribe.illanes00.cl/editor/{slug}">Scribe</a>
-    {f' · <a href="https://docs.google.com/document/d/{doc.source_id}/edit">Google Doc</a>' if doc.source_id else ''}
+  <div class="doc-header-right">
+    <div class="doc-stats">
+      <span class="stat stat-resolved">{resolved} resueltos</span>
+      <span class="stat stat-pending">{pending} pendientes</span>
+      <span class="stat stat-total">{len(changes)} cambios</span>
+      <span class="stat stat-bib">{len(bibliography)} refs</span>
+    </div>
+    <div class="doc-links">
+      <a href="https://scribe.illanes00.cl/editor/{slug}">Abrir en Scribe</a>
+      {source_link}
+    </div>
   </div>
-</div>
+</header>
 
-<div class="stats">
-  <div class="stat"><span class="dot dot-g"></span> {resolved} resueltos</div>
-  <div class="stat"><span class="dot dot-a"></span> {pending} pendientes</div>
-  <div class="stat"><span class="dot dot-b"></span> {section_count} de sección · {inline_count} inline · {general_count} generales</div>
-  <div class="stat"><span class="dot dot-y"></span> {len(changes)} cambios · {len(bibliography)} refs</div>
-</div>
-
-<div class="cols">
-  <div class="col-doc">
+<div class="page-container">
+  <svg class="connectors" id="connectors"></svg>
+  <div class="doc-body" id="doc-body">
     {doc_html}
+    <div class="bib-section">
+      <h2>Referencias</h2>
+      {bib_html}
+    </div>
   </div>
-  <div class="col-margin">
-    {margin_html}
-    <div class="m-section" style="color:#4b5563">Bibliografía ({len(bibliography)})</div>
-    {bib_html}
+  <div class="margin-comments" id="margin-comments">
+    {margin_cards}
   </div>
 </div>
 
+<script>
+{_get_js()}
+</script>
 </body>
 </html>"""
 
 
-def _markdown_to_html_with_diffs(
+# ── Markdown to HTML with inline suggestions ─────────────────────────────────
+
+
+def _markdown_to_html_with_suggestions(
     md: str,
     comments_by_section: dict[str, list[Comment]],
-    all_comments: list[Comment],
-    replies_map: dict,
+    comment_ref: dict[str, int],
+    section_status: dict[str, tuple[int, int]],
 ) -> str:
-    """Convert markdown to HTML, injecting inline diffs at section boundaries."""
+    """Convert markdown to HTML with inline del/ins suggestions, status badges, and section separators."""
     lines = md.split("\n")
-    result = []
+    result: list[str] = []
     in_table = False
     in_list = False
-    current_section = ""
-    comment_idx = 0
+    h2_count = 0  # Track H2s for separators
 
     for line in lines:
         stripped = line.strip()
@@ -257,7 +296,7 @@ def _markdown_to_html_with_diffs(
             result.append("")
             continue
 
-        # Table
+        # ── Table ──
         if "|" in stripped and stripped.startswith("|"):
             cells = [c.strip() for c in stripped.split("|")[1:-1]]
             if all(set(c) <= set("-: ") for c in cells):
@@ -279,7 +318,7 @@ def _markdown_to_html_with_diffs(
             result.append("</tbody></table>")
             in_table = False
 
-        # Headers — inject diff markers and comment badges
+        # ── Headers ──
         is_heading = False
         heading_text = ""
         heading_level = 0
@@ -302,29 +341,38 @@ def _markdown_to_html_with_diffs(
                 result.append("</ul>")
                 in_list = False
 
-            heading_id = heading_text.lower().replace(" ", "-").replace(".", "").replace(":", "")[:40]
-            current_section = heading_text
-
-            # Count comments for this section
-            section_comment_count = 0
-            for sec_key, sec_comments in comments_by_section.items():
-                if _section_matches(sec_key, heading_text):
-                    section_comment_count += len(sec_comments)
-
-            badge = ""
-            if section_comment_count > 0:
-                badge = f' <span class="sec-badge">{section_comment_count} comentarios</span>'
-
-            # Check for diffs at this section
-            diffs_html = _get_section_diffs(heading_text)
-
+            heading_id = re.sub(r"[^a-z0-9-]", "", heading_text.lower().replace(" ", "-"))[:40]
             tag = f"h{heading_level}"
-            result.append(f'<{tag} id="sec-{heading_id}">{_inline(heading_text)}{badge}</{tag}>')
-            if diffs_html:
-                result.append(diffs_html)
+
+            # Section separator before H2 (not the first one)
+            if heading_level == 2:
+                h2_count += 1
+                if h2_count > 1:
+                    # Build section status summary for the separator
+                    sep_status = _section_separator_status(heading_text, section_status)
+                    result.append(f'<div class="section-sep">{sep_status}</div>')
+
+            # Find comment references for this section
+            refs_html = _section_comment_refs(heading_text, comments_by_section, comment_ref)
+
+            # Section-level changes with resolution status
+            section_resolved = _is_section_resolved(heading_text, section_status)
+            suggestions_html = _get_section_suggestions(heading_text, section_resolved)
+
+            # Wrap heading in a mark if it has comments
+            heading_inner = _inline(heading_text)
+            if refs_html:
+                heading_inner = (
+                    f'<mark class="cm" data-section="{html.escape(heading_id)}">'
+                    f"{heading_inner}</mark>{refs_html}"
+                )
+
+            result.append(f'<{tag} id="sec-{heading_id}">{heading_inner}</{tag}>')
+            if suggestions_html:
+                result.append(suggestions_html)
             continue
 
-        # Lists
+        # ── Lists ──
         if stripped.startswith("- "):
             if not in_list:
                 result.append("<ul>")
@@ -354,18 +402,87 @@ def _markdown_to_html_with_diffs(
     return "\n".join(result)
 
 
-def _get_section_diffs(heading_text: str) -> str:
-    """Get inline diff HTML for changes at this section."""
-    parts = []
+def _section_comment_refs(
+    heading_text: str,
+    comments_by_section: dict[str, list[Comment]],
+    comment_ref: dict[str, int],
+) -> str:
+    """Build superscript reference numbers for comments on this section."""
+    refs: list[str] = []
+    for sec_key, sec_comments in comments_by_section.items():
+        if _section_matches(sec_key, heading_text):
+            for c in sec_comments:
+                num = comment_ref.get(c.id, 0)
+                if num:
+                    refs.append(f'<sup class="cref" data-cref="{num}">{num}</sup>')
+    return "".join(refs)
+
+
+def _is_section_resolved(
+    heading_text: str, section_status: dict[str, tuple[int, int]]
+) -> bool | None:
+    """Check if all comments in this section are resolved. None if no comments."""
+    for sec_key, (resolved, total) in section_status.items():
+        if _section_matches(sec_key, heading_text):
+            return resolved == total
+    return None
+
+
+def _section_separator_status(
+    heading_text: str, section_status: dict[str, tuple[int, int]]
+) -> str:
+    """Build a small status summary for the section separator line."""
+    for sec_key, (resolved, total) in section_status.items():
+        if _section_matches(sec_key, heading_text):
+            if total == 0:
+                return ""
+            if resolved == total:
+                return f'<span class="sep-badge sep-resolved">{resolved}/{total} resueltos</span>'
+            return f'<span class="sep-badge sep-pending">{resolved}/{total} resueltos</span>'
+    return ""
+
+
+def _get_section_suggestions(heading_text: str, section_resolved: bool | None) -> str:
+    """Render inline suggestions with status badges for changes at this section."""
+    parts: list[str] = []
     for sec_key, changes in SECTION_CHANGES.items():
         if _section_matches(sec_key, heading_text):
             for change in changes:
                 if change["type"] == "add":
-                    parts.append(f'<div class="diff-add"><div class="diff-label diff-label-add">+ Agregado</div>{html.escape(change["text"])}</div>')
+                    if section_resolved:
+                        badge = '<span class="sg-badge sg-applied">Agregado</span>'
+                    elif section_resolved is False:
+                        badge = '<span class="sg-badge sg-pending">Pendiente</span>'
+                    else:
+                        badge = '<span class="sg-badge sg-applied">Agregado</span>'
+                    parts.append(
+                        f'<div class="suggestion sg-add">'
+                        f"{badge}"
+                        f'<ins>{html.escape(change["text"])}</ins>'
+                        f"</div>"
+                    )
                 elif change["type"] == "alert":
-                    parts.append(f'<div class="diff-alert"><div class="diff-label diff-label-alert">⚠ Verificar</div>{html.escape(change["text"])}</div>')
+                    badge = '<span class="sg-badge sg-verify">Verificar</span>'
+                    parts.append(
+                        f'<div class="suggestion sg-alert">'
+                        f"{badge}"
+                        f'{html.escape(change["text"])}'
+                        f"</div>"
+                    )
                 elif change["type"] == "replace":
-                    parts.append(f'<div class="diff-replace"><div class="old"><div class="diff-label diff-label-del">− Antes</div>{html.escape(change["before"])}</div><div class="new"><div class="diff-label diff-label-add">+ Después</div>{html.escape(change["after"])}</div></div>')
+                    if section_resolved:
+                        badge = '<span class="sg-badge sg-corrected">Corregido</span>'
+                    elif section_resolved is False:
+                        badge = '<span class="sg-badge sg-pending">Pendiente</span>'
+                    else:
+                        badge = '<span class="sg-badge sg-corrected">Corregido</span>'
+                    parts.append(
+                        f'<div class="suggestion sg-replace">'
+                        f"{badge}"
+                        f'<del>{html.escape(change["before"])}</del> '
+                        f'<ins>{html.escape(change["after"])}</ins>'
+                        f"</div>"
+                    )
     return "\n".join(parts)
 
 
@@ -374,134 +491,614 @@ def _section_matches(key: str, heading: str) -> bool:
     return key.lower() in heading.lower() or heading.lower() in key.lower()
 
 
-CITATION_MAP = {
-    "INE, 2023": "ine_2023",
-    "Instituto Nacional de Estadísticas [INE], 2023, Cuadro 8.1, cálculo del autor": "ine_2023",
-    "Instituto Nacional de Estadísticas [INE], 2023": "ine_2023",
-    "OCDE, 2025": "oecd_2025",
-    "Organización para la Cooperación y el Desarrollo Económicos [OCDE], 2025": "oecd_2025",
-    "OMS, 2024": "who_ghed_2024",
-    "Organización Mundial de la Salud [OMS], 2024": "who_ghed_2024",
-    "Armijo et al., 2022": "armijo_espinoza_2022",
-    "Kirchlechner & Cohen, 2025": "kirchlechner_cohen_2025",
-    "Kirchlechner &amp; Cohen, 2025": "kirchlechner_cohen_2025",
-    "Cortez, Medici & Singh, 2023": "cortez_medici_singh_2023",
-    "Cortez, Medici &amp; Singh, 2023": "cortez_medici_singh_2023",
-    "Vargas-Pelaez et al., 2019": "vargas_pelaez_2019",
-    "Corte Suprema, 2026": "corte_suprema_2026",
-    "MINSAL, 2026": "minsal_dac_2026",
-    "FONASA, 2023": "fonasa_2023",
-}
-
-
 def _inline(text: str) -> str:
-    """Process inline markdown + convert citations to hyperlinks."""
+    """Process inline markdown + citation hyperlinks."""
     text = html.escape(text)
     text = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", text)
     text = re.sub(r"(?<!\*)\*([^*]+?)\*(?!\*)", r"<em>\1</em>", text)
     text = re.sub(r"`(.+?)`", r"<code>\1</code>", text)
     text = re.sub(r"\[(.+?)\]\((.+?)\)", r'<a href="\2" target="_blank">\1</a>', text)
 
-    # Convert (Author, Year) citations to clickable links → bibliography
     for citation_text, bib_key in CITATION_MAP.items():
         escaped = html.escape(citation_text)
         if escaped in text:
-            link = f'<a href="#bib-{bib_key}" style="color:#3763e0;text-decoration:none;border-bottom:1px dotted #3763e0" title="Ver referencia">{escaped}</a>'
+            link = (
+                f'<a href="#bib-{bib_key}" class="cite-link" '
+                f'title="Ver referencia">{escaped}</a>'
+            )
             text = text.replace(f"({escaped})", f"({link})")
 
     return text
 
 
-def _build_margin_comments(
-    root_comments: list[Comment],
-    replies_map: dict,
-    general_comments: list[Comment],
+# ── Margin comment cards ─────────────────────────────────────────────────────
+
+
+def _build_margin_cards(
+    ordered_comments: list[Comment],
+    replies_map: dict[str, list[Comment]],
+    comment_ref: dict[str, int],
 ) -> str:
-    """Build margin comments grouped by section."""
-    parts = []
+    """Build flat margin comment cards with reference numbers."""
+    parts: list[str] = []
 
-    # Group by section
-    by_section: dict[str, list[tuple[int, Comment]]] = {}
-    inline_comments: list[tuple[int, Comment]] = []
-    general: list[tuple[int, Comment]] = []
-
-    for i, c in enumerate(root_comments, 1):
+    for c in ordered_comments:
+        num = comment_ref.get(c.id, 0)
         scope = getattr(c, "comment_scope", "general")
         section = getattr(c, "section", None)
-        if scope == "section" and section:
-            by_section.setdefault(section, []).append((i, c))
-        elif scope == "inline":
-            inline_comments.append((i, c))
-        else:
-            general.append((i, c))
+        resolved = c.resolved
+        provider = {
+            "email": "Email",
+            "google-docs": "GDocs",
+            "local": "Scribe",
+            "scribe-ai": "AI",
+        }.get(c.provider, c.provider)
 
-    # Section comments
-    if by_section:
-        parts.append('<div class="m-section">Por sección</div>')
-        for section_name, section_comments in sorted(by_section.items()):
-            sec_id = section_name.lower().replace(" ", "-").replace(".", "")[:40]
-            parts.append(f'<div style="font-size:0.68rem;font-weight:600;color:#3763e0;margin:0.4rem 0 0.15rem"><a href="#sec-{sec_id}">{html.escape(section_name)}</a></div>')
-            for idx, c in section_comments:
-                parts.append(_render_margin_card(idx, c, replies_map))
+        status_cls = "resolved" if resolved else "pending"
+        scope_cls = f"scope-{scope}"
 
-    # Inline
-    if inline_comments:
-        parts.append('<div class="m-section" style="color:#d97706">Ediciones inline</div>')
-        for idx, c in inline_comments:
-            parts.append(_render_margin_card(idx, c, replies_map))
+        sec_id = ""
+        if section:
+            sec_id = re.sub(r"[^a-z0-9-]", "", section.lower().replace(" ", "-"))[:40]
 
-    # General — place before everything as "Sobre el documento"
-    if general:
-        parts.insert(0, '<div class="m-section" style="color:#4b5563">Sobre el documento</div>')
-        insert_at = 1
-        for idx, c in general:
-            parts.insert(insert_at, _render_margin_card(idx, c, replies_map))
-            insert_at += 1
+        card_parts: list[str] = []
+        card_parts.append(
+            f'<div class="mc {status_cls} {scope_cls}" '
+            f'data-cid="{num}" data-section="{html.escape(sec_id)}">'
+        )
+        card_parts.append('  <div class="mc-head">')
+        card_parts.append(f'    <span class="mc-num">{num}</span>')
+        card_parts.append(
+            f'    <span class="mc-author">{html.escape(c.author or "Anon")}</span>'
+        )
+        card_parts.append(f'    <span class="mc-provider">{provider}</span>')
+        if resolved:
+            card_parts.append('    <span class="mc-status mc-resolved">Resuelto</span>')
+        card_parts.append("  </div>")
+        card_parts.append(f'  <div class="mc-body">{html.escape(c.content)}</div>')
+
+        for reply in replies_map.get(c.id, []):
+            card_parts.append('  <div class="mc-reply">')
+            card_parts.append(
+                f'    <span class="mc-reply-author">'
+                f"{html.escape(reply.author or 'Scribe')}</span>"
+            )
+            card_parts.append(f"    {html.escape(reply.content)}")
+            card_parts.append("  </div>")
+
+        card_parts.append("</div>")
+        parts.append("\n".join(card_parts))
 
     return "\n".join(parts)
 
 
-def _render_margin_card(idx: int, c: Comment, replies_map: dict) -> str:
-    status = "resolved" if c.resolved else ""
-    provider = {"email": "Email", "google-docs": "GDocs", "local": "Scribe", "scribe-ai": "AI"}.get(c.provider, c.provider)
-    scope = getattr(c, "comment_scope", "general")
-    scope_color = {"inline": "#d97706", "section": "#3763e0", "general": "#4b5563"}.get(scope, "#4b5563")
-
-    parts = [f'<div class="m-card {status}">']
-    parts.append(f'<div class="m-author">#{idx} · {html.escape(c.author or "Anon")} <span class="m-provider">{provider}</span></div>')
-    parts.append(f'<div class="m-text">{html.escape(c.content)}</div>')
-
-    for reply in replies_map.get(c.id, []):
-        parts.append(f'<div class="m-reply"><strong>{html.escape(reply.author or "Scribe")[:25]}</strong>: {html.escape(reply.content)}</div>')
-
-    parts.append("</div>")
-    return "\n".join(parts)
+# ── Bibliography ─────────────────────────────────────────────────────────────
 
 
 def _build_bib_html(entries: list[BibliographyEntry]) -> str:
-    parts = []
+    """Build APA-style bibliography entries with clickable links."""
+    parts: list[str] = []
     for e in entries:
         author = html.escape(e.author or "")
         year = e.year or "s/f"
         title = html.escape(e.title or "")
         journal = html.escape(e.journal or "")
 
-        # Build APA-style citation with integrated hyperlinks
-        # Title is the clickable element (links to URL or DOI)
         if e.doi:
-            title_html = f'<a href="https://doi.org/{html.escape(e.doi)}" target="_blank" style="color:#3763e0"><em>{title}</em></a>'
+            doi_escaped = html.escape(e.doi)
+            title_html = (
+                f'<a href="https://doi.org/{doi_escaped}" target="_blank">'
+                f"<em>{title}</em></a>"
+            )
         elif e.url:
-            title_html = f'<a href="{html.escape(e.url)}" target="_blank" style="color:#3763e0"><em>{title}</em></a>'
+            url_escaped = html.escape(e.url)
+            title_html = (
+                f'<a href="{url_escaped}" target="_blank"><em>{title}</em></a>'
+            )
         else:
-            title_html = f'<em>{title}</em>'
+            title_html = f"<em>{title}</em>"
 
-        # APA format: Author (Year). Title. Journal.
-        citation = f'{author} ({year}). {title_html}.'
+        citation = f"{author} ({year}). {title_html}."
         if journal:
-            citation += f' <em>{journal}</em>.'
+            citation += f" <em>{journal}</em>."
         if e.doi:
-            citation += f' <span style="font-size:0.62rem;color:#4b5563">doi:{html.escape(e.doi)}</span>'
+            citation += f' <span class="bib-doi">doi:{html.escape(e.doi)}</span>'
 
-        parts.append(f'<div class="bib-entry" id="bib-{html.escape(e.bib_key)}"><span class="bib-key">[{html.escape(e.bib_key)}]</span> {citation}</div>')
+        bib_key_escaped = html.escape(e.bib_key)
+        parts.append(
+            f'<div class="bib-entry" id="bib-{bib_key_escaped}">'
+            f'<span class="bib-key">[{bib_key_escaped}]</span> {citation}'
+            f"</div>"
+        )
 
-    return "\n".join(parts) if parts else '<div style="font-size:0.7rem;color:#4b5563">Sin bibliografía.</div>'
+    return "\n".join(parts) if parts else '<p class="bib-empty">Sin referencias.</p>'
+
+
+# ── CSS ──────────────────────────────────────────────────────────────────────
+
+
+def _get_css() -> str:
+    return """
+@page { size: A3 landscape; margin: 1.2cm; }
+@media print {
+  body { font-size: 8.5pt; }
+  .no-print { display: none; }
+  .page-container { overflow: visible; }
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Google Sans', 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 11pt;
+  line-height: 1.6;
+  color: #202124;
+  background: #f8f9fa;
+}
+a { color: #1a73e8; text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ── Header ── */
+.doc-header {
+  background: #fff;
+  border-bottom: 1px solid #dadce0;
+  padding: 12px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.doc-title {
+  font-size: 18px;
+  font-weight: 500;
+  color: #202124;
+}
+.doc-meta {
+  font-size: 11px;
+  color: #5f6368;
+  margin-top: 2px;
+}
+.doc-stats {
+  display: flex;
+  gap: 12px;
+  font-size: 11px;
+}
+.stat {
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-weight: 500;
+}
+.stat-resolved { background: #e6f4ea; color: #137333; }
+.stat-pending { background: #fce8e6; color: #c5221f; }
+.stat-total { background: #e8f0fe; color: #1967d2; }
+.stat-bib { background: #f1f3f4; color: #5f6368; }
+.doc-links {
+  font-size: 11px;
+  margin-top: 4px;
+  text-align: right;
+}
+
+/* ── Page layout: document + margin ── */
+.page-container {
+  position: relative;
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  background: #fff;
+  min-height: calc(100vh - 60px);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+.doc-body {
+  flex: 1;
+  padding: 40px 60px 60px 60px;
+  max-width: 860px;
+  min-width: 0;
+}
+.margin-comments {
+  width: 380px;
+  flex-shrink: 0;
+  position: relative;
+  padding: 40px 16px 60px 8px;
+  border-left: 1px solid #dadce0;
+}
+.connectors {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ── Document typography ── */
+.doc-body h1 {
+  font-size: 24px;
+  font-weight: 400;
+  color: #202124;
+  margin: 28px 0 12px;
+  line-height: 1.3;
+}
+.doc-body h2 {
+  font-size: 18px;
+  font-weight: 500;
+  color: #202124;
+  margin: 24px 0 8px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid #e8eaed;
+}
+.doc-body h3 {
+  font-size: 14px;
+  font-weight: 600;
+  color: #3c4043;
+  margin: 16px 0 6px;
+}
+.doc-body p {
+  margin: 0 0 8px;
+  color: #3c4043;
+}
+.doc-body table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 12px 0;
+  font-size: 0.9em;
+}
+.doc-body th {
+  border-bottom: 2px solid #202124;
+  padding: 6px 8px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.85em;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: #5f6368;
+}
+.doc-body td {
+  border-bottom: 1px solid #e8eaed;
+  padding: 6px 8px;
+}
+.doc-body ul, .doc-body ol {
+  padding-left: 24px;
+  margin: 4px 0;
+}
+.doc-body blockquote {
+  border-left: 3px solid #1a73e8;
+  padding-left: 12px;
+  color: #5f6368;
+  margin: 8px 0;
+  font-style: italic;
+}
+.doc-body strong { font-weight: 600; }
+.doc-body em { font-style: italic; }
+.doc-body code {
+  background: #f1f3f4;
+  padding: 1px 4px;
+  border-radius: 3px;
+  font-size: 0.88em;
+  font-family: 'Roboto Mono', monospace;
+}
+
+/* ── Section separators ── */
+.section-sep {
+  border-top: 1px solid #dadce0;
+  margin: 28px 0 8px;
+  padding-top: 6px;
+  min-height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+.sep-badge {
+  font-size: 10px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+.sep-resolved { background: #e6f4ea; color: #137333; }
+.sep-pending { background: #fef7e0; color: #7c4d12; }
+
+/* ── Inline suggestions (Google Docs style) ── */
+.suggestion {
+  margin: 6px 0 10px;
+  padding: 6px 10px;
+  line-height: 1.7;
+  border-radius: 4px;
+  position: relative;
+}
+.suggestion del {
+  background: #fce8e6;
+  color: #c5221f;
+  text-decoration: line-through;
+  text-decoration-color: #c5221f;
+  padding: 1px 3px;
+  border-radius: 2px;
+}
+.suggestion ins {
+  background: #e6f4ea;
+  color: #137333;
+  text-decoration: none;
+  padding: 1px 3px;
+  border-radius: 2px;
+}
+
+/* Suggestion type variants */
+.sg-add {
+  background: #f0fdf4;
+  border-left: 3px solid #137333;
+}
+.sg-replace {
+  background: #fffbeb;
+  border-left: 3px solid #f59e0b;
+}
+.sg-alert {
+  background: #fef7e0;
+  border-left: 3px solid #f9ab00;
+  color: #7c4d12;
+  font-size: 0.88em;
+}
+
+/* Status badges on suggestions */
+.sg-badge {
+  display: inline-block;
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 2px 7px;
+  border-radius: 3px;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+.sg-applied { background: #137333; color: #fff; }
+.sg-corrected { background: #1967d2; color: #fff; }
+.sg-verify { background: #f9ab00; color: #fff; }
+.sg-pending { background: #80868b; color: #fff; }
+.sg-rejected { background: #c5221f; color: #fff; }
+
+/* ── Comment highlight marks ── */
+mark.cm {
+  background: #fcefb4;
+  padding: 1px 0;
+  border-bottom: 2px solid #f9ab00;
+  border-radius: 0;
+}
+
+/* ── Superscript comment references ── */
+sup.cref {
+  font-size: 9px;
+  font-weight: 600;
+  color: #f9ab00;
+  cursor: default;
+  margin-left: 1px;
+  vertical-align: super;
+  line-height: 0;
+}
+
+/* ── Margin comment cards (Google Docs style) ── */
+.mc {
+  border: 1px solid #dadce0;
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  background: #fff;
+  font-size: 12px;
+  line-height: 1.5;
+  transition: box-shadow 0.15s;
+  position: relative;
+}
+.mc:hover {
+  box-shadow: 0 1px 6px rgba(0,0,0,0.12);
+}
+.mc.resolved {
+  opacity: 0.7;
+  border-color: #e8eaed;
+}
+.mc.resolved .mc-body {
+  text-decoration: line-through;
+  color: #80868b;
+}
+.mc.scope-section { border-left: 3px solid #1a73e8; }
+.mc.scope-inline { border-left: 3px solid #f9ab00; }
+.mc.scope-general { border-left: 3px solid #80868b; }
+
+.mc-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+.mc-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #1a73e8;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.mc.scope-inline .mc-num { background: #f9ab00; }
+.mc.scope-general .mc-num { background: #80868b; }
+
+.mc-author {
+  font-weight: 600;
+  font-size: 12px;
+  color: #202124;
+}
+.mc-provider {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #80868b;
+}
+.mc-status {
+  margin-left: auto;
+  font-size: 10px;
+  font-weight: 500;
+}
+.mc-resolved { color: #137333; }
+
+.mc-body {
+  font-size: 12px;
+  color: #3c4043;
+  line-height: 1.5;
+}
+
+.mc-reply {
+  margin-top: 6px;
+  padding: 6px 8px;
+  background: #f1f3f4;
+  border-radius: 6px;
+  font-size: 11px;
+  line-height: 1.4;
+  color: #3c4043;
+}
+.mc-reply-author {
+  font-weight: 600;
+  font-size: 11px;
+  margin-right: 4px;
+}
+
+/* ── Bibliography ── */
+.bib-section {
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid #dadce0;
+}
+.bib-section h2 {
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 12px;
+}
+.bib-entry {
+  font-size: 11px;
+  margin-bottom: 4px;
+  line-height: 1.5;
+  color: #3c4043;
+}
+.bib-key {
+  font-weight: 600;
+  color: #1a73e8;
+}
+.bib-doi {
+  font-size: 9px;
+  color: #80868b;
+}
+.bib-empty {
+  font-size: 12px;
+  color: #80868b;
+}
+.cite-link {
+  color: #1a73e8;
+  border-bottom: 1px dotted #1a73e8;
+}
+
+/* ── Connector lines ── */
+.connector-line {
+  stroke: #dadce0;
+  stroke-width: 1;
+  fill: none;
+}
+.connector-dot {
+  fill: #f9ab00;
+}
+"""
+
+
+# ── JavaScript for positioning + connectors ──────────────────────────────────
+
+
+def _get_js() -> str:
+    return r"""
+(function() {
+  function position() {
+    var docBody = document.getElementById('doc-body');
+    var marginCol = document.getElementById('margin-comments');
+    var svg = document.getElementById('connectors');
+    var cards = marginCol.querySelectorAll('.mc');
+    var container = document.querySelector('.page-container');
+    var containerRect = container.getBoundingClientRect();
+
+    // Reset SVG dimensions
+    while (svg.firstChild) svg.removeChild(svg.firstChild);
+    svg.setAttribute('width', containerRect.width);
+    svg.setAttribute('height', Math.max(containerRect.height, document.body.scrollHeight));
+
+    var lastBottom = 0;
+
+    cards.forEach(function(card) {
+      var cid = card.getAttribute('data-cid');
+      var sectionId = card.getAttribute('data-section');
+
+      // Find the corresponding mark or heading in the document
+      var mark = null;
+      var cref = docBody.querySelector('sup[data-cref="' + cid + '"]');
+      if (cref) {
+        mark = cref.closest('mark.cm') || cref;
+      }
+      if (!mark && sectionId) {
+        mark = docBody.querySelector('#sec-' + sectionId) ||
+               docBody.querySelector('[data-section="' + sectionId + '"]');
+      }
+
+      if (!mark) return;
+
+      var markRect = mark.getBoundingClientRect();
+      var marginRect = marginCol.getBoundingClientRect();
+
+      // Align card top with the mark vertical center
+      var targetY = markRect.top - marginRect.top + (markRect.height / 2) - 12;
+      var actualY = Math.max(targetY, lastBottom + 6);
+      actualY = Math.max(actualY, 0);
+
+      card.style.position = 'absolute';
+      card.style.top = actualY + 'px';
+      card.style.left = '8px';
+      card.style.right = '16px';
+
+      lastBottom = actualY + card.offsetHeight;
+
+      // Draw connector: dot on mark → L-shaped line → card
+      var markCenterY = markRect.top - containerRect.top + markRect.height / 2;
+      var cardCenterY = marginRect.top - containerRect.top + actualY + 16;
+      var markRight = markRect.right - containerRect.left;
+      var marginLeft = marginRect.left - containerRect.left;
+
+      var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      var midX = marginLeft - 4;
+
+      if (Math.abs(markCenterY - cardCenterY) < 3) {
+        path.setAttribute('d',
+          'M ' + markRight + ' ' + markCenterY +
+          ' L ' + marginLeft + ' ' + cardCenterY);
+      } else {
+        path.setAttribute('d',
+          'M ' + markRight + ' ' + markCenterY +
+          ' L ' + midX + ' ' + markCenterY +
+          ' L ' + midX + ' ' + cardCenterY +
+          ' L ' + marginLeft + ' ' + cardCenterY);
+      }
+      path.setAttribute('class', 'connector-line');
+      svg.appendChild(path);
+
+      var dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      dot.setAttribute('cx', markRight);
+      dot.setAttribute('cy', markCenterY);
+      dot.setAttribute('r', '3');
+      dot.setAttribute('class', 'connector-dot');
+      svg.appendChild(dot);
+    });
+
+    marginCol.style.minHeight = (lastBottom + 40) + 'px';
+  }
+
+  if (document.readyState === 'complete') {
+    position();
+  } else {
+    window.addEventListener('load', position);
+  }
+  // Chrome headless needs a brief delay for layout
+  setTimeout(position, 500);
+})();
+"""
