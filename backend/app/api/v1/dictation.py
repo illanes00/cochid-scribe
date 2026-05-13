@@ -1,4 +1,4 @@
-"""Chunked dictation endpoints for CIF medication workspace."""
+"""Chunked dictation endpoints for workspace authoring flows."""
 
 from __future__ import annotations
 
@@ -14,6 +14,7 @@ from openai import OpenAI
 from sqlalchemy.orm import Session
 
 from app.api.v1.auth import require_user
+from app.api.v1.workspaces import WORKSPACE_REGISTRY
 from app.config import get_settings
 from app.core.logging import get_logger
 from app.db.session import get_db
@@ -26,7 +27,6 @@ settings = get_settings()
 
 REPO_ROOT = Path(__file__).resolve().parents[4]
 DOCS_ROOT = REPO_ROOT / "docs"
-REPORT_FILE = DOCS_ROOT / "cif-medicamentos-resumen-final.md"
 PRIVATE_UPLOAD_ROOT = Path(__file__).resolve().parents[2] / "private_uploads" / "dictation"
 PRIVATE_UPLOAD_ROOT.mkdir(parents=True, exist_ok=True)
 
@@ -75,20 +75,27 @@ def _serialize_session(session: DictationSession) -> dict[str, Any]:
     }
 
 
-@router.post("/workspace/cif-medicamentos/seed")
-def seed_cif_workspace_document(
+@router.post("/workspace/{workspace_slug}/seed")
+def seed_workspace_document(
+    workspace_slug: str,
     _: dict = Depends(require_user),
     db: Session = Depends(get_db),
 ) -> dict[str, Any]:
-    """Create or refresh the canonical CIF medications workspace document."""
-    if not REPORT_FILE.exists():
+    """Create or refresh the canonical workspace document from its on-disk report."""
+    spec = WORKSPACE_REGISTRY.get(workspace_slug)
+    if spec is None:
+        raise HTTPException(status_code=404, detail="Workspace not registered")
+
+    report_file = DOCS_ROOT / spec["report_file"]
+    if not report_file.exists():
         raise HTTPException(status_code=404, detail="Workspace report not found")
 
-    slug = "cif-medicamentos-workspace"
-    markdown = REPORT_FILE.read_text(encoding="utf-8")
+    slug = spec["recommended_document_slug"]
+    markdown = report_file.read_text(encoding="utf-8")
     front_matter = {
-        "workspace_slug": "cif-medicamentos",
-        "source_report": "cif-medicamentos-resumen-final.md",
+        "workspace_slug": workspace_slug,
+        "workspace_type": "dictation",
+        "source_report": spec["report_file"],
         "deterministic": True,
     }
 
@@ -96,7 +103,7 @@ def seed_cif_workspace_document(
     if document is None:
         document = Document(
             slug=slug,
-            title="CIF Medicamentos Workspace",
+            title=spec["title"],
             doc_type="policy",
             markdown=markdown,
             front_matter=front_matter,
@@ -105,17 +112,20 @@ def seed_cif_workspace_document(
         )
         db.add(document)
     else:
-        document.title = "CIF Medicamentos Workspace"
+        document.title = spec["title"]
         document.doc_type = "policy"
         document.markdown = markdown
-        document.front_matter = front_matter
+        # Preserve any non-managed front_matter keys (style, layout, etc.).
+        merged = dict(document.front_matter or {})
+        merged.update(front_matter)
+        document.front_matter = merged
 
     db.commit()
     db.refresh(document)
     return {
         "slug": document.slug,
         "title": document.title,
-        "workspace_slug": "cif-medicamentos",
+        "workspace_slug": workspace_slug,
     }
 
 

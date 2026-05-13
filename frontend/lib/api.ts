@@ -1181,14 +1181,13 @@ export interface DictationChunkResponse {
   session: DictationSession;
 }
 
-export interface WorkspaceLoginResponse {
-  ok: boolean;
-  authenticated: boolean;
-  user: {
-    email: string;
-    name?: string;
-    role?: string;
-  };
+export interface User {
+  id?: string;
+  email: string;
+  name?: string;
+  display_name?: string;
+  role?: string;
+  avatar_url?: string | null;
 }
 
 export interface ApplyItem {
@@ -1236,20 +1235,35 @@ export const reviewApi = {
 };
 
 export const workspacesApi = {
+  get: (workspaceSlug: string): Promise<WorkspaceBundle> =>
+    fetchApi(`/api/v1/workspaces/${workspaceSlug}`),
+
+  // Deprecated alias for backwards compat. Prefer workspacesApi.get(slug).
   getCifMedicamentos: (): Promise<WorkspaceBundle> =>
     fetchApi("/api/v1/workspaces/cif-medicamentos"),
 };
 
 export const dictationApi = {
+  seedWorkspace: (
+    workspaceSlug: string,
+  ): Promise<{ slug: string; title: string; workspace_slug: string }> =>
+    fetchApi(`/api/v1/dictation/workspace/${workspaceSlug}/seed`, {
+      method: "POST",
+    }),
+
+  // Deprecated alias retained for older callers. Prefer seedWorkspace(slug).
   seedCifWorkspace: (): Promise<{ slug: string; title: string; workspace_slug: string }> =>
     fetchApi("/api/v1/dictation/workspace/cif-medicamentos/seed", {
       method: "POST",
     }),
 
-  createSession: (documentSlug: string): Promise<DictationSession> => {
+  createSession: (
+    documentSlug: string,
+    workspaceSlug: string = "cif-medicamentos",
+  ): Promise<DictationSession> => {
     const form = new FormData();
     form.append("title", `Dictado ${documentSlug}`);
-    form.append("workspace_slug", "cif-medicamentos");
+    form.append("workspace_slug", workspaceSlug);
     form.append("document_slug", documentSlug);
     return fetchApi("/api/v1/dictation/sessions", {
       method: "POST",
@@ -1277,12 +1291,15 @@ export const dictationApi = {
   },
 };
 
+// Auth uses Authentik SSO via /api/auth/* (OIDC). The previous
+// password-based workspaceLogin endpoint was removed; the frontend now
+// drives login through window.location to /api/auth/login. See lib/auth.tsx.
 export const authApi = {
-  workspaceLogin: (password: string): Promise<WorkspaceLoginResponse> =>
-    fetchApi("/api/v1/auth/workspace-login", {
-      method: "POST",
-      body: JSON.stringify({ password }),
-    }),
+  me: (): Promise<{ authenticated: boolean; user: User | null }> =>
+    fetchApi("/api/v1/auth/me"),
+
+  logout: (): Promise<{ ok: boolean }> =>
+    fetchApi("/api/v1/auth/logout", { method: "POST" }),
 };
 
 // Export all APIs

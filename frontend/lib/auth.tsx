@@ -7,13 +7,13 @@ import {
   useState,
   ReactNode,
 } from 'react';
-import { authApi } from '@/lib/api';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || '';
 
 interface User {
   email: string;
   name?: string;
+  display_name?: string;
   role?: string;
 }
 
@@ -22,7 +22,8 @@ interface AuthContextType {
   loading: boolean;
   authenticated: boolean;
   refresh: () => Promise<void>;
-  loginToWorkspace: (password: string) => Promise<void>;
+  loginWithSSO: () => void;
+  logout: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -30,7 +31,8 @@ const AuthContext = createContext<AuthContextType>({
   loading: true,
   authenticated: false,
   refresh: async () => {},
-  loginToWorkspace: async () => {},
+  loginWithSSO: () => {},
+  logout: async () => {},
 });
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -47,23 +49,39 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       .finally(() => setLoading(false));
   }
 
-  async function loginToWorkspace(password: string) {
-    await authApi.workspaceLogin(password);
-    await refresh();
+  function loginWithSSO() {
+    if (typeof window === 'undefined') return;
+    // Authentik OIDC login lives at /api/auth/login (NOT /api/v1/auth/...).
+    window.location.href = '/api/auth/login';
+  }
+
+  async function logout() {
+    try {
+      await fetch(`${API_BASE}/api/v1/auth/logout`, {
+        method: 'POST',
+        credentials: 'include',
+      });
+    } finally {
+      setUser(null);
+    }
   }
 
   useEffect(() => {
-    fetch(`${API_BASE}/api/v1/auth/me`, { credentials: 'include' })
-      .then((r) => r.json())
-      .then((data) => {
-        setUser(data.authenticated ? data.user : null);
-      })
-      .catch(() => setUser(null))
-      .finally(() => setLoading(false));
+    refresh();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, loading, authenticated: !!user, refresh, loginToWorkspace }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        loading,
+        authenticated: !!user,
+        refresh,
+        loginWithSSO,
+        logout,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

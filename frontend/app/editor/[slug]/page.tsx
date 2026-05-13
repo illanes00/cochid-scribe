@@ -89,12 +89,10 @@ export default function EditorPage() {
   const params = useParams()
   const slug = params.slug as string
   const isNew = slug === 'new'
-  const isCifWorkspace = slug === 'cif-medicamentos-workspace'
-  const useCifLayout = isCifWorkspace
   const { user, authenticated, loading: authLoading } = useAuth()
 
   const editorRef = useRef<Editor | null>(null)
-  const [activePanel, setActivePanel] = useState<PanelType>(isCifWorkspace ? 'dictation' : 'claims')
+  const [activePanel, setActivePanel] = useState<PanelType>('claims')
   const [selectedText, setSelectedText] = useState('')
   const [title, setTitle] = useState('')
   const [exporting, setExporting] = useState(false)
@@ -131,6 +129,16 @@ export default function EditorPage() {
     autoSaveDelay: 3000,
   })
 
+  // Dictation-style workspaces (e.g. CIF medicamentos) opt in via front_matter.
+  // The editor uses a 3-column layout: context | editor | dictation+panels.
+  const isDictationWorkspace =
+    (document?.front_matter as Record<string, any> | undefined)?.workspace_type === 'dictation'
+  const useCifLayout = isDictationWorkspace
+  const workspaceSlug =
+    (document?.front_matter as Record<string, any> | undefined)?.workspace_slug as
+      | string
+      | undefined
+
   // Initialize title from document
   useState(() => {
     if (document?.title) {
@@ -154,8 +162,16 @@ export default function EditorPage() {
   useEffect(() => {
     setActiveClaimId(null)
     setEditorReady(false)
-    setActivePanel(slug === 'cif-medicamentos-workspace' ? 'dictation' : 'claims')
   }, [slug])
+
+  // Once the doc loads, switch the default panel to dictation for dictation
+  // workspaces. We only do this on workspace_type change to avoid clobbering
+  // the user's explicit panel pick.
+  useEffect(() => {
+    if (isDictationWorkspace) {
+      setActivePanel('dictation')
+    }
+  }, [isDictationWorkspace])
 
   useEffect(() => {
     appliedClaimIds.current = new Set()
@@ -687,14 +703,11 @@ export default function EditorPage() {
       <header className="border-b border-line bg-paper flex-shrink-0">
         <div className="flex items-center justify-between px-4 py-3">
           <div className="flex items-center gap-4">
-            <Link href={isCifWorkspace ? "/medicamentos" : "/dashboard"} className="text-muted hover:text-ink">
+            <Link href="/dashboard" className="text-muted hover:text-ink">
               <ChevronLeft size={20} />
             </Link>
-            {isCifWorkspace ? (
+            {isDictationWorkspace ? (
               <div className="flex items-center gap-2 flex-wrap">
-                <Link href="/medicamentos" className="btn btn-sm">
-                  Volver a lectura renderizada
-                </Link>
                 <span className="btn btn-sm btn-primary">Editor de reescritura</span>
               </div>
             ) : null}
@@ -720,9 +733,9 @@ export default function EditorPage() {
                 Saved {lastSaved.toLocaleTimeString()}
               </span>
             )}
-            {isCifWorkspace ? (
+            {isDictationWorkspace ? (
               <div className="text-xs text-muted border border-line px-3 py-2">
-                Modo reescritura CIF: contexto fijo, dictado persistente y panel de apoyo reducido.
+                Modo workspace: contexto fijo, dictado persistente y panel de apoyo reducido.
               </div>
             ) : (
               <>
@@ -1016,7 +1029,7 @@ export default function EditorPage() {
             {useCifLayout ? (
               <div className="cif-shell flex-1 overflow-hidden">
                 <aside className="cif-column border-r border-line bg-paper overflow-hidden">
-                  <WorkspaceContextPanel />
+                  <WorkspaceContextPanel workspaceSlug={workspaceSlug} />
                 </aside>
 
                 <main className="cif-column flex-1 overflow-hidden border-r border-line bg-bg">
@@ -1077,7 +1090,11 @@ export default function EditorPage() {
 
                 <aside className="cif-column w-[420px] bg-paper flex-shrink-0 flex flex-col">
                   <div className="min-h-0 flex-[1.25] border-b border-line">
-                    <DictationPanel documentSlug={slug} onInsertText={handleInsertDictation} />
+                    <DictationPanel
+                      documentSlug={slug}
+                      workspaceSlug={workspaceSlug}
+                      onInsertText={handleInsertDictation}
+                    />
                   </div>
                   <div className="min-h-0 flex-1 flex flex-col">
                     <div className="px-4 py-3 border-b border-line bg-bg">

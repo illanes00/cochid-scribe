@@ -36,9 +36,9 @@ type WorkspaceBundle = {
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || ''
 
-async function fetchTextPreview(path: string): Promise<string> {
+async function fetchTextPreview(workspaceSlug: string, path: string): Promise<string> {
   const response = await fetch(
-    `${API_BASE}/api/v1/workspaces/cif-medicamentos/file?path=${encodeURIComponent(path)}`
+    `${API_BASE}/api/v1/workspaces/${workspaceSlug}/file?path=${encodeURIComponent(path)}`
   )
   if (!response.ok) {
     throw new Error('No se pudo cargar el archivo')
@@ -46,7 +46,13 @@ async function fetchTextPreview(path: string): Promise<string> {
   return response.text()
 }
 
-export function WorkspaceContextPanel() {
+interface WorkspaceContextPanelProps {
+  workspaceSlug?: string
+}
+
+export function WorkspaceContextPanel({
+  workspaceSlug = 'cif-medicamentos',
+}: WorkspaceContextPanelProps = {}) {
   const [bundle, setBundle] = useState<WorkspaceBundle | null>(null)
   const [selectedFile, setSelectedFile] = useState<WorkspaceFile | null>(null)
   const [activeGroupKey, setActiveGroupKey] = useState<string>('report')
@@ -56,7 +62,8 @@ export function WorkspaceContextPanel() {
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    fetch(`${API_BASE}/api/v1/workspaces/cif-medicamentos`)
+    setLoading(true)
+    fetch(`${API_BASE}/api/v1/workspaces/${workspaceSlug}`)
       .then((response) => {
         if (!response.ok) throw new Error('No se pudo cargar el workspace')
         return response.json()
@@ -76,7 +83,7 @@ export function WorkspaceContextPanel() {
       })
       .catch((err) => setError(err instanceof Error ? err.message : 'Error inesperado'))
       .finally(() => setLoading(false))
-  }, [])
+  }, [workspaceSlug])
 
   useEffect(() => {
     if (!selectedFile || selectedFile.kind !== 'text') {
@@ -84,11 +91,11 @@ export function WorkspaceContextPanel() {
       return
     }
     setPreviewLoading(true)
-    fetchTextPreview(selectedFile.relative_path)
+    fetchTextPreview(workspaceSlug, selectedFile.relative_path)
       .then((text) => setPreview(text.slice(0, 16000)))
       .catch((err) => setPreview(err instanceof Error ? err.message : 'No se pudo cargar vista previa'))
       .finally(() => setPreviewLoading(false))
-  }, [selectedFile])
+  }, [selectedFile, workspaceSlug])
 
   const groups = useMemo(() => {
     if (!bundle) return []

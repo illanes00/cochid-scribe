@@ -14,6 +14,20 @@ const nextConfig = {
         source: '/api/v1/:path*',
         destination: `${backendUrl}/api/v1/:path*`,
       },
+      {
+        // Authentik OIDC login/callback/logout served by backend at /api/auth/*
+        source: '/api/auth/:path*',
+        destination: `${backendUrl}/api/auth/:path*`,
+      },
+    ]
+  },
+  async redirects() {
+    return [
+      {
+        source: '/medicamentos',
+        destination: '/editor/cif-medicamentos-workspace',
+        permanent: true,
+      },
     ]
   },
 }

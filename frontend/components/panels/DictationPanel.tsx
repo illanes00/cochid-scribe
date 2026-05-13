@@ -6,6 +6,7 @@ import { dictationApi, DictationSession } from '@/lib/api'
 
 interface DictationPanelProps {
   documentSlug: string
+  workspaceSlug?: string
   onInsertText?: (text: string) => void
   showCanvas?: boolean
 }
@@ -14,6 +15,7 @@ const STORAGE_PREFIX = 'scribe-dictation-session'
 
 export function DictationPanel({
   documentSlug,
+  workspaceSlug = 'cif-medicamentos',
   onInsertText,
   showCanvas = true,
 }: DictationPanelProps) {
@@ -46,7 +48,7 @@ export function DictationPanel({
           return
         }
 
-        const created = await dictationApi.createSession(documentSlug)
+        const created = await dictationApi.createSession(documentSlug, workspaceSlug)
         setSession(created)
         sessionSlugRef.current = created.slug
         chunkCounterRef.current = created.chunk_count
