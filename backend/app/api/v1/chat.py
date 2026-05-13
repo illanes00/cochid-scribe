@@ -7,10 +7,11 @@ to all MCP tools including the Scribe MCP server.
 import subprocess
 import json
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
+from app.api.v1.auth import require_document_access, require_document_record_access
 from app.core.logging import get_logger
 from app.db.session import get_db
 from app.models.bibliography import BibliographyEntry
@@ -83,6 +84,7 @@ def _build_context(db: Session, doc: Document, req: ChatRequest) -> str:
 async def chat_with_document(
     slug: str,
     req: ChatRequest,
+    request: Request,
     db: Session = Depends(get_db),
 ):
     """Chat about a document using Claude Code CLI subprocess.
@@ -90,9 +92,11 @@ async def chat_with_document(
     This gives the AI access to all MCP tools (including Scribe MCP server),
     file system, web search, and the full Claude Code toolkit.
     """
+    require_document_access(request, slug)
     doc = db.query(Document).filter(Document.slug == slug).first()
     if not doc:
         raise HTTPException(status_code=404, detail="Document not found")
+    require_document_record_access(request, doc)
 
     context = _build_context(db, doc, req)
 

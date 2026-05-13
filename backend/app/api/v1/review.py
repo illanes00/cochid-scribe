@@ -1,12 +1,13 @@
 """Review API endpoints for AI-assisted comment response."""
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
 from app.config import get_settings
 from app.core.logging import get_logger
 from app.db.session import get_db
+from app.api.v1.auth import require_document_access, require_document_record_access
 from app.models.comment import Comment
 from app.models.document import Document
 from app.models.track_change import ChangeStatus, ChangeType, TrackChange
@@ -23,11 +24,13 @@ settings = get_settings()
 
 
 @router.get("/{slug}/status")
-async def review_status(slug: str, db: Session = Depends(get_db)):
+async def review_status(slug: str, request: Request, db: Session = Depends(get_db)):
     """Get the review status for a document — pending comments, etc."""
+    require_document_access(request, slug)
     doc = db.query(Document).filter(Document.slug == slug).first()
     if not doc:
         raise HTTPException(status_code=404, detail="Document not found")
+    require_document_record_access(request, doc)
 
     service = ReviewRespondService(db)
     pending = service.get_pending_comments(doc)
@@ -57,14 +60,16 @@ async def review_status(slug: str, db: Session = Depends(get_db)):
 
 
 @router.post("/{slug}/analyze", response_model=ReviewAnalysis)
-async def analyze_comments(slug: str, db: Session = Depends(get_db)):
+async def analyze_comments(slug: str, request: Request, db: Session = Depends(get_db)):
     """AI analyzes all pending comments and generates suggested responses."""
+    require_document_access(request, slug)
     if not settings.anthropic_api_key:
         raise HTTPException(status_code=503, detail="LLM service not configured")
 
     doc = db.query(Document).filter(Document.slug == slug).first()
     if not doc:
         raise HTTPException(status_code=404, detail="Document not found")
+    require_document_record_access(request, doc)
 
     service = ReviewRespondService(db)
     analysis = service.analyze_and_respond(doc)
@@ -80,12 +85,17 @@ async def analyze_comments(slug: str, db: Session = Depends(get_db)):
 
 
 @router.get("/{slug}/export", response_class=HTMLResponse)
-async def export_review(slug: str, db: Session = Depends(get_db)):
+async def export_review(slug: str, request: Request, db: Session = Depends(get_db)):
     """Export the full review as a printable A3 HTML document.
 
     Open in browser and print to PDF (Ctrl+P → A3 landscape).
     """
+    require_document_access(request, slug)
     try:
+        doc = db.query(Document).filter(Document.slug == slug).first()
+        if not doc:
+            raise HTTPException(status_code=404, detail="Document not found")
+        require_document_record_access(request, doc)
         html_content = generate_review_html(db, slug)
         return HTMLResponse(content=html_content)
     except ValueError as e:
@@ -93,8 +103,9 @@ async def export_review(slug: str, db: Session = Depends(get_db)):
 
 
 @router.get("/{slug}/pdf")
-async def download_pdf(slug: str, db: Session = Depends(get_db)):
+async def download_pdf(slug: str, request: Request, db: Session = Depends(get_db)):
     """Generate and download the review as a PDF file."""
+    require_document_access(request, slug)
     import subprocess
     from pathlib import Path
 
@@ -103,6 +114,7 @@ async def download_pdf(slug: str, db: Session = Depends(get_db)):
     doc = db.query(Document).filter(Document.slug == slug).first()
     if not doc:
         raise HTTPException(status_code=404, detail="Document not found")
+    require_document_record_access(request, doc)
 
     exports_dir = Path("/srv/projects/cochid/cochid-scribe/backend/exports")
     exports_dir.mkdir(parents=True, exist_ok=True)
@@ -142,9 +154,14 @@ async def download_pdf(slug: str, db: Session = Depends(get_db)):
 
 
 @router.get("/{slug}/diff", response_class=HTMLResponse)
-async def export_diff(slug: str, db: Session = Depends(get_db)):
+async def export_diff(slug: str, request: Request, db: Session = Depends(get_db)):
     """Export visual diff showing each comment with its text change (git-style)."""
+    require_document_access(request, slug)
     try:
+        doc = db.query(Document).filter(Document.slug == slug).first()
+        if not doc:
+            raise HTTPException(status_code=404, detail="Document not found")
+        require_document_record_access(request, doc)
         return HTMLResponse(content=generate_diff_html(db, slug))
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
@@ -165,12 +182,15 @@ class ApplyRequest(BaseModel):
 async def apply_responses(
     slug: str,
     payload: ApplyRequest,
+    request: Request,
     db: Session = Depends(get_db),
 ):
     """Apply approved responses: create track changes and/or push replies to Google Docs."""
+    require_document_access(request, slug)
     doc = db.query(Document).filter(Document.slug == slug).first()
     if not doc:
         raise HTTPException(status_code=404, detail="Document not found")
+    require_document_record_access(request, doc)
 
     drive = None
     if any(item.push_to_google for item in payload.items):
@@ -188,7 +208,11 @@ async def apply_responses(
     errors: list[str] = []
 
     for item in payload.items:
-        comment = db.query(Comment).filter(Comment.id == item.comment_id).first()
+        comment = (
+            db.query(Comment)
+            .filter(Comment.id == item.comment_id, Comment.document_id == doc.id)
+            .first()
+        )
         if not comment:
             errors.append(f"Comment {item.comment_id} not found")
             continue

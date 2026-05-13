@@ -3,9 +3,10 @@
 import uuid
 from typing import Optional
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from sqlalchemy.orm import Session
 
+from app.api.v1.auth import require_document_access
 from app.db.session import get_db
 from app.models.document import Document
 from app.models.track_change import ChangeStatus, ChangeType, TrackChange
@@ -31,17 +32,24 @@ def get_document_or_404(db: Session, slug: str) -> Document:
     return doc
 
 
+def get_protected_document(db: Session, request: Request, slug: str) -> Document:
+    """Require access before loading a document."""
+    require_document_access(request, slug)
+    return get_document_or_404(db, slug)
+
+
 @router.get("/{slug}/changes", response_model=TrackChangesListResponse)
 async def list_changes(
     slug: str,
-    status: Optional[str] = Query(None, description="Filter by status: pending, accepted, rejected"),
+    request: Request,
+    status: Optional[str] = None,
     db: Session = Depends(get_db),
 ):
     """List all tracked changes for a document.
 
     Returns changes with counts by status.
     """
-    doc = get_document_or_404(db, slug)
+    doc = get_protected_document(db, request, slug)
 
     query = db.query(TrackChange).filter(TrackChange.document_id == doc.id)
 
@@ -69,13 +77,14 @@ async def list_changes(
 async def create_change(
     slug: str,
     change: TrackChangeCreate,
+    request: Request,
     db: Session = Depends(get_db),
 ):
     """Create a new tracked change.
 
     Called when the editor detects a new change.
     """
-    doc = get_document_or_404(db, slug)
+    doc = get_protected_document(db, request, slug)
 
     # Check if change with this ID already exists
     existing = db.query(TrackChange).filter(
@@ -120,10 +129,11 @@ async def create_change(
 async def get_change(
     slug: str,
     change_id: str,
+    request: Request,
     db: Session = Depends(get_db),
 ):
     """Get a specific tracked change."""
-    doc = get_document_or_404(db, slug)
+    doc = get_protected_document(db, request, slug)
 
     change = db.query(TrackChange).filter(
         TrackChange.document_id == doc.id,
@@ -141,6 +151,7 @@ async def resolve_change(
     slug: str,
     change_id: str,
     request: ResolveChangeRequest,
+    http_request: Request,
     db: Session = Depends(get_db),
 ):
     """Accept or reject a tracked change.
@@ -148,7 +159,7 @@ async def resolve_change(
     - accept: The change becomes part of the final document
     - reject: The change is undone
     """
-    doc = get_document_or_404(db, slug)
+    doc = get_protected_document(db, http_request, slug)
 
     change = db.query(TrackChange).filter(
         TrackChange.document_id == doc.id,
@@ -185,10 +196,11 @@ async def resolve_change(
 async def bulk_resolve_changes(
     slug: str,
     request: BulkResolveRequest,
+    http_request: Request,
     db: Session = Depends(get_db),
 ):
     """Accept or reject multiple changes at once."""
-    doc = get_document_or_404(db, slug)
+    doc = get_protected_document(db, http_request, slug)
 
     changes = db.query(TrackChange).filter(
         TrackChange.document_id == doc.id,
@@ -216,11 +228,12 @@ async def bulk_resolve_changes(
 @router.post("/{slug}/changes/accept-all", response_model=BulkResolveResponse)
 async def accept_all_changes(
     slug: str,
+    request: Request,
     resolved_by: Optional[str] = None,
     db: Session = Depends(get_db),
 ):
     """Accept all pending changes in the document."""
-    doc = get_document_or_404(db, slug)
+    doc = get_protected_document(db, request, slug)
 
     changes = db.query(TrackChange).filter(
         TrackChange.document_id == doc.id,
@@ -242,11 +255,12 @@ async def accept_all_changes(
 @router.post("/{slug}/changes/reject-all", response_model=BulkResolveResponse)
 async def reject_all_changes(
     slug: str,
+    request: Request,
     resolved_by: Optional[str] = None,
     db: Session = Depends(get_db),
 ):
     """Reject all pending changes in the document."""
-    doc = get_document_or_404(db, slug)
+    doc = get_protected_document(db, request, slug)
 
     changes = db.query(TrackChange).filter(
         TrackChange.document_id == doc.id,
@@ -269,10 +283,11 @@ async def reject_all_changes(
 async def delete_change(
     slug: str,
     change_id: str,
+    request: Request,
     db: Session = Depends(get_db),
 ):
     """Delete a tracked change record."""
-    doc = get_document_or_404(db, slug)
+    doc = get_protected_document(db, request, slug)
 
     change = db.query(TrackChange).filter(
         TrackChange.document_id == doc.id,
@@ -292,6 +307,7 @@ async def delete_change(
 async def extract_changes_from_content(
     slug: str,
     request: ExtractChangesRequest,
+    http_request: Request,
     db: Session = Depends(get_db),
 ):
     """Extract and store tracked changes from TipTap content.
@@ -299,7 +315,7 @@ async def extract_changes_from_content(
     This scans the TipTap JSON for change marks and creates/updates
     track change records in the database.
     """
-    doc = get_document_or_404(db, slug)
+    doc = get_protected_document(db, http_request, slug)
 
     # Extract changes from TipTap content
     extracted_changes = _extract_changes_from_tiptap(request.content)
@@ -332,7 +348,7 @@ async def extract_changes_from_content(
     db.commit()
 
     # Return updated list
-    return await list_changes(slug, db=db)
+    return await list_changes(slug, request=http_request, db=db)
 
 
 def _extract_changes_from_tiptap(content: dict) -> list[dict]:

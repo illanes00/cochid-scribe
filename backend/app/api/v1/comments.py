@@ -1,8 +1,9 @@
 """Comments API endpoints."""
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
 
+from app.api.v1.auth import require_document_access, require_document_record_access
 from app.db.session import get_db
 from app.models.comment import Comment
 from app.models.document import Document
@@ -20,12 +21,32 @@ router = APIRouter()
 logger = get_logger(__name__)
 
 
+def get_comment_or_404(db: Session, comment_id: str) -> Comment:
+    comment = db.query(Comment).filter(Comment.id == comment_id).first()
+    if not comment:
+        raise HTTPException(status_code=404, detail="Comment not found")
+    return comment
+
+
+def get_comment_document_or_404(db: Session, comment: Comment) -> Document:
+    doc = db.query(Document).filter(Document.id == comment.document_id).first()
+    if not doc:
+        raise HTTPException(status_code=404, detail="Document not found")
+    return doc
+
+
 @router.get("/document/{slug}", response_model=list[CommentResponse])
-async def list_document_comments(slug: str, db: Session = Depends(get_db)):
+async def list_document_comments(
+    slug: str,
+    request: Request,
+    db: Session = Depends(get_db),
+):
     """List comments for a document."""
+    require_document_access(request, slug)
     doc = db.query(Document).filter(Document.slug == slug).first()
     if not doc:
         raise HTTPException(status_code=404, detail="Document not found")
+    require_document_record_access(request, doc)
     return (
         db.query(Comment)
         .filter(Comment.document_id == doc.id)
@@ -38,12 +59,15 @@ async def list_document_comments(slug: str, db: Session = Depends(get_db)):
 async def create_document_comment(
     slug: str,
     payload: CommentCreate,
+    request: Request,
     db: Session = Depends(get_db),
 ):
     """Create a local comment for a document."""
+    require_document_access(request, slug)
     doc = db.query(Document).filter(Document.slug == slug).first()
     if not doc:
         raise HTTPException(status_code=404, detail="Document not found")
+    require_document_record_access(request, doc)
 
     anchor_id = payload.anchor_id
     if payload.parent_id and not anchor_id:
@@ -75,11 +99,13 @@ async def create_document_comment(
 
 
 @router.post("/document/{slug}/sync")
-async def sync_google_comments(slug: str, db: Session = Depends(get_db)):
+async def sync_google_comments(slug: str, request: Request, db: Session = Depends(get_db)):
     """Sync Google Docs comments and replies into local storage."""
+    require_document_access(request, slug)
     doc = db.query(Document).filter(Document.slug == slug).first()
     if not doc:
         raise HTTPException(status_code=404, detail="Document not found")
+    require_document_record_access(request, doc)
     if doc.source_provider != "google" or not doc.source_id:
         raise HTTPException(status_code=400, detail="Document is not linked to Google Docs")
 
@@ -182,12 +208,15 @@ async def sync_google_comments(slug: str, db: Session = Depends(get_db)):
 async def create_google_comment(
     slug: str,
     payload: CommentCreate,
+    request: Request,
     db: Session = Depends(get_db),
 ):
     """Create a Google Docs comment and store it locally."""
+    require_document_access(request, slug)
     doc = db.query(Document).filter(Document.slug == slug).first()
     if not doc:
         raise HTTPException(status_code=404, detail="Document not found")
+    require_document_record_access(request, doc)
     if doc.source_provider != "google" or not doc.source_id:
         raise HTTPException(status_code=400, detail="Document is not linked to Google Docs")
 
@@ -226,13 +255,12 @@ async def create_google_comment(
 async def update_comment(
     comment_id: str,
     payload: CommentUpdate,
+    request: Request,
     db: Session = Depends(get_db),
 ):
     """Update a comment (local state only)."""
-    comment = db.query(Comment).filter(Comment.id == comment_id).first()
-    if not comment:
-        raise HTTPException(status_code=404, detail="Comment not found")
-
+    comment = get_comment_or_404(db, comment_id)
+    require_document_record_access(request, get_comment_document_or_404(db, comment))
     update_data = payload.model_dump(exclude_unset=True)
     for field, value in update_data.items():
         setattr(comment, field, value)
@@ -245,12 +273,15 @@ async def update_comment(
 async def import_feedback(
     slug: str,
     payload: ImportFeedbackRequest,
+    request: Request,
     db: Session = Depends(get_db),
 ):
     """Import structured feedback (from email, meetings, etc.) as comments."""
+    require_document_access(request, slug)
     doc = db.query(Document).filter(Document.slug == slug).first()
     if not doc:
         raise HTTPException(status_code=404, detail="Document not found")
+    require_document_record_access(request, doc)
 
     created = 0
     for item in payload.items:
@@ -276,12 +307,15 @@ async def import_feedback(
 async def reply_google_comment(
     slug: str,
     payload: ReplyGoogleCreate,
+    request: Request,
     db: Session = Depends(get_db),
 ):
     """Push a reply to a Google Docs comment and store it locally."""
+    require_document_access(request, slug)
     doc = db.query(Document).filter(Document.slug == slug).first()
     if not doc:
         raise HTTPException(status_code=404, detail="Document not found")
+    require_document_record_access(request, doc)
     if doc.source_provider != "google" or not doc.source_id:
         raise HTTPException(status_code=400, detail="Document is not linked to Google Docs")
 

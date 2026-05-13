@@ -5,10 +5,11 @@ import re
 import uuid
 from datetime import datetime
 
-from fastapi import APIRouter, BackgroundTasks, Depends, Form, HTTPException, Query, UploadFile
+from fastapi import APIRouter, BackgroundTasks, Depends, Form, HTTPException, Query, Request, UploadFile
 from fastapi.concurrency import run_in_threadpool
 from sqlalchemy.orm import Session
 
+from app.api.v1.auth import is_authenticated, require_document_access
 from app.api.v1.llm import extract_claims_from_text
 from app.config import get_settings
 from app.core.logging import get_logger
@@ -119,16 +120,18 @@ def is_significant_change(old_text: str, new_text: str) -> bool:
 
 @router.get("", response_model=DocumentList)
 async def list_documents(
+    request: Request,
     page: int = Query(1, ge=1),
     per_page: int = Query(20, ge=1, le=100),
     db: Session = Depends(get_db),
 ):
     """List all documents with pagination."""
     offset = (page - 1) * per_page
-    total = db.query(Document).count()
-    docs = (
-        db.query(Document).order_by(Document.updated_at.desc()).offset(offset).limit(per_page).all()
-    )
+    query = db.query(Document)
+    if not is_authenticated(request):
+        query = query.filter(Document.slug != "cif-medicamentos-workspace")
+    total = query.count()
+    docs = query.order_by(Document.updated_at.desc()).offset(offset).limit(per_page).all()
 
     return DocumentList(
         documents=[get_document_response(doc, db) for doc in docs],
@@ -176,9 +179,11 @@ async def create_document(
 @router.get("/{slug}/versions", response_model=list[DocumentVersionResponse])
 async def list_document_versions(
     slug: str,
+    request: Request,
     db: Session = Depends(get_db),
 ):
     """List version snapshots for a document."""
+    require_document_access(request, slug)
     doc = db.query(Document).filter(Document.slug == slug).first()
     if not doc:
         raise HTTPException(status_code=404, detail="Document not found")
@@ -196,9 +201,11 @@ async def list_document_versions(
 async def create_document_version(
     slug: str,
     data: DocumentVersionCreate,
+    request: Request,
     db: Session = Depends(get_db),
 ):
     """Create a version snapshot for a document."""
+    require_document_access(request, slug)
     doc = db.query(Document).filter(Document.slug == slug).first()
     if not doc:
         raise HTTPException(status_code=404, detail="Document not found")
@@ -220,9 +227,11 @@ async def create_document_version(
 async def restore_document_version(
     slug: str,
     version_id: str,
+    request: Request,
     db: Session = Depends(get_db),
 ):
     """Restore a document to a previous version snapshot."""
+    require_document_access(request, slug)
     doc = db.query(Document).filter(Document.slug == slug).first()
     if not doc:
         raise HTTPException(status_code=404, detail="Document not found")
@@ -250,9 +259,11 @@ async def restore_document_version(
 async def get_document_version(
     slug: str,
     version_id: str,
+    request: Request,
     db: Session = Depends(get_db),
 ):
     """Get a specific document version snapshot."""
+    require_document_access(request, slug)
     doc = db.query(Document).filter(Document.slug == slug).first()
     if not doc:
         raise HTTPException(status_code=404, detail="Document not found")
@@ -271,9 +282,11 @@ async def get_document_version(
 @router.get("/{slug}", response_model=DocumentResponse)
 async def get_document(
     slug: str,
+    request: Request,
     db: Session = Depends(get_db),
 ):
     """Get a document by slug."""
+    require_document_access(request, slug)
     doc = db.query(Document).filter(Document.slug == slug).first()
     if not doc:
         raise HTTPException(status_code=404, detail="Document not found")
@@ -285,9 +298,11 @@ async def get_document(
 async def update_document(
     slug: str,
     data: DocumentUpdate,
+    request: Request,
     db: Session = Depends(get_db),
 ):
     """Update a document."""
+    require_document_access(request, slug)
     doc = db.query(Document).filter(Document.slug == slug).first()
     if not doc:
         raise HTTPException(status_code=404, detail="Document not found")
@@ -374,9 +389,11 @@ async def update_document(
 @router.delete("/{slug}", status_code=204)
 async def delete_document(
     slug: str,
+    request: Request,
     db: Session = Depends(get_db),
 ):
     """Delete a document."""
+    require_document_access(request, slug)
     doc = db.query(Document).filter(Document.slug == slug).first()
     if not doc:
         raise HTTPException(status_code=404, detail="Document not found")
@@ -543,10 +560,12 @@ def run_export_job(job_id: str, doc_id: str, export_format: str) -> None:
 async def export_document(
     slug: str,
     request: ExportRequest,
+    http_request: Request,
     background_tasks: BackgroundTasks,
     db: Session = Depends(get_db),
 ):
     """Export a document to a given format as a background job."""
+    require_document_access(http_request, slug)
     doc = db.query(Document).filter(Document.slug == slug).first()
     if not doc:
         raise HTTPException(status_code=404, detail="Document not found")
