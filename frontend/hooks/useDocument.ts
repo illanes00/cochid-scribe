@@ -21,6 +21,52 @@ interface UseDocumentReturn {
   reloadDocument: () => Promise<void>
 }
 
+function mergePendingUpdates(
+  current: DocumentUpdate,
+  updates: DocumentUpdate
+): DocumentUpdate {
+  return {
+    ...current,
+    ...updates,
+    content: updates.content
+      ? {
+          ...(current.content || {}),
+          ...updates.content,
+        }
+      : current.content,
+    front_matter: updates.front_matter
+      ? {
+          ...(current.front_matter || {}),
+          ...updates.front_matter,
+        }
+      : current.front_matter,
+  }
+}
+
+function applyUpdatesToDocument(
+  document: Document | null,
+  updates: DocumentUpdate
+): Document | null {
+  if (!document) return document
+
+  return {
+    ...document,
+    ...updates,
+    content: updates.content
+      ? {
+          ...(document.content || {}),
+          ...updates.content,
+        }
+      : document.content,
+    front_matter: updates.front_matter
+      ? {
+          ...(document.front_matter || {}),
+          ...updates.front_matter,
+        }
+      : document.front_matter,
+  }
+}
+
 export function useDocument(
   slug: string,
   options: UseDocumentOptions = {}
@@ -36,6 +82,30 @@ export function useDocument(
 
   const pendingUpdates = useRef<DocumentUpdate>({})
   const autoSaveTimer = useRef<NodeJS.Timeout | null>(null)
+  const saveInFlight = useRef<Promise<void> | null>(null)
+  const saveDocumentRef = useRef<() => Promise<void>>(async () => {})
+  const isMounted = useRef(true)
+
+  const clearAutoSaveTimer = useCallback(() => {
+    if (autoSaveTimer.current) {
+      clearTimeout(autoSaveTimer.current)
+      autoSaveTimer.current = null
+    }
+  }, [])
+
+  const scheduleAutoSave = useCallback(
+    (delay = autoSaveDelay) => {
+      clearAutoSaveTimer()
+
+      if (!slug || slug === 'new') return
+      if (Object.keys(pendingUpdates.current).length === 0) return
+
+      autoSaveTimer.current = setTimeout(() => {
+        void saveDocumentRef.current()
+      }, delay)
+    },
+    [autoSaveDelay, clearAutoSaveTimer, slug]
+  )
 
   // Load document
   const loadDocument = useCallback(async () => {
@@ -60,51 +130,73 @@ export function useDocument(
   // Save document
   const saveDocument = useCallback(async () => {
     if (!document || !slug || slug === 'new') return
+    if (saveInFlight.current) return saveInFlight.current
     if (Object.keys(pendingUpdates.current).length === 0) return
 
-    try {
-      setSaving(true)
-      const updates = { ...pendingUpdates.current }
-      pendingUpdates.current = {}
+    clearAutoSaveTimer()
 
-      const updated = await documentsApi.update(slug, updates)
-      setDocument(updated)
-      setLastSaved(new Date())
-      setHasUnsavedChanges(false)
-      onSaveSuccess?.()
-    } catch (err) {
-      const error = err instanceof Error ? err : new Error('Save failed')
-      onSaveError?.(error)
-      // Restore pending updates on failure
-      pendingUpdates.current = {
-        ...pendingUpdates.current,
+    const updates = pendingUpdates.current
+    pendingUpdates.current = {}
+
+    const savePromise = (async () => {
+      try {
+        if (isMounted.current) {
+          setSaving(true)
+        }
+
+        const updated = await documentsApi.update(slug, updates)
+        const hasPendingUpdates = Object.keys(pendingUpdates.current).length > 0
+
+        if (isMounted.current) {
+          setDocument(
+            hasPendingUpdates
+              ? applyUpdatesToDocument(updated, pendingUpdates.current)
+              : updated
+          )
+          setLastSaved(new Date(updated.updated_at))
+          setHasUnsavedChanges(hasPendingUpdates)
+        }
+
+        onSaveSuccess?.()
+
+        if (hasPendingUpdates) {
+          scheduleAutoSave(0)
+        }
+      } catch (err) {
+        pendingUpdates.current = mergePendingUpdates(updates, pendingUpdates.current)
+
+        if (isMounted.current) {
+          setHasUnsavedChanges(true)
+        }
+
+        const error = err instanceof Error ? err : new Error('Save failed')
+        onSaveError?.(error)
+        scheduleAutoSave()
+      } finally {
+        saveInFlight.current = null
+
+        if (isMounted.current) {
+          setSaving(false)
+        }
       }
-      setHasUnsavedChanges(true)
-    } finally {
-      setSaving(false)
-    }
-  }, [document, slug, onSaveSuccess, onSaveError])
+    })()
+
+    saveInFlight.current = savePromise
+    return savePromise
+  }, [document, slug, onSaveSuccess, onSaveError, clearAutoSaveTimer, scheduleAutoSave])
+
+  saveDocumentRef.current = saveDocument
 
   // Update document (queues for auto-save)
   const updateDocument = useCallback(
     (updates: DocumentUpdate) => {
-      pendingUpdates.current = {
-        ...pendingUpdates.current,
-        ...updates,
-      }
+      pendingUpdates.current = mergePendingUpdates(pendingUpdates.current, updates)
+      setDocument((current) => applyUpdatesToDocument(current, updates))
       setHasUnsavedChanges(true)
 
-      // Clear existing timer
-      if (autoSaveTimer.current) {
-        clearTimeout(autoSaveTimer.current)
-      }
-
-      // Set new auto-save timer
-      autoSaveTimer.current = setTimeout(() => {
-        saveDocument()
-      }, autoSaveDelay)
+      scheduleAutoSave()
     },
-    [autoSaveDelay, saveDocument]
+    [scheduleAutoSave]
   )
 
   // Initial load
@@ -115,15 +207,14 @@ export function useDocument(
   // Cleanup on unmount
   useEffect(() => {
     return () => {
-      if (autoSaveTimer.current) {
-        clearTimeout(autoSaveTimer.current)
-      }
+      isMounted.current = false
+      clearAutoSaveTimer()
       // Save any pending changes before unmount
       if (Object.keys(pendingUpdates.current).length > 0) {
-        saveDocument()
+        void saveDocumentRef.current()
       }
     }
-  }, [saveDocument])
+  }, [clearAutoSaveTimer])
 
   // Save on page unload
   useEffect(() => {

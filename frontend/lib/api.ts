@@ -412,13 +412,17 @@ async function fetchApi<T>(
   options: RequestInit = {},
 ): Promise<T> {
   const url = `${API_BASE}${endpoint}`;
+  const isFormData = typeof FormData !== "undefined" && options.body instanceof FormData;
+  const headers = new Headers(options.headers || {});
+
+  if (!isFormData && !headers.has("Content-Type")) {
+    headers.set("Content-Type", "application/json");
+  }
 
   const response = await fetch(url, {
     ...options,
-    headers: {
-      "Content-Type": "application/json",
-      ...options.headers,
-    },
+    credentials: "include",
+    headers,
   });
 
   if (!response.ok) {
@@ -1125,6 +1129,68 @@ export interface ReviewStatus {
   has_google_link: boolean;
 }
 
+export interface WorkspaceFile {
+  name: string;
+  relative_path: string;
+  category: string;
+  kind: "text" | "image" | "binary";
+  size_bytes: number;
+  preview_url: string;
+}
+
+export interface WorkspaceBundle {
+  workspace: {
+    slug: string;
+    title: string;
+    description: string;
+    recommended_document_slug: string;
+  };
+  report: {
+    title: string;
+    relative_path: string;
+    preview_url: string;
+    sections: { level: number; title: string }[];
+    excerpt: string;
+  };
+  sources: {
+    report_files: WorkspaceFile[];
+    review_files: WorkspaceFile[];
+    verification_files: WorkspaceFile[];
+    figure_files: WorkspaceFile[];
+  };
+}
+
+export interface DictationSession {
+  id: string;
+  slug: string;
+  title: string;
+  workspace_slug: string;
+  document_slug?: string | null;
+  status: string;
+  transcript: string;
+  notes: string;
+  chunk_count: number;
+  chunk_log: Record<string, unknown>[];
+  created_at: string;
+  updated_at: string;
+}
+
+export interface DictationChunkResponse {
+  chunk_index: number;
+  transcript: string;
+  session: DictationSession;
+}
+
+export interface WorkspaceLoginResponse {
+  ok: boolean;
+  authenticated: boolean;
+  user: {
+    email: string;
+    name?: string;
+    role?: string;
+  };
+}
+
 export interface ApplyItem {
   comment_id: string;
   response_text: string;
@@ -1169,6 +1235,56 @@ export const reviewApi = {
     }),
 };
 
+export const workspacesApi = {
+  getCifMedicamentos: (): Promise<WorkspaceBundle> =>
+    fetchApi("/api/v1/workspaces/cif-medicamentos"),
+};
+
+export const dictationApi = {
+  seedCifWorkspace: (): Promise<{ slug: string; title: string; workspace_slug: string }> =>
+    fetchApi("/api/v1/dictation/workspace/cif-medicamentos/seed", {
+      method: "POST",
+    }),
+
+  createSession: (documentSlug: string): Promise<DictationSession> => {
+    const form = new FormData();
+    form.append("title", `Dictado ${documentSlug}`);
+    form.append("workspace_slug", "cif-medicamentos");
+    form.append("document_slug", documentSlug);
+    return fetchApi("/api/v1/dictation/sessions", {
+      method: "POST",
+      body: form,
+      headers: undefined,
+    });
+  },
+
+  getSession: (slug: string): Promise<DictationSession> =>
+    fetchApi(`/api/v1/dictation/sessions/${slug}`),
+
+  transcribeChunk: (
+    slug: string,
+    audioFile: File,
+    chunkIndex: number,
+  ): Promise<DictationChunkResponse> => {
+    const form = new FormData();
+    form.append("audio", audioFile);
+    form.append("chunk_index", String(chunkIndex));
+    return fetchApi(`/api/v1/dictation/sessions/${slug}/chunks`, {
+      method: "POST",
+      body: form,
+      headers: undefined,
+    });
+  },
+};
+
+export const authApi = {
+  workspaceLogin: (password: string): Promise<WorkspaceLoginResponse> =>
+    fetchApi("/api/v1/auth/workspace-login", {
+      method: "POST",
+      body: JSON.stringify({ password }),
+    }),
+};
+
 // Export all APIs
 export const api = {
   documents: documentsApi,
@@ -1188,6 +1304,9 @@ export const api = {
   versions: versionsApi,
   trackChanges: trackChangesApi,
   review: reviewApi,
+  workspaces: workspacesApi,
+  dictation: dictationApi,
+  auth: authApi,
 };
 
 export default api;
