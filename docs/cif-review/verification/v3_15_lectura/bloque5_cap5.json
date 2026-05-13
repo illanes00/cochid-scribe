@@ -1,0 +1,102 @@
+{
+  "agent": "lectura_editorial_autor",
+  "bloque": "5 - Cap 5 Comparación internacional",
+  "rango_paragrafos": "P0449 - P0560",
+  "generated_at": "2026-01-01T00:00:00Z",
+  "observaciones_generales": "Cap 5 está muy sólido. Tiene el recuadro de innovación con citas NEJM/Nature Medicine EMPA-REG, KEYNOTE-006, moduladores CFTR, onasemnogén. Edits son pulido menor: (i)(ii)(iii) sin espacio y leyendas de figuras redundantes.",
+  "edits": [
+    {
+      "id": "LE-050",
+      "type": "replace_paragraph",
+      "locator": {
+        "strategy": "prefix",
+        "text": "(i) Beneficio"
+      },
+      "new": "(i) Beneficio explícito y canasta (qué se cubre y para quién).",
+      "rationale": "Espacio tras (i)."
+    },
+    {
+      "id": "LE-051",
+      "type": "replace_paragraph",
+      "locator": {
+        "strategy": "prefix",
+        "text": "(ii) Modalidad de cobertura"
+      },
+      "new": "(ii) Modalidad de cobertura: subsidio en punto de venta (POS) vs reembolso.",
+      "rationale": "Espacio tras (ii)."
+    },
+    {
+      "id": "LE-052",
+      "type": "replace_paragraph",
+      "locator": {
+        "strategy": "prefix",
+        "text": "(iii) Copagos y estructura"
+      },
+      "new": "(iii) Copagos y estructura de reparto del costo (cómo se paga).",
+      "rationale": "Espacio tras (iii)."
+    },
+    {
+      "id": "LE-053",
+      "type": "replace_paragraph",
+      "locator": {
+        "strategy": "prefix",
+        "text": "(iv) Topes"
+      },
+      "new": "(iv) Topes y protección catastrófica (cuál es el máximo que paga el hogar).",
+      "rationale": "Espacio tras (iv) + eliminar 'topes/caps' redundante (caps ya es el término en inglés)."
+    },
+    {
+      "id": "LE-054",
+      "type": "replace_paragraph",
+      "locator": {
+        "strategy": "prefix",
+        "text": "(v) Exenciones"
+      },
+      "new": "(v) Exenciones (quién paga cero o paga menos).",
+      "rationale": "Espacio tras (v)."
+    },
+    {
+      "id": "LE-055",
+      "type": "replace_paragraph",
+      "locator": {
+        "strategy": "prefix",
+        "text": "(vi) Alineamiento"
+      },
+      "new": "(vi) Alineamiento con precios efectivos, competencia y compras (qué precio se reconoce y cómo se controla).",
+      "rationale": "Espacio tras (vi)."
+    },
+    {
+      "id": "LE-056",
+      "type": "replace_text_in_paragraph",
+      "locator": {
+        "strategy": "contains",
+        "text": "Figura 5: Gasto retail farmacéutico per cápita en países OCDE, 2022 (USD PPA, precios constantes)"
+      },
+      "old": "Elaboración: Espacio Público. Fuente: OECD/HSF. (OECD, 2022)",
+      "new": "Elaboración: Espacio Público. Fuente: OECD Health Statistics, OECD.ELS.HD,DSD_SHA@DF_SHA, año 2022.",
+      "rationale": "La cita '(OECD, 2022)' al final es redundante con 'Fuente: OECD/HSF'. Se usa cita normalizada con dataflow específico."
+    },
+    {
+      "id": "LE-057",
+      "type": "replace_text_in_paragraph",
+      "locator": {
+        "strategy": "contains",
+        "text": "Figura 6: Gasto per cápita en medicamentos según fuente"
+      },
+      "old": "Elaboración: Espacio Público. Fuente: OECD/HSF. (OECD, 2022)",
+      "new": "Elaboración: Espacio Público. Fuente: OECD Health Statistics, OECD.ELS.HD,DSD_SHA@DF_SHA, año 2022.",
+      "rationale": "Idem LE-056."
+    },
+    {
+      "id": "LE-058",
+      "type": "replace_paragraph",
+      "locator": {
+        "strategy": "contains",
+        "text": "gasto público cercano a 1,3–1,5% del PIB y gasto de bolsillo en retail típicamente bajo"
+      },
+      "new": "Alta cobertura farmacéutica (por ejemplo, Alemania, Francia, Japón): gasto total en medicamentos en torno a 1,5 a 2,0% del PIB, con gasto público cercano a 1,3 a 1,5% del PIB y gasto de bolsillo en retail típicamente bajo 25%.",
+      "rationale": "Em dashes (–) residuales en rangos numéricos. Reemplazar por 'a' como conector explícito, convención EP."
+    }
+  ],
+  "comments_to_add": []
+}

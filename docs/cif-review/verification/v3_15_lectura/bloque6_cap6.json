@@ -1,0 +1,103 @@
+{
+  "agent": "lectura_editorial_autor",
+  "bloque": "6 - Cap 6 Alternativas y escenarios",
+  "rango_paragrafos": "P0562 - P0662",
+  "generated_at": "2026-01-01T00:00:00Z",
+  "observaciones_generales": "Cap 6 bien escrito. Edits: numeración '1)', '2)', etc sin espacio (formato lista inconsistente); em dashes (–) en rangos numéricos; verbos filler.",
+  "edits": [
+    {
+      "id": "LE-060",
+      "type": "replace_paragraph",
+      "locator": {
+        "strategy": "prefix",
+        "text": "1) Población"
+      },
+      "new": "(1) Población cubierta y naturaleza del derecho",
+      "rationale": "Formato lista inconsistente. Uniformar a '(n)' con espacio."
+    },
+    {
+      "id": "LE-061",
+      "type": "replace_paragraph",
+      "locator": {
+        "strategy": "prefix",
+        "text": "2) Canasta"
+      },
+      "new": "(2) Canasta de medicamentos (beneficio explícito)",
+      "rationale": "Idem LE-060."
+    },
+    {
+      "id": "LE-062",
+      "type": "replace_paragraph",
+      "locator": {
+        "strategy": "prefix",
+        "text": "3) Modalidad de entrega"
+      },
+      "new": "(3) Modalidad de entrega y pago (dispensación institucional vs retail; POS vs reembolso)",
+      "rationale": "Idem LE-060."
+    },
+    {
+      "id": "LE-063",
+      "type": "replace_paragraph",
+      "locator": {
+        "strategy": "prefix",
+        "text": "4) Estructura de copagos"
+      },
+      "new": "(4) Estructura de copagos, exenciones y topes",
+      "rationale": "Idem LE-060."
+    },
+    {
+      "id": "LE-064",
+      "type": "replace_paragraph",
+      "locator": {
+        "strategy": "prefix",
+        "text": "5) Precio efectivo"
+      },
+      "new": "(5) Precio efectivo reconocido y sustitución",
+      "rationale": "Idem LE-060."
+    },
+    {
+      "id": "LE-065",
+      "type": "replace_paragraph",
+      "locator": {
+        "strategy": "prefix",
+        "text": "6) Compras, negociación"
+      },
+      "new": "(6) Compras, negociación, regulación y datos",
+      "rationale": "Idem LE-060."
+    },
+    {
+      "id": "LE-066",
+      "type": "replace_text_in_paragraph",
+      "locator": {
+        "strategy": "contains",
+        "text": "Magnitud fiscal: eleva el gasto público en medicamentos desde 0,46–0,51%"
+      },
+      "old": "desde 0,46–0,51% del PIB (2022–2023) hasta aproximadamente 0,6% del PIB, lo que equivale a un aumento del orden de US$ 400–500 millones anuales",
+      "new": "desde 0,46 a 0,51% del PIB (2022-2023) hasta aproximadamente 0,6% del PIB, lo que equivale a un aumento del orden de US$ 400 a 500 millones anuales",
+      "rationale": "Em dashes (–) en rangos numéricos. Reemplazar por 'a' y guion corto."
+    },
+    {
+      "id": "LE-067",
+      "type": "replace_text_in_paragraph",
+      "locator": {
+        "strategy": "contains",
+        "text": "gasto público en medicamentos a alrededor de 0,7–0,75% del PIB"
+      },
+      "old": "gasto público en medicamentos a alrededor de 0,7–0,75% del PIB, lo que equivale a US$ 800–900 millones adicionales al año (en precios 2022; orden de magnitud), y busca reducir el gasto de bolsillo en retail a un rango de 30–40%",
+      "new": "gasto público en medicamentos a alrededor de 0,7 a 0,75% del PIB, lo que equivale a US$ 800 a 900 millones adicionales al año (en precios 2022; orden de magnitud), y busca reducir el gasto de bolsillo en retail a un rango de 30 a 40%",
+      "rationale": "Em dashes (–) en rangos numéricos."
+    },
+    {
+      "id": "LE-068",
+      "type": "replace_text_in_paragraph",
+      "locator": {
+        "strategy": "contains",
+        "text": "Cabe subrayar que la intermediación de CE"
+      },
+      "old": "Cabe subrayar que la intermediación",
+      "new": "La intermediación",
+      "rationale": "Verbal filler."
+    }
+  ],
+  "comments_to_add": []
+}

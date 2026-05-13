@@ -1,0 +1,39 @@
+{
+  "_meta": {
+    "stage": "70_qa_report.json",
+    "saved_at": "2026-04-17T05:33:33.982806",
+    "input_hashes": {},
+    "output_hash": "125bb006a7845172",
+    "count": 1
+  },
+  "data": {
+    "findings": [
+      {
+        "rule": "unverified_numbers",
+        "severity": "warning",
+        "target_id": "E-C-DOCX40",
+        "message": "Edit introduces numbers not in ledger: {'6', '7'}"
+      },
+      {
+        "rule": "unverified_numbers",
+        "severity": "warning",
+        "target_id": "E-C-CIF1",
+        "message": "Edit introduces numbers not in ledger: {'2.2 '}"
+      },
+      {
+        "rule": "unverified_numbers",
+        "severity": "warning",
+        "target_id": "E-C-CC-DOCX37",
+        "message": "Edit introduces numbers not in ledger: {'0', '20'}"
+      }
+    ],
+    "edits_blocked": [],
+    "edits_flagged": [
+      "E-C-CIF1",
+      "E-C-DOCX40",
+      "E-C-CC-DOCX37"
+    ],
+    "spotcheck_results": {},
+    "passed": true
+  }
+}

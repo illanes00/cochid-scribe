@@ -1,0 +1,47 @@
+{
+  "agent": "lectura_editorial_autor",
+  "bloque": "9 - Resolución de pendientes EU-SUG26, DOCX-20 y CC-DOCX47",
+  "generated_at": "2026-01-01T00:00:00-03:00",
+  "observaciones_generales": "Tres pendientes explícitamente pedidos por el autor. EU-SUG26 y DOCX-20: aceptar. CC-DOCX47: clarificar en Cap 2.4.",
+  "edits": [
+    {
+      "id": "LE-090",
+      "type": "insert_paragraph_after",
+      "anchor": {"strategy": "contains", "text": "instrumento actual es indispensable para riesgos catastróficos pero insuficiente para cubrir el conjunto de necesidades ambulatorias"},
+      "new": "Ambos frentes responden a lógicas distintas de riesgo financiero y requieren, por lo tanto, instrumentos diferenciados. El frente ambulatorio de alto volumen opera bajo riesgo acumulativo y se trata mejor con beneficios continuos (canasta explícita, copagos protegidos y topes anuales). El frente de alto costo opera bajo riesgo catastrófico y se trata mejor con regímenes específicos (protección financiera integral y evaluación ex ante). Un beneficio farmacéutico ambulatorio universal no sustituye a los regímenes de alto costo (GES, Ley Ricarte Soto, DAC); los complementa cubriendo los vacíos del segmento ambulatorio frecuente, donde se concentra el gasto de bolsillo recurrente.",
+      "rationale": "Aceptar EU-SUG26: agregar párrafo conceptual sobre lógicas diferenciadas de riesgo e instrumentos. Ubicación: en el Resumen Ejecutivo tras el párrafo que distingue ambulatorios de alto volumen vs alto costo. Fortalece la justificación analítica de la distinción y del diseño propuesto."
+    },
+    {
+      "id": "LE-091",
+      "type": "replace_text_in_paragraph",
+      "locator": {"strategy": "contains", "text": "Este capítulo cierra el documento recogiendo los principales hallazgos"},
+      "old": "Este capítulo cierra el documento recogiendo los principales hallazgos del análisis y planteando las preguntas que el seminario de discusión busca ordenar.",
+      "new": "Este capítulo funciona como cierre provisorio del documento: recoge los principales hallazgos del análisis, plantea las preguntas que el seminario de discusión busca ordenar y deja abierto el espacio para que las conclusiones definitivas se incorporen tras la deliberación. En ese sentido, no pretende zanjar el debate sino estructurarlo.",
+      "rationale": "Aceptar DOCX-20 / C-CC-EMAIL1 (Carla): el Cap 8 opera como 'conclusiones provisorias + preguntas abiertas'. Tras el seminario se podrán incorporar conclusiones definitivas. Esto alinea con la orientación editorial de Eduardo y Carla y hace explícita la lógica iterativa del informe."
+    },
+    {
+      "id": "LE-092",
+      "type": "insert_paragraph_after",
+      "anchor": {"strategy": "prefix", "text": "2.4"},
+      "new": "Aclaración operativa sobre la expresión \"reglas del beneficio y de red\". Se entiende por reglas del beneficio el conjunto de condiciones que define el asegurador sobre la canasta garantizada: qué medicamentos están incluidos, en qué indicación clínica, con qué criterios de elegibilidad, con qué copago y bajo qué topes de gasto. Se entiende por reglas de red las condiciones de acceso operacional: en qué prestadores se dispensa (red pública, farmacia hospitalaria ambulatoria, farmacia de APS, farmacia privada adherida, farmacia municipal), bajo qué modalidad de pago (dispensación institucional, subsidio en punto de venta, reembolso) y con qué trazabilidad. La protección financiera efectiva depende de la coherencia entre ambas reglas: un beneficio definido en canasta pero mal implementado en la red genera brecha de acceso efectivo (ver Cap 3.2.3).",
+      "rationale": "Aceptar CC-DOCX47 (Carla): la expresión 'reglas del beneficio y de red' no está explicada en el texto. Se agrega aclaración operativa inmediatamente después del header 2.4 para que el lector entienda la distinción y su implicancia."
+    }
+  ],
+  "comments_to_add": [
+    {
+      "id": "MI-80",
+      "anchor": {"strategy": "contains", "text": "Ambos frentes responden a lógicas distintas de riesgo financiero"},
+      "body": "[MI-80] Párrafo agregado en Resumen Ejec aceptando EU-SUG26. Profundización conceptual sobre las dos lógicas de riesgo (acumulativo vs catastrófico) y su correspondencia con dos tipos de instrumento (beneficio ambulatorio continuo vs régimen específico de alto costo). Refuerza la arquitectura propuesta."
+    },
+    {
+      "id": "MI-81",
+      "anchor": {"strategy": "contains", "text": "Este capítulo funciona como cierre provisorio del documento"},
+      "body": "[MI-81] Apertura del Cap 8 reformulada para aceptar DOCX-20/C-CC-EMAIL1 (Carla) y alineación con Eduardo: el informe explicita que las conclusiones definitivas quedan abiertas hasta después del seminario. Las ocho preguntas del Cap 8.2 funcionan como mapa del debate."
+    },
+    {
+      "id": "MI-82",
+      "anchor": {"strategy": "contains", "text": "Aclaración operativa sobre la expresión"},
+      "body": "[MI-82] Aclaración agregada en Cap 2.4 aceptando CC-DOCX47 (Carla). Define 'reglas del beneficio' (canasta, indicación, elegibilidad, copagos, topes) y 'reglas de red' (prestador, modalidad de pago, trazabilidad), y remite a Cap 3.2.3 sobre brecha de acceso efectivo."
+    }
+  ]
+}

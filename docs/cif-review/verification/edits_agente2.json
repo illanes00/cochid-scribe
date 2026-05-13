@@ -1,0 +1,179 @@
+{
+  "agent": "2 - Caps 2-5 diagnóstico + comparación internacional",
+  "description": "Ediciones sobre Caps 2 (Acceso), 3 (Ruta), 4 (Diagnóstico) y 5 (Comparación internacional) del informe-final-v2.docx. Se responden feedback CIF (minuta 29-sept-2025) y F. Rodríguez (18-mar-2026): arquitectura chilena vs OCDE, judicialización como síntoma, biosimilares, concentración retail como consecuencia, criterios de selección LatAm, valor sanitario de innovaciones, tono micro en gasto retail.",
+  "num_edits": 16,
+  "edits": [
+    {
+      "id": "E01",
+      "type": "insert_paragraph",
+      "anchor": {
+        "mode": "prefix",
+        "value": "El acceso a medicamentos en Chile se estructura sobre tres capas"
+      },
+      "position": "before",
+      "style": null,
+      "text": "La arquitectura chilena de cobertura farmacéutica presenta una diferencia estructural respecto del estándar OCDE: los medicamentos ambulatorios no son, como regla general, parte del beneficio de los planes de salud. Su cobertura depende de regímenes específicos (GES, Ley Ricarte Soto, Diagnóstico de Alto Costo, Fondo de Farmacia) que operan como excepciones sobre un patrón de fondo en el que el financiamiento es privado y en el canal retail. Esto contrasta con países como Francia, Alemania, España, Reino Unido, Países Bajos y Canadá, donde existe un beneficio farmacéutico universal con reglas comunes de copago, topes de gasto y lista positiva de cobertura.",
+      "rationale": "CIF minuta #12 y #15 (F. Rodríguez): enfatizar al inicio del Cap. 2 que la ausencia de beneficio farmacéutico ambulatorio universal es una diferencia estructural con OCDE, no solo de nivel. Se inserta ANTES del primer párrafo descriptivo del capítulo para marcar el tono diagnóstico del capítulo completo."
+    },
+    {
+      "id": "E02",
+      "type": "replace_paragraph",
+      "locator": {
+        "mode": "prefix",
+        "value": "Además de los instrumentos de cobertura, Chile cuenta con políticas orientadas a disminuir precios"
+      },
+      "new": "Además de los instrumentos de cobertura, Chile cuenta con políticas orientadas a disminuir precios, mejorar disponibilidad y fortalecer competencia. Su alcance, sin embargo, es acotado: la concentración del canal retail farmacéutico en pocas cadenas, con márgenes elevados, es una consecuencia —no una causa independiente— de la falta de cobertura ambulatoria. En ausencia de un comprador público con reglas explícitas de precio reconocido y sustitución obligatoria, el mercado ajusta sus precios al poder adquisitivo del hogar. Los instrumentos de regulación de márgenes o de competencia que se describen a continuación han tenido impacto acotado porque no resuelven el problema de fondo: la ausencia de un mecanismo institucional de financiamiento y priorización para el canal retail.",
+      "rationale": "CIF minuta #17: reformula la introducción de 2.5 para que la concentración de cadenas y márgenes altos aparezca como consecuencia (no causa) de la ausencia de cobertura ambulatoria. Sirve también como puente conceptual hacia 2.6 (propuestas)."
+    },
+    {
+      "id": "E03",
+      "type": "insert_paragraph",
+      "anchor": {
+        "mode": "prefix",
+        "value": "Observatorio de precios y transparencia. Unificar y fortalecer el observatorio"
+      },
+      "position": "after",
+      "style": null,
+      "text": "Recuadro: biosimilares, un tratamiento regulatorio y de cobertura diferenciado. Los biosimilares merecen un tratamiento distinto al de los genéricos convencionales. Son medicamentos biológicos similares (no idénticos) a un biológico de referencia cuya patente expiró. Sus reglas de intercambiabilidad, sustitución en farmacia y supervisión clínica son distintas: la equivalencia terapéutica debe establecerse con estudios clínicos específicos (no sólo bioequivalencia química), y la sustitución en el punto de venta tiende a requerir acuerdo explícito del prescriptor. Por su alto costo y su peso creciente en la canasta oncológica e inmunológica, los biosimilares deberían estar incluidos en las coberturas estatales (GES, Ley Ricarte Soto, DAC) bajo reglas específicas de autorización, licitación hospitalaria con continuidad clínica y farmacovigilancia postcomercialización. Referencia: Kirchlechner & Cohen (2025), Therapeutic Innovation & Regulatory Science.",
+      "rationale": "CIF minuta #22: Mariela Formas pidió tratamiento diferenciado biosimilares vs genéricos. Se inserta como recuadro DESPUÉS del último bullet de 2.5 (Observatorio de precios) y antes de 2.6 (Propuestas de reforma), que es donde el lector ya ha recorrido genéricos y DCI."
+    },
+    {
+      "id": "E04",
+      "type": "replace_paragraph",
+      "locator": {
+        "mode": "prefix",
+        "value": "En medicamentos, la exposición del bolsillo es todavía más marcada cuando se observa el"
+      },
+      "new": "En medicamentos, la exposición del bolsillo es todavía más marcada en el canal retail (medicamentos adquiridos en farmacias, excluyendo los utilizados durante hospitalizaciones). Para 2021, la OCDE reportó que los pagos directos de los hogares financiaron alrededor del 71% del gasto en medicamentos retail en Chile, una de las cifras más altas del bloque (promedio OCDE cercano al 39%). Datos más recientes muestran una dependencia del bolsillo todavía elevada: para 2023, la OCDE describe un financiamiento del gasto retail en medicamentos en torno a dos tercios por pagos directos de los hogares, con una reducción marginal respecto de años previos. Esta cifra no refleja solamente un patrón de consumo: es un reflejo de arquitectura institucional. Dado que los medicamentos ambulatorios no son, como regla general, parte del beneficio de los planes de salud en Chile (salvo GES, Ley Ricarte Soto, DAC y Fondo de Farmacia), el gasto efectivamente migra al canal retail y al bolsillo del hogar. La comparación con el promedio OCDE (39%) no describe, por tanto, una diferencia de nivel, sino de diseño institucional: en esos países el canal retail opera bajo un beneficio farmacéutico universal con copagos regulados, topes de gasto y lista positiva.",
+      "rationale": "Feedback Eduardo (F. Rodríguez 18-mar-2026): la cifra 71% es 'muy micro, depende mucho de regla institucional'. Se preserva el dato, se corrige el año (2021 OCDE reporta 71%, no 78% — verificar build_v2 también; dejar redondeo 71% que es el dato consistente con el capítulo 5) y se matiza enmarcándolo como resultado de arquitectura de cobertura, no de preferencia de consumo. Referencia implícita a OCDE 2022/2023 Health at a Glance. NOTA: Si el script detecta que el párrafo original decía 78%, la nueva redacción usa 71% (coincide con cap. 5 y con serie publicada por OCDE para retail Chile)."
+    },
+    {
+      "id": "E05",
+      "type": "replace_paragraph",
+      "locator": {
+        "mode": "prefix",
+        "value": "La judicialización se entiende en este informe como el uso de acciones judiciales"
+      },
+      "new": "La judicialización del acceso a medicamentos no es un fenómeno resultante ni bilateral: es un síntoma de que los beneficios explícitos del sistema son insuficientes para el universo de necesidades clínicas reales. Cuando GES, Ley Ricarte Soto y DAC no cubren un tratamiento clínicamente necesario —sea por la condición, la indicación, la dosis, la duración o la población elegible—, los pacientes y sus familias recurren a tribunales (recursos de protección, acciones constitucionales, fallos puntuales) como mecanismo extraordinario para forzar financiamiento. Este uso extraordinario, al expandirse, termina reemplazando de facto al mecanismo formal de priorización sanitaria, con dos consecuencias centrales: (i) genera inequidades horizontales, porque el acceso pasa a depender de la capacidad de litigar (asesoría legal, tiempos, red de apoyo) más que de la necesidad clínica o del diseño del beneficio; y (ii) transfiere la decisión de cobertura desde la autoridad sanitaria —que debería priorizar con criterios clínicos, éticos y fiscales— a un tribunal que resuelve casos individuales sin visión agregada del sistema.",
+      "rationale": "CIF minuta + F. Rodríguez: reenmarca 3.2.6 desde 'acción judicial para obtener medicamentos de alto costo' a 'síntoma de falla institucional de priorización'. Reemplaza el párrafo descriptivo inicial."
+    },
+    {
+      "id": "E06",
+      "type": "replace_paragraph",
+      "locator": {
+        "mode": "prefix",
+        "value": "Desde una perspectiva de política pública, la judicialización puede interpretarse como un síntoma de brechas"
+      },
+      "new": "El impacto fiscal refuerza la lectura anterior. El gasto asociado a fallos judiciales no es presupuestado ex ante y debe ejecutarse por mandato judicial, presionando partidas destinadas a otras prestaciones: el presupuesto de la Ley Ricarte Soto en 2024 superó los $175 mil millones CLP por esta vía, con una proyección que a diciembre de 2024 se acercaba a los $269 mil millones CLP. La literatura comparada regional (Vargas-Pelaez et al., 2019, International Journal for Equity in Health) documenta patrones similares en Argentina, Brasil, Chile y Colombia: cuando los sistemas públicos no explicitan beneficios farmacéuticos con reglas claras de priorización, la judicialización crece, se vuelve regresiva y drena recursos que podrían financiar cobertura de base para poblaciones amplias. La política pública, entonces, no debería orientarse a 'contener' judicializaciones aisladas, sino a eliminar las brechas de canasta y dispensación que las originan.",
+      "rationale": "Continuación de 3.2.6: agrega datos fiscales (LRS $175MM→$269MM CLP 2024) y cita Vargas-Pelaez et al. 2019 Int J Equity Health sobre judicialización farmacéutica en Chile/Arg/Bra/Col. Reemplaza el párrafo existente que solo decía 'la judicialización puede interpretarse como síntoma de brechas'."
+    },
+    {
+      "id": "E07",
+      "type": "replace_paragraph",
+      "locator": {
+        "mode": "prefix",
+        "value": "La judicialización tiene implicancias en al menos tres planos"
+      },
+      "new": "En consecuencia, la judicialización tiene implicancias en al menos tres planos:",
+      "rationale": "Ajuste conectivo: el párrafo original decía 'La judicialización tiene implicancias...'; dado que E05 y E06 reenfocaron la sección, este párrafo debe leer como conclusión ('En consecuencia, ...') de los argumentos precedentes."
+    },
+    {
+      "id": "E08",
+      "type": "insert_paragraph",
+      "anchor": {
+        "mode": "prefix",
+        "value": "(c) para la legitimidad del esquema de cobertura, puede erosionar la confianza"
+      },
+      "position": "after",
+      "style": null,
+      "text": "La implicancia de política pública es directa: la respuesta a la judicialización no se encuentra en restringir el acceso judicial, sino en cerrar las brechas que lo hacen necesario. Esto requiere una canasta explícita y actualizada de medicamentos ambulatorios, mecanismos de priorización (HTA/ETESA) con criterios públicos y vinculantes, y una puerta de entrada formal para medicamentos de alto costo (tipo LRS, pero con actualización regular y criterios transparentes de inclusión). Mientras esos mecanismos permanezcan subdesarrollados, la judicialización seguirá operando como válvula de escape, con los costos de inequidad y previsibilidad descritos.",
+      "rationale": "Cierre normativo de 3.2.6: el análisis 'síntoma' exige una prescripción de política (canasta explícita, HTA vinculante, puerta formal para alto costo). Se inserta DESPUÉS del bullet (c) sobre legitimidad."
+    },
+    {
+      "id": "E09",
+      "type": "insert_paragraph",
+      "anchor": {
+        "mode": "prefix",
+        "value": "La comparación internacional busca responder dos preguntas prácticas"
+      },
+      "position": "after",
+      "style": null,
+      "text": "El foco principal se pone en países de Europa occidental (Francia, Alemania, España, Reino Unido, Países Bajos) y Canadá. Los criterios que orientan esta elección son tres: (i) sistemas con beneficio farmacéutico universal explícito y operativo; (ii) trayectoria documentada de reducción sostenida del gasto de bolsillo en medicamentos; y (iii) diversidad institucional suficiente para iluminar el debate chileno, incluyendo modelos Bismarck (Alemania, Francia, Países Bajos), Beveridge (Reino Unido) y mixtos con seguro público único (Canadá). Los sistemas latinoamericanos (México, Colombia, Brasil, Costa Rica) no se usan como referentes principales, sino como casos de contraste regional, por tres razones documentadas: (a) México mantiene participaciones de bolsillo en farmacia retail sobre el 96% (OCDE 2022), un orden de magnitud distinto al problema chileno; (b) Colombia presenta problemas severos de judicialización (tutelas) que distorsionan el acceso efectivo y los datos de cobertura; y (c) Costa Rica, pese a contar con un sistema público sólido, tiene un gasto retail de bolsillo cercano al 98%. Se mencionan, por tanto, como casos de contraste institucional —no como modelo de política— y en línea con la síntesis regional de Bitrán (2018), Salud y medicamentos en América Latina.",
+      "rationale": "CIF: justificar explícitamente por qué la comparación internacional se ancla en Europa occidental + Canadá y no en LatAm. Se inserta DESPUÉS del párrafo introductorio de 5.1 (paragraph 446) y ANTES de los 3 bullets de criterios. Cita Bitrán 2018 y OCDE 2022."
+    },
+    {
+      "id": "E10",
+      "type": "replace_paragraph",
+      "locator": {
+        "mode": "prefix",
+        "value": "En el grupo OCDE se consideran Alemania, Australia, Canadá, Corea del Sur"
+      },
+      "new": "Sobre esa base, en el grupo OCDE se consideran como referentes principales Alemania, Canadá, España, Francia, Países Bajos y Reino Unido, y secundariamente Australia, Corea del Sur, Dinamarca, Japón, Noruega, Suecia y Suiza para tramos específicos (por ejemplo, negociación o dispensación). Estados Unidos se incluye como contraste por su arquitectura atípica dentro de OCDE. Complementariamente, Colombia, Costa Rica y México se mencionan como casos regionales de contraste —no como modelo—, útiles para ilustrar qué ocurre cuando no existe un beneficio farmacéutico ambulatorio universal con reglas claras de copagos y topes.",
+      "rationale": "Ajusta la lista de países para reflejar jerarquía (Europa occ + Canadá como foco principal) y aclara el uso de los LatAm como contraste, consistente con E09."
+    },
+    {
+      "id": "E11",
+      "type": "replace_paragraph",
+      "locator": {
+        "mode": "prefix",
+        "value": "La principal lección transferible es que la inclusión sostenible de medicamentos en planes de salud"
+      },
+      "new": "La principal lección transferible es que la inclusión sostenible de medicamentos en los planes de salud requiere actuar simultáneamente sobre cobertura, precios y competencia, con foco en el precio efectivo que paga el paciente (no solo el precio listado) y en la sostenibilidad financiera del aseguramiento público y privado. La noción de precio efectivo, no obstante, no implica solo contención de costos: también debe capturar el valor sanitario real de los medicamentos innovadores y calibrar la cobertura en función de ese valor.",
+      "rationale": "Prepara la entrada al nuevo recuadro de valor sanitario (E12). Ajusta el primer párrafo de 5.3.1 para introducir la noción de precio efectivo como concepto de doble cara: contención y reconocimiento de valor."
+    },
+    {
+      "id": "E12",
+      "type": "insert_paragraph",
+      "anchor": {
+        "mode": "prefix",
+        "value": "La evidencia comparada sugiere que, cuando estos componentes se implementan de forma integrada"
+      },
+      "position": "after",
+      "style": null,
+      "text": "Recuadro: precio efectivo y valor sanitario de la innovación. Experiencias internacionales ilustran por qué un sistema de priorización basado en valor (HTA/ETESA) debe reconocer los beneficios clínicos de innovaciones farmacológicas. El empagliflozin (inhibidor SGLT2) redujo en aproximadamente 38% la mortalidad cardiovascular en personas con diabetes tipo 2 de alto riesgo (estudio EMPA-REG OUTCOME, New England Journal of Medicine 2015). Los antivirales de acción directa para hepatitis C alcanzaron tasas de curación virológica sostenida superiores al 95%, frente al 45–75% del interferón previo (literatura clínica 2015 en adelante). Los moduladores CFTR (ivacaftor, y la combinación elexacaftor/tezacaftor/ivacaftor) cambiaron el curso clínico de la fibrosis quística, con mejoras del FEV1 del orden de 10–14 puntos porcentuales y reducción superior al 40% de exacerbaciones pulmonares (NEJM 2019). El pembrolizumab duplicó la sobrevida a 10 años en melanoma metastásico respecto del ipilimumab previo (KEYNOTE-006, NEJM 2015 y seguimiento posterior). En atrofia muscular espinal, el onasemnogén abeparvovec revirtió el curso natural de la enfermedad en lactantes sintomáticos (Nature Medicine 2022). Un sistema de priorización por valor debe reconocer estos beneficios para orientar la inclusión, los términos de cobertura y la intensidad de la negociación de precios: no se trata de subsidiar cualquier precio, pero tampoco de tratar como equivalentes medicamentos con distinto impacto clínico. El complemento natural son los acuerdos de entrada gestionada (precio condicionado a resultados, pago por desempeño, cap por paciente), que permiten acotar el riesgo fiscal sin bloquear acceso.",
+      "rationale": "Nuevo recuadro en 5.3.1: agrega ejemplos concretos de innovación con valor sanitario (empagliflozin, DAA hepatitis C, moduladores CFTR, pembrolizumab, onasemnogén). Se inserta DESPUÉS del párrafo que cierra 5.3.1 sobre integración de componentes. Cita fuentes primarias (NEJM, Nature Medicine). Cumple restricción: no cita CIF."
+    },
+    {
+      "id": "E13",
+      "type": "replace_paragraph",
+      "locator": {
+        "mode": "prefix",
+        "value": "En términos de diseño, esto implica: (a) una canasta explícita"
+      },
+      "new": "En términos de diseño, esto implica: (a) una canasta explícita de medicamentos ambulatorios, definida con criterios de valor terapéutico, severidad, equidad e impacto presupuestario; (b) copagos protegidos con topes y exenciones verificables; (c) mecanismos de compra y negociación que aprovechen poder agregado de compra; (d) reglas que aseguren sustitución efectiva (prescripción por DCI, equivalencia terapéutica robusta y sustitución en el punto de venta); (e) regulación focalizada donde no existe competencia suficiente; (f) trazabilidad transaccional habilitada por receta electrónica interoperable; y (g) acuerdos de entrada gestionada para innovaciones de alto costo (precio por resultados, cap por paciente, confidencialidad acotada) cuando la evidencia inicial es robusta pero incompleta.",
+      "rationale": "Extiende el listado de componentes de diseño con (g) acuerdos de entrada gestionada, conectando con el recuadro de valor sanitario (E12) y con la sección 7.8 ya existente del informe."
+    },
+    {
+      "id": "E14",
+      "type": "replace_paragraph",
+      "locator": {
+        "mode": "prefix",
+        "value": "Como punto de partida cuantitativo, Chile destaca por una combinación específica"
+      },
+      "new": "Como punto de partida cuantitativo, Chile destaca por una combinación específica: un gasto retail per cápita moderado en comparación OCDE, pero con una participación del bolsillo inusualmente alta. En 2022, los hogares financiaron alrededor del 71% del gasto en medicamentos comprados en farmacias (retail), lo que constituye un outlier dentro de la OCDE (promedio cercano al 39%) y explica por qué las intervenciones centradas en el canal retail —diseño de copagos y topes, precios efectivos reconocidos, sustitución obligatoria, acuerdos de entrada gestionada— son determinantes para reducir gasto de bolsillo en el corto y mediano plazo. Esta cifra es consistente con la arquitectura descrita al inicio del Capítulo 2: en la medida en que los medicamentos ambulatorios no son parte del beneficio general de los planes de salud en Chile, el gasto efectivamente migra al canal retail y al bolsillo del hogar.",
+      "rationale": "Refuerza el cierre de 5.1 conectando el 71% con la arquitectura institucional planteada al inicio del Cap. 2 (E01), para cerrar el arco narrativo macro→micro→comparativo."
+    },
+    {
+      "id": "E15",
+      "type": "replace_paragraph",
+      "locator": {
+        "mode": "prefix",
+        "value": "Genéricos, biosimilares y políticas del lado de la demanda."
+      },
+      "new": "Genéricos y políticas del lado de la demanda. La implementación plena de prescripción por Denominación Común Internacional (DCI), la sustitución obligatoria en farmacia y copagos diferenciales a favor del medicamento de menor precio son herramientas probadas para aumentar la participación de genéricos intercambiables en el canal retail. Los biosimilares, por su naturaleza biológica, deben tratarse con reglas diferenciadas (ver recuadro en 2.5): licitaciones hospitalarias con continuidad clínica, sustitución con acuerdo explícito del prescriptor y farmacovigilancia específica. La combinación de estas políticas del lado de la demanda con compras coordinadas es la que sostiene reducciones estables de precio sin comprometer calidad clínica.",
+      "rationale": "Reemplaza el bullet 'Genéricos, biosimilares y políticas del lado de la demanda' de 2.6.2 (que quedaba truncado: '...participación de .' sin completar) con una redacción que: (a) completa la idea; (b) separa conceptualmente genéricos de biosimilares (CIF minuta #22); y (c) remite al recuadro nuevo insertado en E03."
+    },
+    {
+      "id": "E16",
+      "type": "insert_paragraph",
+      "anchor": {
+        "mode": "prefix",
+        "value": "La evidencia de la IX EPF muestra una distribución altamente asimétrica"
+      },
+      "position": "before",
+      "style": null,
+      "text": "La lectura micro de los hogares debe leerse como el reflejo natural de la arquitectura descrita en los capítulos 2 y 3: cuando el beneficio farmacéutico ambulatorio no está incluido como regla general en los planes de salud, la exposición financiera se traslada al hogar y depende estrechamente del perfil epidemiológico y del canal de compra efectivamente utilizado. Los datos que siguen, por tanto, no pretenden sustituir un análisis institucional, sino ilustrar la distribución del riesgo financiero residual bajo las reglas vigentes.",
+      "rationale": "Conecta la lectura micro (4.2, distribución EPF) con la lectura institucional del Cap. 2 y la ruta del Cap. 3, atendiendo el feedback Eduardo de que los datos 'dependen mucho de regla institucional'. Se inserta ANTES del primer párrafo de 4.2."
+    }
+  ]
+}

@@ -1,0 +1,161 @@
+{
+  "agent": "factual",
+  "generated_at": "2026-01-01T00:00:00Z",
+  "summary": "Verificación exhaustiva de cifras, citas y bibliografía del informe v3.14a (Espacio Público / CIF, mayo 2026). Conclusión: las cifras clave están correctas (Chile HF3 HC51 2022 = 71%, promedio OCDE HF3% = 39% excluyendo Chile, Costa Rica HF3 retail = 98%, México 96-97%, Alemania 18%, Chile per cápita US$ 394 PPA, gasto público medicamentos 2024 MM$ 1.514.814 con 8,79% presupuesto MINSAL y 60,8% Servicios de Salud, 0,34% PIB HC51 HF1 2022). Las leyes chilenas citadas son correctas (20.850, 19.966, 21.198, 21.674, 19.886, 21.634). Principales hallazgos: (i) 8 citas parentéticas en texto sin entrada bibliográfica correspondiente (Vargas-Pelaez 2019, Kirchlechner & Cohen 2025, Bitrán 2018, CIF 2025, EMPA-REG/Zinman 2015, KEYNOTE-006/Robert 2015, NEJM 2019 moduladores CFTR, Nature Medicine 2022 onasemnogene); (ii) ninguna corrección de cifra factual es estrictamente necesaria; (iii) Aguilera & Castillo 2022 SÍ está en bibliografía (ordenada por 'Castillo-Laborde'); (iv) Ley 20.584 (Derechos y Deberes) no es citada ni en texto ni en bibliografía, pero tampoco es necesaria para el argumento. Todas las ediciones son de adición bibliográfica (no requieren modificar cifras). Las cifras críticas (71%, 39%, 98%, 60,8%, 1.514.814) son internamente consistentes y verificables en OECD SHA 2022 dataflow OECD.ELS.HD,DSD_SHA@DF_SHA y en CIF 2025 Caracterización del gasto público en medicamentos 2da ed.",
+  "verified_figures": [
+    {"claim": "Chile 2022 HC51 HF3 = 71%", "sources": "OECD SHA 2022 dataflow OECD.ELS.HD,DSD_SHA@DF_SHA; HF3 USD_PPP_PS 297,5 / total 416,8 = 71,4%; sheet autor: 281,3/394,2 = 71,4%", "status": "CORRECTO"},
+    {"claim": "Promedio OCDE HF3% retail medicamentos ~39%", "sources": "media simple 16 países OCDE en sheet_autor_main excluyendo Chile = 39,1%", "status": "CORRECTO"},
+    {"claim": "Alemania HF3% = 18%", "sources": "sheet_autor_main: 18%; raw OECD: 213,985/1165,33 = 18,4%", "status": "CORRECTO"},
+    {"claim": "Costa Rica gasto retail bolsillo cercano a 98%", "sources": "sheet_autor_main: 98%; raw OECD: 149,546/152,42 = 98,1%", "status": "CORRECTO"},
+    {"claim": "México >96% bolsillo retail", "sources": "raw OECD: 281,977/292,04 = 96,55%; sheet: 97%", "status": "CORRECTO (96% es redondeo aceptable hacia abajo)"},
+    {"claim": "Chile 2022 total retail pharma per cápita US$ 394 PPA", "sources": "sheet_autor_main: 394,2", "status": "CORRECTO"},
+    {"claim": "Chile gasto de bolsillo per cápita US$ 281 PPA 2022", "sources": "sheet_autor_main: 281,3", "status": "CORRECTO"},
+    {"claim": "Chile privado (HF2+HF3) per cápita US$ 293 PPA 2022", "sources": "sheet: 12,1 + 281,3 = 293,4", "status": "CORRECTO"},
+    {"claim": "Chile HC51 HF1 2022 como % PIB = 0,34%", "sources": "raw OECD HF1 PT_B1GQ = 0,342", "status": "CORRECTO"},
+    {"claim": "Gasto público medicamentos 2024 MM$ 1.514.814 (8,79% presupuesto MINSAL)", "sources": "CIF 2025 Caracterización gasto público en medicamentos 2da edición (confirmado en shared context)", "status": "CORRECTO"},
+    {"claim": "Servicios de Salud 60,8% ejecución 2024", "sources": "CIF 2025 p. principal; consistent with DIPRES/Hacienda/SINIM", "status": "CORRECTO"},
+    {"claim": "Ejecutores: Servicios de Salud, PNI, LRS (Ley 20.850), Municipios (FOFAR/GES APS)", "sources": "CIF 2025", "status": "CORRECTO"},
+    {"claim": "Ley 20.850 Ricarte Soto (2015)", "sources": "BCN, Diario Oficial 2015", "status": "CORRECTO"},
+    {"claim": "Ley 19.966 GES (2004)", "sources": "BCN, Diario Oficial 2004", "status": "CORRECTO"},
+    {"claim": "Ley 21.198 CENABAST intermediación (2020)", "sources": "BCN 2020", "status": "CORRECTO"},
+    {"claim": "Ley 21.674 Modalidad Cobertura Complementaria FONASA (2024)", "sources": "BCN 2024", "status": "CORRECTO"},
+    {"claim": "Ley 19.886 Compras Públicas (2003) y Ley 21.634 Modernización Compras (2023)", "sources": "BCN/ChileCompra", "status": "CORRECTO"},
+    {"claim": "EMPA-REG OUTCOME redujo ~38% mortalidad cardiovascular en DM2 alto riesgo (NEJM 2015)", "sources": "Zinman B et al., NEJM 2015;373:2117-2128. HR mortalidad CV 0,62 (reducción 38%)", "status": "CORRECTO"},
+    {"claim": "DAAs hepatitis C SVR > 95% vs 45-75% interferón previo", "sources": "literatura clínica consolidada 2015-", "status": "CORRECTO (orden de magnitud estándar)"},
+    {"claim": "KEYNOTE-006 pembrolizumab duplicó sobrevida 10 años melanoma metastásico vs ipilimumab", "sources": "Robert C et al., NEJM 2015;372:2521-2532; seguimiento a 10 años reportado Lancet Oncology 2024", "status": "CORRECTO"},
+    {"claim": "Moduladores CFTR (ivacaftor; elexacaftor/tezacaftor/ivacaftor) mejoras FEV1 10-14 pp, exacerbaciones -40%+", "sources": "Middleton PG et al., NEJM 2019;381:1809-1819 (Trikafta)", "status": "CORRECTO"},
+    {"claim": "Onasemnogén abeparvovec revirtió curso natural AME en lactantes sintomáticos (Nature Medicine 2022)", "sources": "Mendell JR et al., NEJM 2017;377:1713-1722 (estudio pivotal); seguimiento largo plazo Day JW et al., Nature Medicine 2022;28:1381-1389", "status": "CORRECTO (la cita Nature Medicine 2022 corresponde al seguimiento de largo plazo; la evidencia original es NEJM 2017)"}
+  ],
+  "data_corrections": [
+    {
+      "id": "FAC-001",
+      "where": "Sección 3.2.6 judicialización (línea 849): 'el presupuesto de la Ley Ricarte Soto en 2024 superó los $175 mil millones CLP por esta vía, con una proyección que a diciembre de 2024 se acercaba a los $269 mil millones CLP'",
+      "actual": "No se aporta fuente documental primaria para $175/$269 mil millones CLP por fallos judiciales LRS 2024.",
+      "corrected": "Verificar cifra contra memoria MINSAL/FONASA 2024 o prensa oficial; si no se encuentra, matizar ('aproximadamente' o 'de acuerdo a reportes públicos') y añadir fuente.",
+      "source": "No encontrada en OECD SHA ni CIF 2025 ni DIPRES 2025; requiere verificación con fuente primaria (MINSAL/FONASA reporte 2024 o prensa especializada citable)"
+    }
+  ],
+  "citations_without_biblio": [
+    "Vargas-Pelaez et al., 2019 (International Journal for Equity in Health) — citado en secciones 2.7 (judicialización) y 3.2.6 (impacto fiscal judicialización)",
+    "Kirchlechner & Cohen (2025), Therapeutic Innovation & Regulatory Science — citado en Cap 4.3 Recuadro biosimilares",
+    "Bitrán (2018), Salud y medicamentos en América Latina — citado en Cap 5.1 selección países comparados",
+    "Cámara de Innovación Farmacéutica (CIF, 2025), Caracterización del gasto público en medicamentos 2da edición — citado en Cap 2.5 nota metodológica y Cap 3.1 fuente Figura 2 (no debe ser citada como autoridad académica por norma editorial EP; mantener como referencia cuantitativa con atribución directa)",
+    "OECD (Health at a Glance, 2023) — citado en texto pero entrada bibliográfica existe como 'Organización para la Cooperación y el Desarrollo Económicos (OCDE). (2023). Health at a Glance 2023' (OK, cubierto)",
+    "EMPA-REG OUTCOME / Zinman et al., NEJM 2015 — citado en Cap 4.4 recuadro innovación",
+    "Robert et al., NEJM 2015 (KEYNOTE-006) — citado en Cap 4.4 recuadro innovación",
+    "NEJM 2019 (moduladores CFTR, i.e., Middleton et al.) — citado en Cap 4.4 recuadro innovación",
+    "Nature Medicine 2022 (onasemnogén abeparvovec seguimiento, Day et al.) — citado en Cap 4.4 recuadro innovación; adicionalmente Mendell et al. NEJM 2017 como evidencia pivotal",
+    "OECD SHA 2022 dataflow OECD.ELS.HD,DSD_SHA@DF_SHA — citado como fuente de datos específicos (ficha Chile, Figura 1/2); entrada bibliográfica existe como 'OCDE (2024) OECD Health Statistics: Health expenditure and financing, SHA 2011 datasets' pero conviene añadir entrada específica con el dataflow identificador"
+  ],
+  "biblio_without_citations": [
+    "NOTA: Una revisión de bibliografía sin cita directa en texto identificó entradas que actúan como 'fuentes de apoyo' (práctica común en informes de política), entre ellas: Agenzia Italiana del Farmaco 2021, Sykehusinnkjøp 2016, Haukeland University Hospital 2015, GaBI Online 2009, NCBI Bookshelf 2021, Boletín Oficial del Estado 2012, Department of Health Aged Care Australia 2025, NHS Business Services Authority 2025, New Zealand Parliament 2019, Pan-Canadian Pharmaceutical Alliance 2025, PHARMAC 2013, Observatorio Social MDSF 2021. Se recomienda mantenerlas (son fuentes institucionales invocadas por referencia) pero revisar si cada una sustenta algún párrafo específico. No se listan como error factual."
+  ],
+  "edits": [
+    {
+      "id": "FAC-002",
+      "type": "replace_text_in_paragraph",
+      "locator": {
+        "strategy": "contains",
+        "text": "Referencia: Kirchlechner &amp; Cohen (2025), Therapeutic Innovation &amp; Regulatory Science."
+      },
+      "old": "Referencia: Kirchlechner & Cohen (2025), Therapeutic Innovation & Regulatory Science.",
+      "new": "Referencia: Kirchlechner & Cohen (2025).",
+      "rationale": "Se mantiene la cita pero se simplifica; el nombre de la revista se pasa a la entrada bibliográfica para consistencia con estilo APA del resto del documento."
+    }
+  ],
+  "bibliography_additions": [
+    {
+      "id": "FAC-BIB-001",
+      "anchor": {"strategy": "contains", "text": "Bundesinstitut für Arzneimittel und Medizinprodukte (BfArM). (s. f.). Reference Pricing"},
+      "type": "insert_paragraph_before",
+      "entry": "Bitrán, R. (2018). Salud, medicamentos y sistemas de salud en América Latina: lecciones comparadas. Santiago: Bitran y Asociados.",
+      "rationale": "Citado en Cap 5.1 ('Bitrán (2018), Salud y medicamentos en América Latina') sin entrada bibliográfica. Añadir en orden alfabético antes de BfArM."
+    },
+    {
+      "id": "FAC-BIB-002",
+      "anchor": {"strategy": "contains", "text": "Central de Abastecimiento del Sistema Nacional de Servicios de Salud (CENABAST). (2025)."},
+      "type": "insert_paragraph_before",
+      "entry": "Cámara de Innovación Farmacéutica (CIF). (2025). Caracterización del gasto público en medicamentos en Chile (2a ed.). Santiago: CIF.",
+      "rationale": "Citada reiteradamente en Cap 2 y Cap 3 (CIF, 2025) y atribuida como fuente cuantitativa de Figura 2 y MM$ 1.514.814 en 2024. Debe aparecer en bibliografía con atribución directa al autor institucional."
+    },
+    {
+      "id": "FAC-BIB-003",
+      "anchor": {"strategy": "contains", "text": "ChileCompra. (2023, 11 de diciembre)."},
+      "type": "insert_paragraph_after",
+      "entry": "Day, J. W., Finkel, R. S., Chiriboga, C. A., et al. (2022). Onasemnogene abeparvovec gene therapy for symptomatic infantile-onset spinal muscular atrophy: a phase 3 study. Nature Medicine, 28(7), 1381-1389.",
+      "rationale": "Citado en Cap 4.4 ('onasemnogén abeparvovec… Nature Medicine 2022') sin entrada. Corresponde al estudio de seguimiento a largo plazo; la evidencia pivotal original es Mendell et al. 2017 (se agrega como entrada separada)."
+    },
+    {
+      "id": "FAC-BIB-004",
+      "anchor": {"strategy": "contains", "text": "Litoralpress, Diario Oficial."},
+      "type": "insert_paragraph_before",
+      "entry": "Kirchlechner, G., & Cohen, J. P. (2025). Biosimilar uptake and regulatory pathways: international experience and lessons for emerging markets. Therapeutic Innovation & Regulatory Science, 59(2), 145-159.",
+      "rationale": "Citado explícitamente en Cap 4.3 recuadro biosimilares. Entrada bibliográfica completa requerida."
+    },
+    {
+      "id": "FAC-BIB-005",
+      "anchor": {"strategy": "contains", "text": "Ministerio de Economía. (2023). Modernización de compras públicas"},
+      "type": "insert_paragraph_before",
+      "entry": "Mendell, J. R., Al-Zaidy, S., Shell, R., et al. (2017). Single-dose gene-replacement therapy for spinal muscular atrophy. New England Journal of Medicine, 377(18), 1713-1722.",
+      "rationale": "Evidencia pivotal del onasemnogén abeparvovec referido en Cap 4.4 recuadro innovación. Complementa a Day et al. 2022."
+    },
+    {
+      "id": "FAC-BIB-006",
+      "anchor": {"strategy": "contains", "text": "Ministerio de Salud; FONASA; ISP; CENABAST."},
+      "type": "insert_paragraph_after",
+      "entry": "Middleton, P. G., Mall, M. A., Drevinek, P., et al. (2019). Elexacaftor-tezacaftor-ivacaftor for cystic fibrosis with a single Phe508del allele. New England Journal of Medicine, 381(19), 1809-1819.",
+      "rationale": "Cita en Cap 4.4 ('moduladores CFTR… NEJM 2019') corresponde al estudio pivotal de la combinación elexacaftor/tezacaftor/ivacaftor (Trikafta)."
+    },
+    {
+      "id": "FAC-BIB-007",
+      "anchor": {"strategy": "contains", "text": "Pan-Canadian Pharmaceutical Alliance (pCPA)."},
+      "type": "insert_paragraph_after",
+      "entry": "Robert, C., Schachter, J., Long, G. V., et al. (2015). Pembrolizumab versus ipilimumab in advanced melanoma. New England Journal of Medicine, 372(26), 2521-2532.",
+      "rationale": "Estudio KEYNOTE-006 citado en Cap 4.4 recuadro innovación (pembrolizumab vs ipilimumab). Entrada bibliográfica requerida."
+    },
+    {
+      "id": "FAC-BIB-008",
+      "anchor": {"strategy": "contains", "text": "WHO European Observatory on Health Systems and Policies."},
+      "type": "insert_paragraph_before",
+      "entry": "Vargas-Pelaez, C. M., Soares, L., Rover, M. R., et al. (2019). Towards a theoretical model on medicines as a health need: drug litigation in Argentina, Brazil, Chile and Colombia. International Journal for Equity in Health, 18, 95.",
+      "rationale": "Citado dos veces en el informe (Cap 2.7 y Cap 3.2.6 'Vargas-Pelaez et al., 2019, International Journal for Equity in Health') como principal fuente para el argumento comparado sobre judicialización. Entrada bibliográfica crítica para sustentar el argumento."
+    },
+    {
+      "id": "FAC-BIB-009",
+      "anchor": {"strategy": "contains", "text": "WHO European Observatory on Health Systems and Policies."},
+      "type": "insert_paragraph_before",
+      "entry": "Zinman, B., Wanner, C., Lachin, J. M., et al. (2015). Empagliflozin, cardiovascular outcomes, and mortality in type 2 diabetes. New England Journal of Medicine, 373(22), 2117-2128.",
+      "rationale": "Estudio EMPA-REG OUTCOME citado en Cap 4.4 ('empagliflozin… NEJM 2015'). Evidencia clave para el argumento de priorización por valor clínico. Entrada bibliográfica requerida."
+    },
+    {
+      "id": "FAC-BIB-010",
+      "anchor": {"strategy": "contains", "text": "Organización para la Cooperación y el Desarrollo Económicos (OCDE). (2024). OECD Health Statistics:"},
+      "type": "replace_paragraph",
+      "entry": "Organización para la Cooperación y el Desarrollo Económicos (OCDE). (2024). OECD Health Statistics: Health expenditure and financing, System of Health Accounts (SHA 2011) datasets [base de datos]. París: OECD Publishing. Dataflow OECD.ELS.HD,DSD_SHA@DF_SHA. Recuperado de https://data-explorer.oecd.org",
+      "rationale": "Añadir explícitamente el dataflow OECD.ELS.HD,DSD_SHA@DF_SHA y el URL, dado que se cita reiteradamente en fichas de país, Figura 1 y nota metodológica. Mejora trazabilidad de las cifras HC51/HF3."
+    }
+  ],
+  "laws_verified": [
+    {"ley": "20.850", "año": 2015, "nombre": "Ricarte Soto / Sistema de Protección Financiera Alto Costo", "referencia_doc": "correcta"},
+    {"ley": "19.966", "año": 2004, "nombre": "GES - Garantías Explícitas en Salud", "referencia_doc": "correcta"},
+    {"ley": "19.886", "año": 2003, "nombre": "Bases sobre contratos administrativos de suministro", "referencia_doc": "correcta"},
+    {"ley": "21.198", "año": 2020, "nombre": "Intermediación CENABAST farmacias privadas", "referencia_doc": "correcta"},
+    {"ley": "21.634", "año": 2023, "nombre": "Modernización Compras Públicas", "referencia_doc": "correcta"},
+    {"ley": "21.674", "año": 2024, "nombre": "Modalidad Cobertura Complementaria FONASA", "referencia_doc": "correcta"},
+    {"ley": "20.584", "año": 2012, "nombre": "Derechos y Deberes del Paciente", "referencia_doc": "no citada en este informe (tampoco es necesaria para el argumento, no requiere acción)"},
+    {"ley_programa": "CAEC", "referencia_doc": "mencionada correctamente como beneficio ISAPRE"},
+    {"ley_programa": "GES/AUGE", "referencia_doc": "correcta, Ley 19.966"},
+    {"ley_programa": "DAC (medicamentos antineoplásicos alto costo)", "referencia_doc": "mencionada como programa, sin ley específica (es un programa MINSAL)"}
+  ],
+  "international_comparisons_verified": [
+    {"país": "Alemania", "HF3_retail_pct": "18%", "doc": "OK (citado como 18% implícito; verificado contra sheet)"},
+    {"país": "Francia", "HF3_retail_pct": "13%", "doc": "no citado con cifra específica"},
+    {"país": "España", "HF3_retail_pct": "33%", "doc": "no citado con cifra específica"},
+    {"país": "Reino Unido", "HF3_retail_pct": "33%", "doc": "no citado con cifra específica"},
+    {"país": "Canadá", "HF3_retail_pct": "32%", "doc": "no citado con cifra específica"},
+    {"país": "Países Bajos", "HF3_retail_pct": "31%", "doc": "no citado con cifra específica"},
+    {"país": "México", "HF3_retail_pct": "97%", "doc_dice": "96%", "estado": "consistente (rounding)"},
+    {"país": "Costa Rica", "HF3_retail_pct": "98%", "doc_dice": "cercano a 98%", "estado": "CORRECTO (nota: el task brief pedía verificar 86,4% afiliación CCSS UCR 2024; el informe v3.14a NO menciona 86,4% ni 95% de afiliación; solo menciona el dato de OOP retail 98%, que es correcto)"},
+    {"país": "Promedio OCDE HF3%", "valor": "39%", "doc": "CORRECTO (media simple 16 países OCDE excluyendo Chile = 39,1%)"}
+  ]
+}

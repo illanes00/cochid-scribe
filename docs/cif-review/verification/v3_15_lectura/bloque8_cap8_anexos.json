@@ -1,0 +1,70 @@
+{
+  "agent": "lectura_editorial_autor",
+  "bloque": "8 - Cap 8 Conclusiones + Bibliografía + Anexos",
+  "rango_paragrafos": "P0854 - fin",
+  "generated_at": "2026-01-01T00:00:00Z",
+  "observaciones_generales": "Cap 8 está muy sólido. Las 8 preguntas del seminario son claras y alineadas con los temas globales (innovación, judicialización, arquitectura). Edits: orphan párrafo '.', headers anexos sin espacio, reformulaciones menores en preguntas.",
+  "edits": [
+    {
+      "id": "LE-080",
+      "type": "replace_paragraph",
+      "locator": {
+        "strategy": "prefix",
+        "text": "."
+      },
+      "new": "",
+      "rationale": "Orphan: párrafo que solo contiene un punto aislado. Residuo de edición previa. Eliminar."
+    },
+    {
+      "id": "LE-081",
+      "type": "replace_text_in_paragraph",
+      "locator": {
+        "strategy": "contains",
+        "text": "¿Debe el beneficio aplicar como piso común a FONASA e ISAPRE"
+      },
+      "old": "¿Debe el beneficio aplicar como piso común a FONASA e ISAPRE desde el inicio",
+      "new": "¿Conviene que el beneficio se aplique como piso común a FONASA e ISAPRE desde el inicio",
+      "rationale": "'Debe' es prescriptivo y se resiste al enfoque 'insumo para debate'. Reformulación alineada con estilo EP."
+    },
+    {
+      "id": "LE-082",
+      "type": "replace_text_in_paragraph",
+      "locator": {
+        "strategy": "contains",
+        "text": "¿Qué rol debe jugar el HTA/ETESA en la priorización"
+      },
+      "old": "¿Qué rol debe jugar el HTA/ETESA en la priorización",
+      "new": "¿Qué rol cabe al HTA/ETESA en la priorización",
+      "rationale": "'Debe jugar' es prescriptivo. 'Cabe' es neutral y más preciso."
+    },
+    {
+      "id": "LE-083",
+      "type": "replace_text_in_paragraph",
+      "locator": {
+        "strategy": "contains",
+        "text": "¿Qué rol debe jugar la judicialización en un sistema"
+      },
+      "old": "¿Qué rol debe jugar la judicialización en un sistema",
+      "new": "¿Qué rol cabe a la judicialización en un sistema",
+      "rationale": "Idem LE-082."
+    }
+  ],
+  "comments_to_add": [
+    {
+      "id": "MI-70",
+      "anchor": {
+        "strategy": "contains",
+        "text": "5. Innovación y sostenibilidad. ¿Cómo se aborda la tensión"
+      },
+      "body": "[MI-70] Pregunta 5 alineada con feedback global de CIF sobre mecanismos de acceso a innovación. El seminario podría profundizar en tres instrumentos concretos ya discutidos en Cap 7.8: (a) acuerdos basados en resultados (outcomes-based agreements), (b) acuerdos price-volume con techos de gasto, y (c) descuentos condicionados a reevaluación por HTA. La experiencia alemana (AMNOG), inglesa (NICE) e italiana (AIFA, registros MEA) son referentes documentados."
+    },
+    {
+      "id": "MI-71",
+      "anchor": {
+        "strategy": "contains",
+        "text": "6. Judicialización. ¿Qué rol cabe a la judicialización"
+      },
+      "body": "[MI-71] Pregunta 6 conecta con Cap 3.2.6 donde se desarrolla la judicialización como síntoma estructural (lectura Vargas-Pelaez et al., 2019) y con la propuesta de un mecanismo excepcional fuera de canasta (Cap 7.7) trazable y auditable. La respuesta convencionalmente no pasa por restringir acceso judicial sino por cerrar las brechas que lo hacen necesario."
+    }
+  ]
+}

@@ -1,0 +1,133 @@
+{
+  "agent": "3 - Caps 6-8 alternativas + conclusiones",
+  "notes": "Ediciones sobre informe-final-v2.docx para cerrar los capítulos 6 (Alternativas), 7 (Escenario 2) y 8 (Conclusiones) atendiendo el feedback de CIF (menos prescriptivo, más opciones para discusión), Eduardo (suavizar tono categórico) y Carla (FFAA en 6.1, financiamiento ISAPRE en 7.5.2). Se inserta una nueva sección 8.3 'Clasificación de medidas por horizonte de reforma' antes de la 8.4 existente. Todas las ediciones quedan como tracked changes para que el equipo editorial acepte/rechace.",
+  "edits": [
+    {
+      "type": "replace_paragraph",
+      "locator": {"mode": "prefix", "value": "Cobertura aplicable solo a un subsistema o como piso común para FONASA e ISAPRE."},
+      "new": "Cobertura aplicable solo a un subsistema o como piso común para FONASA, ISAPRE y los sistemas de salud de las Fuerzas Armadas y de Orden (CAPREDENA, DIPRECA). Estos últimos, por contar con reglas independientes, quedan fuera de una cobertura común salvo que se les aplique el mismo piso de canasta y copagos protegidos, preservando flexibilidad operativa.",
+      "rationale": "Feedback Carla (C-CC-DOCX122, '¿Y FFAA?'). Agrega mención breve a CAPREDENA/DIPRECA en la enumeración de variables de diseño 6.1 sobre población cubierta, subrayando que para preservar universalidad del beneficio estos sistemas deberían aplicar las mismas reglas de canasta y copagos como piso común."
+    },
+    {
+      "type": "replace_paragraph",
+      "locator": {"mode": "prefix", "value": "Ventajas y exigencias: mejora significativamente la protección financiera con un esfuerzo fiscal"},
+      "new": "Ventajas y exigencias: el escenario mejora significativamente la protección financiera con un esfuerzo fiscal \"intermedio\", pero supone una reforma institucional más profunda: roles claros entre FONASA, ISAPRE, CENABAST y reguladores, junto con una HTA/ETESA con capacidad técnica, tiempos de respuesta y legitimidad social para decisiones difíciles. Cabe subrayar que la intermediación de CENABAST a farmacias privadas ha sido un paliativo útil en el contexto de baja cobertura y falta de gestión en la dispensación, pero no constituye una arquitectura escalable como solución principal: su rol más eficaz es cubrir medicamentos que se encuentran fuera del beneficio estatal. En este escenario, CENABAST complementa —no sustituye— al beneficio farmacéutico ambulatorio universal.",
+      "rationale": "Minuta CIF #19 (Mariela): matizar sobre Cenabast como no-escalable. Se reformula el cierre del Escenario 2 (6.2.2) para aclarar el rol complementario de CENABAST sin desplazar la arquitectura del beneficio universal."
+    },
+    {
+      "type": "replace_paragraph",
+      "locator": {"mode": "prefix", "value": "Si el objetivo es universalidad del derecho, el beneficio debe operar como piso regulatorio"},
+      "new": "Si el objetivo es universalidad del derecho, el beneficio puede operar como piso regulatorio: los planes pueden ofrecer mejoras, pero el estándar mínimo de protección farmacéutica ambulatoria (canasta, copagos protegidos y tope) tendría carácter común. El financiamiento, en una fase inicial, puede provenir del precio del plan para beneficiarios de ISAPRE, con exigencia de que las reglas de copago, topes y canasta sean homogéneas con FONASA. En una fase de convergencia, caben mecanismos de compensación de riesgos entre subsistemas que alineen incentivos y eviten selección adversa.",
+      "rationale": "Feedback Carla (C-CC-DOCX157) sobre financiamiento ISAPRE vs FONASA. Suaviza tono ('debe'→'puede') y aclara: en fase inicial el financiamiento ISAPRE puede venir del precio del plan con reglas homogéneas; en fase de convergencia se discuten mecanismos de compensación de riesgos."
+    },
+    {
+      "type": "replace_paragraph",
+      "locator": {"mode": "prefix", "value": "La canasta debe ser explícita, priorizada y gestionable. Para que opere como “piso universal”"},
+      "new": "Una canasta explícita, priorizada y gestionable es condición para que el beneficio opere como \"piso universal\" y no como suma de programas fragmentados. Los criterios que el capítulo discute son:",
+      "rationale": "Eduardo: suavizar tono prescriptivo del Cap 7 (7.4.1). 'Se recomienda' categórico → presentación descriptiva de criterios discutidos en el capítulo, coherente con el cierre en 7.13 (insumo para debate)."
+    },
+    {
+      "type": "replace_paragraph",
+      "locator": {"mode": "prefix", "value": "Recomendación: un esquema híbrido con predominio de POS para la canasta y reglas automáticas."},
+      "new": "El capítulo desarrolla como opción analíticamente más contrastable un esquema híbrido con predominio de POS para la canasta y reglas automáticas, dejando el reembolso para situaciones excepcionales o transitorias. En caso de adoptar reembolso, convendría explicitar requisitos normativos, operativos y de datos que eviten introducir fricciones que debiliten la protección efectiva. Las alternativas (POS puro, reembolso predominante) quedan abiertas para la discusión del seminario.",
+      "rationale": "Eduardo: bajar tono prescriptivo en 7.4.4. 'Recomendación' → 'opción analíticamente más contrastable' + 'alternativas quedan abiertas para la discusión del seminario'. Coherente con 7.13 'Síntesis y remisión al debate'."
+    },
+    {
+      "type": "replace_paragraph",
+      "locator": {"mode": "prefix", "value": "Opción institucional mínima (fase inicial): implementación en FONASA con financiamiento fiscal"},
+      "new": "Opción institucional mínima (fase inicial): implementación en FONASA con financiamiento fiscal y gestión de costos vía compras/competencia. Para ISAPRE, el beneficio operaría como piso regulatorio que los planes deben cubrir; el financiamiento en esta fase puede provenir del precio del plan, con exigencia de que las reglas de copago, topes y canasta sean homogéneas con FONASA. La preparación normativa y operativa habilita exigir piso equivalente en ISAPRE con tiempos definidos.",
+      "rationale": "Feedback Carla (C-CC-DOCX157): aclarar explícitamente en 7.5.2 que en fase inicial el financiamiento del beneficio en ISAPRE puede venir del precio del plan, no de fondos fiscales. El texto v2 era ambiguo."
+    },
+    {
+      "type": "replace_paragraph",
+      "locator": {"mode": "prefix", "value": "Opción de convergencia (fase de madurez): integración del componente farmacéutico a la función aseguradora"},
+      "new": "Opción de convergencia (fase de madurez): avanzar hacia mecanismos de compensación de riesgos entre subsistemas que reduzcan incentivos a selección y alineen financiamiento con cobertura. Esta fase supone integrar el componente farmacéutico a la función aseguradora pública y privada bajo reglas comunes, con financiamiento definido y ajustes por estructura de riesgo de los beneficiarios.",
+      "rationale": "Feedback Carla (C-CC-DOCX157): en la fase de convergencia explicitar los mecanismos de compensación de riesgos como instrumento que resuelve la tensión público/privado."
+    },
+    {
+      "type": "replace_paragraph",
+      "locator": {"mode": "prefix", "value": "Se recomienda, como estándar mínimo, que el proceso de decisión incluya: nominación"},
+      "new": "Como estándar mínimo, el proceso de decisión podría incluir: nominación, evaluación clínica y de comparadores, evaluación económica e impacto presupuestario, decisión y reglas de cobertura (condiciones clínicas, sustitución, copagos/cap) y reevaluación periódica. El foco de ETESA/HTA sería priorizar según valor sanitario, social y económico, y no solo según contención de costos.",
+      "rationale": "Eduardo: suavizar 'Se recomienda' en 7.7. Alinea con CIF 14 (clasificación por tipo de reforma que luego aparece en 8.3): ETESA como instrumento vinculante con foco en valor, no solo contención."
+    },
+    {
+      "type": "replace_paragraph",
+      "locator": {"mode": "prefix", "value": "Asimismo, el beneficio debe incorporar un mecanismo excepcional fuera de canasta"},
+      "new": "Asimismo, conviene discutir la incorporación de un mecanismo excepcional fuera de canasta, con criterios explícitos, trazabilidad y auditoría, para reducir incentivos a que la excepción se canalice principalmente vía judicialización.",
+      "rationale": "Eduardo: suavizar 'debe' categórico en 7.7 por 'conviene discutir'. Coherente con cierre 7.13 en clave de opción para debate."
+    },
+    {
+      "type": "replace_paragraph",
+      "locator": {"mode": "prefix", "value": "En términos de diseño, la evidencia revisada favorece una arquitectura basada en canasta explícita"},
+      "new": "En términos de diseño, la evidencia revisada sugiere que una arquitectura basada en canasta explícita, copagos protegidos y un tope (cap) de gasto acumulado, con reglas post-umbral, ofrece el mejor balance técnico. La canasta explícita aporta claridad sobre qué se cubre y bajo qué condiciones; los copagos protegidos preservan incentivos de uso eficiente sin trasladar el riesgo financiero al hogar; y el cap limita la exposición acumulativa, particularmente relevante en tratamientos crónicos de larga duración. Esta combinación es la que, en sistemas comparables, ha mostrado mayor capacidad para reducir el gasto de bolsillo de forma sostenida y predecible.",
+      "rationale": "CIF 10 (secciones no cerradas) + Eduardo: bajar tono prescriptivo en Cap 8 (párrafo 847). 'Favorece' → 'sugiere que ofrece el mejor balance técnico' mantiene el mensaje sin cerrar el debate."
+    },
+    {
+      "type": "replace_paragraph",
+      "locator": {"mode": "prefix", "value": "Asimismo, la reducción del gasto de bolsillo requiere resolver un punto que el diagnóstico"},
+      "new": "La reducción del gasto de bolsillo supone resolver un punto que el diagnóstico identifica como estructural: la brecha entre cobertura nominal y acceso efectivo. Un diseño híbrido —donde la provisión institucional es primera opción cuando existe disponibilidad, y existe un mecanismo explícito de continuidad hacia retail adherido cuando el medicamento no se dispensa efectivamente— aparece como la alternativa más coherente con ese diagnóstico. Sin esta \"válvula de continuidad\", el sistema tiende a trasladar el costo al hogar en los mismos casos donde el objetivo de política debiera ser protegerlo, especialmente frente a quiebres de stock y discontinuidades logísticas.",
+      "rationale": "CIF 10 + Eduardo: suavizar 'la recomendación es' → 'aparece como la alternativa más coherente'. Mantiene argumento y evita prescripción."
+    },
+    {
+      "type": "replace_paragraph",
+      "locator": {"mode": "prefix", "value": "El beneficio, además, debe orientarse al precio efectivo y no al precio listado."},
+      "new": "El beneficio, además, convendría orientarlo al precio efectivo y no al precio listado. Aumentar cobertura sin disciplina de precios y sustitución efectiva puede traducirse en inflación de precios, captura del subsidio y aumento de gasto fiscal/asegurador sin caída proporcional del gasto de bolsillo. En consecuencia, calcular la protección financiera sobre precios de referencia y reglas de sustitución, y complementarla con compras agregadas, contratos marco y regulación focalizada cuando la competencia sea limitada, aparece como condición de alineamiento entre cobertura y gestión de precios para sostener la reforma.",
+      "rationale": "Eduardo: suavizar 'debe orientarse' → 'convendría orientarlo' y 'La recomendación, por tanto, es' → 'En consecuencia... aparece como condición'. Mantiene contenido técnico."
+    },
+    {
+      "type": "replace_paragraph",
+      "locator": {"mode": "prefix", "value": "En materia institucional, la sostenibilidad del beneficio exige que ETESA/HTA opere"},
+      "new": "En materia institucional, la sostenibilidad del beneficio supone que ETESA/HTA opere como gobernanza técnica para la incorporación, exclusión y definición de condiciones de cobertura, vinculada a evaluación de impacto presupuestario y a criterios de valor sanitario, social y económico. La priorización explícita, la actualización periódica y la transparencia de criterios y decisiones no son componentes accesorios: constituyen el núcleo de la legitimidad del beneficio y de su viabilidad fiscal en el tiempo. En ausencia de un marco robusto de gobernanza, la expansión de canasta tiende a desordenarse y a trasladarse a mecanismos excepcionales, incluyendo judicialización, con costos y desigualdades asociadas.",
+      "rationale": "Eduardo + CIF 14: suavizar 'exige' → 'supone' en Cap 8 e incorporar foco en valor sanitario/social/económico para ETESA (no solo contención de costos), que anticipa lo que luego se formaliza en 8.3 (nueva clasificación por tipo de reforma)."
+    },
+    {
+      "type": "insert_paragraph",
+      "anchor": {"mode": "contains", "value": "Los escenarios 1 y 3 representan rutas alternativas con trade-offs distintos"},
+      "position": "after",
+      "text": "8.3\tClasificación de medidas por horizonte de reforma",
+      "style": "Heading2",
+      "rationale": "CIF 14: insertar heading de la nueva sección 8.3 que clasifica las medidas por horizonte de reforma. Se ubica antes de 8.4 'Preguntas para la discusión' (existente en v2) y después del último párrafo del bloque de síntesis (851)."
+    },
+    {
+      "type": "insert_paragraph",
+      "anchor": {"mode": "exact", "value": "8.3\tClasificación de medidas por horizonte de reforma"},
+      "position": "after",
+      "text": "Las medidas analizadas en este informe no requieren todas el mismo tipo de reforma. Para orientar la discusión de implementación, pueden clasificarse en tres horizontes según el marco institucional que exigen.",
+      "style": null,
+      "rationale": "CIF 14: párrafo introductorio de la sección 8.3."
+    },
+    {
+      "type": "insert_paragraph",
+      "anchor": {"mode": "prefix", "value": "Las medidas analizadas en este informe no requieren todas el mismo tipo de reforma."},
+      "position": "after",
+      "text": "Medidas sin reforma legal (implementables con instrumentos actuales): ampliación del arsenal farmacológico en Atención Primaria y FONASA; compras agregadas y contratos marco vía CENABAST para medicamentos prioritarios; fortalecimiento de la prescripción por Denominación Común Internacional (DCI) y sustitución en farmacia bajo reglas existentes; mejoras en receta electrónica interoperable y trazabilidad.",
+      "style": null,
+      "rationale": "CIF 14: primer bloque de la clasificación (sin reforma legal)."
+    },
+    {
+      "type": "insert_paragraph",
+      "anchor": {"mode": "prefix", "value": "Medidas sin reforma legal (implementables con instrumentos actuales)"},
+      "position": "after",
+      "text": "Medidas que requieren ajustes regulatorios o institucionales: fortalecimiento de ETESA/HTA como mecanismo vinculante de priorización, con foco en valor sanitario, social y económico (no solo contención de costos); actualización del listado GES y del arsenal de Ley Ricarte Soto con criterios explícitos; regulación de márgenes en el canal retail y normativa específica para biosimilares; certificación efectiva de bioequivalencia por el Instituto de Salud Pública.",
+      "style": null,
+      "rationale": "CIF 14: segundo bloque (ajustes regulatorios/institucionales)."
+    },
+    {
+      "type": "insert_paragraph",
+      "anchor": {"mode": "prefix", "value": "Medidas que requieren ajustes regulatorios o institucionales"},
+      "position": "after",
+      "text": "Medidas que suponen rediseños sistémicos del aseguramiento: creación de un Beneficio Farmacéutico Ambulatorio Universal como piso común para FONASA e ISAPRE; integración del canal retail bajo un mecanismo POS con conciliación automática de copagos y topes de gasto; unificación de reglas de cobertura entre subsistemas, incluyendo convergencia progresiva con los sistemas de salud de las Fuerzas Armadas y de Orden.",
+      "style": null,
+      "rationale": "CIF 14: tercer bloque (rediseños sistémicos). Incluye referencia a FFAA siguiendo feedback Carla."
+    },
+    {
+      "type": "insert_paragraph",
+      "anchor": {"mode": "prefix", "value": "Medidas que suponen rediseños sistémicos del aseguramiento"},
+      "position": "after",
+      "text": "Esta clasificación permite diferenciar medidas de implementación inmediata de aquellas que requieren acuerdo legislativo o rediseño institucional, y entrega un ordenamiento útil para priorizar la secuencia de reforma en el debate del seminario.",
+      "style": null,
+      "rationale": "CIF 14: cierre de la sección 8.3 con bridge explícito al seminario (coherente con 7.13 y 8.4)."
+    }
+  ],
+  "num_edits": 19
+}

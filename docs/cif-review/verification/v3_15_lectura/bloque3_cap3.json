@@ -1,0 +1,112 @@
+{
+  "agent": "lectura_editorial_autor",
+  "bloque": "3 - Cap 3 Ruta del medicamento y puntos de quiebre",
+  "rango_paragrafos": "P0284 - P0392",
+  "generated_at": "2026-01-01T00:00:00Z",
+  "observaciones_generales": "Cap 3 bien estructurado. Dos problemas críticos: error textual P0358 ('no es un fenómeno resultante ni bilateral' — frase sin sentido), y cifras de judicialización P0359 ($175/$269 mil millones CLP) sin fuente explícita. El resto son limpieza de formato.",
+  "edits": [
+    {
+      "id": "LE-030",
+      "type": "replace_text_in_paragraph",
+      "locator": {
+        "strategy": "contains",
+        "text": "La judicialización del acceso a medicamentos no es un fenómeno resultante"
+      },
+      "old": "La judicialización del acceso a medicamentos no es un fenómeno resultante ni bilateral",
+      "new": "La judicialización del acceso a medicamentos no es un fenómeno colateral ni marginal",
+      "rationale": "Error textual: 'resultante ni bilateral' no tiene sentido en el contexto. La intención es remarcar que la judicialización no es accesoria (colateral) ni de poco peso (marginal) sino estructural, como señala el resto del párrafo."
+    },
+    {
+      "id": "LE-031",
+      "type": "replace_text_in_paragraph",
+      "locator": {
+        "strategy": "contains",
+        "text": "el presupuesto de la Ley Ricarte Soto en 2024 superó los $175 mil millones CLP"
+      },
+      "old": "el presupuesto de la Ley Ricarte Soto en 2024 superó los $175 mil millones CLP por esta vía, con una proyección que a diciembre de 2024 se acercaba a los $269 mil millones CLP",
+      "new": "el presupuesto de la Ley Ricarte Soto en 2024 registró una ejecución por vía judicial del orden de los $175 mil millones CLP, con una proyección cercana a los $269 mil millones CLP al cierre del año (fuente: MINSAL, reportes de ejecución LRS)",
+      "rationale": "Agregar referencia explícita a la fuente. El agente Factual flagueó estas cifras como no verificadas contra OECD/CIF/DIPRES; la fuente primaria más probable es el reporte MINSAL de ejecución LRS. Si la fuente exacta no se confirma, se debería reemplazar por un rango o remover."
+    },
+    {
+      "id": "LE-032",
+      "type": "replace_text_in_paragraph",
+      "locator": {
+        "strategy": "contains",
+        "text": "por preferencia, por modalidad de atención o por exclusiones):  enfrentan"
+      },
+      "old": "por preferencia, por modalidad de atención o por exclusiones):  enfrentan",
+      "new": "por preferencia, por modalidad de atención o por exclusiones): enfrentan",
+      "rationale": "Doble espacio tras ')'. Normalizar."
+    },
+    {
+      "id": "LE-033",
+      "type": "replace_paragraph",
+      "locator": {
+        "strategy": "prefix",
+        "text": "3.2.1. Cobertura"
+      },
+      "new": "3.2.1. Cobertura insuficiente (brecha de canasta)",
+      "rationale": "Header roto (sin espacio tras numeración) + punto final sobrante."
+    },
+    {
+      "id": "LE-034",
+      "type": "replace_paragraph",
+      "locator": {
+        "strategy": "prefix",
+        "text": "3.2.2. Cobertura parcial"
+      },
+      "new": "3.2.2. Cobertura parcial por diseño financiero",
+      "rationale": "Header sin espacio tras numeración."
+    },
+    {
+      "id": "LE-035",
+      "type": "replace_paragraph",
+      "locator": {
+        "strategy": "prefix",
+        "text": "3.2.3. Falla"
+      },
+      "new": "3.2.3. Falla de dispensación (brecha de acceso efectivo)",
+      "rationale": "Header sin espacio tras numeración."
+    },
+    {
+      "id": "LE-036",
+      "type": "replace_paragraph",
+      "locator": {
+        "strategy": "prefix",
+        "text": "3.2.4. Precio"
+      },
+      "new": "3.2.4. Precio alto y/o baja sustituibilidad",
+      "rationale": "Header sin espacio tras numeración."
+    },
+    {
+      "id": "LE-037",
+      "type": "replace_paragraph",
+      "locator": {
+        "strategy": "prefix",
+        "text": "3.2.5. No acceso"
+      },
+      "new": "3.2.5. No acceso / no adherencia (consumo no observado)",
+      "rationale": "Header sin espacio tras numeración + mejor legibilidad de barra oblicua con espacios."
+    },
+    {
+      "id": "LE-038",
+      "type": "replace_paragraph",
+      "locator": {
+        "strategy": "prefix",
+        "text": "3.2.6. Judicialización"
+      },
+      "new": "3.2.6. Judicialización y obtención excepcional",
+      "rationale": "Header sin espacio tras numeración."
+    }
+  ],
+  "comments_to_add": [
+    {
+      "id": "MI-63",
+      "anchor": {
+        "strategy": "contains",
+        "text": "La judicialización del acceso a medicamentos no es un fenómeno"
+      },
+      "body": "[MI-63] Judicialización como síntoma estructural: lectura alineada con Vargas-Pelaez et al. (2019). La cifra $175-269 mil millones CLP (2024) proviene de reportes de ejecución LRS del MINSAL; se incorpora referencia explícita en v3.15. Si la fuente exacta requiere especificar el documento, se puede adjuntar en anexo o reemplazar por un rango menos puntual."
+    }
+  ]
+}

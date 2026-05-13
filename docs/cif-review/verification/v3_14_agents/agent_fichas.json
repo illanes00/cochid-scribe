@@ -1,0 +1,273 @@
+{
+  "agent": "fichas",
+  "generated_at": "2026-01-01T00:00:00Z",
+  "summary": "Tabla 4 (comparación internacional OECD SHA HC51 USD PPA 2022) coincide 100% con el Google Sheet del autor para los 18 paises. La Tarjeta 1 Chile (cap. 2) tambien coincide (394/281/71%). Sin embargo, las 14 fichas individuales OECD del Anexo 6 y las 6 fichas LATAM usan una metodologia DISTINTA a Tabla 4: totales per capita divergen 15 a 70% y los porcentajes 'gasto de bolsillo' parecen referirse a OOP sobre gasto total de salud (no sobre HC51 farmaceutico). Esto produce una contradiccion interna grave: el mismo pais aparece con dos cifras distintas en tablas distintas. Argentina, Colombia y Peru (LATAM) no tienen cifras de medicamentos en el informe (N/D) y no estan en el Google Sheet ni en OECD SHA (no son miembros OECD; OECD SHA no los cubre).",
+  "countries_reviewed": [
+    "Chile", "Alemania", "Australia", "Canada", "Corea del Sur", "Dinamarca",
+    "Espana", "Estados Unidos", "Francia", "Israel", "Japon", "Nueva Zelanda",
+    "Noruega", "Paises Bajos", "Reino Unido", "Suecia", "Suiza",
+    "Argentina", "Brasil", "Colombia", "Costa Rica", "Mexico", "Uruguay"
+  ],
+  "edits": [
+    {
+      "id": "FICHA-01",
+      "type": "replace_text_in_paragraph",
+      "locator": {
+        "strategy": "contains",
+        "text": "Privado per cápita (US$ PPA 2022): US$ 293"
+      },
+      "old": "Privado per cápita (US$ PPA 2022): US$ 293",
+      "new": "Privado per cápita (US$ PPA 2022): US$ 293 (HF2 + HF3 = 12,1 + 281,3)",
+      "rationale": "Precisar composicion del valor 'privado' (voluntario + bolsillo) en linea con OECD SHA HC51 2022."
+    },
+    {
+      "id": "FICHA-02",
+      "type": "replace_text_in_paragraph",
+      "locator": {
+        "strategy": "contains",
+        "text": "Gasto público en medicamentos retail: 0,34% (HC51 HF1, 2022)"
+      },
+      "old": "Gasto público en medicamentos retail: 0,34% (HC51 HF1, 2022)",
+      "new": "Gasto público en medicamentos retail: HF1 US$ 100,7 per cápita (26% de HC51); HF2 US$ 12,1 (3%); HF3 US$ 281,3 (71%). Total HC51: US$ 394,2 PPA. Fuente: OECD SHA 2022, HC51",
+      "rationale": "Completar Ficha Chile con descomposicion HF1/HF2/HF3 per capita y % (coincide exactamente con Google Sheet del autor)."
+    }
+  ],
+  "comments_to_add": [
+    {
+      "id": "MI-20",
+      "type": "add_comment",
+      "anchor": {
+        "strategy": "contains",
+        "text": "Tarjeta 1: sistema de medicamentos en Chile"
+      },
+      "body": "[MI-20] Ficha Chile verificada contra OECD SHA 2022 (dataflow OECD.ELS.HD,DSD_SHA@DF_SHA, HC51 USD PPA per capita, precios constantes): Total 394,2 / HF1 100,7 (26%) / HF2 12,1 (3%) / HF3 281,3 (71%). Coincide con la Ficha. Conviene anadir las tres subcuentas HF1/HF2/HF3 explicitamente en la tarjeta para facilitar la comparacion con el resto de fichas.",
+      "rationale": "Trazabilidad metodologica Ficha Chile."
+    },
+    {
+      "id": "MI-21",
+      "type": "add_comment",
+      "anchor": {
+        "strategy": "contains",
+        "text": "Países OCDE no latinoamericanos"
+      },
+      "body": "[MI-21] CRITICO: las fichas individuales del Anexo 6 reportan totales per capita y % gasto de bolsillo que DIFIEREN significativamente de Tabla 4 (Anexo 4) y del Google Sheet del autor. Ejemplos: Alemania Anexo 6 total=$839 vs Tabla 4=$1.038 (diff 19%); Dinamarca $496 vs $389 (+27%); Espana $424 vs $605 (-30%); Francia $629 vs $807 (-22%); Japon $667 vs $847 (-21%); Corea $533 vs $773 (-31%). Los porcentajes de bolsillo tambien divergen: Alemania 13,6% vs 18% (Tabla 4 HC51); Suecia 9,5% vs 45%. La explicacion mas probable: Anexo 6 usa OOP como % de gasto total en salud (no HC51), y Total per capita puede estar en USD corrientes (no PPA) o provenir de otra fuente (posiblemente OECD Health at a Glance 2023 con ano 2021). Recomendacion: unificar fuente y metodologia. Si se mantiene Anexo 6 con scope distinto, declarar explicitamente la fuente, ano y denominador (ej: 'OOP como % del gasto total en salud, OECD Health Statistics') y eliminar ambiguedad 'US$ 2022' vs 'US$ corrientes' vs 'US$ PPA'. De lo contrario, reemplazar por valores coherentes con Tabla 4 (OECD SHA HC51 USD PPA 2022).",
+      "rationale": "Inconsistencia interna grave: mismo pais con dos cifras distintas en tablas distintas."
+    },
+    {
+      "id": "MI-22",
+      "type": "add_comment",
+      "anchor": {
+        "strategy": "contains",
+        "text": "Gasto en medicamentos (US$ 2022)"
+      },
+      "body": "[MI-22] Unidades mezcladas: las fichas alternan 'US$ 2022', 'US$ corrientes' y 'US$ PPA 2022' sin definir si son precios corrientes o constantes, ni si son PPA ajustadas. OECD SHA distingue PRICE_BASE: Q (precios constantes 2015) vs V (precios corrientes). Tabla 4 usa Q (constantes); las fichas dicen 'corrientes' pero los numeros no coinciden con V tampoco. Sugerencia: aclarar en nota al pie de todas las fichas: 'Valores en USD PPA, precios constantes, ano 2022. Fuente: OECD Health Statistics HC51.'",
+      "rationale": "Ambiguedad de unidades a traves del capitulo."
+    },
+    {
+      "id": "MI-23",
+      "type": "add_comment",
+      "anchor": {
+        "strategy": "contains",
+        "text": "Argentina"
+      },
+      "body": "[MI-23] Argentina, Colombia y Peru no son miembros OECD y no aparecen en OECD SHA; tampoco estan en el Google Sheet del autor (18 paises). Las fichas Anexo 6 muestran 'N/D' en medicamentos para Argentina y Colombia, lo cual es correcto dadas las limitaciones de datos. Peru no tiene ficha en el informe. Si se desea incorporar datos para estos paises, recurrir a WHO GHED (Global Health Expenditure Database) que cubre los tres con datos 2021-2022, o al BID (Banco Interamericano de Desarrollo) para estimaciones LATAM.",
+      "rationale": "Explicitar limitacion de datos para LATAM no-OECD."
+    },
+    {
+      "id": "MI-24",
+      "type": "add_comment",
+      "anchor": {
+        "strategy": "contains",
+        "text": "Brasil"
+      },
+      "body": "[MI-24] Ficha Brasil LATAM (Anexo 7): total $158, bolsillo $42, % 18,2%. Google Sheet / OECD SHA 2022 HC51 para Brasil: total US$ 329,9 PPA, bolsillo US$ 301,2, % bolsillo 91%. Discrepancia de 52% en el total y factor 5x en el %. Brasil SI esta en OECD SHA (es pais asociado). La cifra 91% bolsillo refleja la realidad documentada: SUS sin copago en dispensacion publica + Farmacia Popular con descuentos, pero la mayor parte del gasto privado en farmacia retail es OOP. Recomendacion: adoptar cifras OECD SHA 2022 HC51 para Brasil (consistentes con Tabla 4) y redactar la nota cualitativa sobre SUS/Farmacia Popular separadamente.",
+      "rationale": "Corregir cifras Brasil usando OECD SHA que si cubre el pais."
+    },
+    {
+      "id": "MI-25",
+      "type": "add_comment",
+      "anchor": {
+        "strategy": "contains",
+        "text": "Costa Rica "
+      },
+      "body": "[MI-25] Ficha Costa Rica LATAM (Anexo 7): total $90, bolsillo $20, % 9,2%. Google Sheet / OECD SHA 2022 HC51: total US$ 144,6 PPA, bolsillo US$ 141,9, % bolsillo 98%. Discrepancia grande (38% total, factor 11x en %). Costa Rica SI esta en OECD (pais miembro desde 2021). La cifra 98% bolsillo es consistente con lo citado en el cuerpo del informe (parrafo 0648: 'Costa Rica... gasto retail de bolsillo cercano al 98%'). Hay contradiccion entre el parrafo del cap. 5 y la ficha del Anexo 7. Recomendacion: adoptar cifras OECD SHA 2022 HC51.",
+      "rationale": "Contradiccion interna Cap 5 vs Anexo 7 para Costa Rica."
+    },
+    {
+      "id": "MI-26",
+      "type": "add_comment",
+      "anchor": {
+        "strategy": "contains",
+        "text": "México"
+      },
+      "body": "[MI-26] Ficha Mexico LATAM (Anexo 7): total $136, bolsillo $53, % 21,0%. Google Sheet / OECD SHA 2022 HC51: total US$ 250,7 PPA, bolsillo US$ 242,1, % bolsillo 97%. Discrepancia 46% total, factor 4,6x en %. El parrafo 0648 del informe cita correctamente: 'Mexico mantiene participaciones de bolsillo en farmacia retail sobre el 96% (OCDE 2022)', pero la ficha del Anexo 7 contradice este valor. Recomendacion: adoptar cifras OECD SHA 2022 HC51 (consistentes con el cuerpo del cap. 5 y con Tabla 4).",
+      "rationale": "Contradiccion interna Cap 5 vs Anexo 7 para Mexico."
+    },
+    {
+      "id": "MI-27",
+      "type": "add_comment",
+      "anchor": {
+        "strategy": "contains",
+        "text": "Gasto público en medicamentos: 0.0%"
+      },
+      "body": "[MI-27] '0.0%' de gasto publico en medicamentos para Costa Rica y Mexico es inconsistente con la realidad: ambos paises tienen sistemas publicos significativos (CCSS en CR, IMSS/ISSSTE/IMSS-Bienestar en MX) que financian medicamentos institucionales. El '0.0%' parece reflejar que el dato especifico de gasto publico como % del PIB no estaba disponible y se registro como 0 en vez de 'N/D'. OECD SHA 2022 HC51 HF1 para Mexico es 0 USD PPA (casi nulo en dispensacion publica de farmacia retail ambulatoria), pero HF1 en el canal institucional no se captura en HC51. Recomendacion: corregir a 'N/D' o bien precisar el alcance ('HC51 retail ambulatorio: HF1 = 0%; canal institucional no computado').",
+      "rationale": "Valor 0.0% es enganoso sin contexto de que HC51 excluye canal institucional."
+    },
+    {
+      "id": "MI-28",
+      "type": "add_comment",
+      "anchor": {
+        "strategy": "contains",
+        "text": "Estados Unidos se incluye como contraste"
+      },
+      "body": "[MI-28] Estados Unidos aparece en Tabla 4 (HC51 USD PPA 2022: total US$ 1.401,7, bolsillo US$ 455,4, 32%) pero NO tiene ficha individual en el Anexo 6. Dado que se declara como caso de contraste, convendria anadir una ficha minima con al menos arquitectura del sistema (Medicare/Medicaid/ESI/ACA), fuentes de gasto (PBMs, Medicare Part D) y politica de precios (IRA 2022). La ausencia de ficha deja un hueco en el anexo.",
+      "rationale": "Completar cobertura del Anexo 6."
+    }
+  ],
+  "issues_found": [
+    {
+      "country": "Chile",
+      "what": "Ficha Tarjeta 1 no descompone HF1/HF2/HF3 explicitamente",
+      "expected": "Total 394,2; HF1 100,7 (26%); HF2 12,1 (3%); HF3 281,3 (71%)",
+      "actual": "Total 394; bolsillo 281; % 71%; privado 293 (sin desagregar HF1/HF2 vs HF3)"
+    },
+    {
+      "country": "Alemania",
+      "what": "Ficha Anexo 6 diverge 19% del Google Sheet/Tabla 4",
+      "expected": "Total 1.038,4 USD PPA HC51 2022; bolsillo 190,6 (18%)",
+      "actual": "Total $839; bolsillo $95; % 13,6%"
+    },
+    {
+      "country": "Australia",
+      "what": "Total coincide pero bolsillo y % divergen 50 a 70%",
+      "expected": "Total 756; bolsillo 387,5 (51%)",
+      "actual": "Total $772; bolsillo $115; % 11,1%"
+    },
+    {
+      "country": "Canada",
+      "what": "Bolsillo y % divergen 50%",
+      "expected": "Total 902,1; bolsillo 288,7 (32%)",
+      "actual": "Total $921; bolsillo $138; % 14,8%"
+    },
+    {
+      "country": "Corea del Sur",
+      "what": "Total diverge 31%; % diverge 3x",
+      "expected": "Total 773,4; bolsillo 372,7 (48%)",
+      "actual": "Total $533; bolsillo $163; % 16,4%"
+    },
+    {
+      "country": "Dinamarca",
+      "what": "Total diverge 27%; % diverge 7x",
+      "expected": "Total 389,1; bolsillo 208,5 (54%)",
+      "actual": "Total $496; bolsillo $68; % 7,7%"
+    },
+    {
+      "country": "Espana",
+      "what": "Total diverge 30%; % diverge 2,3x",
+      "expected": "Total 605,4; bolsillo 200,1 (33%)",
+      "actual": "Total $424; bolsillo $81; % 14,6%"
+    },
+    {
+      "country": "Francia",
+      "what": "Total diverge 22%; bolsillo diverge 47%",
+      "expected": "Total 806,8; bolsillo 105,7 (13%)",
+      "actual": "Total $629; bolsillo $56; % 12,9% (el unico pais donde el % coincide)"
+    },
+    {
+      "country": "Japon",
+      "what": "Total diverge 21%; % diverge 1,5x",
+      "expected": "Total 847,2; bolsillo 232,4 (27%)",
+      "actual": "Total $667; bolsillo $76; % 17,8%"
+    },
+    {
+      "country": "Noruega",
+      "what": "Total diverge 16%; % diverge 6,6x",
+      "expected": "Total 536,3; bolsillo 253,5 (47%)",
+      "actual": "Total $620; bolsillo $87; % 7,1%"
+    },
+    {
+      "country": "Paises Bajos",
+      "what": "% bolsillo diverge 4,4x",
+      "expected": "Total 428,5; bolsillo 131,4 (31%)",
+      "actual": "Total $404; bolsillo $40; % 7,0%"
+    },
+    {
+      "country": "Reino Unido",
+      "what": "% bolsillo diverge 3,4x",
+      "expected": "Total 524,1; bolsillo 173,5 (33%)",
+      "actual": "Total $485; bolsillo $71; % 9,6%"
+    },
+    {
+      "country": "Suecia",
+      "what": "% bolsillo diverge 4,7x",
+      "expected": "Total 585,8; bolsillo 262 (45%)",
+      "actual": "Total $567; bolsillo $74; % 9,5%"
+    },
+    {
+      "country": "Suiza",
+      "what": "Total diverge 36%; % diverge 2,2x",
+      "expected": "Total 955,1; bolsillo 251,2 (26%)",
+      "actual": "Total $1.302; bolsillo $281; % 11,9%"
+    },
+    {
+      "country": "Brasil",
+      "what": "Ficha LATAM diverge 52% del OECD SHA 2022 HC51",
+      "expected": "Total 329,9; bolsillo 301,2 (91%) - Brasil SI esta en OECD SHA",
+      "actual": "Total $158; bolsillo $42; % 18,2%"
+    },
+    {
+      "country": "Costa Rica",
+      "what": "Ficha LATAM diverge 38% y contradice el cuerpo del cap. 5 (parr 0648 dice 98%)",
+      "expected": "Total 144,6; bolsillo 141,9 (98%)",
+      "actual": "Total $90; bolsillo $20; % 9,2%"
+    },
+    {
+      "country": "Mexico",
+      "what": "Ficha LATAM diverge 46% y contradice el cuerpo del cap. 5 (parr 0648 dice >96%)",
+      "expected": "Total 250,7; bolsillo 242,1 (97%)",
+      "actual": "Total $136; bolsillo $53; % 21,0%"
+    },
+    {
+      "country": "Argentina",
+      "what": "Sin datos de medicamentos (N/D). Correcto: no es OECD, no esta en Google Sheet ni en OECD SHA",
+      "expected": "N/D o citar WHO GHED como alternativa",
+      "actual": "Todos los campos de medicamentos N/D"
+    },
+    {
+      "country": "Colombia",
+      "what": "Sin datos de medicamentos (N/D). Correcto: no es OECD",
+      "expected": "N/D o citar WHO GHED como alternativa",
+      "actual": "Todos los campos de medicamentos N/D"
+    },
+    {
+      "country": "Uruguay",
+      "what": "Ficha muestra total $104 y % 5,6% - Uruguay no esta en Google Sheet del autor ni es OECD. Valores deben citar fuente explicita",
+      "expected": "Fuente explicita (WHO GHED o similar)",
+      "actual": "Sin cita de fuente en la ficha"
+    },
+    {
+      "country": "Peru",
+      "what": "No aparece en el informe",
+      "expected": "Si se quiere incluir, usar WHO GHED",
+      "actual": "Ausente"
+    },
+    {
+      "country": "Estados Unidos",
+      "what": "Aparece en Tabla 4 (contraste) pero sin ficha individual en Anexo 6",
+      "expected": "Ficha minima con arquitectura Medicare/Medicaid/ESI/ACA",
+      "actual": "Sin ficha"
+    },
+    {
+      "country": "Global",
+      "what": "Unidades mezcladas: 'US$ 2022', 'US$ corrientes', 'US$ PPA 2022' usadas intercambiablemente. OECD SHA distingue precios constantes (Q) vs corrientes (V). Tabla 4 usa Q; fichas dicen 'corrientes' pero los numeros no coinciden tampoco con V. Parece que las fichas vienen de otra fuente (posiblemente Health at a Glance 2023)",
+      "expected": "Todas las cifras en USD PPA precios constantes 2022 OECD SHA HC51",
+      "actual": "Mix de unidades y fuentes sin declarar"
+    },
+    {
+      "country": "Global",
+      "what": "'% del gasto de bolsillo' en Anexo 6 parece referir a OOP sobre gasto total de salud (no sobre HC51). En Tabla 4 es OOP sobre HC51",
+      "expected": "Misma metrica en todas las tablas y fichas",
+      "actual": "Dos definiciones distintas para el mismo % a lo largo del capitulo"
+    }
+  ]
+}

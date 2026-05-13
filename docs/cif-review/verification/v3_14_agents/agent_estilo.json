@@ -1,0 +1,450 @@
+{
+  "agent": "estilo",
+  "generated_at": "2026-04-24T00:00:00Z",
+  "summary": "39 edits totales; 20 verbos prescriptivos suavizados (debe/deben/debería/debiera → podría/convendría/requiere/conviene); 2 espacios moneda-cifra (US$/MM$); 7 artefactos de reemplazo masivo previo 'farmacias privadas' eliminados; 3 reemplazos 'farmacias privadas' (uso chileno) → 'canal retail' (término OECD HC51); 1 cita CIF como fuente académica reformulada a 'estudio sectorial'; 1 primera persona editorial suavizada; 4 citas (Fuente año) normalizadas a (Fuente, año); 0 em dashes en texto vivo (los 8 em dashes del XML están en w:delText ya eliminados por tracked changes previos); 0 'seguros de salud' (ya está usando 'planes de salud'); 0 neologismos (farmaceutización/medicalización) detectados.",
+  "stats": {
+    "em_dashes_final_text": 0,
+    "em_dashes_in_delText_only": 8,
+    "prescriptivos": 20,
+    "seguros_to_planes": 0,
+    "farmacias_to_retail_chile": 3,
+    "farmacias_privadas_artifacts": 7,
+    "cif_as_source": 1,
+    "primera_persona": 1,
+    "currency_spacing": 2,
+    "citas_sin_coma": 4,
+    "categoricos_suavizados": 2,
+    "total_edits": 39
+  },
+  "edits": [
+    {
+      "id": "EST-001",
+      "type": "replace_text_in_paragraph",
+      "locator": {
+        "strategy": "contains",
+        "text": "Chile: US$394"
+      },
+      "old": "Chile: US$394; Alemania: US$1.038; Estados Unidos: US$1.402; Francia: US$807; España: US$605; promedio OCDE: US$614.",
+      "new": "Chile: US$ 394; Alemania: US$ 1.038; Estados Unidos: US$ 1.402; Francia: US$ 807; España: US$ 605; promedio OCDE: US$ 614.",
+      "rationale": "Regla 10: espacio entre US$ y cifra."
+    },
+    {
+      "id": "EST-002",
+      "type": "replace_text_in_paragraph",
+      "locator": {
+        "strategy": "contains",
+        "text": "Total 2024: MM$1.514.814"
+      },
+      "old": "Total 2024: MM$1.514.814",
+      "new": "Total 2024: MM$ 1.514.814",
+      "rationale": "Regla 10: espacio entre MM$ y cifra."
+    },
+    {
+      "id": "EST-003",
+      "type": "replace_text_in_paragraph",
+      "locator": {
+        "strategy": "contains",
+        "text": "debe considerarse al interpretar los escenarios"
+      },
+      "old": "debe considerarse al interpretar los escenarios del Capítulo 6.",
+      "new": "conviene considerarse al interpretar los escenarios del Capítulo 6.",
+      "rationale": "Regla 2: tono prescriptivo en texto editorial → suavizar a 'conviene'."
+    },
+    {
+      "id": "EST-004",
+      "type": "replace_text_in_paragraph",
+      "locator": {
+        "strategy": "contains",
+        "text": "la equivalencia terapéutica debe establecerse con estudios"
+      },
+      "old": "la equivalencia terapéutica debe establecerse con estudios clínicos específicos (no sólo bioequivalencia química)",
+      "new": "la equivalencia terapéutica requiere establecerse con estudios clínicos específicos (no sólo bioequivalencia química)",
+      "rationale": "Regla 2: 'debe establecerse' es prescriptivo; 'requiere establecerse' mantiene el contenido técnico sin tono normativo."
+    },
+    {
+      "id": "EST-005",
+      "type": "replace_text_in_paragraph",
+      "locator": {
+        "strategy": "contains",
+        "text": "El medicamento debe contar con autorización sanitaria"
+      },
+      "old": "El medicamento debe contar con autorización sanitaria para su comercialización y uso",
+      "new": "El medicamento requiere autorización sanitaria para su comercialización y uso",
+      "rationale": "Regla 2: 'debe contar' → 'requiere' (lenguaje descriptivo del requisito regulatorio)."
+    },
+    {
+      "id": "EST-006",
+      "type": "replace_text_in_paragraph",
+      "locator": {
+        "strategy": "contains",
+        "text": "no es presupuestado ex ante y debe ejecutarse por mandato judicial"
+      },
+      "old": "no es presupuestado ex ante y debe ejecutarse por mandato judicial",
+      "new": "no es presupuestado ex ante y se ejecuta por mandato judicial",
+      "rationale": "Regla 2: 'debe ejecutarse' (prescriptivo) → 'se ejecuta' (descriptivo)."
+    },
+    {
+      "id": "EST-007",
+      "type": "replace_text_in_paragraph",
+      "locator": {
+        "strategy": "contains",
+        "text": "La lectura micro de los hogares debe leerse como el reflejo"
+      },
+      "old": "La lectura micro de los hogares debe leerse como el reflejo natural",
+      "new": "La lectura micro de los hogares conviene interpretarla como el reflejo natural",
+      "rationale": "Regla 2: 'debe leerse' (prescriptivo) → 'conviene interpretarla' (propositivo)."
+    },
+    {
+      "id": "EST-008",
+      "type": "replace_text_in_paragraph",
+      "locator": {
+        "strategy": "contains",
+        "text": "el copago “diseñado” debe proteger tratamientos"
+      },
+      "old": "el copago “diseñado” debe proteger tratamientos crónicos y recurrentes, y desincentivar usos de bajo valor sin castigar continuidad terapéutica.",
+      "new": "el copago “diseñado” conviene que proteja tratamientos crónicos y recurrentes y desincentive usos de bajo valor sin castigar continuidad terapéutica.",
+      "rationale": "Regla 2: atenuar imperativo en referencia a literatura de política pública."
+    },
+    {
+      "id": "EST-009",
+      "type": "replace_text_in_paragraph",
+      "locator": {
+        "strategy": "contains",
+        "text": "también debe capturar el valor sanitario real"
+      },
+      "old": "también debe capturar el valor sanitario real de los medicamentos innovadores y calibrar la cobertura en función de ese valor.",
+      "new": "también resulta relevante que capture el valor sanitario real de los medicamentos innovadores y que calibre la cobertura en función de ese valor.",
+      "rationale": "Regla 2: 'debe capturar' → 'resulta relevante que capture' (tono de insumo para debate)."
+    },
+    {
+      "id": "EST-010",
+      "type": "replace_text_in_paragraph",
+      "locator": {
+        "strategy": "contains",
+        "text": "sistema de priorización basado en valor (HTA/ETESA) debe reconocer"
+      },
+      "old": "sistema de priorización basado en valor (HTA/ETESA) debe reconocer los beneficios clínicos de innovaciones farmacológicas.",
+      "new": "sistema de priorización basado en valor (HTA/ETESA) convendría que reconozca los beneficios clínicos de innovaciones farmacológicas.",
+      "rationale": "Regla 2: suavizar prescripción con 'convendría que'."
+    },
+    {
+      "id": "EST-011",
+      "type": "replace_text_in_paragraph",
+      "locator": {
+        "strategy": "contains",
+        "text": "debe quedar trazado y auditable"
+      },
+      "old": "debe quedar trazado y auditable (sin convertir la excepción en regla).",
+      "new": "convendría que quede trazado y auditable (sin convertir la excepción en regla).",
+      "rationale": "Regla 2: 'debe quedar' → 'convendría que quede'."
+    },
+    {
+      "id": "EST-012",
+      "type": "replace_text_in_paragraph",
+      "locator": {
+        "strategy": "contains",
+        "text": "Debe alimentar gestión logística"
+      },
+      "old": "Debe alimentar gestión logística (alertas, reposición) y evaluación de desempeño.",
+      "new": "Conviene que alimente la gestión logística (alertas, reposición) y la evaluación de desempeño.",
+      "rationale": "Regla 2: imperativo → condicional atenuado."
+    },
+    {
+      "id": "EST-013",
+      "type": "replace_text_in_paragraph",
+      "locator": {
+        "strategy": "contains",
+        "text": "Entre los instrumentos que deben incorporarse explícitamente figura"
+      },
+      "old": "Entre los instrumentos que deben incorporarse explícitamente figura el Programa de medicamentos antineoplásicos",
+      "new": "Entre los instrumentos que conviene incorporar explícitamente figura el Programa de medicamentos antineoplásicos",
+      "rationale": "Regla 2: 'deben incorporarse' → 'conviene incorporar'."
+    },
+    {
+      "id": "EST-014",
+      "type": "replace_text_in_paragraph",
+      "locator": {
+        "strategy": "contains",
+        "text": "Los biosimilares, por su naturaleza biológica, deben tratarse con reglas diferenciadas"
+      },
+      "old": "Los biosimilares, por su naturaleza biológica, deben tratarse con reglas diferenciadas",
+      "new": "Los biosimilares, por su naturaleza biológica, requieren reglas diferenciadas",
+      "rationale": "Regla 2: 'deben tratarse' → 'requieren' (describe requisito técnico sin imperativo editorial)."
+    },
+    {
+      "id": "EST-015",
+      "type": "replace_text_in_paragraph",
+      "locator": {
+        "strategy": "contains",
+        "text": "los planes deben cubrir"
+      },
+      "old": "el beneficio operaría como piso regulatorio que los planes deben cubrir",
+      "new": "el beneficio operaría como piso regulatorio que los planes cubrirían",
+      "rationale": "Regla 2: alinear al condicional 'operaría' del mismo enunciado."
+    },
+    {
+      "id": "EST-016",
+      "type": "replace_text_in_paragraph",
+      "locator": {
+        "strategy": "contains",
+        "text": "la definición del cap deben quedar “ancladas”"
+      },
+      "old": "la definición del cap deben quedar “ancladas” a este análisis y a reglas explícitas de priorización",
+      "new": "la definición del cap convendría que queden “ancladas” a este análisis y a reglas explícitas de priorización",
+      "rationale": "Regla 2: suavizar imperativo en texto propositivo."
+    },
+    {
+      "id": "EST-017",
+      "type": "replace_text_in_paragraph",
+      "locator": {
+        "strategy": "contains",
+        "text": "quienes definen canasta/reglas y quienes negocian deben operar"
+      },
+      "old": "quienes definen canasta/reglas y quienes negocian deben operar con estándares de transparencia y control.",
+      "new": "quienes definen canasta/reglas y quienes negocian convendría que operen con estándares de transparencia y control.",
+      "rationale": "Regla 2: suavizar imperativo."
+    },
+    {
+      "id": "EST-018",
+      "type": "replace_text_in_paragraph",
+      "locator": {
+        "strategy": "contains",
+        "text": "los biosimilares deberían estar incluidos en las coberturas estatales"
+      },
+      "old": "los biosimilares deberían estar incluidos en las coberturas estatales (GES, Ley Ricarte Soto, DAC) bajo reglas específicas",
+      "new": "los biosimilares podrían incluirse en las coberturas estatales (GES, Ley Ricarte Soto, DAC) bajo reglas específicas",
+      "rationale": "Regla 2: 'deberían' → 'podrían' (tono de opción para el debate)."
+    },
+    {
+      "id": "EST-019",
+      "type": "replace_text_in_paragraph",
+      "locator": {
+        "strategy": "contains",
+        "text": "La agenda de reforma debiera apuntar"
+      },
+      "old": "La agenda de reforma debiera apuntar a aumentar la cobertura territorial",
+      "new": "La agenda de reforma podría apuntar a aumentar la cobertura territorial",
+      "rationale": "Regla 2: 'debiera apuntar' → 'podría apuntar'."
+    },
+    {
+      "id": "EST-020",
+      "type": "replace_text_in_paragraph",
+      "locator": {
+        "strategy": "contains",
+        "text": "El MCC debiera alinear"
+      },
+      "old": "El MCC debiera alinear la canasta de beneficios con la estrategia de compras",
+      "new": "El MCC convendría que alinee la canasta de beneficios con la estrategia de compras",
+      "rationale": "Regla 2: 'debiera alinear' → 'convendría que alinee'."
+    },
+    {
+      "id": "EST-021",
+      "type": "replace_text_in_paragraph",
+      "locator": {
+        "strategy": "contains",
+        "text": "La política pública, entonces, no debería orientarse"
+      },
+      "old": "La política pública, entonces, no debería orientarse a 'contener' judicializaciones aisladas, sino a eliminar las brechas",
+      "new": "La política pública, en consecuencia, más que orientarse a 'contener' judicializaciones aisladas, podría concentrarse en cerrar las brechas",
+      "rationale": "Regla 2+9: reemplazar imperativo negativo por planteo propositivo."
+    },
+    {
+      "id": "EST-022",
+      "type": "replace_text_in_paragraph",
+      "locator": {
+        "strategy": "contains",
+        "text": "que el seminario debe ponderar"
+      },
+      "old": "los escenarios 1 y 3 del Capítulo 6 representan alternativas igualmente válidas que el seminario debe ponderar.",
+      "new": "los escenarios 1 y 3 del Capítulo 6 representan alternativas igualmente válidas para la ponderación en el seminario.",
+      "rationale": "Regla 2+9: 'debe ponderar' → formulación descriptiva sin imperativo."
+    },
+    {
+      "id": "EST-023",
+      "type": "replace_text_in_paragraph",
+      "locator": {
+        "strategy": "contains",
+        "text": "La implementación debe ser gradual"
+      },
+      "old": "La implementación debe ser gradual e informada por evidencia.",
+      "new": "La implementación convendría que sea gradual e informada por evidencia.",
+      "rationale": "Regla 2: 'debe ser' → 'convendría que sea'."
+    },
+    {
+      "id": "EST-024",
+      "type": "replace_text_in_paragraph",
+      "locator": {
+        "strategy": "contains",
+        "text": "farmacias privadasChile exhibe una brecha de protección financiera"
+      },
+      "old": "farmacias privadasChile exhibe una brecha de protección financiera",
+      "new": "Chile exhibe una brecha de protección financiera",
+      "rationale": "Artefacto de reemplazo masivo previo: 'farmacias privadas' pegado al inicio del párrafo (no corresponde)."
+    },
+    {
+      "id": "EST-025",
+      "type": "replace_text_in_paragraph",
+      "locator": {
+        "strategy": "contains",
+        "text": "farmacias privadasida la onesMás allá del nivel de gasto"
+      },
+      "old": "farmacias privadasida la onesMás allá del nivel de gasto",
+      "new": "Más allá del nivel de gasto",
+      "rationale": "Artefacto de reemplazo masivo previo: fragmento 'farmacias privadasida la ones' es ruido, no corresponde al sentido del párrafo."
+    },
+    {
+      "id": "EST-026",
+      "type": "replace_text_in_paragraph",
+      "locator": {
+        "strategy": "contains",
+        "text": "precio efectivo enfrentado por el paciente farmacias privadasIncluye terapias crónicas"
+      },
+      "old": "reduccines del precio efectivo enfrentado por el paciente farmacias privadasIncluye terapias crónicas frecuentes",
+      "new": "Incluye terapias crónicas frecuentes",
+      "rationale": "Artefacto de reemplazo masivo: 'reduccines... farmacias privadas' es ruido; el enunciado correcto comienza con 'Incluye terapias crónicas'."
+    },
+    {
+      "id": "EST-027",
+      "type": "replace_text_in_paragraph",
+      "locator": {
+        "strategy": "contains",
+        "text": "trasladando la compra al farmacias privadas"
+      },
+      "old": "trasladando la compra al farmacias privadas.",
+      "new": "trasladando la compra al canal retail.",
+      "rationale": "Regla 4 + gramática: 'al farmacias privadas' no concuerda; sustituir por 'canal retail' (término técnico OECD HC51)."
+    },
+    {
+      "id": "EST-028",
+      "type": "replace_text_in_paragraph",
+      "locator": {
+        "strategy": "contains",
+        "text": "el registro de dispensaciones en el farmacias privadas"
+      },
+      "old": "el registro de dispensaciones en el farmacias privadas y la trazabilidad individual",
+      "new": "el registro de dispensaciones en el canal retail y la trazabilidad individual",
+      "rationale": "Regla 4 + gramática: 'en el farmacias privadas' no concuerda; reemplazar por 'canal retail'."
+    },
+    {
+      "id": "EST-029",
+      "type": "replace_text_in_paragraph",
+      "locator": {
+        "strategy": "contains",
+        "text": "la adquisición ocurre en el farmacias privadas"
+      },
+      "old": "la adquisición ocurre en el farmacias privadas (o por vías excepcionales).",
+      "new": "la adquisición ocurre en el canal retail (o por vías excepcionales).",
+      "rationale": "Regla 4 + gramática: 'en el farmacias privadas' no concuerda; 'canal retail' es el término técnico."
+    },
+    {
+      "id": "EST-030",
+      "type": "replace_text_in_paragraph",
+      "locator": {
+        "strategy": "contains",
+        "text": "farmacias privadasEn medicamentos, la exposición del bolsillo"
+      },
+      "old": "farmacias privadasEn medicamentos, la exposición del bolsillo",
+      "new": "En medicamentos, la exposición del bolsillo",
+      "rationale": "Artefacto de reemplazo masivo: eliminar 'farmacias privadas' pegado al inicio del párrafo."
+    },
+    {
+      "id": "EST-031",
+      "type": "replace_text_in_paragraph",
+      "locator": {
+        "strategy": "contains",
+        "text": "farmacias privadasComo punto de partida cuantitativo"
+      },
+      "old": "farmacias privadasComo punto de partida cuantitativo",
+      "new": "Como punto de partida cuantitativo",
+      "rationale": "Artefacto de reemplazo masivo: 'farmacias privadas' pegado al inicio del párrafo."
+    },
+    {
+      "id": "EST-032",
+      "type": "replace_text_in_paragraph",
+      "locator": {
+        "strategy": "contains",
+        "text": "alta dependencia del bolsillo en el farmacias privadas"
+      },
+      "old": "mantendría alta dependencia del bolsillo en el farmacias privadas.",
+      "new": "mantendría alta dependencia del bolsillo en el canal retail.",
+      "rationale": "Regla 4 + gramática: 'en el farmacias privadas' no concuerda; 'canal retail' es el término técnico."
+    },
+    {
+      "id": "EST-033",
+      "type": "replace_text_in_paragraph",
+      "locator": {
+        "strategy": "contains",
+        "text": "farmacias privadasEste capítulo desarrolla en detalle"
+      },
+      "old": "farmacias privadasEste capítulo desarrolla en detalle el Escenario 2",
+      "new": "Este capítulo desarrolla en detalle el Escenario 2",
+      "rationale": "Artefacto de reemplazo masivo: 'farmacias privadas' pegado al inicio del párrafo."
+    },
+    {
+      "id": "EST-034",
+      "type": "replace_text_in_paragraph",
+      "locator": {
+        "strategy": "contains",
+        "text": "la Cámara de Innovación Farmacéutica (CIF, 2025) estima que el 80%"
+      },
+      "old": "Estudios recientes con metodologías alternativas reportan cifras consistentes: la Cámara de Innovación Farmacéutica (CIF, 2025) estima que el 80% del gasto retail en me",
+      "new": "Estudios recientes con metodologías alternativas reportan cifras consistentes: un estudio sectorial (2025) estima que el 80% del gasto retail en me",
+      "rationale": "Regla 6: evitar citar CIF como fuente académica; reformular como 'estudio sectorial'. La vinculación con la CIF como financista ya se declara en agradecimientos."
+    },
+    {
+      "id": "EST-035",
+      "type": "replace_text_in_paragraph",
+      "locator": {
+        "strategy": "contains",
+        "text": "este informe propone una agenda de reforma en tres planos"
+      },
+      "old": "este informe propone una agenda de reforma en tres planos complementarios",
+      "new": "este informe desarrolla una agenda de reforma en tres planos complementarios",
+      "rationale": "Regla 5: 'propone' con voz editorial del informe → 'desarrolla' (más descriptivo, menos prescriptivo)."
+    },
+    {
+      "id": "EST-036",
+      "type": "replace_text_in_paragraph",
+      "locator": {
+        "strategy": "contains",
+        "text": "sobre el 96% (OCDE 2022)"
+      },
+      "old": "sobre el 96% (OCDE 2022)",
+      "new": "sobre el 96% (OCDE, 2022)",
+      "rationale": "Regla 11: citas entre paréntesis con coma entre fuente y año."
+    },
+    {
+      "id": "EST-037",
+      "type": "replace_text_in_paragraph",
+      "locator": {
+        "strategy": "contains",
+        "text": "OECD System of Health Accounts (SHA 2022)"
+      },
+      "old": "OECD System of Health Accounts (SHA 2022)",
+      "new": "OECD System of Health Accounts (SHA, 2022)",
+      "rationale": "Regla 11: cita con coma."
+    },
+    {
+      "id": "EST-038",
+      "type": "replace_text_in_paragraph",
+      "locator": {
+        "strategy": "contains",
+        "text": "reducción superior al 40% de exacerbaciones pulmonares (NEJM 2019)"
+      },
+      "old": "reducción superior al 40% de exacerbaciones pulmonares (NEJM 2019)",
+      "new": "reducción superior al 40% de exacerbaciones pulmonares (NEJM, 2019)",
+      "rationale": "Regla 11: cita con coma."
+    },
+    {
+      "id": "EST-039",
+      "type": "replace_text_in_paragraph",
+      "locator": {
+        "strategy": "contains",
+        "text": "el curso natural de la enfermedad en lactantes sintomáticos (Nature Medicine 2022)"
+      },
+      "old": "el curso natural de la enfermedad en lactantes sintomáticos (Nature Medicine 2022)",
+      "new": "el curso natural de la enfermedad en lactantes sintomáticos (Nature Medicine, 2022)",
+      "rationale": "Regla 11: cita con coma."
+    }
+  ]
+}

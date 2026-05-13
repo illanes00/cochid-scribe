@@ -1,0 +1,157 @@
+{
+  "agent": "C - coherencia + bibliografía",
+  "focos_revisados": [
+    "Cap 1.1 (dimensión humana): desplazar el párrafo para que no interrumpa la enumeración de los dos frentes (a y b)",
+    "Cap 7.13 (Síntesis y remisión): coherencia verificada — transición desde 7.12 al cierre funciona",
+    "Cap 8.3/8.4: numeración incoherente — falta 8.1 y 8.2 (el bloque concluyente está sin numerar)",
+    "Cap 8.4 (8 preguntas): verificadas — cubren viabilidad política, arquitectura FONASA/ISAPRE, HTA, dispensación, innovación, judicialización, transparencia, reformas",
+    "Mensajes A/B/C/D: presentes pero Mensaje D (BFAU como opción, no prescripción) necesita refuerzo en Cap 8"
+  ],
+  "edits": [
+    {
+      "type": "replace_paragraph",
+      "locator": {"mode": "prefix", "value": "La dimensión humana de estas brechas no se limita al gasto acumulado. En patologías complejas y de alto costo"},
+      "new": "La dimensión humana de estas brechas no se limita al gasto acumulado. En patologías complejas y de alto costo (cánceres avanzados, enfermedades genéticas raras, patologías autoinmunes graves o enfermedades neurodegenerativas), la ausencia de cobertura explícita se traduce en trayectorias de acceso marcadas por la incertidumbre. Cuando el medicamento requerido no está incluido en GES, Ley Ricarte Soto, DAC ni Fondo de Farmacia, pacientes y familias recurren a vías extraordinarias: financiamiento por colectas, endeudamiento, o acciones judiciales (recursos de protección ante Cortes de Apelaciones y Corte Suprema). Estas vías tienen costos económicos, emocionales y de tiempo: la tramitación de un recurso de protección puede tomar semanas o meses, plazo durante el cual la enfermedad puede progresar y reducir la ventana terapéutica útil. La judicialización, por tanto, no es un fenómeno meramente administrativo, sino un síntoma estructural de insuficiencia del beneficio explícito, que traslada a los tribunales decisiones que deberían resolverse por mecanismos formales de priorización (Vargas-Pelaez et al., 2019). Este diagnóstico se desarrolla en la Sección 3.2.6.",
+      "rationale": "Refuerza Mensaje C (judicialización como síntoma), agrega cita a Vargas-Pelaez et al. 2019 (ya mencionado en 3.2.6) y remite al lector a la sección correspondiente para evitar duplicación. También convierte la lista con comas en paréntesis más legible."
+    },
+    {
+      "type": "insert_paragraph",
+      "anchor": {"mode": "prefix", "value": "La dimensión humana de estas brechas no se limita al gasto acumulado"},
+      "position": "before",
+      "text": "A continuación se presentan los dos frentes del problema; al cierre de esta sección se aborda la dimensión humana y judicial asociada a las brechas de cobertura.",
+      "rationale": "Aunque [209] permanece en su posición, se agrega una breve frase de transición en [208] que anticipa al lector que tras a) y b) se retomará la dimensión humana. Alternativa si no se mueve [209]: mejor dejar solo el edit de mover — ver nota editor."
+    },
+    {
+      "type": "replace_paragraph",
+      "locator": {"mode": "prefix", "value": "farmacias privadasChile exhibe una brecha de protección financiera"},
+      "new": "Chile exhibe una brecha de protección financiera en medicamentos. El gasto de bolsillo en salud permanece alto en comparación internacional y el componente farmacéutico es un determinante central de la exposición financiera de los hogares, especialmente en el segmento ambulatorio. A diferencia del estándar OCDE, en Chile los medicamentos no forman parte de los planes de salud, salvo regímenes específicos (GES, Ley Ricarte Soto, DAC, FOFAR): esa es la diferencia estructural que enmarca la discusión que sigue.",
+      "rationale": "Limpia texto residual 'farmacias privadas' al inicio del primer mensaje clave. Mensaje A (ausencia de BFAU como problema estructural) debe abrir el bloque sin ruido."
+    },
+    {
+      "type": "replace_paragraph",
+      "locator": {"mode": "prefix", "value": "Un escenario de ajuste acotado reduce extremos de ajuste"},
+      "new": "Tres escenarios ilustran trade-offs entre protección financiera y esfuerzo fiscal: un ajuste acotado que contiene gasto catastrófico sin transformar el sistema; una convergencia intermedia hacia el cluster OCDE, con reducciones sustantivas de gasto de bolsillo; y una convergencia alta, que exige un salto fiscal mayor para aproximarse al cuartil superior OCDE.",
+      "rationale": "Elimina repetición 'de ajuste de ajuste' y el fragmento 'Un escenario de ajuste acotado reduce extremos de ajuste, pero mantiene una alta dependencia del bolsillo' que duplica contenido que sigue. Mensaje D (trade-offs, no prescripción) sin ruido."
+    },
+    {
+      "type": "replace_paragraph",
+      "locator": {"mode": "prefix", "value": "farmacias privadasida la onesMás allá del nivel de gasto"},
+      "new": "Más allá del nivel de gasto, el desafío en medicamentos conviene entenderlo como un problema de arquitectura: la protección financiera y el acceso efectivo dependen de la interacción entre cobertura explícita (canasta/beneficio), reglas de copago y mecanismos de protección (topes, exenciones), y el modelo de entrega y dispensación (red pública, convenios institucionales, canal retail, reembolso), incluyendo la continuidad de stock. Cuando alguna de estas piezas falla, la necesidad clínica se traduce en gasto directo o en interrupción del tratamiento.",
+      "rationale": "Limpia residuo 'farmacias privadasida la ones' al inicio del párrafo [206] en Cap 1.1. Preserva Mensaje B (arquitectura fragmentada, no sólo precio)."
+    },
+    {
+      "type": "replace_paragraph",
+      "locator": {"mode": "contains", "value": "En 2022, los hogares financiaron 71% del gasto en fármacos comprados en farmacias"},
+      "new": "En 2022, los hogares financiaron aproximadamente 71% del gasto en fármacos comprados en farmacias (retail) en Chile, cifra elevada en el contexto OCDE. Esta comparación abarca exclusivamente el canal retail/farmacia ambulatoria: los datos OCDE de referencia excluyen los medicamentos dispensados en establecimientos hospitalarios e institucionales, por lo que la cifra refleja únicamente compras directas en farmacia. Este segmento incluye terapias crónicas frecuentes como hipertensión, diabetes, dislipidemia, asma y salud mental, además de fármacos de uso común. En él, el riesgo financiero proviene de compras recurrentes sostenidas en el tiempo; incluso copagos moderados pueden acumularse y generar una carga financiera relevante. Cuando la entrega pública no cubre la necesidad, por brecha de cobertura efectiva, por no inclusión en listados o arsenales institucionales, o por discontinuidad de stock, la adquisición se desplaza hacia farmacias privadas o municipales, donde los hogares enfrentan la mayor parte del gasto. En consecuencia, los avances en cobertura explícita, en reglas e incentivos de sustitución por denominación común internacional (DCI) y bioequivalencia, y en condiciones del canal de dispensación, pueden impactar de forma relativamente rápida el gasto de bolsillo y la continuidad terapéutica, aunque la magnitud depende de la regla institucional adoptada y de la capacidad operativa del sistema.",
+      "rationale": "Limpia residuos de edits previos: ', , En 2022' al inicio, 'reduccines del precio efectivo enfrentado por el paciente farmacias privadas' en mitad del párrafo. Texto reorganizado sin pérdida de contenido. Mensaje A/B se sostienen."
+    },
+    {
+      "type": "replace_paragraph",
+      "locator": {"mode": "prefix", "value": ", Ambos frentes responden a lógicas distintas"},
+      "new": "Segundo, los medicamentos de alto costo, donde el riesgo financiero es catastrófico. En Chile existe un instrumento de alto impacto (Ley Ricarte Soto) que entrega cobertura financiera integral para diagnósticos y tratamientos incorporados por decreto, con copago cero para quienes cumplen requisitos clínicos. Por diseño, su alcance es acotado. Importa subrayar, no obstante, que 'alto costo' no equivale a 'baja prevalencia': el cáncer, por ejemplo, es la primera causa de muerte en Chile y desplaza a las enfermedades cardiovasculares, combinando un peso epidemiológico enorme con tratamientos de costo elevado. Por ello, el instrumento actual es indispensable para riesgos catastróficos pero insuficiente para cubrir el conjunto de necesidades ambulatorias frecuentes que generan gasto de bolsillo sostenido. Ambos frentes responden a lógicas distintas de riesgo financiero y requieren, por lo tanto, instrumentos diferenciados dentro de una arquitectura común de protección.",
+      "rationale": "Limpia residuo ', Ambos frentes...' al inicio del párrafo [169] del Resumen Ejec. Reordena: la frase síntesis 'Ambos frentes responden a lógicas distintas... arquitectura común' queda al final cerrando el bloque de los dos frentes. Preserva Mensaje B."
+    },
+    {
+      "type": "replace_paragraph",
+      "locator": {"mode": "prefix", "value": " conjunto de países OCDE de protección farmacéutica intermedia,Escenario 2:"},
+      "new": "Escenario 2: convergencia intermedia OCDE. Alinea a Chile con un cluster de países OCDE de protección farmacéutica intermedia, que combinan protección financiera sustantiva y esfuerzo fiscal moderado, reduciendo de forma significativa la dependencia del bolsillo y estableciendo un beneficio farmacéutico ambulatorio universal con reglas comunes.",
+      "rationale": "Limpia fragmento huérfano ' conjunto de países OCDE de protección farmacéutica intermedia,' al inicio del párrafo [186] del Resumen Ejec y lo incorpora como aposición limpia."
+    },
+    {
+      "type": "replace_paragraph",
+      "locator": {"mode": "prefix", "value": "informada por evidencia, Para sostener el beneficio"},
+      "new": "Para sostener el beneficio en el tiempo, sería recomendable fortalecer capacidades institucionales y de datos: gobernanza del beneficio, sistemas de información interoperables, evaluación de tecnologías y análisis de impacto presupuestario, mecanismos de transparencia y monitoreo de resultados (acceso efectivo, adherencia, equidad y desempeño fiscal). Una transición incremental, informada por evidencia, apoyada en programas existentes y en el cierre progresivo de brechas de continuidad en la provisión pública, es la ruta más coherente con la experiencia comparada.",
+      "rationale": "Limpia residuo 'informada por evidencia, ' al inicio del párrafo [198] del Resumen Ejec y lo reincorpora en su posición lógica ('transición incremental, informada por evidencia')."
+    },
+    {
+      "type": "replace_paragraph",
+      "locator": {"mode": "prefix", "value": " elevidencia comparada sugiere s, la  de tratamientoel Este informe analiza"},
+      "new": "Este informe analiza la problemática de acceso y protección financiera frente a medicamentos en Chile, con foco en su inclusión sostenible en los planes de salud. Pese a avances relevantes en coberturas explícitas y mecanismos de compra pública, el país mantiene una exposición financiera elevada para los hogares, particularmente en el canal de medicamentos dispensados fuera del hospital. La experiencia internacional comparada muestra que reducir de manera sostenible el gasto de bolsillo en medicamentos no depende de una sola medida, sino de un paquete de políticas que articula (i) una canasta explícita (beneficio), (ii) reglas de copagos y protección financiera (incluyendo topes), y (iii) un modelo de provisión, dispensación y pago que permita la continuidad de tratamiento y el control de costos.",
+      "rationale": "Párrafo [164] del Resumen Ejec tiene un preámbulo corrupto (' elevidencia comparada sugiere s, la  de tratamientoel') y duplica el cuerpo dos veces ('Este informe analiza... Este informe analiza...'). Se elimina el preámbulo roto y la duplicación manteniendo una sola versión limpia."
+    },
+    {
+      "type": "replace_paragraph",
+      "locator": {"mode": "prefix", "value": "8.3\tClasificación de medidas por horizonte"},
+      "new": "8.1\tClasificación de medidas por horizonte de reforma",
+      "rationale": "Renumeración. El Capítulo 8 no tiene 8.1 ni 8.2 en el documento actual: el bloque conclusivo [1068-1074] es texto corrido y luego salta directo a 8.3. Se renumera 8.3 -> 8.1 para que la estructura sea coherente. Nota: también debe actualizarse la Tabla de Contenidos y el edit siguiente renumera 8.4 -> 8.2."
+    },
+    {
+      "type": "replace_paragraph",
+      "locator": {"mode": "prefix", "value": "8.4\tPreguntas para la discusión"},
+      "new": "8.2\tPreguntas para la discusión",
+      "rationale": "Renumeración 8.4 -> 8.2, consistente con el edit anterior. De este modo el Capítulo 8 queda: bloque conclusivo corrido (síntesis y hallazgos), 8.1 Clasificación de medidas por horizonte de reforma, 8.2 Preguntas para la discusión."
+    },
+    {
+      "type": "replace_paragraph",
+      "locator": {"mode": "prefix", "value": "Esta clasificación permite diferenciar medidas de implementación inmediata"},
+      "new": "Esta clasificación permite diferenciar medidas de implementación inmediata de aquellas que requieren acuerdo legislativo o rediseño institucional, y entrega un ordenamiento útil para priorizar la secuencia de reforma en el debate del seminario. Consistente con el espíritu del informe, el Beneficio Farmacéutico Ambulatorio Universal se incluye dentro del tercer horizonte como una opción priorizada para la discusión y no como una prescripción: los escenarios 1 y 3 del Capítulo 6 representan alternativas igualmente válidas que el seminario debe ponderar.",
+      "rationale": "Refuerza Mensaje D (BFAU es OPCIÓN priorizada, no prescripción) al cierre de la clasificación de medidas, justo antes de entrar a 8.2 Preguntas. Reemplaza el párrafo de cierre y elimina el '.' suelto que quedó como párrafo huérfano [1081]."
+    },
+    {
+      "type": "replace_paragraph",
+      "locator": {"mode": "prefix", "value": "Para ordenar el debate del seminario, este informe cierra con ocho preguntas"},
+      "new": "Para ordenar el debate del seminario, este informe cierra con ocho preguntas abiertas. Cada pregunta se deriva de una tensión identificada en el análisis pero no zanjada en el informe; su resolución depende de preferencias sociales y decisiones políticas que exceden el alcance de este documento. Las preguntas abordan, en orden, la viabilidad política de los escenarios, la arquitectura FONASA/ISAPRE, el rol del HTA/ETESA, la modalidad de dispensación, la tensión innovación-sostenibilidad, el lugar de la judicialización, los mecanismos de transparencia y la integración con reformas estructurales en curso.",
+      "rationale": "Mejora la introducción a las 8 preguntas: antes de listar, anuncia los 8 temas cubiertos para que el lector tenga un mapa. Refuerza la afirmación de que el informe NO zanja preferencias (Mensaje D)."
+    }
+  ],
+  "bibliografia_pendiente": [
+    {
+      "cita": "Aguilera, X., Castillo-Laborde, C., & Matute, I. (Eds.). (2022). La ruta del medicamento en Chile. Santiago: Centro de Epidemiología y Políticas de Salud, Facultad de Medicina Clínica Alemana–Universidad del Desarrollo.",
+      "insertar_en": "Bibliografía — ya existe como 'Castillo-Laborde, C., Matute, I., & Aguilera, X. (Eds.). (2022). Ruta del medicamento en Chile...'. Verificar duplicación; si se usa 'Aguilera & Castillo (2022)' en el cuerpo, armonizar la forma de cita autor-año con la entrada en lista."
+    },
+    {
+      "cita": "Bitrán, R. (2018). Salud y medicamentos en América Latina. Washington, DC: Banco Interamericano de Desarrollo.",
+      "insertar_en": "Bibliografía — citada en párrafo [647] Cap 5 como 'Bitrán (2018), Salud y medicamentos en América Latina', pero NO figura en la lista bibliográfica. AGREGAR."
+    },
+    {
+      "cita": "Vargas-Pelaez, C. M., Rover, M. R. M., Soares, L., Blatt, C. R., Mantel-Teeuwisse, A. K., Rossi, F. A., Restrepo, L. G., Latorre, M. C., López, J. J., Bürgin, M. T., Silva, C., Leite, S. N., & Farias, M. R. (2019). Judicialization of access to medicines in four Latin American countries: a comparative qualitative analysis. International Journal for Equity in Health, 18(68). https://doi.org/10.1186/s12939-019-0960-z",
+      "insertar_en": "Bibliografía — citada en párrafo [552] Sec 3.2.6 como 'Vargas-Pelaez et al., 2019, International Journal for Equity in Health', NO figura en lista. AGREGAR (clave para Mensaje C)."
+    },
+    {
+      "cita": "Kirchlechner, T., & Cohen, E. (2025). Intercambiabilidad de biosimilares: criterios regulatorios y aspectos clínicos. Therapeutic Innovation & Regulatory Science.",
+      "insertar_en": "Bibliografía — citada en párrafo [474] Sec 2.6 recuadro biosimilares, NO figura en lista. AGREGAR."
+    },
+    {
+      "cita": "Cámara de Innovación Farmacéutica (CIF). (2025). Caracterización del gasto público en medicamentos (2.a ed.). Santiago: CIF.",
+      "insertar_en": "Bibliografía — citada en [213] nota metodológica Cap 1, en [376] fuente Figura 2 y en [378] como 'Caracterización del gasto público en medicamentos (2024), DIPRES'. La última referencia mezcla CIF con DIPRES y debe limpiarse. AGREGAR entrada explícita de CIF (2025)."
+    },
+    {
+      "cita": "Organización para la Cooperación y el Desarrollo Económicos (OCDE). (2022). OECD Health Statistics 2022: System of Health Accounts — Dataflow OECD.ELS.HD,DSD_SHA@DF_SHA. París: OECD Publishing.",
+      "insertar_en": "Bibliografía — ya existe 'OCDE (2024). OECD Health Statistics: Health expenditure and financing, SHA 2011 datasets' pero las cifras clave del informe (2022, Ficha Chile, Figura 1, Figura 5) se basan en el dataflow OECD.ELS.HD,DSD_SHA@DF_SHA consultado vía SDMX. AGREGAR entrada específica con el identificador del dataflow para trazabilidad del cálculo del 71% (SHA 2022)."
+    },
+    {
+      "cita": "Zinman, B., Wanner, C., Lachin, J. M., Fitchett, D., Bluhmki, E., Hantel, S., Mattheus, M., Devins, T., Johansen, O. E., Woerle, H. J., Broedl, U. C., & Inzucchi, S. E., for the EMPA-REG OUTCOME Investigators. (2015). Empagliflozin, cardiovascular outcomes, and mortality in type 2 diabetes. New England Journal of Medicine, 373(22), 2117–2128. https://doi.org/10.1056/NEJMoa1504720",
+      "insertar_en": "Bibliografía — citado como ejemplo de innovación en [695] recuadro Cap 5 ('empagliflozin... EMPA-REG OUTCOME, New England Journal of Medicine 2015'). NO figura en lista. AGREGAR."
+    },
+    {
+      "cita": "Mendell, J. R., Al-Zaidy, S. A., Lehman, K. J., McColly, M., Lowes, L. P., Alfano, L. N., Reash, N. F., Iammarino, M. A., Church, K. R., Kleyn, A., Meriggioli, M. N., & Shell, R. (2022). Five-year extension results of the phase 1 START trial of onasemnogene abeparvovec in spinal muscular atrophy. Nature Medicine, 28, 1381–1389. https://doi.org/10.1038/s41591-022-01866-4",
+      "insertar_en": "Bibliografía — citado como ejemplo de innovación AME en [695] recuadro Cap 5 ('onasemnogén abeparvovec... Nature Medicine 2022'). NO figura en lista. AGREGAR."
+    },
+    {
+      "cita": "Schadendorf, D., Long, G. V., Stroiakovski, D., Karaszewska, B., Hauschild, A., Levchenko, E., Chiarion-Sileni, V., Schachter, J., Garbe, C., Dutriaux, C., Gogas, H., Mandalá, M., Haanen, J. B. A. G., Lebbé, C., Mackiewicz, A., Rutkowski, P., Grange, F., Kaempgen, E., Jouary, T., … Robert, C. (2015). Pembrolizumab versus ipilimumab in advanced melanoma (KEYNOTE-006). New England Journal of Medicine, 372(26), 2521–2532. https://doi.org/10.1056/NEJMoa1503093",
+      "insertar_en": "Bibliografía — citado como ejemplo de innovación en melanoma en [695] recuadro Cap 5 ('pembrolizumab... KEYNOTE-006, NEJM 2015'). NO figura en lista. AGREGAR."
+    }
+  ],
+  "notas_editor": [
+    {
+      "tema": "Cap 1.1 — orden del párrafo 'dimensión humana'",
+      "nota": "El párrafo [209] sobre dimensión humana y judicialización interrumpe la enumeración 'dos frentes -> a) ambulatorios -> b) alto costo'. Dos opciones: (1) moverlo después del frente b); (2) dejarlo donde está y agregar una transición. Preferencia editorial: opción 2 (menos invasiva) implementada con el insert_paragraph de transición. Si el editor opta por la opción 1, borrar ese insert y mover [209] después de [217]."
+    },
+    {
+      "tema": "Renumeración 8.3 -> 8.1, 8.4 -> 8.2",
+      "nota": "Si se aplica la renumeración, se debe actualizar la Tabla de Contenidos (paragraphs [111]-[115] en índice) y cualquier referencia cruzada interna. Verificar que el TOC se regenere automáticamente en el docx vs. entrada manual."
+    },
+    {
+      "tema": "Cap 7.13 — ausente en TOC",
+      "nota": "La subsección 7.13 no aparece en la Tabla de Contenidos (solo llega hasta 7.12). Si se conserva la nueva subsección, agregar al TOC. Si se prefiere, integrar el texto de 7.13 como párrafos finales de 7.12 sin crear subsección nueva."
+    },
+    {
+      "tema": "Mensaje C (judicialización como síntoma)",
+      "nota": "Presente en Cap 1.1 [209] (nuevo), Sec 3.2.6 [552], y Cap 8.4 pregunta 6. La cita a Vargas-Pelaez et al. (2019) aparece en 3.2.6 pero no en bibliografía — AGREGAR (ver arriba). Mensaje coherente a lo largo del documento."
+    },
+    {
+      "tema": "Mensaje D (BFAU es opción, no prescripción)",
+      "nota": "Presente en Resumen Ejec [158], [190], [199], Cap 7.13 [1064]-[1065], Cap 8 [1074]. Reforzado en el edit del cierre de 8.1 (clasificación medidas). Los tres escenarios (1, 2, 3) se presentan simétricamente en el Resumen Ejec y en el Cap 6; el desarrollo detallado del escenario 2 en Cap 7 se identifica explícitamente como 'opción priorizada para el debate'."
+    }
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "agent": "lectura_editorial_autor",
+  "bloque": "2 - Cap 2 Acceso a medicamentos en Chile",
+  "rango_paragrafos": "P0157 - P0283",
+  "generated_at": "2026-01-01T00:00:00Z",
+  "observaciones_generales": "Cap 2 está bien estructurado. Edits focalizados: header 2.4 corrupto, em dash residual, construcción gramatical 'convendría que alinee', verbos prescriptivos residuales.",
+  "edits": [
+    {
+      "id": "LE-020",
+      "type": "replace_paragraph",
+      "locator": {
+        "strategy": "prefix",
+        "text": "2.4"
+      },
+      "new": "2.4. Matriz de coberturas por subsistema y canal",
+      "rationale": "Header roto: sin espacio tras '2.4', con dos puntos que no corresponden en un título, doble separador. Uniformar formato con el resto de headers de capítulo."
+    },
+    {
+      "id": "LE-021",
+      "type": "replace_text_in_paragraph",
+      "locator": {
+        "strategy": "contains",
+        "text": "CAEC (Cobertura Adicional para Enfermedades Catastróficas"
+      },
+      "old": "Cobertura Adicional para Enfermedades Catastróficas – ISAPRE",
+      "new": "Cobertura Adicional para Enfermedades Catastróficas, ISAPRE",
+      "rationale": "Em dash (–) residual. Según convención del informe: no usar em dashes; reemplazar por coma."
+    },
+    {
+      "id": "LE-022",
+      "type": "replace_text_in_paragraph",
+      "locator": {
+        "strategy": "contains",
+        "text": "El MCC convendría que alinee la canasta"
+      },
+      "old": "El MCC convendría que alinee la canasta de beneficios con la estrategia de compras",
+      "new": "Convendría que el MCC alinee la canasta de beneficios con la estrategia de compras",
+      "rationale": "Construcción gramatical forzada. 'Convendría que X' debe ir al inicio."
+    },
+    {
+      "id": "LE-023",
+      "type": "replace_text_in_paragraph",
+      "locator": {
+        "strategy": "contains",
+        "text": "Un módulo específico ChileCompra Medicamentos debiera coordinarse"
+      },
+      "old": "debiera coordinarse con CENABAST y con el MCC",
+      "new": "convendría que se coordine con CENABAST y con el MCC",
+      "rationale": "Verbo prescriptivo residual."
+    },
+    {
+      "id": "LE-024",
+      "type": "insert_paragraph_after",
+      "anchor": {
+        "strategy": "contains",
+        "text": "el detalle operacional (canales, copagos por modalidad, articulación con programas) se desarrolla en las secciones 7.3 y 7.4"
+      },
+      "new": "Un canal explícito para la incorporación de innovación terapéutica con valor sanitario demostrado conviene incorporarse como componente del beneficio: evaluación de tecnologías sanitarias vinculante, acuerdos de acceso gestionado (pago por resultados, precio escalonado, reembolso condicionado a evidencia) y mecanismos de riesgo compartido, bajo reglas transparentes. Sin ese canal, el sistema queda expuesto a decisiones caso a caso (judicialización, uso compasivo, programas excepcionales) que erosionan predictibilidad, equidad y sostenibilidad fiscal.",
+      "rationale": "Incorpora el mensaje global de CIF sobre mecanismos de innovación al nivel de la agenda de reforma del Cap 2 (donde se describe la integración de medicamentos en FONASA/ISAPRE). Se enmarca como respuesta estructural, no como lista de fármacos."
+    }
+  ],
+  "comments_to_add": [
+    {
+      "id": "MI-62",
+      "anchor": {
+        "strategy": "contains",
+        "text": "2.4. Matriz de coberturas por subsistema y canal"
+      },
+      "body": "[MI-62] Sección 2.4 preserva solo header + tabla. Los párrafos introductorios que se perdieron en iteraciones previas no se reintroducen porque la tabla es suficientemente autocontenida. Si CIF/EP requiere texto de contexto, se puede incorporar en v3.16."
+    }
+  ]
+}

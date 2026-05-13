@@ -1,0 +1,61 @@
+{
+  "agent": "lectura_editorial_autor",
+  "bloque": "4 - Cap 4 Diagnóstico gasto de bolsillo",
+  "rango_paragrafos": "P0393 - P0448",
+  "generated_at": "2026-01-01T00:00:00Z",
+  "observaciones_generales": "Cap 4 bien estructurado. Edits: formato numeración romana (i)(ii)(iii) sin espacio, duplicación fuente Figura 3, construcción gramatical forzada P0420.",
+  "edits": [
+    {
+      "id": "LE-040",
+      "type": "replace_paragraph",
+      "locator": {
+        "strategy": "prefix",
+        "text": "(i) compras fuera de canasta,"
+      },
+      "new": "(i) compras fuera de canasta,",
+      "rationale": "Espacio tras (i)."
+    },
+    {
+      "id": "LE-041",
+      "type": "replace_paragraph",
+      "locator": {
+        "strategy": "prefix",
+        "text": "(ii) copagos"
+      },
+      "new": "(ii) copagos y reembolsos parciales, y",
+      "rationale": "Espacio tras (ii) + coma aclaratoria en vez de barra."
+    },
+    {
+      "id": "LE-042",
+      "type": "replace_paragraph",
+      "locator": {
+        "strategy": "prefix",
+        "text": "(iii) compras inducidas"
+      },
+      "new": "(iii) compras inducidas por fallas de dispensación del canal institucional.",
+      "rationale": "Espacio tras (iii)."
+    },
+    {
+      "id": "LE-043",
+      "type": "replace_text_in_paragraph",
+      "locator": {
+        "strategy": "contains",
+        "text": "La lectura micro de los hogares conviene interpretarla"
+      },
+      "old": "La lectura micro de los hogares conviene interpretarla como el reflejo natural de la arquitectura descrita en los capítulos 2 y 3",
+      "new": "Conviene leer la distribución a nivel de hogares como reflejo natural de la arquitectura descrita en los capítulos 2 y 3",
+      "rationale": "Construcción gramatical forzada. Simplificada sin perder el sentido."
+    },
+    {
+      "id": "LE-044",
+      "type": "replace_paragraph",
+      "locator": {
+        "strategy": "prefix",
+        "text": "(Fuente: IX EPF"
+      },
+      "new": "",
+      "rationale": "Duplicación: P0426 ya dice 'Fuente: IX Encuesta de Presupuestos Familiares, INE. Elaboración propia.' y P0428 repite lo mismo con paréntesis. Eliminar la repetición."
+    }
+  ],
+  "comments_to_add": []
+}

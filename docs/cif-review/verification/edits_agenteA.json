@@ -1,0 +1,128 @@
+{
+  "agent": "A - DEFER Carla",
+  "notes": "Resoluciones DEFER residuales de Carla Castillo sobre instrumentos de cobertura, matriz, reformas sistemicas, escenarios y diseno BFAU. Reply se ancla en comentario real segun mapping comment_id = ID numerico interno comments.xml -> C-CC-DOCXnn.",
+  "reply_updates": [
+    {
+      "comment_id": "55",
+      "tag": "C-CC-DOCX38",
+      "new_reply": "[RESPUESTA] Las GES si se consideran en los instrumentos de cobertura. El Decreto GES 2025-2028 establece 90 problemas de salud con garantias explicitas, y las canastas asociadas incluyen medicamentos ambulatorios (por ejemplo, anticoagulantes orales de accion directa, insulinas, antihipertensivos, antidiabeticos orales, terapia combinada elexacaftor/tezacaftor/ivacaftor para fibrosis quistica, entre otros) con copagos regulados por tramo FONASA (A y B, 0 por ciento; C, 10 por ciento; D, 20 por ciento del arancel de referencia) o segun plan ISAPRE en red GES. El texto de la seccion 2.2 se precisa para explicitar que GES cubre tanto bajo como alto costo ambulatorio cuando el medicamento esta en la canasta del problema garantizado, y se remite a la matriz 2.4 para el detalle por subsistema y canal.",
+      "rationale": "Responde la pregunta directa (si, GES se considera) y aclara el alcance: 90 patologias con canastas que incluyen medicamentos ambulatorios de bajo y alto costo, con copagos diferenciados por tramo FONASA. Remite a seccion 2.4 donde se desarrolla la matriz."
+    },
+    {
+      "comment_id": "25",
+      "tag": "C-CC-DOCX45",
+      "new_reply": "[RESPUESTA] La unidad correcta es MM$ (miles de millones de pesos chilenos), consistente con la convencion DIPRES 2025. El gasto publico en medicamentos 2024 asciende a MM$ 1.514.814 (8,79 por ciento del presupuesto MINSAL). La leyenda de la Figura 2 y la nota metodologica aclaran ahora explicitamente la unidad para evitar ambiguedad (MM$ = 10^9 CLP de 2024, deflactor DG principal, IPC como sensibilidad). Se revisa ademas que todas las series monetarias del documento usen MM$ de forma consistente.",
+      "rationale": "Responde directo: MM$ (miles de millones), no M$ (miles). Cita monto 2024 verificado (MM$ 1.514.814) y aclara metodologia deflactor. El dato correcto esta confirmado por verificacion-datos.md."
+    },
+    {
+      "comment_id": "9",
+      "tag": "C-CC-DOCX47",
+      "new_reply": "[RESPUESTA] Reglas del beneficio y red se refiere a las condiciones de acceso que cada asegurador establece sobre la canasta de la garantia: (a) reglas del beneficio: que medicamentos estan incluidos en la canasta GES del problema garantizado, indicaciones clinicas habilitadas, condiciones de elegibilidad (diagnostico confirmado, criterios clinicos), copago aplicable por tramo FONASA o plan ISAPRE, topes y exenciones; y (b) red: prestadores designados por el asegurador para dispensacion (en FONASA, APS y hospitales de la red publica; en ISAPRE, farmacias y centros de la red GES contratada), con condiciones de derivacion entre niveles. Se precisa el texto de la matriz 2.4 para explicitar esta doble dimension (canasta y red de dispensacion) y eliminar la ambiguedad actual.",
+      "rationale": "Explica que reglas del beneficio (que cubre, en que indicacion, con que copago) y red (donde se dispensa, prestadores habilitados) son las dos dimensiones que definen acceso efectivo. Incorpora la clarificacion en matriz 2.4."
+    },
+    {
+      "comment_id": "57",
+      "tag": "C-CC-DOCX53",
+      "new_reply": "[RESPUESTA] La referencia corresponde al Plan de Salud Universal elaborado por el MINSAL durante el segundo gobierno Pinera (Ministerio de Salud, 2020), que definia un conjunto priorizado de prestaciones con proteccion financiera minima y plazos de atencion, aunque no fue ingresado formalmente al Congreso como proyecto de ley. Se agrega nota al pie con la cita (Ministerio de Salud, Plan de Salud Universal, 2020) y se aclara que se trata de una propuesta de politica publica (no un proyecto parlamentario) que sirve como antecedente conceptual para la discusion actual.",
+      "rationale": "Clarifica autor (MINSAL 2020) y estatus (propuesta de politica, no proyecto parlamentario). Agrega nota al pie con cita. Si Carla o Eduardo tienen una referencia distinta en mente, queda abierto a confirmacion."
+    },
+    {
+      "comment_id": "58",
+      "tag": "C-CC-DOCX54",
+      "new_reply": "[RESPUESTA] El Beneficio Farmaceutico Ambulatorio Universal (BFAU) aplica a ambas modalidades de FONASA con una canasta comun y reglas homogeneas: (a) en MAI, la dispensacion es institucional (APS, hospital, farmacia hospitalaria ambulatoria) con copago segun tramo y regimen vigente; (b) en MLE, la dispensacion es retail (farmacias privadas) con copago calculado sobre arancel de referencia, operando por subsidio en punto de venta o reembolso. La articulacion con los programas existentes sigue este criterio: GES, Ricarte Soto y DAC subsisten sin modificacion como regimenes especificos (piso garantizado por problema), y el BFAU actua como capa coordinadora para medicamentos ambulatorios fuera de esos regimenes o para brechas de continuidad (por ejemplo, quiebre de stock institucional). La seccion 7.3 detalla canales y copagos diferenciados por modalidad.",
+      "rationale": "Responde los dos subpuntos: (1) BFAU aplica en MAI y MLE con canasta comun, dispensacion diferenciada (institucional vs retail); (2) articulacion con programas: GES/LRS/DAC no se absorben, BFAU es piso complementario. Remite a 7.3 para detalle operacional."
+    },
+    {
+      "comment_id": "59",
+      "tag": "C-CC-DOCX56",
+      "new_reply": "[RESPUESTA] Correcto en el contexto de ChileCompra Medicamentos: ese mecanismo especifico opera en compra institucional consolidada (hospitales, APS, CENABAST), no en retail. El acceso retail se canaliza por instrumentos distintos: la Ley 21.198 (intermediacion CENABAST con farmacias privadas adheridas, bajo precios maximos) y, en la propuesta del informe, el BFAU, que contempla cobertura en retail cuando la dispensacion institucional no tiene stock o el paciente opta por retail con copago regulado. La seccion 2.6.2 se precisa para distinguir explicitamente ambos canales.",
+      "rationale": "Acuerdo con Carla: ChileCompra es institucional, no retail. Clarifica que el acceso retail requiere otros instrumentos (Ley 21.198, BFAU). Ajuste menor al texto 2.6.2 para eliminar ambiguedad."
+    },
+    {
+      "comment_id": "60",
+      "tag": "C-CC-DOCX57",
+      "new_reply": "[RESPUESTA] Si: la regulacion de precios de referencia por grupo terapeutico, la vinculacion de precios de genericos al originador y la definicion de maximo cubierto operan en el canal retail (compra directa del paciente en farmacia privada). Se agrega frase contextualizadora al inicio del bloque para explicitar que el instrumento se aplica a retail, diferenciandolo de los mecanismos de compra institucional de la subseccion anterior.",
+      "rationale": "Confirma lectura de Carla: es regulacion retail. Ajuste minimo al texto para explicitar canal al inicio del bloque."
+    },
+    {
+      "comment_id": "75",
+      "tag": "C-CC-DOCX129",
+      "new_reply": "[RESPUESTA] La combinacion opera por ambos canales, con asignacion distinta segun instrumento: (a) la expansion y cierre de brechas en GES, LRS y DAC se canaliza predominantemente por programas institucionales (red publica, farmacia hospitalaria ambulatoria, dispensacion APS) bajo las reglas vigentes de cada regimen; (b) la introduccion o refuerzo de topes anuales de gasto de bolsillo (techo catastrofico) opera sobre el canal retail, porque es ahi donde se concentra el gasto de bolsillo que el tope busca acotar. El texto de la seccion 6.2.1 se precisa para desambiguar cada componente por canal (programas vs retail), siguiendo la misma logica de diferenciacion que aplican los escenarios 2 y 3.",
+      "rationale": "Responde la pregunta: ambos canales, pero con asignacion distinta por instrumento. Expansion GES/LRS/DAC -> institucional; techo catastrofico -> retail. Clarifica en texto 6.2.1."
+    },
+    {
+      "comment_id": "81",
+      "tag": "C-CC-DOCX145",
+      "new_reply": "[RESPUESTA] Las estadisticas de experiencia comparada (niveles de gasto publico/privado en medicamentos, participacion del gasto de bolsillo, gasto per capita PPA) funcionan como referencia de magnitud y orden de convergencia, no como base directa de la estimacion fiscal de cada alternativa. Las proyecciones del capitulo 6 son ordenes de magnitud calibrados sobre proteccion financiera resultante y gasto total, no exclusivamente sobre gasto retail. Por tanto, la Alternativa A (expansion institucional MAI/APS) no invalida las comparaciones internacionales de base. Lo que si cambia es la composicion del gasto (mayor peso institucional, menor OOP retail), que puede afectar algunos indicadores comparados; esa sensibilidad se documenta en la nota metodologica de la seccion 7.3.1.",
+      "rationale": "Distingue base estadistica comparada (referencia de magnitud) de diseno especifico (arquitectura por alternativa). Aclara que las proyecciones son ordenes de magnitud y que la composicion por canal se documenta como sensibilidad."
+    },
+    {
+      "comment_id": "82",
+      "tag": "C-CC-DOCX149",
+      "new_reply": "[RESPUESTA] Si, es una tension real del sistema actual que conviene explicitar. La logica de diseno del BFAU propuesto es: (a) mantener la cobertura GES/LRS/DAC vigente sin modificacion para las indicaciones garantizadas (el regimen especifico prima sobre el BFAU para esas indicaciones); (b) el BFAU actua como piso universal para medicamentos no-GES o para indicaciones no garantizadas del mismo farmaco. En el ejemplo tipico (metformina garantizada GES para diabetes tipo 2 pero usada off-label en SOPQ), la diabetes tipo 2 sigue cubierta por GES con copago GES, y el uso en SOPQ pasaria al BFAU si esta en la canasta positiva ambulatoria con copago BFAU. En el largo plazo, la opcion de converger a cobertura por molecula en vez de por diagnostico es una decision de politica con trade-offs explicitos (universalidad vs sostenibilidad fiscal) que el documento plantea como pregunta abierta para la discusion, sin prescribir una ruta unica. Este tratamiento se detalla en seccion 7.4.1 (canasta y reglas de cobertura).",
+      "rationale": "Responde directo: si, cobertura diferencial existe y es tension real. Propone logica de diseno (GES prima en indicacion garantizada, BFAU cubre resto con canasta explicita) y deja abierta la pregunta de largo plazo (molecula vs diagnostico) como discusion de politica, consistente con rol EP no prescriptivo."
+    }
+  ],
+  "edits": [
+    {
+      "type": "replace_paragraph",
+      "locator": {"mode": "prefix", "value": "La cobertura efectiva de medicamentos depende del plan contratado. En términos generales, los medicamentos se encuentran cubiertos principalmente cuando forman parte de prestaciones hospitalarias"},
+      "new": "La cobertura efectiva de medicamentos depende del plan contratado. En términos generales, los medicamentos se encuentran cubiertos principalmente cuando forman parte de prestaciones hospitalarias o de paquetes de atención; la cobertura de medicamentos ambulatorios en farmacias suele ser parcial, acotada o inexistente, salvo planes o coberturas complementarias específicas. Para problemas de salud garantizados por GES, la cobertura farmacéutica sigue la canasta del problema y los copagos regulados del régimen (red GES contratada por la ISAPRE), independientemente de los beneficios generales del plan.",
+      "rationale": "CC-DOCX38: Carla pregunta si se consideran las GES en la subseccion de planes ISAPRE. Se agrega oracion final que explicita que para problemas GES la cobertura farmaceutica opera por el regimen garantizado (canasta y copagos GES, red GES), distinto a los beneficios generales del plan ISAPRE. Mantiene la descripcion original del plan."
+    },
+    {
+      "type": "replace_paragraph",
+      "locator": {"mode": "prefix", "value": "Composición del gasto público en medicamentos por ejecutor, 2014-2024. Los valores se expresan en miles de millones de pesos chilenos (MM$)"},
+      "new": "Composición del gasto público en medicamentos por ejecutor, 2014-2024. Los valores se expresan en miles de millones de pesos chilenos (MM$, equivalentes a 10^9 CLP) a precios de 2024, con DG (deflactor del gasto) como principal y IPC como sensibilidad. En 2024 el gasto público total en medicamentos alcanzó MM$ 1.514.814 (8,79 por ciento del presupuesto MINSAL); los Servicios de Salud ejecutaron el 60,8 por ciento, seguidos de programas específicos (GES, Ricarte Soto, DAC, FOFAR) y APS municipal.",
+      "rationale": "CC-DOCX45: Carla pregunta unidad M$ vs MM$. Se aclara explicitamente MM$ = 10^9 CLP en la leyenda, y se incorpora cifra 2024 verificada (MM$ 1.514.814; 8,79 por ciento MINSAL; 60,8 por ciento Servicios de Salud) para dar contexto a la figura."
+    },
+    {
+      "type": "replace_paragraph",
+      "locator": {"mode": "prefix", "value": "Protección financiera definida por GES; copagos según reglas del beneficio y red"},
+      "new": "Protección financiera definida por GES. Reglas del beneficio: canasta del problema de salud garantizado (medicamentos incluidos e indicaciones habilitadas), copago por tramo FONASA (A y B, 0 por ciento; C, 10 por ciento; D, 20 por ciento del arancel) o según plan ISAPRE. Red: prestadores designados (APS y hospitales de red pública en FONASA; red GES contratada en ISAPRE) y condiciones de derivación.",
+      "rationale": "CC-DOCX47: Carla pregunta a que se refiere 'reglas del beneficio y red'. Se explicita el doble sentido: reglas del beneficio (canasta, copago por tramo) y red (prestadores designados, derivacion). Incorpora copagos GES por tramo FONASA verificados."
+    },
+    {
+      "type": "replace_paragraph",
+      "locator": {"mode": "prefix", "value": "En el plano sistémico, el eje es avanzar hacia un plan universal de beneficios en salud que incorpore de manera explícita un módulo farmacéutico ambulatorio."},
+      "new": "En el plano sistémico, el eje es avanzar hacia un plan universal de beneficios en salud que incorpore de manera explícita un módulo farmacéutico ambulatorio. El Plan de Salud Universal propuesto por el MINSAL en 2020 (Ministerio de Salud, 2020) es un punto de partida conceptual, en la medida que definía un conjunto priorizado de prestaciones con protección financiera mínima y plazos de atención; cabe precisar que esa propuesta no fue ingresada formalmente al Congreso como proyecto de ley.",
+      "rationale": "CC-DOCX53: Carla pregunta 'que proyecto exactamente, presentado por quien'. Se clarifica autor (MINSAL 2020), estatus (propuesta, no proyecto parlamentario) e incorpora cita."
+    },
+    {
+      "type": "replace_paragraph",
+      "locator": {"mode": "prefix", "value": "Integrar el componente farmacéutico en la función aseguradora de FONASA y de los seguros privados"},
+      "new": "Integrar el componente farmacéutico en la función aseguradora de FONASA y de los planes de salud privados (ISAPRE), de modo que exista un beneficio farmacéutico ambulatorio con financiamiento definido y mecanismos de compensación de riesgos que eviten selección adversa. En FONASA aplicaría tanto en la Modalidad de Atención Institucional (MAI), con dispensación en la red pública (APS, hospital, farmacia hospitalaria ambulatoria), como en la Modalidad de Libre Elección (MLE), con dispensación en retail bajo copago calculado sobre arancel de referencia. El beneficio coexiste con GES, Ley Ricarte Soto y DAC como piso común para medicamentos ambulatorios fuera de esos regímenes; el detalle operacional (canales, copagos por modalidad, articulación con programas) se desarrolla en las secciones 7.3 y 7.4.",
+      "rationale": "CC-DOCX54: Carla pregunta sobre MLE/MAI y articulacion con programas. Se explicita que BFAU aplica MAI (institucional) y MLE (retail con arancel), que coexiste con GES/LRS/DAC, y remite a 7.3-7.4 para detalle. Reemplaza 'seguros privados' por 'planes de salud privados (ISAPRE)' para consistencia con regla estilo EP/CIF."
+    },
+    {
+      "type": "replace_paragraph",
+      "locator": {"mode": "prefix", "value": "Compras públicas y ChileCompra Medicamentos. Profundizar el uso de licitaciones consolidadas"},
+      "new": "Compras públicas y ChileCompra Medicamentos (canal institucional). Profundizar el uso de licitaciones consolidadas para medicamentos ambulatorios, aprovechando la plataforma ChileCompra para estandarizar fichas, consolidar demanda y transparentar condiciones comerciales. Un módulo específico ChileCompra Medicamentos debiera coordinarse con CENABAST y con el MCC, evitando duplicidades. Este instrumento opera en el canal de compra institucional (hospitales, APS, CENABAST), no en retail; el acceso retail se aborda por instrumentos específicos (Ley 21.198 y diseño del beneficio ambulatorio descritos a continuación).",
+      "rationale": "CC-DOCX56: Carla pregunta si entonces no sera cobertura para retail. Se explicita que ChileCompra es canal institucional, y se diferencia del retail (Ley 21.198, BFAU)."
+    },
+    {
+      "type": "replace_paragraph",
+      "locator": {"mode": "prefix", "value": "Regulación de precios y referencia. La experiencia de la OCDE muestra que los esquemas de precios de referencia internos"},
+      "new": "Regulación de precios y referencia (canal retail). En el canal retail (compra directa del paciente en farmacia privada), la experiencia de la OCDE muestra que los esquemas de precios de referencia internos por grupo terapéutico y la vinculación de precios de genéricos a un porcentaje máximo del originador pueden reducir el gasto de los aseguradores y de los hogares, especialmente cuando se combinan con sustitución obligatoria o incentivo fuerte a genéricos. Para Chile, esto implica definir grupos terapéuticos y montos máximos de reembolso, por encima de los cuales el copago corre por cuenta del paciente.",
+      "rationale": "CC-DOCX57: Carla pregunta si es para retail. Se explicita canal (retail) al inicio del bloque para despejar ambiguedad."
+    },
+    {
+      "type": "replace_paragraph",
+      "locator": {"mode": "prefix", "value": "Ampliar y cerrar brechas en coberturas explícitas existentes (GES, LRS/DAC y programas), priorizando condiciones crónicas"},
+      "new": "Ampliar y cerrar brechas en coberturas explícitas existentes (GES, LRS, DAC y programas), priorizando condiciones crónicas de alto volumen y medicamentos de alto uso ambulatorio con carga relevante de enfermedad. Esta expansión opera predominantemente por canal institucional (red pública, farmacia hospitalaria ambulatoria, APS) bajo las reglas vigentes de cada régimen; los topes de gasto de bolsillo del escenario, en cambio, operan sobre el canal retail, donde se concentra la exposición financiera que el techo catastrófico busca acotar.",
+      "rationale": "CC-DOCX129: Carla pregunta a traves de programas o retail. Se explicita que la expansion de coberturas explicitas va por institucional y los topes por retail, diferenciando canales dentro del escenario 1."
+    },
+    {
+      "type": "replace_paragraph",
+      "locator": {"mode": "prefix", "value": "El beneficio no reemplaza GES/LRS/DAC ni duplica cobertura; actúa como piso"},
+      "new": "El beneficio no reemplaza GES, Ley Ricarte Soto ni DAC y no duplica cobertura; actúa como piso universal para medicamentos ambulatorios fuera de esos regímenes y para brechas de continuidad. En casos donde un mismo fármaco está garantizado por GES para una indicación específica y se utiliza en otras indicaciones no garantizadas (por ejemplo, metformina garantizada para diabetes tipo 2 y usada en síndrome de ovario poliquístico), el régimen específico prima para la indicación garantizada (copago GES, red GES) y el beneficio ambulatorio aplica al resto de indicaciones incluidas en la canasta positiva, con sus propias reglas de copago y red. Esta tensión por cobertura diferencial entre indicaciones es una característica estructural del diseño actual que el documento reconoce; la convergencia de largo plazo hacia cobertura por molécula (en vez de por diagnóstico) es una decisión de política con trade-offs explícitos entre universalidad y sostenibilidad fiscal que queda planteada como pregunta abierta para la discusión.",
+      "rationale": "CC-DOCX149: Carla pregunta por cobertura diferencial GES vs no-GES y eliminacion de fragmentacion. Se propone: GES prima en indicacion garantizada, BFAU cubre resto con canasta explicita. Se reconoce tension actual y se deja abierta la discusion de largo plazo (molecula vs diagnostico), consistente con rol EP no prescriptivo."
+    },
+    {
+      "type": "insert_paragraph",
+      "locator": {"mode": "contains", "value": "Alternativa A: expansión institucional (MAI/APS)."},
+      "new": "Nota metodológica: las estadísticas de la experiencia comparada (gasto público y privado en medicamentos, participación del gasto de bolsillo, per cápita PPA) se utilizan como referencia de magnitud y orden de convergencia, no como base directa de la estimación fiscal por alternativa. Las proyecciones del capítulo 6 se calibran sobre protección financiera resultante y gasto total, no exclusivamente sobre gasto retail. La Alternativa A, al desplazar composición hacia dispensación institucional, reduce OOP retail pero aumenta peso institucional en el gasto total; esa sensibilidad afecta algunos indicadores comparados y se documenta como rango, no como punto.",
+      "rationale": "CC-DOCX145: Carla pregunta si la Alternativa A modifica las estadisticas comparadas base. Se agrega nota metodologica que aclara que las comparaciones internacionales son referencia de magnitud, que las proyecciones son ordenes de magnitud, y que la composicion por canal se trata como sensibilidad documentada."
+    }
+  ]
+}

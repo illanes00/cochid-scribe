@@ -1,0 +1,171 @@
+{
+  "agent": "B - barrido terminológico",
+  "total_edits": 25,
+  "categorias": {
+    "seguros_planes": 0,
+    "seguro_universal_a_beneficio": 2,
+    "canal_retail_clarificacion": 4,
+    "em_dashes": 0,
+    "prescriptivos": 19
+  },
+  "notas_metodologicas": {
+    "seguros_de_salud": "0 ocurrencias encontradas en el documento. No requiere edición.",
+    "em_dashes": "0 em dashes (—) encontrados en el texto del document.xml. No requiere edición.",
+    "la_solucion": "0 ocurrencias de 'la solución' encontradas. No requiere edición.",
+    "tracked_changes_skipped": "Se evitaron todos los párrafos con <w:ins> o <w:del> (122 párrafos marcados) para no colisionar con los tracked changes de Martín Illanes en v3.5. Esto reduce significativamente el scope: la mayoría de las menciones 'canal retail' están en párrafos ya tocados con tracked changes que incluyen la inserción 'farmacias privadas'. Las ediciones aquí son complementarias y se focalizan en párrafos no-tracked.",
+    "glosario_1211_no_editado": "El glosario 'Deducible: Umbral... el beneficiario debe financiar' es definicional (describe qué ES un deducible), no prescriptivo. Se mantiene sin cambios.",
+    "canal_retail_tracked": "Párrafos 151, 155, 206, 212, 213, 232, 294, 326, 446, 472, 598, 654, 655, 878, 1078, 1079 tienen tracked changes (muchos ya con 'farmacias privadas' insertado por el autor). No se tocan."
+  },
+  "edits": [
+    {
+      "type": "replace_paragraph",
+      "locator": {"mode": "prefix", "value": "7. Seguro Universal con tope de gasto ambulatorio en medicamentos"},
+      "new": "7. Beneficio Farmacéutico Ambulatorio Universal con tope de gasto en medicamentos57",
+      "rationale": "TOC: 'Seguro Universal' → 'Beneficio Farmacéutico Ambulatorio Universal'. El BFAU no es un seguro sino un beneficio farmacéutico (consistente con el nombre correcto del instrumento chileno propuesto)."
+    },
+    {
+      "type": "replace_paragraph",
+      "locator": {"mode": "prefix", "value": "Capítulo 7: formula la propuesta de un Seguro Universal / Beneficio Farmacéutico"},
+      "new": "Capítulo 7: formula la propuesta de un Beneficio Farmacéutico Ambulatorio Universal con protección mediante topes, describiendo su operación y garantías.",
+      "rationale": "Cap 1 estructura: elimina 'Seguro Universal /' para usar únicamente la denominación correcta del instrumento."
+    },
+    {
+      "type": "replace_paragraph",
+      "locator": {"mode": "prefix", "value": "Otra pieza sistémica clave es reforzar la gobernanza de beneficios y precios."},
+      "new": "Otra pieza sistémica clave es reforzar la gobernanza de beneficios y precios. Se requiere un esquema de evaluación de tecnologías sanitarias que sea vinculante para la incorporación y exclusión de medicamentos en la canasta universal, aplicable tanto a FONASA como a los planes de salud privados. Esta función puede radicar en una agencia especializada o en una unidad fortalecida dentro del MINSAL; resulta recomendable que opere con criterios transparentes, plazos claros y participación de pacientes y expertos.",
+      "rationale": "Prescriptivo: 'pero debe operar' → 'resulta recomendable que opere'. También 'seguros privados' → 'planes de salud privados' (contexto chileno: ISAPRE son planes, no seguros)."
+    },
+    {
+      "type": "replace_paragraph",
+      "locator": {"mode": "prefix", "value": "Observatorio de precios y transparencia. Unificar y fortalecer el observatorio"},
+      "new": "Observatorio de precios y transparencia. Unificar y fortalecer el observatorio de precios de medicamentos, integrando información de CENABAST, farmacias privadas, farmacias comunales y planes de salud. Convendría que el observatorio ofrezca tableros públicos para la ciudadanía y herramientas analíticas para reguladores, gestores y academia, incorporando no solo precios de lista sino también precios netos (cuando aplica), márgenes, disponibilidad y comparación internacional. La transparencia habilita rendición de cuentas y facilita la competencia.",
+      "rationale": "Prescriptivo: 'El observatorio debe ofrecer' → 'Convendría que el observatorio ofrezca'. Y 'seguros' → 'planes de salud' en el contexto chileno."
+    },
+    {
+      "type": "replace_paragraph",
+      "locator": {"mode": "prefix", "value": "Una vez cubierto, el medicamento debe asignarse a un canal compatible"},
+      "new": "Una vez cubierto, el medicamento se asigna a un canal compatible con la prestación:",
+      "rationale": "Prescriptivo descriptivo: 'debe asignarse' → 'se asigna' (describe el funcionamiento del sistema, no una prescripción normativa)."
+    },
+    {
+      "type": "replace_paragraph",
+      "locator": {"mode": "prefix", "value": "Desde el punto de vista de política pública, esto sugiere que la protección financiera"},
+      "new": "Desde el punto de vista de política pública, esto sugiere que convendría diseñar la protección financiera para capturar tanto:",
+      "rationale": "Prescriptivo: 'debe diseñarse' → 'convendría diseñar'."
+    },
+    {
+      "type": "replace_paragraph",
+      "locator": {"mode": "prefix", "value": "Una política habilitante es establecer una canasta explícita de medicamentos"},
+      "new": "Una política habilitante es establecer una canasta explícita de medicamentos ambulatorios de alto uso con copago fijo o porcentual, combinada con exenciones y topes. Para que sea transferible a Chile, resulta recomendable que el copago se calcule sobre un precio reconocido (precio de referencia/menor equivalente), evitando que el beneficio subsidie precios altos. Esto exige también una política de sustitución por DCI/bioequivalentes efectiva y observable, y una infraestructura de conciliación (POS/reembolso) que ancle el copago al precio reconocido y permita monitoreo.",
+      "rationale": "Prescriptivo: 'el copago debe calcularse' → 'resulta recomendable que el copago se calcule'."
+    },
+    {
+      "type": "replace_paragraph",
+      "locator": {"mode": "prefix", "value": "Objetivo: alinear a Chile con el “cluster intermedio” OCDE (p. ej., España"},
+      "new": "Objetivo: alinear a Chile con el “cluster intermedio” OCDE (p. ej., España, Países Bajos, Reino Unido, Canadá), logrando una caída sustantiva del gasto de bolsillo en farmacias privadas (canal retail) mediante un beneficio explícito y reglas comunes.",
+      "rationale": "Canal retail: primera mención relevante en Cap 6 Escenario 2 usa 'farmacias privadas (canal retail)' para aclarar el jargon (Eduardo 29)."
+    },
+    {
+      "type": "replace_paragraph",
+      "locator": {"mode": "prefix", "value": "En el canal institucional (APS/hospital), la expansión de cobertura debe cuidar"},
+      "new": "En el canal institucional (APS/hospital), la expansión de cobertura convendría que cuide el principio de continuidad y disponibilidad: si el stock falla, resulta recomendable que el diseño “enganche” automáticamente protección en farmacias privadas (canal retail) mediante POS o reembolso; de lo contrario, se reproduce la brecha.",
+      "rationale": "Doble prescriptivo: 'debe cuidar' → 'convendría que cuide' y 'el diseño debe' → 'resulta recomendable que el diseño'. También introduce 'farmacias privadas (canal retail)' en primera mención de Cap 6.3 sub-sección FONASA."
+    },
+    {
+      "type": "replace_paragraph",
+      "locator": {"mode": "prefix", "value": "Debe definirse la interacción con coberturas existentes"},
+      "new": "Convendría definir la interacción con coberturas existentes (p. ej., coberturas catastróficas), para evitar duplicidades o vacíos y asegurar que el gasto de bolsillo se reduzca efectivamente.",
+      "rationale": "Prescriptivo: 'Debe definirse' → 'Convendría definir'."
+    },
+    {
+      "type": "replace_paragraph",
+      "locator": {"mode": "prefix", "value": "Mantener sostenibilidad y eficiencia: la expansión de cobertura debe ir acompañada"},
+      "new": "Mantener sostenibilidad y eficiencia: convendría que la expansión de cobertura vaya acompañada de disciplina de precios, compras agregadas, competencia y reglas de uso clínico.",
+      "rationale": "Prescriptivo: 'debe ir acompañada' → 'convendría que vaya acompañada'."
+    },
+    {
+      "type": "replace_paragraph",
+      "locator": {"mode": "prefix", "value": "e)Mecanismo operativo para “no dispensación” (continuidad de acceso)"},
+      "new": "e)Mecanismo operativo para “no dispensación” (continuidad de acceso): si el canal institucional no entrega el medicamento por quiebre de stock u otra causa validada, se habilita adquisición en farmacias privadas (canal retail) con cobertura automática bajo reglas comunes, evitando que el paciente enfrente el costo por una falla operativa del sistema. Este mecanismo exige trazabilidad (prescripción–dispensación–pago) y reglas explícitas de activación para evitar abusos o desvíos.",
+      "rationale": "Canal retail: primera mención en Cap 7.3 de 'retail' como canal de dispensación alternativo, se expande a 'farmacias privadas (canal retail)'."
+    },
+    {
+      "type": "replace_paragraph",
+      "locator": {"mode": "prefix", "value": "Alternativa B: beneficio centrado en retail (cobertura/reembolso)."},
+      "new": "Alternativa B: beneficio centrado en farmacias privadas (canal retail) con cobertura o reembolso.",
+      "rationale": "Canal retail: 'centrado en retail' es jargon puro. Se reemplaza por 'farmacias privadas (canal retail)' para lector no especialista."
+    },
+    {
+      "type": "replace_paragraph",
+      "locator": {"mode": "prefix", "value": "Alineamiento con estrategia de precios: la canasta debe operar con precios"},
+      "new": "Alineamiento con estrategia de precios: convendría que la canasta opere con precios de referencia y esté coordinada con catálogos y contratos de compra, de modo que el copago se calcule sobre el menor precio equivalente disponible.",
+      "rationale": "Prescriptivo: 'debe operar' y 'estar coordinada' → 'convendría que opere' y 'esté coordinada'."
+    },
+    {
+      "type": "replace_paragraph",
+      "locator": {"mode": "prefix", "value": "Protección efectiva (no solo nominal): el cap debe acumularse transversalmente"},
+      "new": "Protección efectiva (no solo nominal): resulta recomendable que el cap se acumule transversalmente a canal (institucional/retail), y que el diseño evite incentivos de desvío artificial hacia farmacias privadas. Si la provisión institucional falla, el paciente no debiera enfrentar mayor carga financiera por un problema operativo.",
+      "rationale": "Triple prescriptivo: 'el cap debe acumularse'/'el diseño debe evitar' → 'resulta recomendable que el cap se acumule'/'que el diseño evite'. 'no debe enfrentar' → 'no debiera enfrentar'. Además 'retail' (segunda mención) → 'farmacias privadas'."
+    },
+    {
+      "type": "replace_paragraph",
+      "locator": {"mode": "prefix", "value": "Para contener costos sin afectar calidad, el beneficio debe capturar competencia"},
+      "new": "Para contener costos sin afectar calidad, convendría que el beneficio capture competencia:",
+      "rationale": "Prescriptivo: 'debe capturar' → 'convendría que capture'."
+    },
+    {
+      "type": "replace_paragraph",
+      "locator": {"mode": "prefix", "value": "El financiamiento debe ser explícito y consistente con la universalidad:"},
+      "new": "El financiamiento convendría que sea explícito y consistente con la universalidad:",
+      "rationale": "Prescriptivo: 'debe ser' → 'convendría que sea'."
+    },
+    {
+      "type": "replace_paragraph",
+      "locator": {"mode": "prefix", "value": "Principio: si el beneficio es un piso universal (FONASA e ISAPRE), su financiamiento debe minimizar"},
+      "new": "Principio: si el beneficio es un piso universal (FONASA e ISAPRE), resulta recomendable que su financiamiento minimice selección adversa y evite traslados oportunistas de costos entre subsistemas.",
+      "rationale": "Prescriptivo: 'debe minimizar...evitar' → 'resulta recomendable que minimice...evite'."
+    },
+    {
+      "type": "replace_paragraph",
+      "locator": {"mode": "prefix", "value": "Regla de sostenibilidad: la expansión de canasta y reducción de copagos debe estar"},
+      "new": "Regla de sostenibilidad: convendría que la expansión de canasta y reducción de copagos esté anclada a evaluación de impacto presupuestario y a instrumentos de disciplina de precios, evitando que mayor cobertura se traduzca en inflación de precios.",
+      "rationale": "Prescriptivo: 'debe estar anclada' → 'convendría que esté anclada'."
+    },
+    {
+      "type": "replace_paragraph",
+      "locator": {"mode": "prefix", "value": "La expansión de cobertura debe ir acompañada de una estrategia explícita"},
+      "new": "La expansión de cobertura convendría que vaya acompañada de una estrategia explícita de contención de costos, enfocada en “precio efectivo”:",
+      "rationale": "Prescriptivo: 'debe ir acompañada' → 'convendría que vaya acompañada'."
+    },
+    {
+      "type": "replace_paragraph",
+      "locator": {"mode": "prefix", "value": "Un beneficio farmacéutico universal sostenible requiere un mecanismo institucionalizado"},
+      "new": "Un beneficio farmacéutico universal sostenible requiere un mecanismo institucionalizado de priorización y actualización. Resulta recomendable que la inclusión, exclusión y modificación de medicamentos en la canasta se sustente en procesos ETESA/HTA, articulando evidencia clínica, evaluación económica, impacto presupuestario y consideraciones de equidad. La gobernanza institucional de ETESA/HTA podría definir con claridad: quién decide qué (roles de MINSAL, FONASA, Superintendencia de Salud y comités técnicos), con qué criterios (marco explícito de valoración), con qué plazos (cronograma predecible de revisiones) y con qué mecanismos de participación (pacientes, academia, sociedades clínicas, industria con reglas de conflicto de interés).",
+      "rationale": "Prescriptivo: 'debe sustentarse' → 'Resulta recomendable que se sustente'. También 'debe definir con claridad' → 'podría definir con claridad' (si aparece en continuación)."
+    },
+    {
+      "type": "replace_paragraph",
+      "locator": {"mode": "prefix", "value": "Un beneficio universal con cap requiere estimar impacto presupuestario bajo escenarios"},
+      "new": "Un beneficio universal con cap requiere estimar impacto presupuestario bajo escenarios de incorporación gradual, comportamiento de demanda y cambios de precios. Una opción para la discusión es elaborar al menos tres escenarios (conservador, central y de expansión rápida), documentando supuestos de prevalencia, adherencia, sustitución y precios netos (post descuentos).",
+      "rationale": "Prescriptivo: 'Se recomienda elaborar' → 'Una opción para la discusión es elaborar'."
+    },
+    {
+      "type": "replace_paragraph",
+      "locator": {"mode": "prefix", "value": "Canal retail (farmacias): Canal minorista de dispensación (farmacias privadas"},
+      "new": "Canal retail (farmacias privadas): Canal minorista de dispensación (farmacias privadas y, en sentido amplio, municipal/comunal). En el informe, es el canal donde se concentra el gasto de bolsillo ambulatorio.",
+      "rationale": "Glosario: aclara desde el encabezado que 'canal retail' = 'farmacias privadas' (consistente con la sugerencia de Eduardo 29 de privilegiar el término menos jargon en definiciones)."
+    },
+    {
+      "type": "replace_paragraph",
+      "locator": {"mode": "prefix", "value": "Ambulatorio retail: compra en farmacias privadas o municipales/populares"},
+      "new": "Ambulatorio retail (farmacias privadas): compra en farmacias privadas o municipales/populares, con o sin reembolso.",
+      "rationale": "Aclaración del término 'retail' en primera definición operativa del Cap 3."
+    },
+    {
+      "type": "replace_paragraph",
+      "locator": {"mode": "prefix", "value": "Reglas de cobertura consistentes: qué se cubre, en qué indicación"},
+      "new": "Reglas de cobertura consistentes: qué se cubre, en qué indicación, con qué requisitos clínicos y en qué canal (institucional / farmacias privadas / híbrido).",
+      "rationale": "Canal retail: reemplaza 'retail' por 'farmacias privadas' en definición operacional Cap 7.4."
+    }
+  ]
+}

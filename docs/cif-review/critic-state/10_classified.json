@@ -1,0 +1,1509 @@
+{
+  "_meta": {
+    "stage": "10_classified.json",
+    "saved_at": "2026-04-17T04:01:42.762520",
+    "input_hashes": {
+      "comment-mapping.json": "62b3d52a0573eebc"
+    },
+    "output_hash": "4e6953a6b29d0e46",
+    "count": 91
+  },
+  "data": [
+    {
+      "id": "C-CIF1",
+      "author": "CIF (Francisca Rodriguez)",
+      "comment_text": "La tabla de coberturas generales no incorpora DAC, pese a que este instrumento formaba parte de los componentes que se solicito considerar para reflejar adecuadamente la fragmentacion del sistema chileno. Su omision debilita la representacion completa del esquema vigente de cobertura y financiamiento.",
+      "quoted_text": "Matriz de coberturas : por subsistema y canal",
+      "section_hint": "2.4",
+      "type": "factual",
+      "specificity": "section",
+      "verifiability": "factual_claim",
+      "touches_sections": [
+        "2.4"
+      ],
+      "has_embedded_claim": true,
+      "raw_claims": [
+        "La tabla de coberturas generales no incorpora DAC"
+      ],
+      "style_consistency_hint": "n/a"
+    },
+    {
+      "id": "C-CIF2",
+      "author": "CIF (Francisca Rodriguez)",
+      "comment_text": "Se incorpora la brecha de cobertura en medicamentos ambulatorios, pero no desarrolla con la misma fuerza el problema de patologias complejas y de alto costo, ni la experiencia concreta de exclusion que enfrentan pacientes y familias cuando el sistema no cubre un tratamiento.",
+      "quoted_text": "El problema se compone de dos frentes con lógicas distintas",
+      "section_hint": "1.1",
+      "type": "strategic",
+      "specificity": "section",
+      "verifiability": "opinion",
+      "touches_sections": [
+        "1.1"
+      ],
+      "has_embedded_claim": false,
+      "raw_claims": [],
+      "style_consistency_hint": "n/a"
+    },
+    {
+      "id": "C-CIF3",
+      "author": "CIF (Francisca Rodriguez)",
+      "comment_text": "Debiera incorporarse la judicializacion como sintoma de falla institucional de acceso y no solo como fenomeno lateral. Este punto es clave para mostrar que, en ausencia de beneficios explicitos suficientes, se recurren a mecanismos extraordinarios para obtener cobertura que impactan en la sostenibilidad del sistema.",
+      "quoted_text": "Judicialización y obtención excepcional",
+      "section_hint": "3.2.6",
+      "type": "strategic",
+      "specificity": "section",
+      "verifiability": "suggestion",
+      "touches_sections": [
+        "3.2.6"
+      ],
+      "has_embedded_claim": false,
+      "raw_claims": [],
+      "style_consistency_hint": "n/a"
+    },
+    {
+      "id": "C-CIF4",
+      "author": "CIF (Francisca Rodriguez)",
+      "comment_text": "Mezcla diagnostico, comparacion internacional y propuestas normativas sin separar con suficiente claridad la evidencia, la interpretacion y la recomendacion.",
+      "quoted_text": "# 5.\tComparación internacional",
+      "section_hint": "5",
+      "type": "structural",
+      "specificity": "section",
+      "verifiability": "opinion",
+      "touches_sections": [
+        "5"
+      ],
+      "has_embedded_claim": false,
+      "raw_claims": [],
+      "style_consistency_hint": "n/a"
+    },
+    {
+      "id": "C-CIF5",
+      "author": "CIF (Francisca Rodriguez)",
+      "comment_text": "Explicar con mayor precision como se seleccionaron los paises de la comparacion internacional, que anos base se utilizaron para cada indicador, cuales fueron las fuentes empleadas y que limitaciones tienen las extrapolaciones realizadas al caso chileno.",
+      "quoted_text": "Criterios de selección de países referentes",
+      "section_hint": "5.1",
+      "type": "methodological",
+      "specificity": "section",
+      "verifiability": "suggestion",
+      "touches_sections": [
+        "5.1"
+      ],
+      "has_embedded_claim": false,
+      "raw_claims": [],
+      "style_consistency_hint": "n/a"
+    },
+    {
+      "id": "C-CIF6",
+      "author": "CIF (Francisca Rodriguez)",
+      "comment_text": "Se tiende a asimilar biosimilares a genericos en materia de intercambiabilidad, prescripcion por DCI, sustitucion y preferencia por menor precio.",
+      "quoted_text": "Competencia y sustitución en genéricos y biosimilares",
+      "section_hint": "5.3.4",
+      "type": "factual",
+      "specificity": "section",
+      "verifiability": "factual_claim",
+      "touches_sections": [
+        "5.3.4"
+      ],
+      "has_embedded_claim": true,
+      "raw_claims": [
+        "El estudio asimila biosimilares a genéricos en materia de intercambiabilidad, prescripción por DCI, sustitución y preferencia por menor precio"
+      ],
+      "style_consistency_hint": "n/a"
+    },
+    {
+      "id": "C-CIF7",
+      "author": "CIF (Francisca Rodriguez)",
+      "comment_text": "En la experiencia internacional en biosimilares no existe un estandar unico, por lo que el estudio debiera reflejar esa heterogeneidad regulatoria.",
+      "quoted_text": "En biosimilares, las licitaciones hospitalarias con reglas de continuidad",
+      "section_hint": "5.3.4",
+      "type": "factual",
+      "specificity": "section",
+      "verifiability": "factual_claim",
+      "touches_sections": [
+        "5.3.4"
+      ],
+      "has_embedded_claim": true,
+      "raw_claims": [
+        "En la experiencia internacional en biosimilares no existe un estándar único de regulación"
+      ],
+      "style_consistency_hint": "n/a"
+    },
+    {
+      "id": "C-CIF8",
+      "author": "CIF (Francisca Rodriguez)",
+      "comment_text": "Se debieran incorporar con mayor claridad ejemplos de innovacion que generen valor sanitario y ahorro futuro, de modo de evitar que la agenda propositiva quede leida unicamente desde la logica de contencion de precios.",
+      "quoted_text": "Sistema orientado al precio efectivo",
+      "section_hint": "5.3.1",
+      "type": "strategic",
+      "specificity": "section",
+      "verifiability": "suggestion",
+      "touches_sections": [
+        "5.3.1"
+      ],
+      "has_embedded_claim": false,
+      "raw_claims": [],
+      "style_consistency_hint": "n/a"
+    },
+    {
+      "id": "C-CIF9",
+      "author": "CIF (Francisca Rodriguez)",
+      "comment_text": "Reforzar que el objetivo de ETESA no es contener el gasto y que se debiera avanzar a una priorizacion basada en valor sanitario, social y economico.",
+      "quoted_text": "ETESA/HTA: Gobernanza clínica y de incorporación",
+      "section_hint": "3.3",
+      "type": "factual",
+      "specificity": "section",
+      "verifiability": "factual_claim",
+      "touches_sections": [
+        "3.3"
+      ],
+      "has_embedded_claim": true,
+      "raw_claims": [
+        "El objetivo de ETESA no es contener el gasto sino priorizar basado en valor sanitario, social y económico"
+      ],
+      "style_consistency_hint": "n/a"
+    },
+    {
+      "id": "C-CIF10",
+      "author": "CIF (Francisca Rodriguez)",
+      "comment_text": "Hay secciones que no parecen cerradas, problemas de orden y la conclusion requiere mayor analisis.",
+      "quoted_text": "Conclusiones y recomendaciones",
+      "section_hint": "8",
+      "type": "structural",
+      "specificity": "document",
+      "verifiability": "opinion",
+      "touches_sections": [
+        "8"
+      ],
+      "has_embedded_claim": false,
+      "raw_claims": [],
+      "style_consistency_hint": "n/a"
+    },
+    {
+      "id": "C-CIF11",
+      "author": "CIF (Francisca Rodriguez)",
+      "comment_text": "Problemas de numeracion de tablas y subtitulos, ademas de inconsistencias en algunas cifras y formulaciones.",
+      "quoted_text": "Figura 1: Evolución del gasto público en medicamentos",
+      "section_hint": "2.3",
+      "type": "structural",
+      "specificity": "document",
+      "verifiability": "factual_claim",
+      "touches_sections": [
+        "2.3"
+      ],
+      "has_embedded_claim": true,
+      "raw_claims": [
+        "Existen inconsistencias en algunas cifras del documento"
+      ],
+      "style_consistency_hint": "n/a"
+    },
+    {
+      "id": "C-CIF12",
+      "author": "CIF (Francisca Rodriguez)",
+      "comment_text": "El estudio parece borrador avanzado mas que una version final cerrada.",
+      "quoted_text": "Inclusión sostenible de medicamentos en los planes de salud en Chile",
+      "section_hint": "title",
+      "type": "general",
+      "specificity": "document",
+      "verifiability": "opinion",
+      "touches_sections": [],
+      "has_embedded_claim": false,
+      "raw_claims": [],
+      "style_consistency_hint": "n/a"
+    },
+    {
+      "id": "C-CIF13",
+      "author": "CIF (Francisca Rodriguez)",
+      "comment_text": "La incorporacion de las observaciones formuladas en la minuta previa fue parcial, ya que varios comentarios centrales para CIF no quedaron desarrollados con la fuerza esperada.",
+      "quoted_text": "Inclusión sostenible de medicamentos en los planes de salud en Chile",
+      "section_hint": "title",
+      "type": "general",
+      "specificity": "document",
+      "verifiability": "opinion",
+      "touches_sections": [],
+      "has_embedded_claim": false,
+      "raw_claims": [],
+      "style_consistency_hint": "n/a"
+    },
+    {
+      "id": "C-CIF14",
+      "author": "CIF (Francisca Rodriguez)",
+      "comment_text": "Ordenar claramente que medidas podrian implementarse sin reforma legal mayor, cuales requieren ajustes regulatorios o institucionales y cuales suponen redisenos sistemicos del aseguramiento.",
+      "quoted_text": "Conclusiones y recomendaciones",
+      "section_hint": "8",
+      "type": "structural",
+      "specificity": "section",
+      "verifiability": "suggestion",
+      "touches_sections": [
+        "8"
+      ],
+      "has_embedded_claim": false,
+      "raw_claims": [],
+      "style_consistency_hint": "n/a"
+    },
+    {
+      "id": "C-EU-EMAIL1",
+      "author": "Eduardo Undurraga",
+      "comment_text": "Mantendria la discusion un poco mas de alto vuelo. Le bajaria el tono a la parte de gastos de retail que pagan las familias, porque es algo relativamente micro y depende mucho del arreglo institucional que tiene el sistema de salud. Lo que queda en el retail en Chile es lo que no esta cubierto por el sistema de salud, entonces no es raro que la proporcion de pago sea alta. La comparacion con UK por ejemplo no es tan directa porque alla el NHS tiene convenios con el retail, etc. Lo mismo con el enfasis actual de la Ricarte Soto, que es solo una forma de cobertura entre muchas otras.",
+      "quoted_text": "Canales de acceso a medicamentos (dispensación)",
+      "section_hint": "2.1",
+      "type": "strategic",
+      "specificity": "section",
+      "verifiability": "opinion",
+      "touches_sections": [
+        "2.1"
+      ],
+      "has_embedded_claim": false,
+      "raw_claims": [],
+      "style_consistency_hint": "n/a"
+    },
+    {
+      "id": "C-EU-EMAIL2",
+      "author": "Eduardo Undurraga",
+      "comment_text": "Seria mucho menos prescriptivo en el informe. EP no puede jugarse en una solucion sino que nuestro rol es mostrar evidencia y datos, y los policymakers deben buscar que es la mejor solucion al problema. Cerrar el reporte con un capitulo sobre conclusiones generales del seminario de discusion, donde podremos analizar y conversar sobre las alternativas de politicas publica para avanzar en este problema. Dejamos como un blueprint general de problema y potenciales soluciones, pero sin alinearnos con ninguna.",
+      "quoted_text": "Conclusiones y recomendaciones",
+      "section_hint": "8",
+      "type": "strategic",
+      "specificity": "document",
+      "verifiability": "opinion",
+      "touches_sections": [
+        "8"
+      ],
+      "has_embedded_claim": false,
+      "raw_claims": [],
+      "style_consistency_hint": "n/a"
+    },
+    {
+      "id": "C-CC-EMAIL1",
+      "author": "Carla Castillo",
+      "comment_text": "Seria mucho mejor cerrar el reporte con un capitulo sobre conclusiones generales del seminario de discusion, donde podremos analizar y conversar sobre las alternativas de politicas publica. Los cambios y sugerencias especificas estan en el documento adjunto con track changes.",
+      "quoted_text": "Conclusiones y recomendaciones",
+      "section_hint": "8",
+      "type": "structural",
+      "specificity": "section",
+      "verifiability": "suggestion",
+      "touches_sections": [
+        "8"
+      ],
+      "has_embedded_claim": false,
+      "raw_claims": [],
+      "style_consistency_hint": "n/a"
+    },
+    {
+      "id": "EXISTING-EU1",
+      "author": "Eduardo Undurraga",
+      "comment_text": "\"en el canal retail\" -- jargon, evitar lenguaje tecnico de industria",
+      "quoted_text": "en particular en el canal retail",
+      "section_hint": "Mensajes clave",
+      "type": "stylistic",
+      "specificity": "local",
+      "verifiability": "opinion",
+      "touches_sections": [
+        "Mensajes clave"
+      ],
+      "has_embedded_claim": false,
+      "raw_claims": [],
+      "style_consistency_hint": "consistent_rule"
+    },
+    {
+      "id": "EXISTING-EU2",
+      "author": "Eduardo Undurraga",
+      "comment_text": "En el cuadro resumen, seria util indicar en que capitulo o seccion se profundiza el tema, para facilitar el acceso de los lectores (e.g., capitulo 6, paginas xx-xx)",
+      "quoted_text": "# Resumen ejecutivo",
+      "section_hint": "Resumen ejecutivo",
+      "type": "structural",
+      "specificity": "section",
+      "verifiability": "suggestion",
+      "touches_sections": [
+        "Resumen ejecutivo"
+      ],
+      "has_embedded_claim": false,
+      "raw_claims": [],
+      "style_consistency_hint": "n/a"
+    },
+    {
+      "id": "EXISTING-EU3",
+      "author": "Eduardo Undurraga",
+      "comment_text": "\"en el canal de\" -- mejor evitar jargon",
+      "quoted_text": "particularmente en el canal de medicamentos dispensados fuera del hospital",
+      "section_hint": "Resumen ejecutivo",
+      "type": "stylistic",
+      "specificity": "local",
+      "verifiability": "opinion",
+      "touches_sections": [
+        "Resumen ejecutivo"
+      ],
+      "has_embedded_claim": false,
+      "raw_claims": [],
+      "style_consistency_hint": "consistent_rule"
+    },
+    {
+      "id": "EXISTING-EU4",
+      "author": "Eduardo Undurraga",
+      "comment_text": "Tabla 1 -- tamano 11 como lo anterior (formato inconsistente)",
+      "quoted_text": "Tarjeta 1: sistema de medicamentos en Chile",
+      "section_hint": "2",
+      "type": "stylistic",
+      "specificity": "local",
+      "verifiability": "opinion",
+      "touches_sections": [
+        "2"
+      ],
+      "has_embedded_claim": false,
+      "raw_claims": [],
+      "style_consistency_hint": "consistent_rule"
+    },
+    {
+      "id": "EXISTING-EU5",
+      "author": "Eduardo Undurraga",
+      "comment_text": "Seccion 2.1 -- no se usa otra subseccion cuando es solo 1",
+      "quoted_text": "## 2.1. Canales de acceso a medicamentos (dispensación)",
+      "section_hint": "2.1",
+      "type": "structural",
+      "specificity": "local",
+      "verifiability": "suggestion",
+      "touches_sections": [
+        "2.1"
+      ],
+      "has_embedded_claim": false,
+      "raw_claims": [],
+      "style_consistency_hint": "n/a"
+    },
+    {
+      "id": "EXISTING-EU6",
+      "author": "Eduardo Undurraga",
+      "comment_text": "Seccion 6.1 -- aca tampoco, es solo otro parrafo (no necesita subseccion)",
+      "quoted_text": "Variables de diseño (canasta, copagos, topes, modalidad POS vs reembolso",
+      "section_hint": "6.1",
+      "type": "structural",
+      "specificity": "local",
+      "verifiability": "suggestion",
+      "touches_sections": [
+        "6.1"
+      ],
+      "has_embedded_claim": false,
+      "raw_claims": [],
+      "style_consistency_hint": "n/a"
+    },
+    {
+      "id": "EXISTING-EU7",
+      "author": "Eduardo Undurraga",
+      "comment_text": "En general no se usan subcategorias cuando es solo 1 (sobre seccion 'Como opera...')",
+      "quoted_text": "Cómo opera en cada canal",
+      "section_hint": "7.3.1",
+      "type": "structural",
+      "specificity": "local",
+      "verifiability": "suggestion",
+      "touches_sections": [
+        "7.3.1"
+      ],
+      "has_embedded_claim": false,
+      "raw_claims": [],
+      "style_consistency_hint": "n/a"
+    },
+    {
+      "id": "EXISTING-EU8",
+      "author": "Eduardo Undurraga",
+      "comment_text": "\"Diciembre de 2025\" -- supongo que enero 2026",
+      "quoted_text": "Diciembre de 2025",
+      "section_hint": "frontmatter",
+      "type": "factual",
+      "specificity": "local",
+      "verifiability": "factual_claim",
+      "touches_sections": [
+        "frontmatter"
+      ],
+      "has_embedded_claim": true,
+      "raw_claims": [
+        "La fecha indicada en el documento es diciembre de 2025, pero debería ser enero 2026"
+      ],
+      "style_consistency_hint": "n/a"
+    },
+    {
+      "id": "C-EU-SUG26",
+      "author": "Eduardo Undurraga",
+      "comment_text": "Agregar parrafo: 'Ambos frentes responden a logicas distintas de riesgo financiero y requieren, por lo tanto, instrumentos diferenciados...' (profundizacion conceptual)",
+      "quoted_text": "Ambos frentes responden a lógicas distintas de riesgo financiero",
+      "section_hint": "Resumen ejecutivo",
+      "type": "structural",
+      "specificity": "local",
+      "verifiability": "suggestion",
+      "touches_sections": [
+        "Resumen ejecutivo"
+      ],
+      "has_embedded_claim": false,
+      "raw_claims": [],
+      "style_consistency_hint": "n/a"
+    },
+    {
+      "id": "C-EU-SUG27",
+      "author": "Eduardo Undurraga",
+      "comment_text": "Agregar parrafo: 'La efectividad de estos instrumentos depende en buena parte de su implementacion conjunta y no de su aplicacion aislada...'",
+      "quoted_text": "La efectividad de estos instrumentos depende en buena parte de su implementación conjunta",
+      "section_hint": "Resumen ejecutivo",
+      "type": "structural",
+      "specificity": "local",
+      "verifiability": "suggestion",
+      "touches_sections": [
+        "Resumen ejecutivo"
+      ],
+      "has_embedded_claim": false,
+      "raw_claims": [],
+      "style_consistency_hint": "n/a"
+    },
+    {
+      "id": "C-EU-SUG28",
+      "author": "Eduardo Undurraga",
+      "comment_text": "Eliminar parrafo (contenido redundante)",
+      "quoted_text": "# Resumen ejecutivo",
+      "section_hint": "Resumen ejecutivo",
+      "type": "structural",
+      "specificity": "local",
+      "verifiability": "suggestion",
+      "touches_sections": [
+        "Resumen ejecutivo"
+      ],
+      "has_embedded_claim": false,
+      "raw_claims": [],
+      "style_consistency_hint": "n/a"
+    },
+    {
+      "id": "C-EU-SUG29",
+      "author": "Eduardo Undurraga",
+      "comment_text": "Reemplazar: 'u' por 'u' con acento (correccion ortografica)",
+      "quoted_text": "Inclusión sostenible de medicamentos en los planes de salud en Chile",
+      "section_hint": "title",
+      "type": "stylistic",
+      "specificity": "local",
+      "verifiability": "factual_claim",
+      "touches_sections": [
+        "title"
+      ],
+      "has_embedded_claim": true,
+      "raw_claims": [
+        "La conjunción 'u' en el título debe llevar tilde diacrítica según la norma ortográfica aplicada"
+      ],
+      "style_consistency_hint": "consistent_rule"
+    },
+    {
+      "id": "C-EU-SUG30",
+      "author": "Eduardo Undurraga",
+      "comment_text": "Agregar: 'la' (articulo faltante)",
+      "quoted_text": "Inclusión sostenible de medicamentos en los planes de salud en Chile",
+      "section_hint": "unknown",
+      "type": "stylistic",
+      "specificity": "local",
+      "verifiability": "factual_claim",
+      "touches_sections": [
+        "title"
+      ],
+      "has_embedded_claim": true,
+      "raw_claims": [
+        "Falta el artículo 'la' en el texto señalado del título"
+      ],
+      "style_consistency_hint": "local_substitution"
+    },
+    {
+      "id": "C-EU-SUG31",
+      "author": "Eduardo Undurraga",
+      "comment_text": "Agregar: 'los' (articulo faltante)",
+      "quoted_text": "Inclusión sostenible de medicamentos en los planes de salud en Chile",
+      "section_hint": "unknown",
+      "type": "stylistic",
+      "specificity": "local",
+      "verifiability": "suggestion",
+      "touches_sections": [],
+      "has_embedded_claim": false,
+      "raw_claims": [],
+      "style_consistency_hint": "local_substitution"
+    },
+    {
+      "id": "C-EU-SUG32",
+      "author": "Eduardo Undurraga",
+      "comment_text": "Eliminar: ',' (coma innecesaria)",
+      "quoted_text": "Inclusión sostenible de medicamentos en los planes de salud en Chile",
+      "section_hint": "unknown",
+      "type": "stylistic",
+      "specificity": "local",
+      "verifiability": "suggestion",
+      "touches_sections": [],
+      "has_embedded_claim": false,
+      "raw_claims": [],
+      "style_consistency_hint": "local_substitution"
+    },
+    {
+      "id": "C-EU-SUG33",
+      "author": "Eduardo Undurraga",
+      "comment_text": "Agregar: 'de ajuste' (precision conceptual)",
+      "quoted_text": "Un escenario de ajuste acotado reduce extremos",
+      "section_hint": "Mensajes clave",
+      "type": "stylistic",
+      "specificity": "local",
+      "verifiability": "suggestion",
+      "touches_sections": [
+        "Mensajes clave"
+      ],
+      "has_embedded_claim": false,
+      "raw_claims": [],
+      "style_consistency_hint": "local_substitution"
+    },
+    {
+      "id": "C-EU-SUG34",
+      "author": "Eduardo Undurraga",
+      "comment_text": "Reemplazar: 'p. ej.' por 'e.g.' (convencion academica)",
+      "quoted_text": "(e.g.p. ej., Ley Ricarte Soto)",
+      "section_hint": "Mensajes clave",
+      "type": "stylistic",
+      "specificity": "document",
+      "verifiability": "suggestion",
+      "touches_sections": [
+        "Mensajes clave"
+      ],
+      "has_embedded_claim": false,
+      "raw_claims": [],
+      "style_consistency_hint": "consistent_rule"
+    },
+    {
+      "id": "C-EU-SUG35",
+      "author": "Eduardo Undurraga",
+      "comment_text": "Reemplazar: 'y gobernada' por 'e informada' (mejora de redaccion)",
+      "quoted_text": "informada y gobernada por evidencia",
+      "section_hint": "Mensajes clave",
+      "type": "stylistic",
+      "specificity": "local",
+      "verifiability": "suggestion",
+      "touches_sections": [
+        "Mensajes clave"
+      ],
+      "has_embedded_claim": false,
+      "raw_claims": [],
+      "style_consistency_hint": "local_substitution"
+    },
+    {
+      "id": "C-EU-SUG36",
+      "author": "Eduardo Undurraga",
+      "comment_text": "Reemplazar: 'muestra' por 'comparada sugiere' (mas cauteloso, menos prescriptivo)",
+      "quoted_text": "evidencia experiencia internacional comparada sugiere muestra que",
+      "section_hint": "Resumen ejecutivo",
+      "type": "stylistic",
+      "specificity": "local",
+      "verifiability": "suggestion",
+      "touches_sections": [
+        "Resumen ejecutivo"
+      ],
+      "has_embedded_claim": false,
+      "raw_claims": [],
+      "style_consistency_hint": "local_substitution"
+    },
+    {
+      "id": "C-EU-SUG37",
+      "author": "Eduardo Undurraga",
+      "comment_text": "Agregar: 'y coordinada' (sobre implementacion)",
+      "quoted_text": "simultánea y coordinadamente tres dimensiones",
+      "section_hint": "Resumen ejecutivo",
+      "type": "stylistic",
+      "specificity": "local",
+      "verifiability": "suggestion",
+      "touches_sections": [
+        "Resumen ejecutivo"
+      ],
+      "has_embedded_claim": false,
+      "raw_claims": [],
+      "style_consistency_hint": "local_substitution"
+    },
+    {
+      "id": "C-EU-SUG38",
+      "author": "Eduardo Undurraga",
+      "comment_text": "Reemplazar: 'cluster intermedio' por 'conjunto de paises OCDE de proteccion farmaceutica intermedia' (evitar jargon)",
+      "quoted_text": "conjunto de países OCDE de protección farmacéutica intermedia, cluster intermedio",
+      "section_hint": "Resumen ejecutivo",
+      "type": "stylistic",
+      "specificity": "local",
+      "verifiability": "suggestion",
+      "touches_sections": [
+        "Resumen ejecutivo"
+      ],
+      "has_embedded_claim": false,
+      "raw_claims": [],
+      "style_consistency_hint": "local_substitution"
+    },
+    {
+      "id": "C-EU-SUG39",
+      "author": "Eduardo Undurraga",
+      "comment_text": "Agregar: 'con foco prioritario en medicamentos' (precision)",
+      "quoted_text": "con foco prioritario en medicamentos ambulatoriosa y hospitalaria",
+      "section_hint": "Resumen ejecutivo",
+      "type": "stylistic",
+      "specificity": "local",
+      "verifiability": "suggestion",
+      "touches_sections": [
+        "Resumen ejecutivo"
+      ],
+      "has_embedded_claim": false,
+      "raw_claims": [],
+      "style_consistency_hint": "local_substitution"
+    },
+    {
+      "id": "C-EU-SUG40",
+      "author": "Eduardo Undurraga",
+      "comment_text": "Reemplazar: 'experiencia' por 'evidencia' (mas riguroso)",
+      "quoted_text": "La evidencia experiencia internacional comparada sugiere",
+      "section_hint": "Resumen ejecutivo",
+      "type": "stylistic",
+      "specificity": "local",
+      "verifiability": "suggestion",
+      "touches_sections": [
+        "Resumen ejecutivo"
+      ],
+      "has_embedded_claim": false,
+      "raw_claims": [],
+      "style_consistency_hint": "local_substitution"
+    },
+    {
+      "id": "C-EU-SUG41",
+      "author": "Eduardo Undurraga",
+      "comment_text": "Agregar: ', por brechas de canasta' (concepto faltante)",
+      "quoted_text": "por brechas de canasta  o existe discontinuidades de por stock",
+      "section_hint": "Resumen ejecutivo",
+      "type": "stylistic",
+      "specificity": "local",
+      "verifiability": "suggestion",
+      "touches_sections": [
+        "Resumen ejecutivo"
+      ],
+      "has_embedded_claim": false,
+      "raw_claims": [],
+      "style_consistency_hint": "local_substitution"
+    },
+    {
+      "id": "C-EU-SUG42",
+      "author": "Eduardo Undurraga",
+      "comment_text": "Agregar: 'informada por evidencia,' (calificador importante)",
+      "quoted_text": "informada por evidencia, aprovechando programas existentes",
+      "section_hint": "Resumen ejecutivo",
+      "type": "stylistic",
+      "specificity": "local",
+      "verifiability": "suggestion",
+      "touches_sections": [
+        "Resumen ejecutivo"
+      ],
+      "has_embedded_claim": false,
+      "raw_claims": [],
+      "style_consistency_hint": "local_substitution"
+    },
+    {
+      "id": "C-EU-SUG43",
+      "author": "Eduardo Undurraga",
+      "comment_text": "Reemplazar: 'precios mas accesibles' por 'reducciones del precio efectivo enfrentado por el paciente' (mas preciso)",
+      "quoted_text": "reduccines del precio efectivo enfrentado por el paciente precios más accesibles",
+      "section_hint": "1.1",
+      "type": "stylistic",
+      "specificity": "local",
+      "verifiability": "suggestion",
+      "touches_sections": [
+        "1.1"
+      ],
+      "has_embedded_claim": false,
+      "raw_claims": [],
+      "style_consistency_hint": "local_substitution"
+    },
+    {
+      "id": "C-EU-SUG44",
+      "author": "Eduardo Undurraga",
+      "comment_text": "Reemplazar: 'sostienen el' por 'explican una fraccion sustantiva del' (mas cauteloso)",
+      "quoted_text": "explican una fracción sustantiva del sostienen el gasto de bolsillo",
+      "section_hint": "1.1",
+      "type": "stylistic",
+      "specificity": "local",
+      "verifiability": "suggestion",
+      "touches_sections": [
+        "1.1"
+      ],
+      "has_embedded_claim": false,
+      "raw_claims": [],
+      "style_consistency_hint": "local_substitution"
+    },
+    {
+      "id": "C-EU-SUG45",
+      "author": "Eduardo Undurraga",
+      "comment_text": "Reemplazar: 'cotidiano' por 'persistente' (mas preciso)",
+      "quoted_text": "gasto de bolsillo persistente cotidiano",
+      "section_hint": "1.1",
+      "type": "stylistic",
+      "specificity": "local",
+      "verifiability": "suggestion",
+      "touches_sections": [
+        "1.1"
+      ],
+      "has_embedded_claim": false,
+      "raw_claims": [],
+      "style_consistency_hint": "local_substitution"
+    },
+    {
+      "id": "C-CC-DOCX9",
+      "author": "Carla Castillo",
+      "comment_text": "No incluye alto costo entonces?",
+      "quoted_text": "Beneficio Farmacéutico Ambulatorio Universal (para beneficiarios de FONASA e ISAPRE bajo reglas comunes)",
+      "section_hint": "Mensajes clave",
+      "type": "question",
+      "specificity": "local",
+      "verifiability": "suggestion",
+      "touches_sections": [
+        "Mensajes clave"
+      ],
+      "has_embedded_claim": false,
+      "raw_claims": [],
+      "style_consistency_hint": "n/a"
+    },
+    {
+      "id": "C-CC-DOCX12",
+      "author": "Carla Castillo",
+      "comment_text": "Perdon por insistir en este punto pero no es el unico...las GES tambien cubren medicamentos de alto costo (sin ir mas lejos el nuevo decreto incorpora un medicamento para fibrosis quistica de muy alto costo)...tambien las drogas de alto costo de Ca.",
+      "quoted_text": "En Chile existe un instrumento de alto impacto (Ley Ricarte Soto)",
+      "section_hint": "Resumen ejecutivo",
+      "type": "factual",
+      "specificity": "section",
+      "verifiability": "factual_claim",
+      "touches_sections": [
+        "Resumen ejecutivo"
+      ],
+      "has_embedded_claim": true,
+      "raw_claims": [
+        "GES cubre medicamentos de alto costo",
+        "El nuevo decreto GES incorpora un medicamento para fibrosis quística de muy alto costo",
+        "GES cubre también drogas de alto costo para cáncer"
+      ],
+      "style_consistency_hint": "n/a"
+    },
+    {
+      "id": "C-CC-DOCX15",
+      "author": "Carla Castillo",
+      "comment_text": "En FONASA aplicara en MLE o MAI?",
+      "quoted_text": "aplicable a beneficiarios de FONASA e ISAPRE bajo reglas comunes",
+      "section_hint": "Resumen ejecutivo",
+      "type": "question",
+      "specificity": "local",
+      "verifiability": "suggestion",
+      "touches_sections": [
+        "Resumen ejecutivo"
+      ],
+      "has_embedded_claim": false,
+      "raw_claims": [],
+      "style_consistency_hint": "n/a"
+    },
+    {
+      "id": "C-CC-DOCX19",
+      "author": "Carla Castillo",
+      "comment_text": "Por que solo Ricarte Soto?",
+      "quoted_text": "La Ley Ricarte Soto entrega cobertura financiera integral para diagnósticos y tratamientos incorporados por decreto",
+      "section_hint": "1.1",
+      "type": "question",
+      "specificity": "local",
+      "verifiability": "suggestion",
+      "touches_sections": [
+        "1.1"
+      ],
+      "has_embedded_claim": false,
+      "raw_claims": [],
+      "style_consistency_hint": "n/a"
+    },
+    {
+      "id": "C-CC-DOCX27",
+      "author": "Carla Castillo",
+      "comment_text": "Esto es solo retail, verdad? https://www.oecd.org/content/dam/oecd/en/publications/reports/2023/11/health-at-a-glance-2023_e04f8239/7a7afb35-en.pdf De ser asi, creo que habria que precisarlo.",
+      "quoted_text": "Tarjeta 1: sistema de medicamentos en Chile",
+      "section_hint": "2",
+      "type": "methodological",
+      "specificity": "local",
+      "verifiability": "factual_claim",
+      "touches_sections": [
+        "2"
+      ],
+      "has_embedded_claim": true,
+      "raw_claims": [
+        "Los datos de gasto en medicamentos de la ficha corresponden solo al canal retail, excluyendo el sector público"
+      ],
+      "style_consistency_hint": "n/a"
+    },
+    {
+      "id": "C-CC-DOCX29",
+      "author": "Carla Castillo",
+      "comment_text": "las personas tambien serian ejecutoras, no?",
+      "quoted_text": "Ejecutores del gasto: las instituciones que materializan el gasto y administran presupuestos",
+      "section_hint": "2",
+      "type": "question",
+      "specificity": "local",
+      "verifiability": "suggestion",
+      "touches_sections": [
+        "2"
+      ],
+      "has_embedded_claim": false,
+      "raw_claims": [],
+      "style_consistency_hint": "n/a"
+    },
+    {
+      "id": "C-CC-DOCX30",
+      "author": "Carla Castillo",
+      "comment_text": "publica?",
+      "quoted_text": "hay barreras de disponibilidad/dispensación o de red que empujan la compra fuera del canal protegido",
+      "section_hint": "2",
+      "type": "question",
+      "specificity": "local",
+      "verifiability": "suggestion",
+      "touches_sections": [
+        "2"
+      ],
+      "has_embedded_claim": false,
+      "raw_claims": [],
+      "style_consistency_hint": "n/a"
+    },
+    {
+      "id": "C-CC-DOCX33",
+      "author": "Carla Castillo",
+      "comment_text": "Aca (y en el anterior) muchas veces se entregan medicamentos de alto costo, no?",
+      "quoted_text": "Farmacia hospitalaria ambulatoria (dispensación ambulatoria de especialidad)",
+      "section_hint": "2.1",
+      "type": "factual",
+      "specificity": "local",
+      "verifiability": "factual_claim",
+      "touches_sections": [
+        "2.1"
+      ],
+      "has_embedded_claim": true,
+      "raw_claims": [
+        "Las farmacias hospitalarias ambulatorias dispensan frecuentemente medicamentos de alto costo"
+      ],
+      "style_consistency_hint": "n/a"
+    },
+    {
+      "id": "C-CC-DOCX34",
+      "author": "Carla Castillo",
+      "comment_text": "Tambien en convenio con ISAPRE en el caso de las GES...",
+      "quoted_text": "Canal minorista predominante para compra ambulatoria",
+      "section_hint": "2.1",
+      "type": "factual",
+      "specificity": "local",
+      "verifiability": "factual_claim",
+      "touches_sections": [
+        "2.1"
+      ],
+      "has_embedded_claim": true,
+      "raw_claims": [
+        "Las farmacias retail operan también en convenio con ISAPRE en el caso de las GES"
+      ],
+      "style_consistency_hint": "n/a"
+    },
+    {
+      "id": "C-CC-DOCX37",
+      "author": "Carla Castillo",
+      "comment_text": "Mayoritariamente varia solo entre FONASA (cero) e ISAPRE (20% del arancel de referencia, aunque operan deducibles definidos por ley).",
+      "quoted_text": "El nivel de copago varía según régimen y reglas del beneficio",
+      "section_hint": "2.2",
+      "type": "factual",
+      "specificity": "local",
+      "verifiability": "factual_claim",
+      "touches_sections": [
+        "2.2"
+      ],
+      "has_embedded_claim": true,
+      "raw_claims": [
+        "En FONASA el copago en medicamentos es cero",
+        "En ISAPRE el copago es 20% del arancel de referencia con deducibles definidos por ley"
+      ],
+      "style_consistency_hint": "n/a"
+    },
+    {
+      "id": "C-CC-DOCX38",
+      "author": "Carla Castillo",
+      "comment_text": "Aca no se consideran las GES, verdad?",
+      "quoted_text": "La cobertura efectiva de medicamentos depende del plan contratado",
+      "section_hint": "2.2",
+      "type": "question",
+      "specificity": "local",
+      "verifiability": "suggestion",
+      "touches_sections": [
+        "2.2"
+      ],
+      "has_embedded_claim": false,
+      "raw_claims": [],
+      "style_consistency_hint": "n/a"
+    },
+    {
+      "id": "C-CC-DOCX40",
+      "author": "Carla Castillo",
+      "comment_text": "Se puede separar en Chile lo que compra el sector publico con impuestos y lo que compra con el 7%? Ambas son fuentes de ingreso para FONASA, pero el gasto no marca con cual de las dos se financia...es decir, aca, para el sector publico tambien entran los Serv. de salud, la CENABAST, etc. (idem al punto anterior).",
+      "quoted_text": "Seguros sociales y privados: cotizaciones obligatorias (7% y estructura contractual)",
+      "section_hint": "2.3",
+      "type": "methodological",
+      "specificity": "section",
+      "verifiability": "factual_claim",
+      "touches_sections": [
+        "2.3"
+      ],
+      "has_embedded_claim": true,
+      "raw_claims": [
+        "Los impuestos generales y la cotización obligatoria del 7% son ambas fuentes de ingreso de FONASA",
+        "El gasto público en medicamentos no distingue el financiamiento por impuestos del financiamiento por cotizaciones",
+        "Los Servicios de Salud y CENABAST son ejecutores del gasto público en medicamentos"
+      ],
+      "style_consistency_hint": "n/a"
+    },
+    {
+      "id": "C-CC-DOCX42",
+      "author": "Carla Castillo",
+      "comment_text": "Me parece que el % para 2022 no calza con el de la ficha para Chile (0,2%).",
+      "quoted_text": "Figura 1: Evolución del gasto público en medicamentos, 2014",
+      "section_hint": "2.3",
+      "type": "factual",
+      "specificity": "local",
+      "verifiability": "factual_claim",
+      "touches_sections": [
+        "2.3"
+      ],
+      "has_embedded_claim": true,
+      "raw_claims": [
+        "El porcentaje de gasto público en medicamentos para Chile en 2022 que aparece en la Figura 1 no coincide con el 0,2% que figura en la ficha de Chile"
+      ],
+      "style_consistency_hint": "n/a"
+    },
+    {
+      "id": "C-CC-DOCX45",
+      "author": "Carla Castillo",
+      "comment_text": "El dato esta en miles (M$) o en millones (MM$)?",
+      "quoted_text": "Figura 2: Composición del gasto público en medicamentos por ejecutor/programa",
+      "section_hint": "2.3",
+      "type": "question",
+      "specificity": "local",
+      "verifiability": "suggestion",
+      "touches_sections": [
+        "2.3"
+      ],
+      "has_embedded_claim": false,
+      "raw_claims": [],
+      "style_consistency_hint": "n/a"
+    },
+    {
+      "id": "C-CC-DOCX47",
+      "author": "Carla Castillo",
+      "comment_text": "A que se refiere segun reglas del beneficio y red?",
+      "quoted_text": "Matriz de coberturas : por subsistema y canal",
+      "section_hint": "2.4",
+      "type": "question",
+      "specificity": "local",
+      "verifiability": "suggestion",
+      "touches_sections": [
+        "2.4"
+      ],
+      "has_embedded_claim": false,
+      "raw_claims": [],
+      "style_consistency_hint": "n/a"
+    },
+    {
+      "id": "C-CC-DOCX53",
+      "author": "Carla Castillo",
+      "comment_text": "Que proyecto exactamente? presentado por quien?",
+      "quoted_text": "El proyecto de Plan de Salud Universal presentado en 2020 es un punto de partida",
+      "section_hint": "2.6.1",
+      "type": "question",
+      "specificity": "local",
+      "verifiability": "suggestion",
+      "touches_sections": [
+        "2.6.1"
+      ],
+      "has_embedded_claim": false,
+      "raw_claims": [],
+      "style_consistency_hint": "n/a"
+    },
+    {
+      "id": "C-CC-DOCX54",
+      "author": "Carla Castillo",
+      "comment_text": "MLE? como se articularia con las coberturas en MAI, con los distintos programas?",
+      "quoted_text": "Integrar el componente farmacéutico en la función aseguradora de FONASA",
+      "section_hint": "2.6.1",
+      "type": "question",
+      "specificity": "local",
+      "verifiability": "suggestion",
+      "touches_sections": [
+        "2.6.1"
+      ],
+      "has_embedded_claim": false,
+      "raw_claims": [],
+      "style_consistency_hint": "n/a"
+    },
+    {
+      "id": "C-CC-DOCX56",
+      "author": "Carla Castillo",
+      "comment_text": "Entonces no sera cobertura para compras en retail?",
+      "quoted_text": "Un módulo específico \"ChileCompra Medicamentos\" debiera coordinarse con CENABAST y con el MCC",
+      "section_hint": "2.6.2",
+      "type": "question",
+      "specificity": "local",
+      "verifiability": "suggestion",
+      "touches_sections": [
+        "2.6.2"
+      ],
+      "has_embedded_claim": false,
+      "raw_claims": [],
+      "style_consistency_hint": "n/a"
+    },
+    {
+      "id": "C-CC-DOCX57",
+      "author": "Carla Castillo",
+      "comment_text": "Esto si es para el retail, no?",
+      "quoted_text": "Regulación de precios y referencia. La experiencia de la OCDE muestra",
+      "section_hint": "2.6.2",
+      "type": "question",
+      "specificity": "local",
+      "verifiability": "suggestion",
+      "touches_sections": [
+        "2.6.2"
+      ],
+      "has_embedded_claim": false,
+      "raw_claims": [],
+      "style_consistency_hint": "n/a"
+    },
+    {
+      "id": "C-CC-DOCX58",
+      "author": "Carla Castillo",
+      "comment_text": "Para esto me parece que primero se deberia avanzar en una politica universal de sustitucion (con exigencias de bioequivalencia o biosimilaridad mucho mas amplia que el listado actual).",
+      "quoted_text": "la sustitución obligatoria en farmacia y copagos diferenciales a favor del medicamento de menor precio",
+      "section_hint": "2.6.2",
+      "type": "strategic",
+      "specificity": "local",
+      "verifiability": "suggestion",
+      "touches_sections": [
+        "2.6.2"
+      ],
+      "has_embedded_claim": false,
+      "raw_claims": [],
+      "style_consistency_hint": "n/a"
+    },
+    {
+      "id": "C-CC-DOCX72",
+      "author": "Carla Castillo",
+      "comment_text": "En este caso tambien se entregan los medicamentos sin criterios sanitarios y, por lo tanto, con potenciales perdidas de eficiencia considerables...",
+      "quoted_text": "puede inducir asignación no planificada de recursos y menor previsibilidad presupuestaria",
+      "section_hint": "3.2.6",
+      "type": "factual",
+      "specificity": "local",
+      "verifiability": "factual_claim",
+      "touches_sections": [
+        "3.2.6"
+      ],
+      "has_embedded_claim": true,
+      "raw_claims": [
+        "Los medicamentos se entregan sin criterios sanitarios, generando pérdidas de eficiencia considerables"
+      ],
+      "style_consistency_hint": "n/a"
+    },
+    {
+      "id": "C-CC-DOCX75",
+      "author": "Carla Castillo",
+      "comment_text": "Podria ser tambien un sistema judicial que respeta o 'juega' bajo estas reglas...",
+      "quoted_text": "y sistemas de información que permitan monitorear utilización y resultados",
+      "section_hint": "3.3",
+      "type": "strategic",
+      "specificity": "local",
+      "verifiability": "suggestion",
+      "touches_sections": [
+        "3.3"
+      ],
+      "has_embedded_claim": false,
+      "raw_claims": [],
+      "style_consistency_hint": "n/a"
+    },
+    {
+      "id": "C-CC-DOCX78",
+      "author": "Carla Castillo",
+      "comment_text": "tengo la impresion de que las categorias Hogares incluyen a las categorias Medicamentos...o que al menos se intersectan...no me suenan tan excluyentes...",
+      "quoted_text": "Medicamentos crónicos/ambulatorios de alta frecuencia: concentran exposición por recurrencia",
+      "section_hint": "3.4",
+      "type": "methodological",
+      "specificity": "section",
+      "verifiability": "opinion",
+      "touches_sections": [
+        "3.4"
+      ],
+      "has_embedded_claim": false,
+      "raw_claims": [],
+      "style_consistency_hint": "n/a"
+    },
+    {
+      "id": "C-CC-DOCX79",
+      "author": "Carla Castillo",
+      "comment_text": "GES tambien incluye cobertura de medicamentos de alto costo para algunos problemas de salud... Las otras categorias (FONASA/ISAPRE) son solo para medicamentos ambulatorios o de 'bajo costo'?...",
+      "quoted_text": "Alto costo: brecha relevante en medicamentos fuera de LRS y DAC",
+      "section_hint": "3.4",
+      "type": "factual",
+      "specificity": "section",
+      "verifiability": "factual_claim",
+      "touches_sections": [
+        "3.4"
+      ],
+      "has_embedded_claim": true,
+      "raw_claims": [
+        "GES incluye cobertura de medicamentos de alto costo para algunos problemas de salud"
+      ],
+      "style_consistency_hint": "n/a"
+    },
+    {
+      "id": "C-CC-DOCX85",
+      "author": "Carla Castillo",
+      "comment_text": "Y el gasto total en medicamentos? Como yo interpreto este dato es que las coberturas para medicamentos del retail son bajas...pero que dice eso del gasto en medicamentos en general, o de las coberturas en general?",
+      "quoted_text": "Chile puede exhibir gasto per cápita en retail farmacéutico inferior al promedio OCDE",
+      "section_hint": "4.1",
+      "type": "question",
+      "specificity": "local",
+      "verifiability": "suggestion",
+      "touches_sections": [
+        "4.1"
+      ],
+      "has_embedded_claim": false,
+      "raw_claims": [],
+      "style_consistency_hint": "n/a"
+    },
+    {
+      "id": "C-CC-DOCX88",
+      "author": "Carla Castillo",
+      "comment_text": "Claro, porque si obtuvieron los medicamentos gratis (por ejemplo, en la APS), van a aparecer con gasto cero tambien... Otra cosa es que las encuestas muchas veces fallan en capturar (o subestiman) el gasto extremo en su muestra (ej. compra de bolsillo de medicamentos de alto costo).",
+      "quoted_text": "La mitad de los hogares no reporta ningún gasto mensual en medicamentos",
+      "section_hint": "4.2",
+      "type": "methodological",
+      "specificity": "local",
+      "verifiability": "factual_claim",
+      "touches_sections": [
+        "4.2"
+      ],
+      "has_embedded_claim": true,
+      "raw_claims": [
+        "Hogares que obtienen medicamentos gratis (ej. APS) aparecen con gasto cero en encuestas",
+        "Las encuestas subestiman el gasto extremo en medicamentos, como compras de bolsillo de alto costo"
+      ],
+      "style_consistency_hint": "n/a"
+    },
+    {
+      "id": "C-CC-DOCX92",
+      "author": "Carla Castillo",
+      "comment_text": "Quizas agregar una nota al pie indicando que el reporte mas reciente modifico este indicador...ya no son dos umbrales. De todas formas no se si es tan relevante...",
+      "quoted_text": "10% y 25% del gasto o ingreso total del hogar",
+      "section_hint": "4.2",
+      "type": "factual",
+      "specificity": "local",
+      "verifiability": "factual_claim",
+      "touches_sections": [
+        "4.2"
+      ],
+      "has_embedded_claim": true,
+      "raw_claims": [
+        "El reporte más reciente modificó el indicador de gasto catastrófico en medicamentos; ya no opera con dos umbrales (10% y 25%)"
+      ],
+      "style_consistency_hint": "n/a"
+    },
+    {
+      "id": "C-CC-DOCX96",
+      "author": "Carla Castillo",
+      "comment_text": "Retail?",
+      "quoted_text": "Gasto anual per cápita en medicamentos en países de la OCDE",
+      "section_hint": "5.1",
+      "type": "question",
+      "specificity": "local",
+      "verifiability": "suggestion",
+      "touches_sections": [
+        "5.1"
+      ],
+      "has_embedded_claim": false,
+      "raw_claims": [],
+      "style_consistency_hint": "n/a"
+    },
+    {
+      "id": "C-CC-DOCX101",
+      "author": "Carla Castillo",
+      "comment_text": "Esto centrado en el retail, verdad? (no considera entrega/dispensacion institucional)...",
+      "quoted_text": "Modalidad de cobertura: subsidio en punto de venta (POS) vs reembolso",
+      "section_hint": "5.2",
+      "type": "question",
+      "specificity": "local",
+      "verifiability": "suggestion",
+      "touches_sections": [
+        "5.2"
+      ],
+      "has_embedded_claim": false,
+      "raw_claims": [],
+      "style_consistency_hint": "n/a"
+    },
+    {
+      "id": "C-CC-DOCX114",
+      "author": "Carla Castillo",
+      "comment_text": "Estos datos consideran solo retail o todo el gasto en medicamentos?",
+      "quoted_text": "Alta cobertura farmacéutica (p. ej., Alemania, Francia, Japón): gasto total en medicamentos en torno a 1,5",
+      "section_hint": "5.4",
+      "type": "question",
+      "specificity": "local",
+      "verifiability": "suggestion",
+      "touches_sections": [
+        "5.4"
+      ],
+      "has_embedded_claim": false,
+      "raw_claims": [],
+      "style_consistency_hint": "n/a"
+    },
+    {
+      "id": "C-CC-DOCX115",
+      "author": "Carla Castillo",
+      "comment_text": "Incluye todo el gasto o solo retail?",
+      "quoted_text": "gasto público en medicamentos en torno a 0,46–0,51% del PIB (2022–2023)",
+      "section_hint": "5.4",
+      "type": "question",
+      "specificity": "local",
+      "verifiability": "opinion",
+      "touches_sections": [
+        "5.4"
+      ],
+      "has_embedded_claim": false,
+      "raw_claims": [],
+      "style_consistency_hint": "n/a"
+    },
+    {
+      "id": "C-CC-DOCX122",
+      "author": "Carla Castillo",
+      "comment_text": "Y FFAA?",
+      "quoted_text": "Cobertura aplicable solo a un subsistema o como piso común para FONASA e ISAPRE",
+      "section_hint": "6.1",
+      "type": "question",
+      "specificity": "local",
+      "verifiability": "opinion",
+      "touches_sections": [
+        "6.1"
+      ],
+      "has_embedded_claim": false,
+      "raw_claims": [],
+      "style_consistency_hint": "n/a"
+    },
+    {
+      "id": "C-CC-DOCX123",
+      "author": "Carla Castillo",
+      "comment_text": "Como se definiria esto para beneficiarios ISAPRE en que no hay APS?",
+      "quoted_text": "Qué parte se resuelve por dispensación institucional (APS/hospital) y qué parte se protege en retail",
+      "section_hint": "6.1",
+      "type": "question",
+      "specificity": "local",
+      "verifiability": "opinion",
+      "touches_sections": [
+        "6.1"
+      ],
+      "has_embedded_claim": true,
+      "raw_claims": [
+        "Los beneficiarios ISAPRE no tienen acceso a APS"
+      ],
+      "style_consistency_hint": "n/a"
+    },
+    {
+      "id": "C-CC-DOCX129",
+      "author": "Carla Castillo",
+      "comment_text": "A traves de programas o del retail?",
+      "quoted_text": "Ampliar y cerrar brechas en coberturas explícitas existentes (GES, LRS/DAC y programas)",
+      "section_hint": "6.2.1",
+      "type": "question",
+      "specificity": "local",
+      "verifiability": "opinion",
+      "touches_sections": [
+        "6.2.1"
+      ],
+      "has_embedded_claim": false,
+      "raw_claims": [],
+      "style_consistency_hint": "n/a"
+    },
+    {
+      "id": "C-CC-DOCX131",
+      "author": "Carla Castillo",
+      "comment_text": "Si el beneficio es para las compras en retail, podria haber trasvasije desde gasto publico institucional a gasto publico en retail? (ejemplo, personas que ahora reciben el beneficio en APS comienzan a comprar en retail debido a nuevas coberturas)? Esto podria aumentar el gasto por sobre lo esperado, dependiendo de la magnitud de este efecto claro...",
+      "quoted_text": "Lista positiva nacional ambulatoria, actualizada regularmente y sustentada en HTA explícita",
+      "section_hint": "6.2.2",
+      "type": "methodological",
+      "specificity": "section",
+      "verifiability": "opinion",
+      "touches_sections": [
+        "6.2.2"
+      ],
+      "has_embedded_claim": false,
+      "raw_claims": [],
+      "style_consistency_hint": "n/a"
+    },
+    {
+      "id": "C-CC-DOCX133",
+      "author": "Carla Castillo",
+      "comment_text": "Y los de alto costo?",
+      "quoted_text": "Cobertura casi integral de medicamentos ambulatorios médicamente necesarios",
+      "section_hint": "6.2.3",
+      "type": "question",
+      "specificity": "local",
+      "verifiability": "opinion",
+      "touches_sections": [
+        "6.2.3"
+      ],
+      "has_embedded_claim": false,
+      "raw_claims": [],
+      "style_consistency_hint": "n/a"
+    },
+    {
+      "id": "C-CC-DOCX140",
+      "author": "Carla Castillo",
+      "comment_text": "Y lo que hoy es gratis solo para FONASA se hace gratis para ISAPRE ahora?",
+      "quoted_text": "“Lo gratis sigue gratis”: lo ya cubierto institucionalmente (dispensación en red pública/arsenales)",
+      "section_hint": "7.2",
+      "type": "question",
+      "specificity": "local",
+      "verifiability": "opinion",
+      "touches_sections": [
+        "7.2"
+      ],
+      "has_embedded_claim": true,
+      "raw_claims": [
+        "Lo que actualmente es gratis para FONASA no está disponible gratuitamente para ISAPRE"
+      ],
+      "style_consistency_hint": "n/a"
+    },
+    {
+      "id": "C-CC-DOCX142",
+      "author": "Carla Castillo",
+      "comment_text": "Pero los programas siguen existiendo? Seguiria habiendo fragmentacion?",
+      "quoted_text": "Submódulo de alto costo fuera de GES/LRS/DAC: incorpora medicamentos ambulatorios de alto costo",
+      "section_hint": "7.3",
+      "type": "question",
+      "specificity": "section",
+      "verifiability": "opinion",
+      "touches_sections": [
+        "7.3"
+      ],
+      "has_embedded_claim": false,
+      "raw_claims": [],
+      "style_consistency_hint": "n/a"
+    },
+    {
+      "id": "C-CC-DOCX143",
+      "author": "Carla Castillo",
+      "comment_text": "En el fondo como una excepcion para el FONASA? pero operaria distinto para ISAPRE?",
+      "quoted_text": "si el canal institucional no entrega el medicamento por quiebre de stock u otra causa validada",
+      "section_hint": "7.3",
+      "type": "question",
+      "specificity": "local",
+      "verifiability": "opinion",
+      "touches_sections": [
+        "7.3"
+      ],
+      "has_embedded_claim": false,
+      "raw_claims": [],
+      "style_consistency_hint": "n/a"
+    },
+    {
+      "id": "C-CC-DOCX145",
+      "author": "Carla Castillo",
+      "comment_text": "Esto no modificaria las estadisticas de la experiencia comparada en que se basan los escenarios propuestos, no?",
+      "quoted_text": "Alternativa A: expansión institucional (MAI/APS)",
+      "section_hint": "7.3.1",
+      "type": "question",
+      "specificity": "section",
+      "verifiability": "opinion",
+      "touches_sections": [
+        "7.3.1"
+      ],
+      "has_embedded_claim": false,
+      "raw_claims": [],
+      "style_consistency_hint": "n/a"
+    },
+    {
+      "id": "C-CC-DOCX149",
+      "author": "Carla Castillo",
+      "comment_text": "Entonces un medicamento que se garantiza en alguno de los problemas GES, pero que se usa para otros problemas no garantizados podria tener distintas coberturas? En el largo plazo no se deberia apuntar a disminuir/eliminar esta fragmentacion?",
+      "quoted_text": "El beneficio no reemplaza GES/LRS/DAC ni duplica cobertura",
+      "section_hint": "7.4.1",
+      "type": "question",
+      "specificity": "section",
+      "verifiability": "opinion",
+      "touches_sections": [
+        "7.4.1"
+      ],
+      "has_embedded_claim": false,
+      "raw_claims": [],
+      "style_consistency_hint": "n/a"
+    },
+    {
+      "id": "C-CC-DOCX151",
+      "author": "Carla Castillo",
+      "comment_text": "El cap o stop loss se acumula por hogar?",
+      "quoted_text": "El objetivo del diseño financiero es proteger a los hogares sin perder incentivos de eficiencia",
+      "section_hint": "7.4.2",
+      "type": "question",
+      "specificity": "local",
+      "verifiability": "opinion",
+      "touches_sections": [
+        "7.4.2"
+      ],
+      "has_embedded_claim": false,
+      "raw_claims": [],
+      "style_consistency_hint": "n/a"
+    },
+    {
+      "id": "C-CC-DOCX157",
+      "author": "Carla Castillo",
+      "comment_text": "El financiamiento sera con fondos publicos para FONASA e ISAPRE? o en ISAPRE se financiara con el precio del plan?",
+      "quoted_text": "si el beneficio es un piso universal (FONASA e ISAPRE), su financiamiento debe minimizar selección adversa",
+      "section_hint": "7.5.2",
+      "type": "question",
+      "specificity": "section",
+      "verifiability": "opinion",
+      "touches_sections": [
+        "7.5.2"
+      ],
+      "has_embedded_claim": false,
+      "raw_claims": [],
+      "style_consistency_hint": "n/a"
+    },
+    {
+      "id": "C-CC-DOCX166",
+      "author": "Carla Castillo",
+      "comment_text": "Probablemente requeriria algun cambio en la actual ley de compras, no? (por el nuevo vinculo (posibilidad de compra) con privados? (probablemente no tan excepcional)...",
+      "quoted_text": "generación de un evento trazable cuando la farmacia institucional no entrega por causa validada",
+      "section_hint": "7.9",
+      "type": "question",
+      "specificity": "local",
+      "verifiability": "opinion",
+      "touches_sections": [
+        "7.9"
+      ],
+      "has_embedded_claim": false,
+      "raw_claims": [],
+      "style_consistency_hint": "n/a"
+    },
+    {
+      "id": "C-CC-DOCX171",
+      "author": "Carla Castillo",
+      "comment_text": "(y de personas que reciben MAI a la MLE?)",
+      "quoted_text": "Traslado de costos desde planes privados al beneficio público",
+      "section_hint": "7.12",
+      "type": "question",
+      "specificity": "local",
+      "verifiability": "opinion",
+      "touches_sections": [
+        "7.12"
+      ],
+      "has_embedded_claim": false,
+      "raw_claims": [],
+      "style_consistency_hint": "n/a"
+    },
+    {
+      "id": "C-CC-DOCX173",
+      "author": "Carla Castillo",
+      "comment_text": "No me queda tan claro como la propuesta resuelve la fragmentacion...dado que lo actualmente existente seguira existiendo...",
+      "quoted_text": "Chile requiere transitar desde un conjunto de instrumentos fragmentados hacia un beneficio farmacéutico ambulatorio integrado",
+      "section_hint": "8",
+      "type": "question",
+      "specificity": "section",
+      "verifiability": "opinion",
+      "touches_sections": [
+        "8"
+      ],
+      "has_embedded_claim": false,
+      "raw_claims": [],
+      "style_consistency_hint": "n/a"
+    }
+  ]
+}

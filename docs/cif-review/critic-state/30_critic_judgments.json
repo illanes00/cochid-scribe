@@ -1,0 +1,1509 @@
+{
+  "_meta": {
+    "stage": "30_critic_judgments.json",
+    "saved_at": "2026-04-17T04:25:43.885658",
+    "input_hashes": {
+      "10_classified": "from_load_stage"
+    },
+    "output_hash": "9dad33d55f3e30df",
+    "count": 91
+  },
+  "data": [
+    {
+      "comment_id": "C-CIF1",
+      "recommendation": "ACCEPT",
+      "reasoning": "La sección 2.4 aparece como título vacío (sin contenido) en el extracto, y DAC está documentado como instrumento de cobertura en 2.2 y referenciado en 3.4. La omisión en la matriz debilita precisamente la tesis central del capítulo: la fragmentación del sistema chileno. El revisor está en lo correcto por inspección interna del documento. Regla 1 aplica.",
+      "improvement_score": 4,
+      "preference_score": 1,
+      "benja_alignment": 4,
+      "correctness_score": 5,
+      "conflicts_with": [],
+      "supports": [
+        "C-CIF4"
+      ],
+      "verification_refs": [],
+      "proposed_action": "add_content",
+      "requires_director_approval": false
+    },
+    {
+      "comment_id": "C-CIF2",
+      "recommendation": "ACCEPT_PARTIAL",
+      "reasoning": "El documento cubre explícitamente ambos frentes en 1.1 (ambulatorio y alto costo vía LRS), por lo que la omisión es de énfasis, no estructural. El foco diferencial en ambulatorio es una decisión editorial deliberada: es el gap de política más desatendido y la contribución principal del informe. Propuesta de softening: añadir en 1.1 una oración que reconozca explícitamente que el tratamiento desigual es intencional dado el alcance.",
+      "improvement_score": 2,
+      "preference_score": 3,
+      "benja_alignment": 3,
+      "correctness_score": 3,
+      "conflicts_with": [],
+      "supports": [
+        "C-CIF3"
+      ],
+      "verification_refs": [
+        "V-ley-20850-ricarte-soto"
+      ],
+      "proposed_action": "apply_local_edit",
+      "requires_director_approval": false
+    },
+    {
+      "comment_id": "C-CIF3",
+      "recommendation": "ACCEPT_PARTIAL",
+      "reasoning": "La sección 3.2.6 ya trata la judicialización como síntoma de brechas y desarrolla implicancias en tres planos (hogares, sistema, legitimidad). El revisor pide reforzar el diagnóstico de falla sistémica, lo cual es técnicamente válido y alineado con Benja (profundidad técnica, no prescripción). Propuesta concreta: añadir una oración sobre tendencia temporal de tutelas/recursos de protección como evidencia cuantitativa que soporte el diagnóstico de falla institucional.",
+      "improvement_score": 2,
+      "preference_score": 2,
+      "benja_alignment": 4,
+      "correctness_score": 4,
+      "conflicts_with": [],
+      "supports": [
+        "C-CIF2"
+      ],
+      "verification_refs": [],
+      "proposed_action": "add_content",
+      "requires_director_approval": false
+    },
+    {
+      "comment_id": "C-CIF4",
+      "recommendation": "DEFER",
+      "reasoning": "El diagnóstico es correcto: el Capítulo 5 mezcla hallazgos descriptivos, inferencias comparadas e implicancias normativas sin separadores claros. Sin embargo, reestructurar un capítulo completo supera los 500 chars de cambio estimado y afecta el flujo argumental. Propuesta tentativa para directores: añadir párrafo de encuadre al inicio del capítulo que distinga explícitamente qué es evidencia comparada versus derivación para Chile; considerar una caja editorial que marque el salto a recomendaciones.",
+      "improvement_score": 3,
+      "preference_score": 2,
+      "benja_alignment": 3,
+      "correctness_score": 4,
+      "conflicts_with": [],
+      "supports": [
+        "C-CIF1",
+        "C-CIF5"
+      ],
+      "verification_refs": [],
+      "proposed_action": "restructure_section",
+      "requires_director_approval": true
+    },
+    {
+      "comment_id": "C-CIF5",
+      "recommendation": "ACCEPT",
+      "reasoning": "La sección 5.1 menciona tres criterios de selección pero no especifica años base por indicador, fuente primaria por dato ni limitaciones de comparabilidad. El ledger confirma errores concretos de atribución: V-us206-attribution está REFUTED (triple error de fuente/año/expresión), y V-mediana-ocde-percapita está REFUTED (sobreestimación de mediana). Esto valida la necesidad de documentar metodología con mayor precisión. Regla 10: metodológico → ACCEPT, add_content.",
+      "improvement_score": 4,
+      "preference_score": 1,
+      "benja_alignment": 5,
+      "correctness_score": 5,
+      "conflicts_with": [],
+      "supports": [
+        "C-CIF4"
+      ],
+      "verification_refs": [
+        "V-us206-attribution",
+        "V-us455-ppa-chile",
+        "V-mediana-ocde-percapita"
+      ],
+      "proposed_action": "add_content",
+      "requires_director_approval": false
+    },
+    {
+      "comment_id": "C-CIF6",
+      "recommendation": "ACCEPT",
+      "reasoning": "Técnicamente correcto: biosimilares y genéricos de molécula pequeña tienen marcos regulatorios distintos en intercambiabilidad, prescripción por DCI y sustitución automática en farmacia (FDA mantiene categoría específica 'interchangeable biosimilar'; EMA varía por Estado miembro). El documento usa 'DCI/bioequivalentes' y 'genéricos y biosimilares' de forma intercambiable en varios pasajes, constituyendo un error técnico con consecuencias para la recomendación de política. Regla 1: factual confirmado → ACCEPT, apply_consistent_edit.",
+      "improvement_score": 4,
+      "preference_score": 1,
+      "benja_alignment": 5,
+      "correctness_score": 5,
+      "conflicts_with": [],
+      "supports": [
+        "C-CIF7"
+      ],
+      "verification_refs": [],
+      "proposed_action": "apply_consistent_edit",
+      "requires_director_approval": false
+    },
+    {
+      "comment_id": "C-CIF7",
+      "recommendation": "ACCEPT",
+      "reasoning": "Correcto: la regulación internacional de biosimilares es heterogénea. UE varía por Estado miembro en sustitución automática; FDA tiene designación restrictiva de 'interchangeable biosimilar'; Japón y Corea tienen criterios propios de intercambiabilidad. El documento (5.3.4) no debe implicar un estándar convergente. Edición local que añada cláusula de heterogeneidad regulatoria y ejemplos contrastantes resuelve el punto sin restructurar. Se resuelve junto con C-CIF6.",
+      "improvement_score": 3,
+      "preference_score": 1,
+      "benja_alignment": 5,
+      "correctness_score": 5,
+      "conflicts_with": [],
+      "supports": [
+        "C-CIF6"
+      ],
+      "verification_refs": [],
+      "proposed_action": "apply_local_edit",
+      "requires_director_approval": false
+    },
+    {
+      "comment_id": "C-CIF8",
+      "recommendation": "ACCEPT_PARTIAL",
+      "reasoning": "El punto técnico es legítimo: HTA bien diseñada evalúa beneficio terapéutico incremental (no solo costo) y un sistema de contención pura puede desintivar I+D de valor. Sin embargo, el comentario proviene del financiador del estudio (CIF/industria farmacéutica) y el énfasis en 'innovación = ahorro futuro' roza prescripción de política favorable al sector. La línea de Benja ('casarnos con política NO') aplica con fuerza aquí. Propuesta parcial y protegida: una oración que mencione que HTA evalúa beneficio incremental, sin convertirse en argumento pro-innovación farmacéutica.",
+      "improvement_score": 2,
+      "preference_score": 3,
+      "benja_alignment": 2,
+      "correctness_score": 4,
+      "conflicts_with": [],
+      "supports": [
+        "C-CIF9"
+      ],
+      "verification_refs": [],
+      "proposed_action": "apply_local_edit",
+      "requires_director_approval": true
+    },
+    {
+      "comment_id": "C-CIF9",
+      "recommendation": "ACCEPT_PARTIAL",
+      "reasoning": "Técnicamente matizable: la literatura de HTA define el objetivo primario como asignación eficiente basada en valor (costo-efectividad, carga de enfermedad, equidad), no contención de gasto per se. El documento en 3.3 dice ETESA 'permite comparar alternativas costo-efectivas', framing compatible con valor pero que podría interpretarse como contención. Propuesta: añadir oración explícita sobre mandato de valor de HTA sin borrar la dimensión de sostenibilidad fiscal que es central al argumento del informe.",
+      "improvement_score": 2,
+      "preference_score": 2,
+      "benja_alignment": 3,
+      "correctness_score": 3,
+      "conflicts_with": [],
+      "supports": [
+        "C-CIF8"
+      ],
+      "verification_refs": [],
+      "proposed_action": "apply_local_edit",
+      "requires_director_approval": false
+    },
+    {
+      "comment_id": "C-CIF10",
+      "recommendation": "DEFER",
+      "reasoning": "El comentario es general y no identifica secciones específicas ni propone cambios concretos más allá de 'secciones no cerradas, orden y conclusiones insuficientes'. El diagnóstico tiene base real (2.4 es placeholder vacío, Capítulo 8 no aparece en extracto), pero sin especificidad no se pueden proponer acciones editoriales precisas. Regla 12: general → none_reply_only. Reply debe apuntar a C-CIF1 como ejemplo concreto ya identificado de sección incompleta y solicitar al revisor enumerar las secciones específicas que considera abiertas.",
+      "improvement_score": 1,
+      "preference_score": 1,
+      "benja_alignment": 2,
+      "correctness_score": 3,
+      "conflicts_with": [],
+      "supports": [
+        "C-CIF4",
+        "C-CIF1"
+      ],
+      "verification_refs": [],
+      "proposed_action": "none_reply_only",
+      "requires_director_approval": true
+    },
+    {
+      "comment_id": "C-CIF11",
+      "recommendation": "ACCEPT_PARTIAL",
+      "reasoning": "El ledger de verificación confirma múltiples errores factuales reales en el documento (V-us206-attribution refutado, V-mediana-ocde-percapita refutado, V-costa-rica-ccss refutado, V-ges-patologias refutado), validando la premisa del comentario. Sin embargo, la observación es demasiado vaga para aplicar una edición directa: no especifica qué tablas tienen problemas de numeración ni cuáles cifras son inconsistentes. Se acepta la premisa y se propone revisión sistemática de todas las cifras marcadas como X en el ledger más auditoría de numeración de figuras.",
+      "improvement_score": 4,
+      "preference_score": 1,
+      "benja_alignment": 3,
+      "correctness_score": 4,
+      "conflicts_with": [],
+      "supports": [
+        "C-CIF12"
+      ],
+      "verification_refs": [
+        "V-us206-attribution",
+        "V-mediana-ocde-percapita",
+        "V-costa-rica-ccss",
+        "V-ges-patologias"
+      ],
+      "proposed_action": "apply_consistent_edit",
+      "requires_director_approval": false
+    },
+    {
+      "comment_id": "C-CIF12",
+      "recommendation": "DEFER",
+      "reasoning": "Comentario general de calidad global cuya premisa es parcialmente correcta dado que el ledger confirma errores factuales sin corregir. Regla 12 aplica: no genera edición directa. La respuesta adecuada es señalar los fixes específicos en proceso (corrección de cifras del ledger, revisión de numeración) y comprometer una ronda de edición editorial final antes del cierre. No existe edición accionable derivada de este comentario en sí mismo.",
+      "improvement_score": 1,
+      "preference_score": 3,
+      "benja_alignment": 2,
+      "correctness_score": 3,
+      "conflicts_with": [],
+      "supports": [
+        "C-CIF11"
+      ],
+      "verification_refs": [
+        "V-us206-attribution",
+        "V-mediana-ocde-percapita"
+      ],
+      "proposed_action": "none_reply_only",
+      "requires_director_approval": false
+    },
+    {
+      "comment_id": "C-CIF13",
+      "recommendation": "DEFER",
+      "reasoning": "Comentario meta-procesal sobre incorporación parcial de revisiones previas; sin lista concreta de observaciones pendientes, no genera edición accionable. Regla 12 aplica. La respuesta correcta es solicitar a CIF la lista específica de comentarios de la minuta previa que consideran no incorporados, para procesarlos uno a uno con el marco de decisión; sin esa lista, el comentario no puede traducirse en cambio al documento.",
+      "improvement_score": 1,
+      "preference_score": 2,
+      "benja_alignment": 2,
+      "correctness_score": 2,
+      "conflicts_with": [
+        "C-EU-EMAIL2"
+      ],
+      "supports": [
+        "C-CIF12"
+      ],
+      "verification_refs": [],
+      "proposed_action": "none_reply_only",
+      "requires_director_approval": false
+    },
+    {
+      "comment_id": "C-CIF14",
+      "recommendation": "DEFER",
+      "reasoning": "Clasificar recomendaciones en tres niveles de habilitación legal (sin reforma / ajuste regulatorio / rediseño sistémico) es sustantivo y mejora la utilidad del documento para policy-makers, alineándose con la profundidad técnica que valora Benja sin prescribir una solución específica. El cambio implica reorganización del capítulo 8 estimada en >500 caracteres, lo que requiere aprobación de directores. Mejor opción propuesta en reply: agregar tabla-resumen de requisitos habilitantes por medida sin reescribir el cuerpo narrativo.",
+      "improvement_score": 4,
+      "preference_score": 1,
+      "benja_alignment": 4,
+      "correctness_score": 4,
+      "conflicts_with": [],
+      "supports": [
+        "C-EU-EMAIL2"
+      ],
+      "verification_refs": [],
+      "proposed_action": "restructure_section",
+      "requires_director_approval": true
+    },
+    {
+      "comment_id": "C-EU-EMAIL1",
+      "recommendation": "ACCEPT_PARTIAL",
+      "reasoning": "Eduardo tiene razón en que la comparación retail OOP es parcialmente confundente porque lo que permanece en el bolsillo refleja el diseño institucional del sistema, y que comparar con UK sin mencionar los convenios NHS-retail distorsiona la lectura. Los datos base son correctos (V-78-retail-2021 OK, V-us455-ppa-chile OK), por lo que no se eliminan sino que se contextualizan con una nota metodológica sobre heterogeneidad institucional entre países. La alineación con la línea de Benja es alta: el dato técnico se preserva, la lectura prescriptiva se suaviza.",
+      "improvement_score": 3,
+      "preference_score": 2,
+      "benja_alignment": 5,
+      "correctness_score": 4,
+      "conflicts_with": [],
+      "supports": [
+        "C-EU-EMAIL2"
+      ],
+      "verification_refs": [
+        "V-78-retail-2021",
+        "V-us455-ppa-chile"
+      ],
+      "proposed_action": "apply_local_edit",
+      "requires_director_approval": false
+    },
+    {
+      "comment_id": "C-EU-EMAIL2",
+      "recommendation": "ACCEPT_PARTIAL",
+      "reasoning": "La dirección editorial de Eduardo —menos prescriptivo, someter opciones a discusión— es perfectamente alineada con la línea arbitral de Benja y con la función de Espacio Público como productor de evidencia. Se acepta y aplica: suavizar lenguaje prescriptivo en mensajes clave y capítulo 7 (de 'se recomienda / proponemos' a 'una opción es / los trade-offs son / preguntas a discutir'). Se difiere con aprobación de directores la decisión de reemplazar el capítulo 8 completo con conclusiones del seminario, pues eso cambia estructuralmente la función del documento.",
+      "improvement_score": 4,
+      "preference_score": 1,
+      "benja_alignment": 5,
+      "correctness_score": 5,
+      "conflicts_with": [
+        "C-CIF13"
+      ],
+      "supports": [
+        "C-CC-EMAIL1",
+        "C-CIF14"
+      ],
+      "verification_refs": [],
+      "proposed_action": "restructure_section",
+      "requires_director_approval": true
+    },
+    {
+      "comment_id": "C-CC-EMAIL1",
+      "recommendation": "DEFER",
+      "reasoning": "Carla refuerza la misma reorientación estructural de Eduardo (capítulo 8 → conclusiones del seminario), lo que convierte la señal en consenso editorial real. El cambio es estructuralmente grande (>500 chars, reescritura del cierre del documento) y requiere decisión de directores. Opción propuesta en reply: versión intermedia con 'conclusiones provisorias + preguntas abiertas para el seminario', que honra la señal sin bloquear publicación mientras se resuelve el formato final.",
+      "improvement_score": 3,
+      "preference_score": 2,
+      "benja_alignment": 4,
+      "correctness_score": 4,
+      "conflicts_with": [],
+      "supports": [
+        "C-EU-EMAIL2"
+      ],
+      "verification_refs": [],
+      "proposed_action": "restructure_section",
+      "requires_director_approval": true
+    },
+    {
+      "comment_id": "EXISTING-EU1",
+      "recommendation": "ACCEPT",
+      "reasoning": "Regla 5 aplica directamente: comentario estilístico con style_consistency_hint=consistent_rule. El término 'canal retail' es jerga de industria farmacéutica que reduce la accesibilidad para lectores de política pública no especializados; la sustitución consistente por términos como 'farmacias privadas' o 'compra directa en farmacia' es correcta y mejora la claridad sin pérdida de precisión técnica. La edición debe aplicarse en todas las ocurrencias del documento.",
+      "improvement_score": 2,
+      "preference_score": 3,
+      "benja_alignment": 3,
+      "correctness_score": 4,
+      "conflicts_with": [],
+      "supports": [
+        "EXISTING-EU3"
+      ],
+      "verification_refs": [],
+      "proposed_action": "apply_consistent_edit",
+      "requires_director_approval": false
+    },
+    {
+      "comment_id": "EXISTING-EU2",
+      "recommendation": "ACCEPT",
+      "reasoning": "Sugerencia estructural pequeña (<500 chars): agregar referencias a capítulos en el resumen ejecutivo es estándar en documentos técnicos de política pública y mejora la navegabilidad para lectores selectivos. Regla 7 aplica. No genera tensión con ninguna línea editorial; es una mejora de usabilidad neutral que facilita que el documento funcione tanto como lectura completa como referencia rápida.",
+      "improvement_score": 3,
+      "preference_score": 2,
+      "benja_alignment": 3,
+      "correctness_score": 4,
+      "conflicts_with": [],
+      "supports": [],
+      "verification_refs": [],
+      "proposed_action": "restructure_section",
+      "requires_director_approval": false
+    },
+    {
+      "comment_id": "EXISTING-EU3",
+      "recommendation": "ACCEPT",
+      "reasoning": "Idéntica lógica a EXISTING-EU1: regla 5 con consistent_rule. La frase 'en el canal de medicamentos dispensados fuera del hospital' combina jerga ('canal de') con perífrasis redundante; reemplazar por 'medicamentos adquiridos en farmacias' o equivalente mantiene el significado técnico con mayor claridad. Aplica la misma regla de sustitución consistente establecida por EXISTING-EU1 en todo el documento.",
+      "improvement_score": 2,
+      "preference_score": 3,
+      "benja_alignment": 3,
+      "correctness_score": 4,
+      "conflicts_with": [],
+      "supports": [
+        "EXISTING-EU1"
+      ],
+      "verification_refs": [],
+      "proposed_action": "apply_consistent_edit",
+      "requires_director_approval": false
+    },
+    {
+      "comment_id": "EXISTING-EU4",
+      "recommendation": "ACCEPT",
+      "reasoning": "Comentario de consistencia de formato (tamaño de fuente en Tarjeta 1 vs. el resto del documento). La regla stylistic + consistent_rule activa aceptación directa: si el estilo tamaño-11 ya aplica al resto de tarjetas/tablas, la Tarjeta 1 debe seguir esa misma regla sin excepción. El cambio es puramente visual y no altera contenido.",
+      "improvement_score": 2,
+      "preference_score": 2,
+      "benja_alignment": 3,
+      "correctness_score": 3,
+      "conflicts_with": [],
+      "supports": [],
+      "verification_refs": [],
+      "proposed_action": "apply_consistent_edit",
+      "requires_director_approval": false
+    },
+    {
+      "comment_id": "EXISTING-EU5",
+      "recommendation": "ACCEPT",
+      "reasoning": "Convención académica estándar: una sección no se subdivide cuando solo existe una subsección bajo ella, pues la jerarquía resulta vacía. La sección 2.1 como único nivel bajo '2' genera estructura innecesaria. El cambio es pequeño (eliminar encabezado numerado y tratar el contenido como párrafo introductorio de la sección 2), claramente menor a 500 caracteres.",
+      "improvement_score": 3,
+      "preference_score": 2,
+      "benja_alignment": 3,
+      "correctness_score": 4,
+      "conflicts_with": [],
+      "supports": [
+        "EXISTING-EU6",
+        "EXISTING-EU7"
+      ],
+      "verification_refs": [],
+      "proposed_action": "restructure_section",
+      "requires_director_approval": false
+    },
+    {
+      "comment_id": "EXISTING-EU6",
+      "recommendation": "ACCEPT",
+      "reasoning": "Mismo patrón que EU5: la subsección 6.1 como único nivel subordinado bajo sección 6 crea jerarquía innecesaria. Eduardo aplica la misma convención de forma coherente. La corrección es eliminar el encabezado numerado 6.1 e integrar el contenido como párrafo del cuerpo de la sección 6, cambio menor a 500 caracteres.",
+      "improvement_score": 3,
+      "preference_score": 2,
+      "benja_alignment": 3,
+      "correctness_score": 4,
+      "conflicts_with": [],
+      "supports": [
+        "EXISTING-EU5",
+        "EXISTING-EU7"
+      ],
+      "verification_refs": [],
+      "proposed_action": "restructure_section",
+      "requires_director_approval": false
+    },
+    {
+      "comment_id": "EXISTING-EU7",
+      "recommendation": "ACCEPT",
+      "reasoning": "Patrón idéntico a EU5 y EU6: la subsección 7.3.1 'Cómo opera en cada canal' como única subordinada bajo 7.3 genera jerarquía vacía. Eduardo aplica la misma regla consistentemente en todo el documento, lo que confirma que es una convención editorial del proyecto y no una preferencia local. Cambio local menor a 500 caracteres.",
+      "improvement_score": 3,
+      "preference_score": 2,
+      "benja_alignment": 3,
+      "correctness_score": 4,
+      "conflicts_with": [],
+      "supports": [
+        "EXISTING-EU5",
+        "EXISTING-EU6"
+      ],
+      "verification_refs": [],
+      "proposed_action": "restructure_section",
+      "requires_director_approval": false
+    },
+    {
+      "comment_id": "EXISTING-EU8",
+      "recommendation": "DEFER",
+      "reasoning": "El claim es factual (fecha de publicación) pero el ledger no contiene verificación para este dato y el propio Eduardo lo formula como suposición ('supongo que enero 2026'), reconociendo incertidumbre. La fecha correcta depende de cuándo cerró la redacción vs. cuándo circuló formalmente, información que solo el equipo coordinador (Benja/Eleni) puede confirmar. Propuesta tentativa: si el documento se cerró en diciembre 2025 pero fue distribuido en enero 2026, corresponde 'Enero de 2026'; si la versión fue firmada en diciembre, mantener la fecha original.",
+      "improvement_score": 2,
+      "preference_score": 1,
+      "benja_alignment": 3,
+      "correctness_score": 2,
+      "conflicts_with": [],
+      "supports": [],
+      "verification_refs": [],
+      "proposed_action": "none_reply_only",
+      "requires_director_approval": true
+    },
+    {
+      "comment_id": "C-EU-SUG26",
+      "recommendation": "DEFER",
+      "reasoning": "El texto citado ya existe en el Resumen Ejecutivo; Eduardo propone agregar un párrafo de profundización conceptual que distingan instrumentos según el frente de riesgo. El punto tiene mérito técnico real y alinea con la profundidad analítica que el documento persigue. Sin embargo, la extensión estimada del nuevo párrafo supera los 500 caracteres, y su formulación exacta en el resumen ejecutivo —que tiene un tono más sintético— requiere revisión directorial para no sobrecargar esa sección.",
+      "improvement_score": 3,
+      "preference_score": 2,
+      "benja_alignment": 4,
+      "correctness_score": 4,
+      "conflicts_with": [],
+      "supports": [
+        "C-EU-SUG27"
+      ],
+      "verification_refs": [],
+      "proposed_action": "add_content",
+      "requires_director_approval": true
+    },
+    {
+      "comment_id": "C-EU-SUG27",
+      "recommendation": "DEFER",
+      "reasoning": "El texto citado ('La efectividad de estos instrumentos depende en buena parte de su implementación conjunta') ya existe en el Resumen Ejecutivo. Eduardo propone agregar un párrafo expandiendo la idea de implementación conjunta, que es técnicamente sólida y con respaldo comparado. La extensión estimada supera 500 caracteres y su incorporación en el resumen ejecutivo debe alinearse con el nivel de síntesis de esa sección; requiere revisión directorial sobre extensión y posición dentro del resumen.",
+      "improvement_score": 3,
+      "preference_score": 2,
+      "benja_alignment": 4,
+      "correctness_score": 4,
+      "conflicts_with": [],
+      "supports": [
+        "C-EU-SUG26"
+      ],
+      "verification_refs": [],
+      "proposed_action": "add_content",
+      "requires_director_approval": true
+    },
+    {
+      "comment_id": "C-EU-SUG28",
+      "recommendation": "DEFER",
+      "reasoning": "Eduardo señala redundancia en el Resumen Ejecutivo, pero el texto citado es solo el encabezado de sección ('# Resumen ejecutivo'), sin identificar el párrafo específico a eliminar. Sin esa especificidad no es posible proceder: el resumen ejecutivo contiene varios párrafos candidatos y eliminar el incorrecto alteraría la coherencia narrativa. El equipo director debe identificar y aprobar explícitamente cuál párrafo es redundante antes de aplicar la edición.",
+      "improvement_score": 2,
+      "preference_score": 2,
+      "benja_alignment": 3,
+      "correctness_score": 3,
+      "conflicts_with": [],
+      "supports": [],
+      "verification_refs": [],
+      "proposed_action": "none_reply_only",
+      "requires_director_approval": true
+    },
+    {
+      "comment_id": "C-EU-SUG29",
+      "recommendation": "REJECT",
+      "reasoning": "La claim ortográfica es factualmente incorrecta según la normativa vigente. La Ortografía de la Lengua Española (RAE/ASALE, 2010) eliminó explícitamente la tilde diacrítica en monosílabos gramaticales, incluidas las conjunciones 'o' y 'u', incluso en contextos donde históricamente se usaban para evitar ambigüedad. Escribir 'ú' como conjunción introduciría un error ortográfico conforme al estándar actual. Se recomienda mantener 'u' sin tilde y comunicar esta aclaración al revisor.",
+      "improvement_score": 0,
+      "preference_score": 1,
+      "benja_alignment": 2,
+      "correctness_score": 0,
+      "conflicts_with": [],
+      "supports": [],
+      "verification_refs": [],
+      "proposed_action": "none_reply_only",
+      "requires_director_approval": false
+    },
+    {
+      "comment_id": "C-EU-SUG30",
+      "recommendation": "NEEDS_DATA",
+      "reasoning": "Eduardo propone agregar el artículo 'la' pero el texto citado es el título completo del documento ('Inclusión sostenible de medicamentos en los planes de salud en Chile'), que está gramaticalmente correcto sin ese artículo, y la section_hint es 'unknown'. No es posible identificar la ubicación exacta donde Eduardo detectó la omisión. Se requiere que el revisor especifique la frase completa y la ubicación precisa en el cuerpo del texto antes de proceder con cualquier edición.",
+      "improvement_score": 1,
+      "preference_score": 2,
+      "benja_alignment": 3,
+      "correctness_score": 2,
+      "conflicts_with": [],
+      "supports": [],
+      "verification_refs": [],
+      "proposed_action": "none_reply_only",
+      "requires_director_approval": false
+    },
+    {
+      "comment_id": "C-EU-SUG31",
+      "recommendation": "ACCEPT",
+      "reasoning": "Corrección gramatical de artículo faltante; aplica regla 6 (stylistic + local_substitution → apply_local_edit) sin excepciones. El texto citado en el extracto provisto ya parece incluir 'los', lo que sugiere que el comentario apunta a otra ocurrencia del título o encabezado en el documento completo que no aparece en este extracto. El cambio es de bajo riesgo, mínimo impacto y no toca sustancia.",
+      "improvement_score": 2,
+      "preference_score": 4,
+      "benja_alignment": 3,
+      "correctness_score": 3,
+      "conflicts_with": [],
+      "supports": [
+        "C-EU-SUG32"
+      ],
+      "verification_refs": [],
+      "proposed_action": "apply_local_edit",
+      "requires_director_approval": false
+    },
+    {
+      "comment_id": "C-EU-SUG32",
+      "recommendation": "ACCEPT",
+      "reasoning": "Eliminación de coma innecesaria; aplica regla 6 (stylistic + local_substitution → apply_local_edit). La coma en cuestión no es visible en el texto citado del extracto, por lo que el contexto exacto requiere verificación en el documento fuente completo, pero la naturaleza gramatical de la corrección es válida y de bajo riesgo. No altera sustancia ni línea editorial.",
+      "improvement_score": 1,
+      "preference_score": 4,
+      "benja_alignment": 3,
+      "correctness_score": 3,
+      "conflicts_with": [],
+      "supports": [
+        "C-EU-SUG31"
+      ],
+      "verification_refs": [],
+      "proposed_action": "apply_local_edit",
+      "requires_director_approval": false
+    },
+    {
+      "comment_id": "C-EU-SUG33",
+      "recommendation": "ACCEPT",
+      "reasoning": "Agregar 'de ajuste' tras 'extremos' añade precisión conceptual real: aclara que lo que el escenario acotado reduce son los extremos del gasto de bolsillo (y no extremos en sentido vago), evitando ambigüedad en un mensaje clave donde la precisión es especialmente importante para el lector de política. Aplica regla 6 (stylistic + local_substitution). La adición es sustantiva en rigor, no solo estética.",
+      "improvement_score": 3,
+      "preference_score": 2,
+      "benja_alignment": 3,
+      "correctness_score": 3,
+      "conflicts_with": [],
+      "supports": [],
+      "verification_refs": [],
+      "proposed_action": "apply_local_edit",
+      "requires_director_approval": false
+    },
+    {
+      "comment_id": "C-EU-SUG34",
+      "recommendation": "ACCEPT_PARTIAL",
+      "reasoning": "El texto '(e.g.p. ej., Ley Ricarte Soto)' es una corrupción evidente de control de cambios que debe resolverse: eso es innegociable. Sin embargo, la dirección propuesta por Eduardo (usar 'e.g.' en todo el documento) es incorrecta para un informe íntegramente en español destinado a audiencia chilena de política pública, donde 'p. ej.' es la convención estándar y más accesible; 'e.g.' corresponde a uso latino/anglosajón. El documento usa 'p. ej.' consistentemente en múltiples secciones (2.2, 3.1, 3.2), por lo que la acción correcta es resolver la corrupción estandarizando a 'p. ej.' y no cambiar la convención existente.",
+      "improvement_score": 4,
+      "preference_score": 2,
+      "benja_alignment": 3,
+      "correctness_score": 2,
+      "conflicts_with": [],
+      "supports": [],
+      "verification_refs": [],
+      "proposed_action": "apply_consistent_edit",
+      "requires_director_approval": false
+    },
+    {
+      "comment_id": "C-EU-SUG35",
+      "recommendation": "ACCEPT",
+      "reasoning": "La frase 'informada y gobernada por evidencia' presenta redundancia semántica: 'gobernada por evidencia' es prácticamente sinónimo de 'informada por evidencia' en este contexto. Eliminar 'y gobernada' simplifica a 'gradual e informada por evidencia', que es más directa y tiene mejor ritmo. Aplica regla 6 (stylistic + local_substitution). La simplificación no pierde sustancia y mejora la legibilidad de un mensaje clave que debe ser de lectura rápida.",
+      "improvement_score": 3,
+      "preference_score": 2,
+      "benja_alignment": 3,
+      "correctness_score": 3,
+      "conflicts_with": [],
+      "supports": [],
+      "verification_refs": [],
+      "proposed_action": "apply_local_edit",
+      "requires_director_approval": false
+    },
+    {
+      "comment_id": "C-EU-SUG36",
+      "recommendation": "ACCEPT",
+      "reasoning": "El texto corrupto 'evidencia experiencia internacional comparada sugiere muestra que' requiere resolución obligatoria; Eduardo propone conservar 'sugiere' sobre 'muestra', lo que es editorialmente correcto: 'sugiere' es epistemológicamente más apropiado para conclusiones de revisión de literatura comparada donde causalidad no está establecida experimentalmente. Esta elección también alinea directamente con la línea de Benja de no prescribir y mantener apertura al debate. Aplica regla 6 y lógica estratégica de softening.",
+      "improvement_score": 4,
+      "preference_score": 2,
+      "benja_alignment": 5,
+      "correctness_score": 3,
+      "conflicts_with": [],
+      "supports": [
+        "C-EU-SUG40"
+      ],
+      "verification_refs": [],
+      "proposed_action": "apply_local_edit",
+      "requires_director_approval": false
+    },
+    {
+      "comment_id": "C-EU-SUG37",
+      "recommendation": "REJECT",
+      "reasoning": "El texto citado 'simultánea y coordinadamente tres dimensiones' ya contiene el concepto de coordinación mediante el adverbio 'coordinadamente'; agregar 'y coordinada' introduciría redundancia directa con el adverbio ya presente, degradando la calidad del texto en lugar de mejorarlo. El comentario parece surgir de una lectura parcial del fragmento o de una versión distinta del documento. Se recomienda responder a Eduardo señalando que 'coordinadamente' ya captura el concepto y que la adición sería redundante.",
+      "improvement_score": 0,
+      "preference_score": 5,
+      "benja_alignment": 2,
+      "correctness_score": 1,
+      "conflicts_with": [],
+      "supports": [],
+      "verification_refs": [],
+      "proposed_action": "none_reply_only",
+      "requires_director_approval": false
+    },
+    {
+      "comment_id": "C-EU-SUG38",
+      "recommendation": "ACCEPT",
+      "reasoning": "El texto corrupto 'conjunto de países OCDE de protección farmacéutica intermedia, cluster intermedio' yuxtapone la descripción extensa y el anglicismo innecesario. Eliminar 'cluster intermedio' mejora significativamente: evita jerga en inglés en un documento de política pública en español y la descripción expandida ya es suficientemente precisa para el lector objetivo. Aplica regla 6 (stylistic + local_substitution). Mejora accesibilidad y prolijidad editorial sin pérdida de contenido técnico.",
+      "improvement_score": 4,
+      "preference_score": 2,
+      "benja_alignment": 4,
+      "correctness_score": 3,
+      "conflicts_with": [],
+      "supports": [],
+      "verification_refs": [],
+      "proposed_action": "apply_local_edit",
+      "requires_director_approval": false
+    },
+    {
+      "comment_id": "C-EU-SUG39",
+      "recommendation": "ACCEPT",
+      "reasoning": "El texto citado 'ambulatoriosa y hospitalaria' contiene un error tipográfico evidente ('ambulatoriosa' debe ser 'ambulatorios') y un posible problema de concordancia de género con 'hospitalaria' que debe verificarse contra la intención de la frase completa. Esta corrección es necesaria con independencia del comentario de Eduardo. Aplica regla 6 (stylistic + local_substitution). El error tipográfico visible hace esta edición de alta prioridad sobre las demás de este batch.",
+      "improvement_score": 4,
+      "preference_score": 1,
+      "benja_alignment": 3,
+      "correctness_score": 4,
+      "conflicts_with": [],
+      "supports": [],
+      "verification_refs": [],
+      "proposed_action": "apply_local_edit",
+      "requires_director_approval": false
+    },
+    {
+      "comment_id": "C-EU-SUG40",
+      "recommendation": "ACCEPT",
+      "reasoning": "El texto corrupto 'La evidencia experiencia internacional comparada sugiere' requiere resolver la duplicidad; Eduardo prefiere 'evidencia' sobre 'experiencia' por mayor rigor académico, lo que es correcto: 'evidencia internacional' connota datos y estudios sistemáticos revisados, mientras 'experiencia' puede interpretarse como relato anecdótico o práctico sin respaldo empírico sistemático. Esta elección eleva el estándar epistémico del documento y alinea con la línea técnica de Benja. Aplica regla 6 y complementa C-EU-SUG36.",
+      "improvement_score": 3,
+      "preference_score": 2,
+      "benja_alignment": 4,
+      "correctness_score": 4,
+      "conflicts_with": [],
+      "supports": [
+        "C-EU-SUG36"
+      ],
+      "verification_refs": [],
+      "proposed_action": "apply_local_edit",
+      "requires_director_approval": false
+    },
+    {
+      "comment_id": "C-EU-SUG41",
+      "recommendation": "ACCEPT",
+      "reasoning": "Sugerencia estilística de tipo local_substitution: agregar ', por brechas de canasta' como concepto técnico explícito. El texto rastreado ya muestra la inserción, por lo que la acción editorial es confirmarla. Añadir el concepto fortalece la precisión terminológica del resumen sin alterar la línea argumental. Compatible con la línea Benja de profundidad técnica.",
+      "improvement_score": 2,
+      "preference_score": 1,
+      "benja_alignment": 4,
+      "correctness_score": 3,
+      "conflicts_with": [],
+      "supports": [
+        "C-EU-SUG43"
+      ],
+      "verification_refs": [],
+      "proposed_action": "apply_local_edit",
+      "requires_director_approval": false
+    },
+    {
+      "comment_id": "C-EU-SUG42",
+      "recommendation": "ACCEPT",
+      "reasoning": "Sugerencia estilística local_substitution: agregar 'informada por evidencia,' como calificador epistémico a la hoja de ruta. El texto rastreado ya lo refleja. El calificador reduce el prescriptivismo al encuadrar la implementación gradual como dependiente de evidencia, no como receta cerrada, alineándose directamente con la postura de Benja de no casarse con una política específica.",
+      "improvement_score": 2,
+      "preference_score": 2,
+      "benja_alignment": 5,
+      "correctness_score": 3,
+      "conflicts_with": [],
+      "supports": [],
+      "verification_refs": [],
+      "proposed_action": "apply_local_edit",
+      "requires_director_approval": false
+    },
+    {
+      "comment_id": "C-EU-SUG43",
+      "recommendation": "ACCEPT",
+      "reasoning": "Sugerencia estilística local_substitution: reemplazar 'precios más accesibles' por 'reducciones del precio efectivo enfrentado por el paciente'. La nueva formulación distingue entre precio de mercado y precio neto al paciente (después de copagos, subsidios e intermediación), distinción analíticamente relevante en un documento sobre arquitectura farmacéutica. El texto rastreado ya muestra la sustitución. Alineado con profundidad técnica de Benja.",
+      "improvement_score": 3,
+      "preference_score": 1,
+      "benja_alignment": 5,
+      "correctness_score": 3,
+      "conflicts_with": [],
+      "supports": [
+        "C-EU-SUG44",
+        "C-EU-SUG45"
+      ],
+      "verification_refs": [],
+      "proposed_action": "apply_local_edit",
+      "requires_director_approval": false
+    },
+    {
+      "comment_id": "C-EU-SUG44",
+      "recommendation": "ACCEPT",
+      "reasoning": "Sugerencia estilística local_substitution: reemplazar 'sostienen el' por 'explican una fracción sustantiva del'. La nueva formulación es causalmente más cautelosa —no asigna al gasto ambulatorio toda la causalidad del gasto persistente— y evita una afirmación demasiado fuerte que podría refutarse empíricamente. Alineado con la línea de Benja de presentar trade-offs y no afirmar soluciones cerradas.",
+      "improvement_score": 2,
+      "preference_score": 2,
+      "benja_alignment": 4,
+      "correctness_score": 3,
+      "conflicts_with": [],
+      "supports": [
+        "C-EU-SUG45"
+      ],
+      "verification_refs": [],
+      "proposed_action": "apply_local_edit",
+      "requires_director_approval": false
+    },
+    {
+      "comment_id": "C-EU-SUG45",
+      "recommendation": "ACCEPT",
+      "reasoning": "Sugerencia estilística local_substitution: reemplazar 'cotidiano' por 'persistente'. 'Persistente' es más preciso técnicamente —refiere a la dimensión temporal del gasto crónico acumulado— mientras que 'cotidiano' tiene connotación coloquial que baja el registro en un documento técnico de política pública. El texto rastreado ya lo muestra.",
+      "improvement_score": 2,
+      "preference_score": 2,
+      "benja_alignment": 4,
+      "correctness_score": 3,
+      "conflicts_with": [],
+      "supports": [
+        "C-EU-SUG44"
+      ],
+      "verification_refs": [],
+      "proposed_action": "apply_local_edit",
+      "requires_director_approval": false
+    },
+    {
+      "comment_id": "C-CC-DOCX9",
+      "recommendation": "REJECT",
+      "reasoning": "Pregunta legítima a la que el documento ya responde por diseño: el BFAU es explícitamente 'ambulatorio' y el alto costo está cubierto por instrumentos separados (LRS, DAC) descritos en el mismo párrafo de Mensajes clave. No se requiere edición; el reply debe aclarar que la exclusión del alto costo en el BFAU es una decisión arquitectónica deliberada —dos frentes con lógicas distintas de riesgo requieren instrumentos diferenciados— no una omisión.",
+      "improvement_score": 0,
+      "preference_score": 0,
+      "benja_alignment": 3,
+      "correctness_score": 3,
+      "conflicts_with": [],
+      "supports": [
+        "C-CC-DOCX12",
+        "C-CC-DOCX15"
+      ],
+      "verification_refs": [],
+      "proposed_action": "none_reply_only",
+      "requires_director_approval": false
+    },
+    {
+      "comment_id": "C-CC-DOCX12",
+      "recommendation": "ACCEPT_PARTIAL",
+      "reasoning": "Los hechos de Carla son correctos y confirmables: GES cubre medicamentos de alto costo (el DS 22/2025 —V-ges-patologias— incorporó elexacaftor/tezacaftor/ivacaftor para fibrosis quística, uno de los fármacos más caros del arsenal público chileno), y el DAC cubre oncológicos de alto costo en la red pública. El texto presenta a LRS como 'un instrumento de alto impacto' sin decir que es el único, pero la redacción induce a interpretar que es el mecanismo exclusivo para alto costo, lo que es inexacto. Se acepta parcialmente: agregar en el Resumen Ejecutivo una cláusula breve que reconozca que GES y DAC también cubren tecnologías de alto costo en sus respectivas canastas, precisando los roles complementarios de cada instrumento, sin reemplazar la caracterización de LRS.",
+      "improvement_score": 3,
+      "preference_score": 1,
+      "benja_alignment": 4,
+      "correctness_score": 4,
+      "conflicts_with": [],
+      "supports": [
+        "C-CC-DOCX19"
+      ],
+      "verification_refs": [
+        "V-ges-patologias",
+        "V-ley-20850-ricarte-soto"
+      ],
+      "proposed_action": "apply_local_edit",
+      "requires_director_approval": false
+    },
+    {
+      "comment_id": "C-CC-DOCX15",
+      "recommendation": "REJECT",
+      "reasoning": "Pregunta técnica válida sobre el alcance operativo del BFAU por modalidad FONASA, pero que no genera edición en el Resumen Ejecutivo. El reply debe explicar que el BFAU está diseñado para aplicar a ambas modalidades (MAI y MLE) con reglas comunes de copago y canasta, que la implementación operativa difiere (MAI: dispensación en red institucional; MLE: reembolso o subsidio en punto de venta), y que el Capítulo 7 del documento detalla este diseño.",
+      "improvement_score": 0,
+      "preference_score": 0,
+      "benja_alignment": 3,
+      "correctness_score": 3,
+      "conflicts_with": [],
+      "supports": [
+        "C-CC-DOCX9"
+      ],
+      "verification_refs": [],
+      "proposed_action": "none_reply_only",
+      "requires_director_approval": false
+    },
+    {
+      "comment_id": "C-CC-DOCX19",
+      "recommendation": "REJECT",
+      "reasoning": "Pregunta idéntica en sustancia a C-CC-DOCX12 pero en sección 1.1. No genera edición independiente: la corrección factual correspondiente ya está cubierta por la aceptación parcial de DOCX12 en el Resumen Ejecutivo. El reply en sección 1.1 debe señalar que el párrafo describe específicamente a LRS como el instrumento especializado en tecnologías de muy alto precio y baja prevalencia (que es su rol específico), y remitir a la clarificación de DOCX12 para el reconocimiento explícito de GES y DAC.",
+      "improvement_score": 0,
+      "preference_score": 0,
+      "benja_alignment": 3,
+      "correctness_score": 3,
+      "conflicts_with": [],
+      "supports": [
+        "C-CC-DOCX12"
+      ],
+      "verification_refs": [
+        "V-ges-patologias"
+      ],
+      "proposed_action": "none_reply_only",
+      "requires_director_approval": false
+    },
+    {
+      "comment_id": "C-CC-DOCX27",
+      "recommendation": "ACCEPT",
+      "reasoning": "Carla tiene razón y los ledger entries lo confirman: los datos OCDE de gasto en medicamentos (Health at a Glance, confirmados en V-78-retail-2021 y V-us455-ppa-chile) corresponden exclusivamente al canal retail/farmacia ambulatoria, excluyendo medicamentos administrados en el sector hospitalario e institucional. Esta distinción es metodológicamente crítica: el denominador afecta la interpretación de las cifras de financiamiento y gasto de bolsillo. El texto actual en Tarjeta 1 y sección 2 no precisa el alcance, lo que puede inducir a sobreestimar la cobertura pública o subestimar el gasto institucional. Aceptar y agregar nota metodológica explícita.",
+      "improvement_score": 4,
+      "preference_score": 0,
+      "benja_alignment": 5,
+      "correctness_score": 5,
+      "conflicts_with": [],
+      "supports": [],
+      "verification_refs": [
+        "V-78-retail-2021",
+        "V-us455-ppa-chile",
+        "V-71-retail-oop"
+      ],
+      "proposed_action": "apply_local_edit",
+      "requires_director_approval": false
+    },
+    {
+      "comment_id": "C-CC-DOCX29",
+      "recommendation": "DEFER",
+      "reasoning": "Parse error: 1 validation error for CriticJudgment\nrecommendation\n  Input should be 'ACCEPT', 'ACCEPT_PARTIAL', 'REJECT', 'DEFER' or 'NEEDS_DATA' [type=literal_error, input_value='none_reply_only', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.12/v/literal_error",
+      "improvement_score": 0,
+      "preference_score": 0,
+      "benja_alignment": 3,
+      "correctness_score": 0,
+      "conflicts_with": [],
+      "supports": [],
+      "verification_refs": [],
+      "proposed_action": "none_reply_only",
+      "requires_director_approval": true
+    },
+    {
+      "comment_id": "C-CC-DOCX30",
+      "recommendation": "DEFER",
+      "reasoning": "Parse error: 1 validation error for CriticJudgment\nrecommendation\n  Input should be 'ACCEPT', 'ACCEPT_PARTIAL', 'REJECT', 'DEFER' or 'NEEDS_DATA' [type=literal_error, input_value='none_reply_only', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.12/v/literal_error",
+      "improvement_score": 0,
+      "preference_score": 0,
+      "benja_alignment": 3,
+      "correctness_score": 0,
+      "conflicts_with": [],
+      "supports": [],
+      "verification_refs": [],
+      "proposed_action": "none_reply_only",
+      "requires_director_approval": true
+    },
+    {
+      "comment_id": "C-CC-DOCX33",
+      "recommendation": "ACCEPT_PARTIAL",
+      "reasoning": "La afirmación es factualmente correcta: la farmacia hospitalaria ambulatoria es el canal primario de dispensación de DAC oncológico y Ley Ricarte Soto, y el arsenal hospitalario intrahospitalario también cubre fármacos oncológicos de alto costo. El texto ya menciona 'tratamientos complejos, crónicos o de alto costo' para farmacia hospitalaria ambulatoria, pero omite el vínculo explícito con instrumentos específicos (DAC, LRS), lo que debilita la conexión con la Sección 2.2. Se acepta parcialmente: agregar una mención explícita a que este canal es el punto de dispensación de coberturas de alto costo refuerza coherencia interna sin ampliar el alcance del párrafo.",
+      "improvement_score": 2,
+      "preference_score": 1,
+      "benja_alignment": 4,
+      "correctness_score": 4,
+      "conflicts_with": [],
+      "supports": [
+        "C-CC-DOCX34"
+      ],
+      "verification_refs": [
+        "V-ley-20850-ricarte-soto"
+      ],
+      "proposed_action": "apply_local_edit",
+      "requires_director_approval": false
+    },
+    {
+      "comment_id": "C-CC-DOCX34",
+      "recommendation": "ACCEPT_PARTIAL",
+      "reasoning": "La afirmación es correcta: bajo GES, las ISAPREs designan redes que pueden incluir farmacias de cadena o independientes como punto de dispensación de medicamentos garantizados, por lo que el canal retail no opera solo como compra directa sino también como canal con cobertura formal. El documento describe las farmacias privadas únicamente como 'canal minorista de compra ambulatoria', omitiendo su rol como canal de dispensación GES bajo red ISAPRE. Agregar esta precisión mejora exactitud conceptual y evita que el lector asocie retail exclusivamente con gasto de bolsillo.",
+      "improvement_score": 3,
+      "preference_score": 1,
+      "benja_alignment": 4,
+      "correctness_score": 4,
+      "conflicts_with": [],
+      "supports": [
+        "C-CC-DOCX33"
+      ],
+      "verification_refs": [],
+      "proposed_action": "apply_local_edit",
+      "requires_director_approval": false
+    },
+    {
+      "comment_id": "C-CC-DOCX37",
+      "recommendation": "DEFER",
+      "reasoning": "Carla propone especificar copagos GES como FONASA=cero e ISAPRE=20% del arancel con deducibles por ley. La información es parcialmente incorrecta: bajo GES, FONASA grupos C y D pagan 10% y 20% respectivamente de la prestación garantizada; solo grupos A y B tienen copago cero. Adoptar la simplificación de Carla introduciría un error técnico para los grupos C/D. Se defiere para redactar una nota precisa con los cuatro tramos FONASA y el esquema ISAPRE, en lugar de reproducir la versión simplificada.",
+      "improvement_score": 3,
+      "preference_score": 1,
+      "benja_alignment": 4,
+      "correctness_score": 2,
+      "conflicts_with": [],
+      "supports": [
+        "C-CC-DOCX38"
+      ],
+      "verification_refs": [
+        "V-ges-patologias"
+      ],
+      "proposed_action": "none_reply_only",
+      "requires_director_approval": false
+    },
+    {
+      "comment_id": "C-CC-DOCX38",
+      "recommendation": "DEFER",
+      "reasoning": "Parse error: 1 validation error for CriticJudgment\nrecommendation\n  Input should be 'ACCEPT', 'ACCEPT_PARTIAL', 'REJECT', 'DEFER' or 'NEEDS_DATA' [type=literal_error, input_value='none_reply_only', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.12/v/literal_error",
+      "improvement_score": 0,
+      "preference_score": 0,
+      "benja_alignment": 3,
+      "correctness_score": 0,
+      "conflicts_with": [],
+      "supports": [],
+      "verification_refs": [],
+      "proposed_action": "none_reply_only",
+      "requires_director_approval": true
+    },
+    {
+      "comment_id": "C-CC-DOCX40",
+      "recommendation": "ACCEPT",
+      "reasoning": "Los tres hechos señalados son correctos: FONASA recibe tanto impuestos generales como la cotización obligatoria del 7%, el gasto público en medicamentos no discrimina entre ambas fuentes, y los Servicios de Salud y CENABAST son ejecutores del gasto público. El punto metodológico es relevante para el análisis de sostenibilidad fiscal: no poder separar el componente contributivo del tributario impide estimar el espacio fiscal real de cada fuente y condiciona las proyecciones de escenarios. Se debe agregar nota metodológica en sección 2.3 reconociendo esta limitación de trazabilidad.",
+      "improvement_score": 3,
+      "preference_score": 1,
+      "benja_alignment": 4,
+      "correctness_score": 5,
+      "conflicts_with": [],
+      "supports": [
+        "C-CC-DOCX42"
+      ],
+      "verification_refs": [],
+      "proposed_action": "add_content",
+      "requires_director_approval": false
+    },
+    {
+      "comment_id": "C-CC-DOCX42",
+      "recommendation": "DEFER",
+      "reasoning": "Carla alerta sobre una posible inconsistencia interna: el valor de gasto público en medicamentos como % del PIB en la Figura 1 para 2022 no coincidiría con el 0,2% de la ficha país Chile. Esta es una alerta de validez interna crítica que puede indicar error de cita, distinto denominador (PIB vs gasto total en salud), distinta cobertura institucional o distinto deflactor. Se defiere para verificación contra el CSV fuente (DIPRES/OCDE) y la ficha país antes de cualquier edición; si la inconsistencia se confirma, requiere corrección con nota metodológica explícita.",
+      "improvement_score": 4,
+      "preference_score": 1,
+      "benja_alignment": 3,
+      "correctness_score": 3,
+      "conflicts_with": [],
+      "supports": [
+        "C-CC-DOCX40"
+      ],
+      "verification_refs": [],
+      "proposed_action": "none_reply_only",
+      "requires_director_approval": false
+    },
+    {
+      "comment_id": "C-CC-DOCX45",
+      "recommendation": "DEFER",
+      "reasoning": "Parse error: 1 validation error for CriticJudgment\nrecommendation\n  Input should be 'ACCEPT', 'ACCEPT_PARTIAL', 'REJECT', 'DEFER' or 'NEEDS_DATA' [type=literal_error, input_value='none_reply_only', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.12/v/literal_error",
+      "improvement_score": 0,
+      "preference_score": 0,
+      "benja_alignment": 3,
+      "correctness_score": 0,
+      "conflicts_with": [],
+      "supports": [],
+      "verification_refs": [],
+      "proposed_action": "none_reply_only",
+      "requires_director_approval": true
+    },
+    {
+      "comment_id": "C-CC-DOCX47",
+      "recommendation": "DEFER",
+      "reasoning": "Parse error: 1 validation error for CriticJudgment\nrecommendation\n  Input should be 'ACCEPT', 'ACCEPT_PARTIAL', 'REJECT', 'DEFER' or 'NEEDS_DATA' [type=literal_error, input_value='none_reply_only', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.12/v/literal_error",
+      "improvement_score": 0,
+      "preference_score": 0,
+      "benja_alignment": 3,
+      "correctness_score": 0,
+      "conflicts_with": [],
+      "supports": [],
+      "verification_refs": [],
+      "proposed_action": "none_reply_only",
+      "requires_director_approval": true
+    },
+    {
+      "comment_id": "C-CC-DOCX53",
+      "recommendation": "DEFER",
+      "reasoning": "Pregunta legítima de especificación: el texto cita 'El proyecto de Plan de Salud Universal presentado en 2020' sin referencia explícita. Corresponde al proyecto gubernamental del segundo gobierno de Piñera (MINSAL, 2020), presentado como propuesta de reforma del sistema de salud, nunca ingresado formalmente al Congreso como proyecto de ley. La respuesta es una aclaración referencial que no requiere edición sustantiva del cuerpo, sino agregar una nota al pie con la fuente exacta (documento MINSAL 2020, o la referencia bibliográfica que usen los autores). Se propone responder en reply y que los autores añadan nota al pie.",
+      "improvement_score": 2,
+      "preference_score": 1,
+      "benja_alignment": 2,
+      "correctness_score": 0,
+      "conflicts_with": [],
+      "supports": [],
+      "verification_refs": [],
+      "proposed_action": "none_reply_only",
+      "requires_director_approval": false
+    },
+    {
+      "comment_id": "C-CC-DOCX54",
+      "recommendation": "DEFER",
+      "reasoning": "Pregunta técnica válida sobre articulación operacional: MLE (Modalidad Libre Elección) y MAI (Modalidad Atención Institucional) tienen lógicas de provisión distintas, y la propuesta de 'integrar el componente farmacéutico en la función aseguradora de FONASA' es ambigua respecto a cuál modalidad aplica. La respuesta correcta es que el beneficio farmacéutico ambulatorio propuesto operaría con reglas comunes para ambas modalidades, pero el detalle de articulación es materia de diseño posterior no desarrollada en este informe. Responder en reply aclarando el alcance y señalando que el Capítulo 7 especifica los componentes del beneficio; no editar sección 2.6.1 que es introductoria.",
+      "improvement_score": 2,
+      "preference_score": 1,
+      "benja_alignment": 3,
+      "correctness_score": 0,
+      "conflicts_with": [],
+      "supports": [],
+      "verification_refs": [
+        "V-ley-21674-mcc"
+      ],
+      "proposed_action": "none_reply_only",
+      "requires_director_approval": false
+    },
+    {
+      "comment_id": "C-CC-DOCX56",
+      "recommendation": "DEFER",
+      "reasoning": "Pregunta pertinente que señala una ambigüedad real: 'ChileCompra Medicamentos' como módulo de compras/licitaciones no implica cobertura retail directa al paciente; opera en el lado de la oferta (agregación de demanda, transparencia de precios institucionales), mientras que el acceso retail del paciente depende de mecanismos de copago/reembolso separados. El texto no aclara esta distinción y Carla tiene razón en que puede interpretarse erróneamente. Responder en reply aclarando que ChileCompra opera del lado de la compra pública/institucional y que la cobertura retail se aborda vía Ley CENABAST (Ley 21.198) y el beneficio farmacéutico propuesto; los autores pueden agregar una frase aclaratoria en el párrafo si lo consideran necesario.",
+      "improvement_score": 3,
+      "preference_score": 1,
+      "benja_alignment": 3,
+      "correctness_score": 0,
+      "conflicts_with": [],
+      "supports": [
+        "C-CC-DOCX57"
+      ],
+      "verification_refs": [
+        "V-ley-21198-cenabast"
+      ],
+      "proposed_action": "none_reply_only",
+      "requires_director_approval": false
+    },
+    {
+      "comment_id": "C-CC-DOCX57",
+      "recommendation": "DEFER",
+      "reasoning": "Pregunta de clasificación correcta: la regulación de precios de referencia (grupos terapéuticos, precios máximos de reembolso, copagos diferenciales) sí opera fundamentalmente en el canal retail, a diferencia de ChileCompra/CENABAST que opera en el canal de compras institucionales. Carla identifica implícitamente que el documento no distingue con claridad qué instrumento actúa en qué canal. Responder en reply confirmando que sí, este párrafo trata instrumentos que inciden en precio retail para el paciente, y sugerir a los autores que encabecen el párrafo con una frase de contextualización de canal si el flujo del capítulo lo requiere.",
+      "improvement_score": 2,
+      "preference_score": 1,
+      "benja_alignment": 2,
+      "correctness_score": 0,
+      "conflicts_with": [],
+      "supports": [
+        "C-CC-DOCX56"
+      ],
+      "verification_refs": [],
+      "proposed_action": "none_reply_only",
+      "requires_director_approval": false
+    },
+    {
+      "comment_id": "C-CC-DOCX58",
+      "recommendation": "ACCEPT_PARTIAL",
+      "reasoning": "Punto estratégico-técnico sustantivo: Carla señala correctamente que la sustitución obligatoria en farmacia y los copagos diferenciales requieren como condición habilitante una política de bioequivalencia más amplia que el listado ISP actual, que cubre solo un subconjunto de medicamentos. La crítica es técnicamente sólida —imponer sustitución sin base regulatoria de bioequivalencia adecuada genera riesgos de calidad y resistencia clínica— y enriquece el documento sin prescribir una solución única. Se acepta parcialmente agregando una oración que reconozca la expansión de bioequivalencia como condición previa o simultánea, formulada como prerequisito técnico ('requiere previamente/simultáneamente ampliar la cobertura de exigencias de bioequivalencia') sin convertirlo en recomendación normativa cerrada.",
+      "improvement_score": 3,
+      "preference_score": 1,
+      "benja_alignment": 4,
+      "correctness_score": 0,
+      "conflicts_with": [],
+      "supports": [],
+      "verification_refs": [],
+      "proposed_action": "apply_local_edit",
+      "requires_director_approval": false
+    },
+    {
+      "comment_id": "C-CC-DOCX72",
+      "recommendation": "ACCEPT_PARTIAL",
+      "reasoning": "El comentario añade una dimensión de eficiencia válida a la discusión de judicialización: la vía judicial en Chile efectivamente tiende a saltarse el ciclo de evaluación HTA/ETESA (análisis de costo-efectividad, impacto presupuestario, criterios de elegibilidad clínica), lo cual es documentado en literatura comparada (Colombia, Brasil, Chile). Sin embargo, 'sin criterios sanitarios' es una hipérbole: existen criterios clínicos individuales (diagnóstico médico, prescripción), solo que no pasan por priorización sistémica. Se acepta parcialmente incorporando la dimensión de eficiencia en el párrafo de judicialización (3.2.6), formulada como 'frecuentemente sin evaluación sistemática de costo-efectividad o impacto presupuestario', que es más preciso que 'sin criterios sanitarios' y agrega valor analítico real.",
+      "improvement_score": 3,
+      "preference_score": 1,
+      "benja_alignment": 4,
+      "correctness_score": 3,
+      "conflicts_with": [],
+      "supports": [
+        "C-CC-DOCX75"
+      ],
+      "verification_refs": [],
+      "proposed_action": "apply_local_edit",
+      "requires_director_approval": false
+    },
+    {
+      "comment_id": "C-CC-DOCX75",
+      "recommendation": "ACCEPT_PARTIAL",
+      "reasoning": "Punto de diseño institucional técnicamente interesante: que el sistema HTA/ETESA tenga reconocimiento legal explícito tal que los tribunales deban considerarlo al resolver acciones judiciales de medicamentos es una característica de algunos sistemas maduros (ej. Colombia con la IETS como referencia técnica para tutelas). El comentario enriquece la sección 3.3 agregando que la gobernanza de HTA incluye su vínculo con el sistema judicial como condición de sostenibilidad. Se acepta parcialmente añadiendo una oración breve en 3.3 señalando que la efectividad del HTA como 'puente' depende también de que el sistema judicial lo reconozca como referencia técnica autorizada, sin prescribir un diseño específico.",
+      "improvement_score": 2,
+      "preference_score": 1,
+      "benja_alignment": 4,
+      "correctness_score": 0,
+      "conflicts_with": [],
+      "supports": [
+        "C-CC-DOCX72"
+      ],
+      "verification_refs": [],
+      "proposed_action": "add_content",
+      "requires_director_approval": false
+    },
+    {
+      "comment_id": "C-CC-DOCX78",
+      "recommendation": "ACCEPT",
+      "reasoning": "Observación metodológica correcta: la sección 3.4 mezcla dos ejes de clasificación distintos sin advertirlo explícitamente. Las categorías 'Hogares con acceso institucional robusto' y 'Hogares que adquieren principalmente en retail' son segmentos de población/demanda; mientras que 'Medicamentos crónicos de alta frecuencia' y 'Medicamentos de alto costo' son tipologías de producto/riesgo. Ambos ejes se intersectan (un hogar institucional puede necesitar medicamentos de alto costo; el canal retail aplica a ambas tipologías). Carla tiene razón. La corrección es agregar una frase introductoria en 3.4 que indique explícitamente que la sección presenta dos lentes analíticas complementarias (por segmento de hogar y por tipo de medicamento/riesgo), no categorías mutuamente excluyentes.",
+      "improvement_score": 3,
+      "preference_score": 1,
+      "benja_alignment": 3,
+      "correctness_score": 4,
+      "conflicts_with": [],
+      "supports": [
+        "C-CC-DOCX79"
+      ],
+      "verification_refs": [],
+      "proposed_action": "apply_local_edit",
+      "requires_director_approval": false
+    },
+    {
+      "comment_id": "C-CC-DOCX79",
+      "recommendation": "ACCEPT_PARTIAL",
+      "reasoning": "Señalamiento factual correcto: GES sí incluye medicamentos como parte de sus canastas de prestaciones garantizadas y algunas condiciones GES involucran fármacos que por precio unitario califican como 'alto costo' (ej. tratamientos oncológicos en LMC, algunos cánceres pediátricos). El párrafo actual de 3.4 al referirse a 'alto costo' menciona solo LRS y DAC, omitiendo GES como tercer mecanismo parcial para algunos medicamentos costosos. Esto crea un cuadro incompleto. Sin embargo, el solapamiento GES/alto costo es parcial y acotado, por lo que se acepta parcialmente: añadir 'y, en condiciones específicas, GES' a la lista de mecanismos que proveen cobertura para medicamentos de alto costo, con una calificación que reconozca su alcance acotado.",
+      "improvement_score": 3,
+      "preference_score": 1,
+      "benja_alignment": 4,
+      "correctness_score": 4,
+      "conflicts_with": [],
+      "supports": [
+        "C-CC-DOCX78"
+      ],
+      "verification_refs": [
+        "V-ges-patologias",
+        "V-ley-20850-ricarte-soto"
+      ],
+      "proposed_action": "apply_local_edit",
+      "requires_director_approval": false
+    },
+    {
+      "comment_id": "C-CC-DOCX85",
+      "recommendation": "DEFER",
+      "reasoning": "Pregunta analítica válida que apunta a una limitación metodológica real del encuadre: al centrarse en gasto retail per cápita Chile aparece 'bajo' en volumen OCDE pero 'alto' en proporción OOP, lo que puede malinterpretarse si no se contextualiza con el gasto total farmacéutico (retail + institucional). La respuesta correcta es que el análisis de gasto retail OOP es deliberado porque el canal institucional público ya tiene OOP estructuralmente bajo (por diseño) y es en el retail donde se concentra la exposición financiera de los hogares; el gasto institucional es protección ya operando. El documento debería agregar media oración que aclare el encuadre metodológico. Responder en reply con esta explicación y sugerir a los autores una frase aclaratoria en el párrafo citado.",
+      "improvement_score": 3,
+      "preference_score": 1,
+      "benja_alignment": 3,
+      "correctness_score": 0,
+      "conflicts_with": [],
+      "supports": [],
+      "verification_refs": [
+        "V-71-retail-oop",
+        "V-78-retail-2021",
+        "V-us455-ppa-chile"
+      ],
+      "proposed_action": "none_reply_only",
+      "requires_director_approval": false
+    },
+    {
+      "comment_id": "C-CC-DOCX88",
+      "recommendation": "ACCEPT",
+      "reasoning": "Ambas afirmaciones son metodológicamente correctas y ampliamente documentadas en la literatura sobre EPF y encuestas de gasto de salud. El texto ya menciona 'hogares que acceden por canales institucionales (sin gasto)' y 'consumo no observado', pero no explicita la subestimación del gasto extremo en la cola derecha de la distribución —fenómeno conocido de las encuestas de hogares cuando hay compras ocasionales de alto monto (oncológicos, biosimilares). El punto sobre APS→gasto cero está parcialmente cubierto; el sesgo de subestimación de gasto extremo es una adición genuina que refuerza la transparencia metodológica sin prescribir política.",
+      "improvement_score": 2,
+      "preference_score": 1,
+      "benja_alignment": 4,
+      "correctness_score": 5,
+      "conflicts_with": [],
+      "supports": [],
+      "verification_refs": [
+        "V-71-retail-oop"
+      ],
+      "proposed_action": "add_content",
+      "requires_director_approval": false
+    },
+    {
+      "comment_id": "C-CC-DOCX92",
+      "recommendation": "DEFER",
+      "reasoning": "La afirmación de que el reporte más reciente modificó el indicador ODS 3.8.2 para ya no operar con dos umbrales tiene base plausible —la OMS y el Banco Mundial han actualizado la metodología de monitoreo de protección financiera en sus reportes 2022–2023—, pero no está confirmada en el ledger y la propia revisora señala incertidumbre sobre su relevancia. Propuesta tentativa: si se confirma el cambio metodológico contra el Global Monitoring Report más reciente, agregar una nota al pie indicando que la versión actualizada de ODS 3.8.2 revisó los umbrales, sin modificar el cuerpo del texto donde la referencia cumple función ilustrativa.",
+      "improvement_score": 2,
+      "preference_score": 1,
+      "benja_alignment": 3,
+      "correctness_score": 3,
+      "conflicts_with": [],
+      "supports": [],
+      "verification_refs": [],
+      "proposed_action": "none_reply_only",
+      "requires_director_approval": false
+    },
+    {
+      "comment_id": "C-CC-DOCX96",
+      "recommendation": "DEFER",
+      "reasoning": "La pregunta apunta a una ambigüedad real en el título de la Figura 5: los datos OECD/HSF de gasto per cápita en medicamentos pueden referirse a gasto total (retail + institucional) o solo canal retail, y el título actual no lo declara. El ledger confirma que los porcentajes de participación de bolsillo (71%, 78%) son específicos del canal retail, pero no aclara el alcance exacto de la figura. Respuesta en reply: los datos OECD Health Statistics de gasto per cápita típicamente incluyen gasto farmacéutico total; si la figura es retail-only, el título debe especificarlo. Confirmar la fuente exacta antes de editar.",
+      "improvement_score": 2,
+      "preference_score": 1,
+      "benja_alignment": 3,
+      "correctness_score": 0,
+      "conflicts_with": [],
+      "supports": [
+        "C-CC-DOCX101",
+        "C-CC-DOCX114",
+        "C-CC-DOCX115"
+      ],
+      "verification_refs": [
+        "V-71-retail-oop",
+        "V-78-retail-2021",
+        "V-us455-ppa-chile"
+      ],
+      "proposed_action": "none_reply_only",
+      "requires_director_approval": false
+    },
+    {
+      "comment_id": "C-CC-DOCX101",
+      "recommendation": "DEFER",
+      "reasoning": "La pregunta sobre si la dicotomía POS/reembolso aplica solo al canal retail es conceptualmente correcta: la dispensación institucional pública opera por entrega directa, sin lógica POS ni reembolso al paciente, por lo que la sección 5.2(ii) aplica casi exclusivamente al canal ambulatorio/retail. El texto no lo declara explícitamente. Respuesta en reply: sí, POS vs reembolso describe modalidades del beneficio en el canal retail/ambulatorio; la provisión institucional sigue una lógica distinta ya descrita en sección 2.1. Si se confirma, agregar una aclaración de alcance al inicio de la sección 5.2 como edit consistente con C-CC-DOCX96/114/115.",
+      "improvement_score": 2,
+      "preference_score": 1,
+      "benja_alignment": 3,
+      "correctness_score": 0,
+      "conflicts_with": [],
+      "supports": [
+        "C-CC-DOCX96",
+        "C-CC-DOCX114",
+        "C-CC-DOCX115"
+      ],
+      "verification_refs": [],
+      "proposed_action": "none_reply_only",
+      "requires_director_approval": false
+    },
+    {
+      "comment_id": "C-CC-DOCX114",
+      "recommendation": "DEFER",
+      "reasoning": "La pregunta sobre el alcance (total vs retail) del dato de gasto farmacéutico como % del PIB en países de alta cobertura es análoga a C-CC-DOCX96/101 y forma parte de un patrón de ambigüedad metodológica en la sección comparativa. Los datos OECD/HSF de gasto farmacéutico como % del PIB típicamente incluyen gasto total (retail + hospitalario), no solo retail. Respuesta en reply: estos datos son gasto farmacéutico total; la participación de bolsillo —que sí es retail-céntrica— se describe en figuras separadas. Resolver junto a C-CC-DOCX96/101/115 en un apply_consistent_edit que añada aclaración de alcance en sección 5.",
+      "improvement_score": 2,
+      "preference_score": 1,
+      "benja_alignment": 3,
+      "correctness_score": 0,
+      "conflicts_with": [],
+      "supports": [
+        "C-CC-DOCX96",
+        "C-CC-DOCX101",
+        "C-CC-DOCX115"
+      ],
+      "verification_refs": [
+        "V-us455-ppa-chile",
+        "V-71-retail-oop"
+      ],
+      "proposed_action": "none_reply_only",
+      "requires_director_approval": false
+    },
+    {
+      "comment_id": "C-CC-DOCX115",
+      "recommendation": "DEFER",
+      "reasoning": "Pregunta idéntica en naturaleza a C-CC-DOCX114 pero sobre el componente de gasto público (0.46–0.51% del PIB). El gasto público en medicamentos se canaliza principalmente por dispensación institucional (hospitales, APS), no por retail, por lo que la cifra es casi con certeza gasto público total. Respuesta en reply: el 0.46–0.51% corresponde a gasto público farmacéutico total según OECD/DIPRES; el canal retail es predominantemente privado/bolsillo. Resolver de forma consistente con los otros comentarios de la serie (C-CC-DOCX96/101/114) en un edit único de sección 5.",
+      "improvement_score": 2,
+      "preference_score": 1,
+      "benja_alignment": 3,
+      "correctness_score": 0,
+      "conflicts_with": [],
+      "supports": [
+        "C-CC-DOCX96",
+        "C-CC-DOCX101",
+        "C-CC-DOCX114"
+      ],
+      "verification_refs": [
+        "V-us455-ppa-chile"
+      ],
+      "proposed_action": "none_reply_only",
+      "requires_director_approval": false
+    },
+    {
+      "comment_id": "C-CC-DOCX122",
+      "recommendation": "DEFER",
+      "reasoning": "La pregunta sobre FFAA apunta a una omisión de alcance real: Chile tiene un tercer subsistema de salud (CAPREDENA/DIPRECA) para fuerzas armadas y de orden que no opera bajo FONASA ni ISAPRE, con cobertura de medicamentos bajo reglas propias. El documento utiliza implícitamente el binario FONASA/ISAPRE sin declarar esta exclusión. Propuesta tentativa: agregar una nota de alcance en la introducción o en sección 6.1 precisando que el análisis se circunscribe al subsistema civil (FONASA/ISAPRE) y excluye los regímenes CAPREDENA/DIPRECA, cuya inclusión requeriría un análisis separado.",
+      "improvement_score": 2,
+      "preference_score": 1,
+      "benja_alignment": 3,
+      "correctness_score": 5,
+      "conflicts_with": [],
+      "supports": [],
+      "verification_refs": [],
+      "proposed_action": "none_reply_only",
+      "requires_director_approval": false
+    },
+    {
+      "comment_id": "C-CC-DOCX123",
+      "recommendation": "DEFER",
+      "reasoning": "La pregunta sobre operacionalización del beneficio para afiliados ISAPRE apunta a una brecha de diseño real en la propuesta: el documento asume una lógica de dispensación institucional (APS/hospital) que no describe cómo operaría para quienes usan principalmente redes privadas. El claim implícito ('ISAPRE no tiene acceso a APS') es una simplificación —técnicamente el acceso existe, pero en la práctica es marginal—, y la correctness es baja para ese claim específico. Propuesta tentativa: en sección 6.1 aclarar que para beneficiarios ISAPRE el beneficio farmacéutico se materializaría primordialmente vía canal retail con subsidio POS o reembolso, no por dispensación APS.",
+      "improvement_score": 3,
+      "preference_score": 1,
+      "benja_alignment": 4,
+      "correctness_score": 2,
+      "conflicts_with": [],
+      "supports": [
+        "C-CC-DOCX101",
+        "C-CC-DOCX129"
+      ],
+      "verification_refs": [],
+      "proposed_action": "none_reply_only",
+      "requires_director_approval": false
+    },
+    {
+      "comment_id": "C-CC-DOCX129",
+      "recommendation": "DEFER",
+      "reasoning": "La pregunta sobre si la ampliación de GES/LRS/DAC operaría a través de programas o del canal retail es una pregunta de diseño de política no resuelta en el texto: la sección 6.2.1 no especifica el canal de provisión para cada tipo de expansión, lo que es una ambigüedad operacional real. Propuesta tentativa: aclarar que la expansión de GES/LRS/DAC para medicamentos de alto costo seguiría por canal institucional, mientras que la incorporación de medicamentos ambulatorios frecuentes se canalizaría vía la nueva lista positiva y el beneficio retail propuesto en escenario 2.",
+      "improvement_score": 2,
+      "preference_score": 1,
+      "benja_alignment": 3,
+      "correctness_score": 0,
+      "conflicts_with": [],
+      "supports": [
+        "C-CC-DOCX101",
+        "C-CC-DOCX123"
+      ],
+      "verification_refs": [
+        "V-ley-20850-ricarte-soto",
+        "V-ges-patologias"
+      ],
+      "proposed_action": "none_reply_only",
+      "requires_director_approval": false
+    },
+    {
+      "comment_id": "C-CC-DOCX131",
+      "recommendation": "ACCEPT",
+      "reasoning": "El riesgo de sustitución de canal institucional→retail ante un nuevo beneficio farmacéutico ambulatorio es un fenómeno bien documentado en economía de la salud (sustitución de demanda, moral hazard en elección de punto de dispensación) y es directamente relevante para la sostenibilidad fiscal del escenario 2 (BFAU). El documento no aborda este riesgo en ninguna de sus secciones de diseño ni de condiciones habilitantes. Agregar un párrafo sobre el riesgo de trasvasije y su impacto presupuestario potencial —con recomendación de monitoreo— es consistente con la profundidad técnica validada editorialmente y fortalece el análisis de trade-offs sin prescribir una solución.",
+      "improvement_score": 4,
+      "preference_score": 1,
+      "benja_alignment": 5,
+      "correctness_score": 5,
+      "conflicts_with": [],
+      "supports": [
+        "C-CC-DOCX123"
+      ],
+      "verification_refs": [
+        "V-ley-21198-cenabast"
+      ],
+      "proposed_action": "add_content",
+      "requires_director_approval": false
+    },
+    {
+      "comment_id": "C-CC-DOCX133",
+      "recommendation": "ACCEPT",
+      "reasoning": "Carla señala una ambigüedad legítima: el texto en 6.2.3 habla de 'cobertura casi integral de medicamentos ambulatorios médicamente necesarios' sin explicitar cómo se articula con medicamentos de alto costo (LRS, DAC). El documento trata estos instrumentos en capítulos anteriores, pero la integración con el beneficio ambulatorio no está suficientemente visible en esta sección. No requiere edición; el reply debe clarificar que LRS/DAC son instrumentos diferenciados que permanecen independientes y que el beneficio propuesto incorpora un submódulo de alto costo fuera de GES/LRS/DAC (sección 7.3), remitiendo al lector a esa sección.",
+      "improvement_score": 2,
+      "preference_score": 0,
+      "benja_alignment": 3,
+      "correctness_score": 0,
+      "conflicts_with": [],
+      "supports": [
+        "C-CC-DOCX142",
+        "C-CC-DOCX149"
+      ],
+      "verification_refs": [
+        "V-ley-20850-ricarte-soto"
+      ],
+      "proposed_action": "none_reply_only",
+      "requires_director_approval": false
+    },
+    {
+      "comment_id": "C-CC-DOCX140",
+      "recommendation": "DEFER",
+      "reasoning": "La pregunta toca un nodo de diseño estratégico no trivial: la asimetría entre FONASA (dispensación gratuita vía red pública/arsenales) e ISAPRE (sin ese canal), y si un beneficio universal la resuelve o la perpetúa. La afirmación implícita —que lo actualmente gratuito para FONASA no existe de igual forma para ISAPRE— es factualmente correcta. La respuesta involucra una decisión de arquitectura sobre quién financia la nivelación, que excede el nivel de un reply editorial y puede comprometer posición de política. El reply debe reconocer la asimetría y presentarla como una de las tensiones de diseño a discutir en el evento, no como algo resuelto.",
+      "improvement_score": 3,
+      "preference_score": 0,
+      "benja_alignment": 5,
+      "correctness_score": 4,
+      "conflicts_with": [],
+      "supports": [
+        "C-CC-DOCX143",
+        "C-CC-DOCX157"
+      ],
+      "verification_refs": [],
+      "proposed_action": "none_reply_only",
+      "requires_director_approval": true
+    },
+    {
+      "comment_id": "C-CC-DOCX142",
+      "recommendation": "ACCEPT",
+      "reasoning": "Carla pregunta si los programas existentes (GES, LRS, DAC, FOFAR, etc.) subsisten o si el beneficio los reemplaza, y si persiste la fragmentación. Es una pregunta técnica de clarificación con respuesta relativamente clara en el diseño propuesto: el beneficio ambulatorio universal coexiste con esquemas existentes sin absorberlos, por lo que la fragmentación estructural se mantiene en el corto plazo. El reply debe explicitar esta coexistencia y señalar que la reducción de fragmentación es un objetivo de mediano/largo plazo, no del diseño inicial del beneficio.",
+      "improvement_score": 2,
+      "preference_score": 0,
+      "benja_alignment": 3,
+      "correctness_score": 0,
+      "conflicts_with": [],
+      "supports": [
+        "C-CC-DOCX149",
+        "C-CC-DOCX133"
+      ],
+      "verification_refs": [
+        "V-ley-20850-ricarte-soto",
+        "V-ges-patologias"
+      ],
+      "proposed_action": "none_reply_only",
+      "requires_director_approval": false
+    },
+    {
+      "comment_id": "C-CC-DOCX143",
+      "recommendation": "ACCEPT",
+      "reasoning": "Carla pregunta si el mecanismo de reembolso por quiebre de stock es una excepción pensada para FONASA y cómo operaría distinto en ISAPRE. Es una pregunta técnica operacional pertinente: en FONASA la provisión institucional gratuita es el canal primario y el reembolso por stock-out funciona como excepción validada; en ISAPRE el canal primario es el retail con cobertura del plan, por lo que el mecanismo de activación sería diferente. El reply debe explicitar esta asimetría operacional señalando que la sección describe la lógica para FONASA/red pública, y que la implementación ISAPRE requiere un diseño complementario.",
+      "improvement_score": 2,
+      "preference_score": 0,
+      "benja_alignment": 3,
+      "correctness_score": 0,
+      "conflicts_with": [],
+      "supports": [
+        "C-CC-DOCX140"
+      ],
+      "verification_refs": [],
+      "proposed_action": "none_reply_only",
+      "requires_director_approval": false
+    },
+    {
+      "comment_id": "C-CC-DOCX145",
+      "recommendation": "DEFER",
+      "reasoning": "Carla plantea una pregunta metodológica sofisticada: si la Alternativa A (expansión institucional MAI/APS) cambia la estructura de gasto observado, ¿las comparaciones internacionales en que se basan los escenarios siguen siendo válidas? Es un punto técnico con respuesta no trivial: los escenarios se calibran sobre gasto total y protección financiera resultante, no solo sobre gasto retail, por lo que un cambio de canal de dispensación afectaría la composición pero no necesariamente el nivel de protección financiera buscado. Si la respuesta es más compleja que eso, requiere alineación del equipo técnico antes de responder, para evitar inconsistencias con los supuestos de modelización.",
+      "improvement_score": 2,
+      "preference_score": 0,
+      "benja_alignment": 4,
+      "correctness_score": 0,
+      "conflicts_with": [],
+      "supports": [],
+      "verification_refs": [
+        "V-78-retail-2021",
+        "V-us455-ppa-chile"
+      ],
+      "proposed_action": "none_reply_only",
+      "requires_director_approval": false
+    },
+    {
+      "comment_id": "C-CC-DOCX149",
+      "recommendation": "DEFER",
+      "reasoning": "Carla identifica correctamente una tensión real del sistema: un mismo medicamento cubierto bajo GES para ciertos diagnósticos puede quedar fuera de cobertura para otras indicaciones, generando cobertura diferencial por indicación con el mismo fármaco. La pregunta de largo plazo —¿se debería eliminar esta fragmentación?— tiene implicancias estratégicas directas: una respuesta afirmativa comprometería a EP con una posición de política específica sobre el alcance del beneficio universal. El reply debe reconocer el problema de fragmentación por indicación como una tensión real del diseño, presentarlo como pregunta abierta a discutir en el evento, y no cerrar la posición editorial.",
+      "improvement_score": 3,
+      "preference_score": 0,
+      "benja_alignment": 5,
+      "correctness_score": 4,
+      "conflicts_with": [],
+      "supports": [
+        "C-CC-DOCX142",
+        "C-CC-DOCX133"
+      ],
+      "verification_refs": [
+        "V-ges-patologias"
+      ],
+      "proposed_action": "none_reply_only",
+      "requires_director_approval": true
+    },
+    {
+      "comment_id": "C-CC-DOCX151",
+      "recommendation": "ACCEPT",
+      "reasoning": "Carla pregunta si el cap o stop-loss se acumula por hogar o por persona, un detalle técnico de diseño financiero que el texto citado no explicita. La pregunta es válida y tiene implicancias distributivas: un cap por hogar protege más a familias numerosas con múltiples enfermos crónicos pero tiene mayor costo fiscal; un cap por persona es más simple de administrar pero puede no proteger adecuadamente a hogares con varios afectados. El reply debe indicar que ambas variantes son posibles, que el documento las trata como variable de diseño en 7.4.2, y que el trade-off protección/costo es una de las decisiones a definir en implementación.",
+      "improvement_score": 2,
+      "preference_score": 0,
+      "benja_alignment": 3,
+      "correctness_score": 0,
+      "conflicts_with": [],
+      "supports": [
+        "C-CC-DOCX157"
+      ],
+      "verification_refs": [],
+      "proposed_action": "none_reply_only",
+      "requires_director_approval": false
+    },
+    {
+      "comment_id": "C-CC-DOCX157",
+      "recommendation": "DEFER",
+      "reasoning": "Carla pregunta si el financiamiento del beneficio universal en ISAPRE será con fondos públicos o con cargo al precio del plan, una pregunta de diseño financiero crítica que el documento no resuelve explícitamente. La respuesta implica una posición sobre el rol del Estado vs el mercado privado en el financiamiento de un piso universal, con consecuencias directas sobre selección adversa y portabilidad. Si se financia vía prima adicional de plan, los incentivos de selección son distintos a un fondo público compartido (similar a la lógica de la Ley 21.674/MCC FONASA). Dado el carácter político-técnico de la respuesta, debe presentarse como trade-off abierto y no como decisión tomada.",
+      "improvement_score": 3,
+      "preference_score": 0,
+      "benja_alignment": 5,
+      "correctness_score": 0,
+      "conflicts_with": [],
+      "supports": [
+        "C-CC-DOCX140",
+        "C-CC-DOCX151"
+      ],
+      "verification_refs": [
+        "V-ley-21674-mcc"
+      ],
+      "proposed_action": "none_reply_only",
+      "requires_director_approval": true
+    },
+    {
+      "comment_id": "C-CC-DOCX166",
+      "recommendation": "ACCEPT",
+      "reasoning": "Carla señala que la generación de eventos trazables para habilitar compra retail excepcional cuando la farmacia institucional falla podría requerir modificaciones a la ley de compras públicas, dado que involucra un mecanismo de adquisición/reembolso fuera del marco habitual. La observación es plausible: la Ley 19.886 y la Ley 21.198 (CENABAST) no cubren automáticamente un mecanismo de reembolso de compra retail validado por quiebre de stock. El reply debe reconocer la observación como una condición habilitante legal-regulatoria pendiente de análisis específico, y señalar que el informe la identifica como parte de la hoja de ruta de implementación.",
+      "improvement_score": 2,
+      "preference_score": 0,
+      "benja_alignment": 4,
+      "correctness_score": 3,
+      "conflicts_with": [],
+      "supports": [],
+      "verification_refs": [
+        "V-ley-21198-cenabast"
+      ],
+      "proposed_action": "none_reply_only",
+      "requires_director_approval": false
+    },
+    {
+      "comment_id": "C-CC-DOCX171",
+      "recommendation": "ACCEPT",
+      "reasoning": "Carla amplía el riesgo de traslado de costos al señalar que personas que hoy reciben medicamentos bajo MAI (atención institucional directa en FONASA) podrían migrar a MLE (libre elección con reembolso) si el beneficio universal genera incentivos para ello, aumentando el gasto retail y potencialmente el costo fiscal. El riesgo es técnicamente sólido y bien identificado: la migración intra-FONASA MAI→MLE es un riesgo de arbitraje de diseño real que debe monitorearse y mitigarse con salvaguardas específicas. El reply debe reconocer el riesgo como pertinente y señalarlo como elemento a incorporar en el análisis de riesgos de implementación.",
+      "improvement_score": 2,
+      "preference_score": 0,
+      "benja_alignment": 4,
+      "correctness_score": 4,
+      "conflicts_with": [],
+      "supports": [
+        "C-CC-DOCX140"
+      ],
+      "verification_refs": [],
+      "proposed_action": "none_reply_only",
+      "requires_director_approval": false
+    },
+    {
+      "comment_id": "C-CC-DOCX173",
+      "recommendation": "DEFER",
+      "reasoning": "Pregunta legítima (type=question) sobre coexistencia de instrumentos: el documento propone el BFAU como nueva capa coordinadora pero no explicita con suficiente claridad las reglas de precedencia ni el mecanismo de transición respecto de GES, Ley Ricarte Soto y DAC, que por diseño continúan vigentes. No requiere edición inmediata; la respuesta debe articular la lógica de 'piso mínimo ambulatorio + instrumentos específicos superpuestos' y reconocer que la reducción de fragmentación es parcial y gradual, dejando el debate de diseño para el evento. Aplica regla 11 (question → none_reply_only); el DEFER refleja que el punto toca una debilidad analítica real aunque la solución no sea trivial.",
+      "improvement_score": 3,
+      "preference_score": 1,
+      "benja_alignment": 4,
+      "correctness_score": 0,
+      "conflicts_with": [],
+      "supports": [],
+      "verification_refs": [],
+      "proposed_action": "none_reply_only",
+      "requires_director_approval": false
+    }
+  ]
+}

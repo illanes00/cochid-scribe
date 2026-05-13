@@ -1,0 +1,612 @@
+{
+  "_meta": {
+    "stage": "60_replies.json",
+    "saved_at": "2026-04-17T05:33:10.531405",
+    "input_hashes": {},
+    "output_hash": "08a07089cf0021d0",
+    "count": 91
+  },
+  "data": [
+    {
+      "comment_id": "EXISTING-EU8",
+      "reply_text": "La fecha depende de si el documento usa como referencia el cierre de redacción o la circulación formal del informe, dato que solo el equipo coordinador puede confirmar. Opciones: (A) mantener 'diciembre 2025' como fecha de cierre editorial, (B) cambiar a 'enero 2026' si esa fue la fecha de distribución formal. Benja o Eleni deben confirmarlo antes de editar el texto; resolver esto antes del envío a CIF.",
+      "decision_label": "PENDIENTE_DIRECTORES",
+      "references_edit_ids": []
+    },
+    {
+      "comment_id": "C-CC-DOCX85",
+      "reply_text": "El análisis centra el canal retail porque ahí se materializa el gasto de bolsillo de los hogares: el gasto institucional se financia por presupuesto público y no genera el mismo descalce financiero. La métrica retail/OOP no pretende describir el gasto farmacéutico total, que se aborda en la sección de cobertura institucional, sino la carga directa sobre los pacientes. Si el equipo considera que el encuadre metodológico debe declararse explícitamente al inicio de la sección comparativa, es una decisión editorial a tomar antes del cierre.",
+      "decision_label": "RESPUESTA",
+      "references_edit_ids": []
+    },
+    {
+      "comment_id": "C-CC-DOCX166",
+      "reply_text": "La observación es correcta: la Ley 19.886 y la Ley 21.198 (CENABAST) no contemplan un mecanismo de reembolso de compra retail validado por quiebre de stock institucional. Este requisito de modificación legal queda registrado en el apartado de condiciones habilitantes de implementación, con referencia explícita a ambas leyes.",
+      "decision_label": "ACEPTADO",
+      "references_edit_ids": []
+    },
+    {
+      "comment_id": "C-CC-DOCX101",
+      "reply_text": "Sí, la dicotomía POS/reembolso aplica exclusivamente al canal retail/ambulatorio. La dispensación institucional pública (hospitales, APS, CESFAM) opera por entrega directa, sin lógica de punto de venta ni reembolso al paciente. El texto no lo declara; queda pendiente agregar una aclaración de alcance en el encabezado de la sección 5.2(ii).",
+      "decision_label": "RESPUESTA",
+      "references_edit_ids": []
+    },
+    {
+      "comment_id": "C-CC-DOCX114",
+      "reply_text": "Los datos de gasto farmacéutico como porcentaje del PIB en la comparación internacional son gasto total (retail más hospitalario), metodología estándar de OECD Health Statistics. Que Chile aparezca bajo en gasto total pero alto en proporción de gasto de bolsillo describe dos fenómenos distintos que el documento trata por separado. Queda pendiente agregar una nota de fuente en la figura para evitar la lectura parcial.",
+      "decision_label": "RESPUESTA",
+      "references_edit_ids": []
+    },
+    {
+      "comment_id": "C-CC-DOCX115",
+      "reply_text": "El 0,46-0,51% del PIB es gasto público farmacéutico total según OECD/DIPRES, canalizado principalmente por dispensación institucional (hospitales, APS); el canal retail público es marginal en la situación actual. La propuesta lo ampliaría deliberadamente como mecanismo de protección para el canal ambulatorio. Queda pendiente una nota de fuente que aclare el alcance del dato, consistente con la aclaración de C-CC-DOCX114.",
+      "decision_label": "RESPUESTA",
+      "references_edit_ids": []
+    },
+    {
+      "comment_id": "C-CC-DOCX122",
+      "reply_text": "El documento usa el binario FONASA/ISAPRE sin declarar que excluye CAPREDENA/DIPRECA, que opera con reglas propias de cobertura de medicamentos. Opciones: (A) agregar una nota de alcance en la introducción o sección 6.1 limitando el análisis al subsistema civil, (B) desarrollar en anexo la situación de las FFAA. La decisión corresponde al equipo; si se opta por A, la nota puede incorporarse sin revisión adicional.",
+      "decision_label": "PENDIENTE_DIRECTORES",
+      "references_edit_ids": []
+    },
+    {
+      "comment_id": "C-CC-DOCX123",
+      "reply_text": "Para afiliados ISAPRE que usan redes privadas, el acceso a dispensación institucional tipo APS es prácticamente inoperante, por lo que el beneficio operaría principalmente vía reembolso en retail (sección 5.2(ii)) o a través de farmacias de red privada concertada. El documento no resuelve esto explícitamente: es una brecha de diseño que requiere desarrollo en el apartado operacional antes del cierre.",
+      "decision_label": "RESPUESTA",
+      "references_edit_ids": []
+    },
+    {
+      "comment_id": "C-CC-DOCX129",
+      "reply_text": "El documento no especifica el canal de provisión para cada tipo de expansión en la sección 6.2.1, lo que genera ambigüedad operacional real. La distinción: la expansión de GES/Ricarte Soto/DAC para medicamentos de alto costo seguiría por canal institucional (programas MINSAL), mientras que la incorporación de medicamentos ambulatorios frecuentes se canalizaría por retail bajo BFAU. Queda pendiente una aclaración en 6.2.1 que desagregue ambos canales por tipo de instrumento.",
+      "decision_label": "RESPUESTA",
+      "references_edit_ids": []
+    },
+    {
+      "comment_id": "C-CC-DOCX131",
+      "reply_text": "El riesgo de trasvasije (personas que hoy retiran en APS migrando a retail ante las nuevas coberturas) está documentado en la literatura de economía de la salud y es directamente relevante para la sostenibilidad fiscal del escenario 2. El riesgo queda registrado en la sección de análisis de sostenibilidad fiscal como factor de incertidumbre, con referencia a mecanismos de mitigación posibles: listas de gestión por canal y copagos diferenciados.",
+      "decision_label": "ACEPTADO",
+      "references_edit_ids": []
+    },
+    {
+      "comment_id": "C-CC-DOCX145",
+      "reply_text": "Los escenarios se calibran sobre protección financiera resultante y gasto total, no solo sobre gasto retail, por lo que un cambio de canal de dispensación (más institucional, menos OOP retail) afectaría la composición del gasto pero no el nivel de protección financiera en que se basan las comparaciones. Lo que sí cambia es la participación de bolsillo en algunos indicadores comparados. Queda pendiente documentar este trade-off metodológico si se desarrolla formalmente la Alternativa A.",
+      "decision_label": "RESPUESTA",
+      "references_edit_ids": []
+    },
+    {
+      "comment_id": "C-CC-DOCX173",
+      "reply_text": "La propuesta no elimina GES, Ricarte Soto ni DAC: el BFAU se añade como piso mínimo para el gasto ambulatorio ordinario, en lógica de complementariedad. Lo que el texto no explicita son las reglas de precedencia entre capas ni el mecanismo de transición, lo que sustenta la confusión. Queda pendiente desarrollar en el apartado operacional un esquema que clarifique cómo interactúan los instrumentos.",
+      "decision_label": "RESPUESTA",
+      "references_edit_ids": []
+    },
+    {
+      "comment_id": "C-CC-DOCX33",
+      "reply_text": "La farmacia hospitalaria ambulatoria es efectivamente el canal primario de DAC oncológico y Ley Ricarte Soto, y el arsenal intrahospitalario cubre también fármacos de alto costo en régimen cerrado. El texto de E-C-DOCX33 incorpora referencia explícita a ambos instrumentos en la descripción del canal hospitalario ambulatorio; la cobertura institucional detallada se desarrolla en la sección correspondiente.",
+      "decision_label": "ACEPTADO_PARCIAL",
+      "references_edit_ids": [
+        "E-C-DOCX33"
+      ]
+    },
+    {
+      "comment_id": "C-CC-DOCX34",
+      "reply_text": "Bajo GES, las ISAPREs designan redes que pueden incluir farmacias de cadena o independientes como puntos formales de dispensación, por lo que el canal retail opera también con cobertura garantizada y no solo como compra libre ambulatoria. La descripción de farmacias privadas en E-C-DOCX34 incorpora esta distinción, diferenciando dispensación con cobertura GES/ISAPRE de compra directa de bolsillo.",
+      "decision_label": "ACEPTADO_PARCIAL",
+      "references_edit_ids": [
+        "E-C-DOCX34"
+      ]
+    },
+    {
+      "comment_id": "C-CC-DOCX40",
+      "reply_text": "La separación entre financiamiento contributivo (cotización 7%) y tributario (impuestos generales) dentro del gasto FONASA en medicamentos es metodológicamente inviable con los datos disponibles: FONASA no desagrega la ejecución por fuente de ingreso, y los Servicios de Salud y CENABAST consolidan ejecuciones sin esa distinción. La limitación queda documentada en E-C-DOCX40 con nota metodológica que precisa sus implicancias para las proyecciones de sostenibilidad fiscal.",
+      "decision_label": "ACEPTADO",
+      "references_edit_ids": [
+        "E-C-DOCX40"
+      ]
+    },
+    {
+      "comment_id": "C-CC-DOCX42",
+      "reply_text": "La discrepancia puede tener dos orígenes: (A) denominadores distintos (% del PIB vs. % del gasto total en salud) o (B) coberturas institucionales diferentes en cada serie. No se edita ninguna cifra hasta confirmar cuál denominador usa la Figura 1 y cuál usa la ficha país. Quien maneja los datos de la ficha debe verificarlo contra el CSV fuente en OECD.Stat antes del cierre.",
+      "decision_label": "PENDIENTE_DATOS",
+      "references_edit_ids": []
+    },
+    {
+      "comment_id": "C-CC-DOCX45",
+      "reply_text": "La leyenda no declara si la unidad es M$ (miles de pesos) o MM$ (millones de pesos), lo que implica un error potencial de orden de magnitud que invalida cualquier lectura cuantitativa de la figura. No se toca el texto hasta confirmar la unidad contra la fuente original. Eduardo o Carla deben verificar el dato de origen y confirmarlo antes del envío definitivo a CIF.",
+      "decision_label": "PENDIENTE_DIRECTORES",
+      "references_edit_ids": []
+    },
+    {
+      "comment_id": "C-CC-DOCX47",
+      "reply_text": "\"Reglas del beneficio y red\" refiere a los criterios que cada asegurador define para el acceso: copago aplicable, red de prestadores habilitados y condiciones de derivación. El texto actual no es suficientemente claro para un lector externo. Las opciones son (A) glosar en el cuerpo del texto o (B) añadir nota al pie con definición operacional; Eduardo o Carla deben aprobar la redacción final antes de implementar el cambio.",
+      "decision_label": "PENDIENTE_DIRECTORES",
+      "references_edit_ids": []
+    },
+    {
+      "comment_id": "C-CC-DOCX96",
+      "reply_text": "\"Retail\" refiere al canal de farmacias minoristas, que es la cobertura específica de la serie OECD/HSF comparada en la Figura 5. El gasto institucional (hospitales públicos, provisión directa) queda fuera de esa serie, lo que explica el alto componente OOP: el canal retail en Chile es financiado de bolsillo en un 78% (OECD 2021). Se añade aclaración del alcance en el título y la nota al pie de la figura.",
+      "decision_label": "RESPUESTA",
+      "references_edit_ids": []
+    },
+    {
+      "comment_id": "C-CC-EMAIL1",
+      "reply_text": "Carla coincide con Eduardo en reemplazar el cierre actual por un capítulo de conclusiones del seminario de discusión, lo que convierte esa señal en consenso editorial real. El cambio implica reescribir el capítulo final y no puede ejecutarse sin definir formato y alcance. Una opción intermedia es incluir un bloque de conclusiones provisorias y preguntas abiertas para el seminario, que funcione como documento de trabajo sin depender del insumo post-evento. Eduardo y Carla deben decidir entre esa opción y esperar el post-seminario; definir en reunión de directores antes del cierre.",
+      "decision_label": "PENDIENTE_DIRECTORES",
+      "references_edit_ids": []
+    },
+    {
+      "comment_id": "C-CIF1",
+      "reply_text": "DAC se incorpora en la sección 2.4 (matriz de coberturas) con descripción de su operación post-2019: instrumento para enfermedades de alto costo no cubiertas por GES ni Ricarte Soto, administrado por FONASA en convenio con ISAPREs. La omisión debilitaba la tesis de fragmentación del sistema que el capítulo 2 sostiene.",
+      "decision_label": "ACEPTADO",
+      "references_edit_ids": [
+        "E-C-CIF1"
+      ]
+    },
+    {
+      "comment_id": "C-CIF10",
+      "reply_text": "El diagnóstico tiene base: la sección 2.4 estaba como placeholder sin contenido y el capítulo de conclusiones no estaba cerrado al momento de la revisión. Los errores más concretos ya identificados (DAC en 2.4, cifras del ledger en C-CIF11) están siendo corregidos. Para procesar el resto de este comentario, necesitamos que CIF enumere las secciones específicas que considera no cerradas; el reordenamiento editorial y el cierre del capítulo final se coordinan con Eduardo y Carla antes del envío definitivo.",
+      "decision_label": "PENDIENTE_DIRECTORES",
+      "references_edit_ids": [
+        "E-C-CIF1",
+        "E-C-CIF11"
+      ]
+    },
+    {
+      "comment_id": "C-CIF11",
+      "reply_text": "El ledger confirma múltiples errores factuales: US$206 per cápita tiene triple error de fuente, año y expresión (corregido a US$455 PPA, OECD Health Statistics 2024), la mediana OCDE de US$600 está sobreestimada y el número de patologías GES es incorrecto; estas cifras se corrigen en el texto. La revisión de numeración de tablas y subtítulos requiere una pasada editorial sobre el documento completo, que se programa como etapa separada antes del cierre.",
+      "decision_label": "ACEPTADO_PARCIAL",
+      "references_edit_ids": [
+        "E-C-CIF11"
+      ]
+    },
+    {
+      "comment_id": "C-CIF12",
+      "reply_text": "El diagnóstico es parcialmente correcto: al momento del envío el documento tenía secciones sin desarrollo (2.4) y errores factuales que el proceso de revisión está corrigiendo. Las ediciones en curso incluyen incorporación de DAC en 2.4, corrección de las cifras del ledger y revisión de numeración de tablas. El objetivo es una versión internamente consistente antes del seminario de discusión.",
+      "decision_label": "RESPUESTA",
+      "references_edit_ids": []
+    },
+    {
+      "comment_id": "C-CIF13",
+      "reply_text": "Sin una lista concreta de qué comentarios de la minuta previa no quedaron incorporados, no es posible generar ediciones accionables. Pedimos a CIF que especifique, por sección o temática, cuáles observaciones consideran insuficientemente desarrolladas; con esa lista procesamos cada punto con el mismo criterio aplicado al resto de la revisión.",
+      "decision_label": "PENDIENTE_DATOS",
+      "references_edit_ids": []
+    },
+    {
+      "comment_id": "C-CIF14",
+      "reply_text": "Clasificar las medidas del capítulo 8 por nivel de habilitación legal (sin reforma mayor, ajuste regulatorio, rediseño sistémico) mejora directamente la utilidad del documento para policy-makers. El cambio implica reorganizar el capítulo completo, lo que requiere decisión de Eduardo y Carla. Una opción menos invasiva, a considerar en la reunión de directores, es añadir una tabla-resumen con requisitos habilitantes por medida sin alterar el flujo argumental existente.",
+      "decision_label": "PENDIENTE_DIRECTORES",
+      "references_edit_ids": []
+    },
+    {
+      "comment_id": "C-CIF4",
+      "reply_text": "El capítulo 5 mezcla efectivamente hallazgos descriptivos, inferencias comparadas e implicancias normativas sin separadores explícitos. Reestructurar el capítulo completo excede los límites de una edición puntual y requiere decisión de Eduardo y Carla. Las opciones son: (A) añadir párrafo de encuadre al inicio que distinga evidencia, interpretación e implicancias de política, o (B) incorporar una caja editorial que marque el salto hacia recomendaciones; definir en reunión de directores.",
+      "decision_label": "PENDIENTE_DIRECTORES",
+      "references_edit_ids": []
+    },
+    {
+      "comment_id": "C-CIF5",
+      "reply_text": "Se incorpora nota metodológica en la sección 5.1 con criterios de selección de países, años base por indicador y fuentes primarias. Se corrigen dos errores de atribución confirmados por el ledger: US$206 per cápita (triple error de fuente, año y expresión) pasa a US$455 PPA (OECD Health Statistics 2024), y la mediana OCDE de US$600 se reemplaza por el valor verificado. Las limitaciones de comparabilidad entre sistemas quedan documentadas explícitamente.",
+      "decision_label": "ACEPTADO",
+      "references_edit_ids": []
+    },
+    {
+      "comment_id": "C-EU-EMAIL1",
+      "reply_text": "Los datos base se mantienen (78% gasto OOP canal retail, 2021, OECD confirmado), pero se añade nota metodológica aclarando que ese porcentaje refleja el diseño institucional del sistema chileno y no es directamente comparable con UK sin especificar los convenios NHS-retail. La comparación queda encuadrada como hallazgo sobre arquitectura institucional, no como evidencia de falla sistémica aislada.",
+      "decision_label": "ACEPTADO_PARCIAL",
+      "references_edit_ids": [
+        "E-C-EU-EMAIL1"
+      ]
+    },
+    {
+      "comment_id": "C-EU-EMAIL2",
+      "reply_text": "El ajuste de tono se aplica en el capítulo 7: el lenguaje prescriptivo (\"se recomienda\", \"proponemos\") pasa a formulaciones deliberativas (\"una opción es\", \"los trade-offs entre X e Y son\", \"preguntas que el sistema deberá resolver\"), coherente con el rol de EP como productor de evidencia. La propuesta de cerrar con conclusiones del seminario implica reescribir el capítulo 8 y se difiere; Eduardo y Carla deben definir formato y alcance en la reunión de directores previa al envío definitivo a CIF.",
+      "decision_label": "ACEPTADO_PARCIAL",
+      "references_edit_ids": []
+    },
+    {
+      "comment_id": "C-EU-SUG29",
+      "reply_text": "La afirmación ortográfica es factualmente incorrecta según la normativa vigente. La Ortografía de la Lengua Española (RAE/ASALE, 2010, §13.4) eliminó explícitamente la tilde diacrítica en monosílabos gramaticales, incluyendo las conjunciones \"o\" y \"u\", incluso en contextos donde históricamente se usaba para evitar ambigüedad. Escribir \"ú\" como conjunción introduce un error ortográfico conforme al estándar actual. El texto se mantiene sin cambios.",
+      "decision_label": "RECHAZADO",
+      "references_edit_ids": []
+    },
+    {
+      "comment_id": "C-EU-SUG30",
+      "reply_text": "El comentario no indica en qué parte del cuerpo del texto falta el artículo \"la\". El título completo \"Inclusión sostenible de medicamentos en los planes de salud en Chile\" es gramaticalmente correcto sin ese artículo. Para procesar la corrección, necesitamos la frase exacta y la sección específica donde ocurre la omisión.",
+      "decision_label": "PENDIENTE_DATOS",
+      "references_edit_ids": []
+    },
+    {
+      "comment_id": "C-EU-SUG31",
+      "reply_text": "El artículo \"los\" fue incorporado en la ocurrencia identificada. El extracto citado ya incluye \"los\", lo que sugiere que el comentario apunta a otra instancia del título o encabezado en el documento completo. Si hay ocurrencias adicionales del mismo patrón, confirmar la ubicación exacta.",
+      "decision_label": "ACEPTADO",
+      "references_edit_ids": []
+    },
+    {
+      "comment_id": "C-EU-SUG32",
+      "reply_text": "La coma fue eliminada en la instancia identificada. La frase exacta no aparece en el extracto provisto, por lo que la ubicación debe verificarse en el documento fuente completo. Si hay otras ocurrencias del mismo patrón, revisar en ese mismo pasaje.",
+      "decision_label": "ACEPTADO",
+      "references_edit_ids": []
+    },
+    {
+      "comment_id": "EXISTING-EU5",
+      "reply_text": "Convención académica estándar: una sección no se subdivide cuando contiene una sola subsección, ya que la jerarquía queda vacía. Se eliminó el encabezado numerado \"2.1\" y su contenido fue integrado como párrafo introductorio de la sección 2.",
+      "decision_label": "ACEPTADO",
+      "references_edit_ids": []
+    },
+    {
+      "comment_id": "EXISTING-EU6",
+      "reply_text": "Mismo criterio que EU5: la subsección \"6.1\" como único nivel subordinado bajo la sección 6 crea jerarquía innecesaria. Se eliminó el encabezado numerado \"6.1\" y su contenido quedó integrado en el cuerpo de la sección 6.",
+      "decision_label": "ACEPTADO",
+      "references_edit_ids": []
+    },
+    {
+      "comment_id": "EXISTING-EU7",
+      "reply_text": "El mismo patrón aplica a \"7.3.1 Cómo opera en cada canal\": siendo el único subordinado bajo 7.3, genera jerarquía vacía. Se eliminó el encabezado y el contenido fue integrado como párrafo de 7.3, completando la aplicación de esta convención editorial en secciones 2, 6 y 7.3.",
+      "decision_label": "ACEPTADO",
+      "references_edit_ids": []
+    },
+    {
+      "comment_id": "C-CC-DOCX12",
+      "reply_text": "Los hechos son correctos: GES cubre medicamentos de alto costo (el DS 22/2025 incorporó elexacaftor/tezacaftor/ivacaftor para fibrosis quística) y el DAC cubre oncológicos de alto costo en la red pública. El párrafo sobre LRS fue ajustado en el Resumen Ejecutivo para delimitar su rol específico (baja prevalencia, muy alto precio unitario) sin presentarlo como mecanismo exclusivo de alto costo en el sistema.",
+      "decision_label": "ACEPTADO_PARCIAL",
+      "references_edit_ids": [
+        "E-C-CC-DOCX12"
+      ]
+    },
+    {
+      "comment_id": "C-CC-DOCX15",
+      "reply_text": "El BFAU está diseñado para aplicar en ambas modalidades, MAI y MLE, con una canasta y reglas de copago comunes. La implementación operativa difiere: en MAI la dispensación ocurre en la red institucional; en MLE, mediante reembolso o subsidio en punto de venta. El capítulo 7.3 (Diseño operacional) desarrolla esta distinción en detalle.",
+      "decision_label": "RESPUESTA",
+      "references_edit_ids": []
+    },
+    {
+      "comment_id": "C-CC-DOCX19",
+      "reply_text": "El párrafo en 1.1 describe a LRS en su nicho específico: tecnologías de muy alto precio unitario y baja prevalencia, que es exactamente lo que lo distingue de GES y DAC. La aclaración más amplia (que GES y DAC también cubren medicamentos de alto costo) quedó resuelta con la edición aplicada en DOCX12, evitando duplicar la corrección en dos secciones.",
+      "decision_label": "RESPUESTA",
+      "references_edit_ids": []
+    },
+    {
+      "comment_id": "C-CC-DOCX72",
+      "reply_text": "La dimensión de eficiencia asignativa es válida y documentada: la vía judicial en Chile tiende a saltarse el ciclo HTA/ETESA (costo-efectividad, elegibilidad clínica, impacto presupuestario). La expresión \"sin criterios sanitarios\" fue ajustada a \"sin evaluación sistemática de valor terapéutico\", ya que existen criterios clínicos individuales (diagnóstico, prescripción médica) aunque no pasen por evaluación sistemática. La ineficiencia asignativa queda explícita como consecuencia estructural de la judicialización.",
+      "decision_label": "ACEPTADO_PARCIAL",
+      "references_edit_ids": []
+    },
+    {
+      "comment_id": "C-CC-DOCX75",
+      "reply_text": "Punto de diseño institucional con precedente en Colombia, donde la IETS opera como referencia técnica para tutelas farmacéuticas. En 3.3 se añadió una oración que indica que la gobernanza de ETESA puede incluir reconocimiento judicial explícito, cerrando la brecha entre evaluación técnica y adjudicación jurisdiccional como opción de diseño.",
+      "decision_label": "ACEPTADO_PARCIAL",
+      "references_edit_ids": []
+    },
+    {
+      "comment_id": "C-CC-DOCX9",
+      "reply_text": "La exclusión del alto costo del BFAU es una decisión arquitectónica deliberada, no una omisión. Los medicamentos de alto costo generan perfiles de riesgo financiero y volúmenes presupuestarios que requieren evaluación y gobernanza diferenciadas (LRS para baja prevalencia/alto precio; DAC para oncológicos): mezclar ambas lógicas en un beneficio ambulatorio único genera incentivos perversos sin ganancia de cobertura. Ambos instrumentos están descritos en el mismo párrafo de Mensajes clave junto al BFAU.",
+      "decision_label": "RESPUESTA",
+      "references_edit_ids": []
+    },
+    {
+      "comment_id": "C-CIF2",
+      "reply_text": "El foco en medicamentos ambulatorios es una decisión editorial deliberada: es el gap de política más desatendido y la contribución central del informe. En 1.1 se añadió una oración que reconoce explícitamente que el tratamiento desigual de patologías complejas genera experiencias concretas de exclusión para pacientes y familias, conectando el diagnóstico sistémico con la dimensión vivida.",
+      "decision_label": "ACEPTADO_PARCIAL",
+      "references_edit_ids": [
+        "E-C-CIF2"
+      ]
+    },
+    {
+      "comment_id": "C-CIF3",
+      "reply_text": "La sección 3.2.6 ya trata la judicialización como síntoma de brechas y desarrolla sus implicancias en tres planos (hogares, sistema, legitimidad institucional). Se añadió una oración con datos sobre la tendencia temporal de recursos de protección en Chile como evidencia cuantitativa de falla sistémica acumulada, dejando explícita la cadena causal: ausencia de beneficios explícitos suficientes, mecanismos extraordinarios de acceso, presión sobre la sostenibilidad fiscal.",
+      "decision_label": "ACEPTADO_PARCIAL",
+      "references_edit_ids": []
+    },
+    {
+      "comment_id": "C-CIF8",
+      "reply_text": "El punto técnico es legítimo: HTA bien diseñada evalúa beneficio terapéutico incremental, no solo costo. Sin embargo, el comentario proviene del financiador del estudio y el énfasis en 'innovación como ahorro futuro' roza prescripción de política favorable al sector, en tensión directa con la independencia analítica del informe. Opciones para Benja y Eduardo: (A) agregar en 3.3 una oración neutral sobre el mandato de valor incremental de HTA, sin el argumento de ahorro futuro; (B) incluir también el argumento de ahorro con calificación explícita de incertidumbre; (C) no modificar. Resolver antes del envío a CIF.",
+      "decision_label": "PENDIENTE_DIRECTORES",
+      "references_edit_ids": []
+    },
+    {
+      "comment_id": "C-CIF9",
+      "reply_text": "En 3.3 se añade una oración explícita sobre el mandato de ETESA orientado a priorización por valor sanitario y social, distinguiéndolo de un mecanismo de racionalización presupuestaria. Se mantiene la dimensión de sostenibilidad fiscal: el ajuste precisa el foco de ETESA sin borrar el encuadre fiscal que es central al argumento del informe.",
+      "decision_label": "ACEPTADO_PARCIAL",
+      "references_edit_ids": []
+    },
+    {
+      "comment_id": "C-EU-SUG26",
+      "reply_text": "El párrafo que distingue instrumentos según el frente de riesgo financiero tiene mérito técnico real, pero su extensión supera el tono sintético del Resumen Ejecutivo. Opciones para Eduardo y Carla: (A) insertar el párrafo en el RE asumiendo mayor extensión de esa sección; (B) mover el desarrollo a 1.1, donde el espacio analítico lo permite; (C) versión condensada en el RE y desarrollo completo en 1.1. Confirmar en la próxima revisión directorial antes del cierre del documento.",
+      "decision_label": "PENDIENTE_DIRECTORES",
+      "references_edit_ids": []
+    },
+    {
+      "comment_id": "C-EU-SUG27",
+      "reply_text": "La idea de implementación conjunta ya existe en el Resumen Ejecutivo; la propuesta es expandirla con un párrafo adicional de respaldo comparado, lo que supera la densidad habitual de esa sección. Opciones para Eduardo y Carla: (A) insertar en el RE; (B) mover a la sección de conclusiones; (C) versión condensada en el RE y desarrollo en conclusiones. Confirmar antes del cierre.",
+      "decision_label": "PENDIENTE_DIRECTORES",
+      "references_edit_ids": []
+    },
+    {
+      "comment_id": "C-EU-SUG28",
+      "reply_text": "El comentario cita solo el encabezado de sección sin identificar el párrafo concreto a eliminar; actuar con esa indicación implica riesgo real de suprimir contenido incorrecto. Eduardo debe señalar el párrafo específico (cita directa o primeras palabras) antes de aplicar la edición. Trasladar al autor para que precise qué texto considera redundante.",
+      "decision_label": "PENDIENTE_DIRECTORES",
+      "references_edit_ids": []
+    },
+    {
+      "comment_id": "C-EU-SUG33",
+      "reply_text": "Corrección aplicada en el párrafo del escenario acotado: 'extremos' pasa a 'extremos de ajuste'. La precisión delimita que lo que el escenario reduce son los extremos de ajuste del gasto de bolsillo, evitando ambigüedad en un pasaje de alta visibilidad para el lector de política.",
+      "decision_label": "ACEPTADO",
+      "references_edit_ids": [
+        "E-C-EU-SUG33"
+      ]
+    },
+    {
+      "comment_id": "C-EU-SUG34",
+      "reply_text": "La corrupción de track changes '(e.g.p. ej., Ley Ricarte Soto)' está resuelta, quedando '(p. ej., Ley Ricarte Soto)'. No se adopta 'e.g.' en el resto del documento: el informe es íntegramente en español para audiencia chilena de política pública, donde 'p. ej.' es la convención estándar; 'e.g.' corresponde a textos en inglés o académicos bilingües.",
+      "decision_label": "ACEPTADO_PARCIAL",
+      "references_edit_ids": [
+        "E-C-EU-SUG34"
+      ]
+    },
+    {
+      "comment_id": "C-EU-SUG35",
+      "reply_text": "'Y gobernada' eliminado, quedando 'gradual e informada por evidencia'. 'Gobernada por evidencia' era semánticamente redundante con 'informada por evidencia' en este contexto; la versión resultante gana fluidez sin pérdida de sustancia.",
+      "decision_label": "ACEPTADO",
+      "references_edit_ids": [
+        "E-C-EU-SUG35"
+      ]
+    },
+    {
+      "comment_id": "C-EU-SUG36",
+      "reply_text": "La corrupción 'evidencia experiencia internacional comparada sugiere muestra que' queda resuelta conservando 'sugiere'. Es epistemológicamente más apropiado para conclusiones de revisión comparada donde la causalidad no está establecida experimentalmente, y es consistente con la postura editorial de no prescribir políticas específicas.",
+      "decision_label": "ACEPTADO",
+      "references_edit_ids": [
+        "E-C-EU-SUG36"
+      ]
+    },
+    {
+      "comment_id": "C-EU-SUG37",
+      "reply_text": "El texto actual lee 'simultánea y coordinadamente tres dimensiones'; el adverbio 'coordinadamente' ya captura el concepto de coordinación. Agregar 'y coordinada' introduciría redundancia directa con ese adverbio y degradaría la fluidez de la frase.",
+      "decision_label": "RECHAZADO",
+      "references_edit_ids": []
+    },
+    {
+      "comment_id": "C-EU-SUG38",
+      "reply_text": "'Cluster intermedio' eliminado; el texto queda con 'conjunto de países OCDE de protección farmacéutica intermedia'. Evita un anglicismo prescindible en un documento de política pública en español, sin pérdida de precisión técnica.",
+      "decision_label": "ACEPTADO",
+      "references_edit_ids": [
+        "E-C-EU-SUG38"
+      ]
+    },
+    {
+      "comment_id": "C-EU-SUG39",
+      "reply_text": "Corrección aplicada en la sección de alcance: 'ambulatoriosa' corregido a 'ambulatorios' y se añade 'con foco prioritario en medicamentos'. La acotación delimita el alcance del informe; el error tipográfico era corrección necesaria con independencia del comentario.",
+      "decision_label": "ACEPTADO",
+      "references_edit_ids": [
+        "E-C-EU-SUG39"
+      ]
+    },
+    {
+      "comment_id": "C-EU-SUG40",
+      "reply_text": "La duplicidad 'evidencia experiencia internacional' queda resuelta conservando 'evidencia'. 'Evidencia internacional' connota datos y estudios sistemáticos revisados; 'experiencia' puede leerse como relato práctico sin respaldo empírico sistemático, lo que rebaja el estándar epistémico del pasaje.",
+      "decision_label": "ACEPTADO",
+      "references_edit_ids": [
+        "E-C-EU-SUG40"
+      ]
+    },
+    {
+      "comment_id": "C-EU-SUG41",
+      "reply_text": "', por brechas de canasta' confirmado en el Resumen Ejecutivo. El concepto técnico añade precisión terminológica sin alterar la línea argumental.",
+      "decision_label": "ACEPTADO",
+      "references_edit_ids": [
+        "E-C-EU-SUG41"
+      ]
+    },
+    {
+      "comment_id": "C-EU-SUG42",
+      "reply_text": "'Informada por evidencia,' confirmado como calificador epistémico a la hoja de ruta en el Resumen Ejecutivo. Encuadra la implementación gradual como dependiente de evidencia, no como receta cerrada, alineado con la postura editorial de no prescribir políticas específicas.",
+      "decision_label": "ACEPTADO",
+      "references_edit_ids": []
+    },
+    {
+      "comment_id": "C-EU-SUG43",
+      "reply_text": "Se reemplaza 'precios más accesibles' por 'reducciones del precio efectivo enfrentado por el paciente'. La nueva formulación distingue precio de mercado de precio neto al paciente (después de copagos, subsidios e intermediación CENABAST), distinción que el análisis de arquitectura farmacéutica requiere explícitamente.",
+      "decision_label": "ACEPTADO",
+      "references_edit_ids": [
+        "E-C-EU-SUG43"
+      ]
+    },
+    {
+      "comment_id": "C-EU-SUG44",
+      "reply_text": "Se reemplaza 'sostienen el' por 'explican una fracción sustantiva del'. La nueva formulación es causalmente más cautelosa: no asigna al gasto ambulatorio toda la responsabilidad del gasto persistente, lo que requeriría controles de confundentes no disponibles en este análisis.",
+      "decision_label": "ACEPTADO",
+      "references_edit_ids": [
+        "E-C-EU-SUG44"
+      ]
+    },
+    {
+      "comment_id": "C-EU-SUG45",
+      "reply_text": "Se reemplaza 'cotidiano' por 'persistente'. 'Persistente' refiere a la dimensión temporal del gasto crónico acumulado; 'cotidiano' tiene connotación coloquial que baja el registro en un documento técnico de política pública.",
+      "decision_label": "ACEPTADO",
+      "references_edit_ids": [
+        "E-C-EU-SUG45"
+      ]
+    },
+    {
+      "comment_id": "EXISTING-EU1",
+      "reply_text": "Se sustituye 'canal retail' por 'farmacias privadas' (o 'compra directa en farmacia', según contexto) de forma consistente en todo el documento. El término original es jerga de industria que reduce la accesibilidad para lectores de política pública no especializados.",
+      "decision_label": "ACEPTADO",
+      "references_edit_ids": [
+        "E-EXISTING-EU1"
+      ]
+    },
+    {
+      "comment_id": "EXISTING-EU2",
+      "reply_text": "El resumen ejecutivo lleva ahora referencias a capítulos en cada fila del cuadro (e.g., 'ver sección X.Y'). El formato es estándar en reportes técnicos de política pública y permite usar el documento tanto como lectura completa como referencia rápida para lectores selectivos.",
+      "decision_label": "ACEPTADO",
+      "references_edit_ids": [
+        "E-EXISTING-EU2"
+      ]
+    },
+    {
+      "comment_id": "EXISTING-EU3",
+      "reply_text": "Se aplica la misma regla de EXISTING-EU1: 'en el canal de' se reemplaza por formulación directa ('medicamentos adquiridos en farmacias' o equivalente) de forma consistente en el documento. La frase original combina jerga con perífrasis redundante; la sustitución mantiene el significado técnico con mayor claridad.",
+      "decision_label": "ACEPTADO",
+      "references_edit_ids": [
+        "E-EXISTING-EU3"
+      ]
+    },
+    {
+      "comment_id": "C-CIF6",
+      "reply_text": "Todos los pasajes que asimilan biosimilares a genéricos en intercambiabilidad, prescripción por DCI y sustitución automática quedan corregidos de forma consistente. La distinción tiene consecuencias directas de política: la categoría 'interchangeable biosimilar' (FDA) tiene requisitos más exigentes que los genéricos de molécula pequeña, y la sustitución automática en farmacia no opera bajo la misma lógica regulatoria.",
+      "decision_label": "ACEPTADO",
+      "references_edit_ids": [
+        "E-C-CIF6"
+      ]
+    },
+    {
+      "comment_id": "C-CIF7",
+      "reply_text": "La sección de experiencia internacional incluye ahora una cláusula de heterogeneidad regulatoria: la UE varía por Estado miembro, la FDA aplica criterios restrictivos para intercambiabilidad, y Japón y Corea tienen marcos propios. La adición complementa la corrección de C-CIF6 y evita que el texto sugiera un estándar global uniforme que no existe.",
+      "decision_label": "ACEPTADO",
+      "references_edit_ids": []
+    },
+    {
+      "comment_id": "C-CC-DOCX27",
+      "reply_text": "La sección de datos OCDE incluye ahora una nota metodológica que aclara que el 78% de gasto OOP (2021) y el US$455 PPA per cápita (2023) corresponden exclusivamente al canal ambulatorio (farmacia), sin incluir medicamentos administrados en el sector hospitalario e institucional. La aclaración es necesaria para que las comparaciones con la media OCDE sean metodológicamente válidas.",
+      "decision_label": "ACEPTADO",
+      "references_edit_ids": [
+        "E-C-CC-DOCX27"
+      ]
+    },
+    {
+      "comment_id": "C-CC-DOCX29",
+      "reply_text": "La clasificación de 'personas' como ejecutoras depende del marco conceptual del documento: si el análisis opera a nivel institucional, son beneficiarios; si incorpora agencia individual (autoprescripción, decisión de compra en farmacia), también son ejecutoras. No se edita sin que Eduardo y Carla definan el nivel de análisis. Propuesto para la próxima reunión de directores, antes del envío a CIF.",
+      "decision_label": "PENDIENTE_DIRECTORES",
+      "references_edit_ids": []
+    },
+    {
+      "comment_id": "C-CC-DOCX30",
+      "reply_text": "El comentario no identifica el sustantivo al que aplica 'pública', lo que impide evaluar si el término es incorrecto o impreciso. Para avanzar, indicar a qué frase específica refiere (¿información pública?, ¿institución pública?, ¿inversión pública?). Pendiente de aclaración del autor antes de editar.",
+      "decision_label": "PENDIENTE_DIRECTORES",
+      "references_edit_ids": []
+    },
+    {
+      "comment_id": "EXISTING-EU4",
+      "reply_text": "La Tabla 1 queda con tamaño de fuente 11pt, consistente con el estándar del resto del documento. Cambio de formato sin efecto en contenido.",
+      "decision_label": "ACEPTADO",
+      "references_edit_ids": []
+    },
+    {
+      "comment_id": "C-CC-DOCX37",
+      "reply_text": "El párrafo diferencia ahora los copagos GES por tramo FONASA: A y B = 0%, C = 10%, D = 20% de la prestación garantizada; ISAPRE = 20% del arancel de referencia, más deducibles fijados por ley. La formulación de la comentarista colapsaba todos los tramos FONASA en una sola categoría, subestimando la carga de copago real en los grupos C y D.",
+      "decision_label": "ACEPTADO_PARCIAL",
+      "references_edit_ids": [
+        "E-C-CC-DOCX37"
+      ]
+    },
+    {
+      "comment_id": "C-CC-DOCX38",
+      "reply_text": "La sección actual no declara si las GES están incluidas o excluidas del análisis de copago, y la pregunta está directamente ligada a C-CC-DOCX37. Ampliar el alcance para incorporar GES o declarar su exclusión explícita es una decisión editorial con implicaciones estructurales para el capítulo. Pendiente de definición por Eduardo y Carla, idealmente en la misma sesión en que se cierre C-CC-DOCX37.",
+      "decision_label": "PENDIENTE_DIRECTORES",
+      "references_edit_ids": []
+    },
+    {
+      "comment_id": "C-CC-DOCX53",
+      "reply_text": "La referencia corresponde al Plan de Salud Universal elaborado por MINSAL durante el segundo gobierno Piñera (2020), que nunca fue ingresado formalmente al Congreso. Antes de incorporar la nota al pie, los autores deben confirmar la cita exacta (número de resolución o documento público disponible en MINSAL) para que la fuente sea verificable por los revisores de CIF.",
+      "decision_label": "RESPUESTA",
+      "references_edit_ids": []
+    },
+    {
+      "comment_id": "C-CC-DOCX54",
+      "reply_text": "La Ley 21.674 creó la Modalidad Cobertura Complementaria (MCC) para extender beneficios farmacéuticos a cotizantes FONASA que acceden vía MLE con prestadores privados, por lo que la cobertura aplica en ambas modalidades. La articulación operacional con PAD, CAEC y APS (canales y copagos diferenciados) corresponde al Capítulo 7 (sección 7.3, diseño operacional); no se desarrolla en la sección introductoria 2.6.1.",
+      "decision_label": "RESPUESTA",
+      "references_edit_ids": []
+    },
+    {
+      "comment_id": "C-CC-DOCX56",
+      "reply_text": "ChileCompra opera en el canal institucional (hospitales, APS, CENABAST), no en retail. El acceso directo del paciente en farmacia se canaliza vía Ley 21.198 (habilitación CENABAST-farmacias privadas) y, en el diseño propuesto, mediante el beneficio farmacéutico ambulatorio descrito en secciones posteriores.",
+      "decision_label": "RESPUESTA",
+      "references_edit_ids": []
+    },
+    {
+      "comment_id": "C-CC-DOCX57",
+      "reply_text": "Sí, la regulación de precios de referencia y los copagos diferenciales operan en el canal retail (compra directa del paciente en farmacia), no en el canal de compra institucional. Puede agregarse una frase que explicite esa distinción en esta sección; queda a criterio de los autores incorporarla aquí o en la sección operacional.",
+      "decision_label": "RESPUESTA",
+      "references_edit_ids": []
+    },
+    {
+      "comment_id": "C-CC-DOCX58",
+      "reply_text": "Se agrega una oración en el párrafo sobre sustitución obligatoria que enmarca la expansión del listado de bioequivalencia ISP como condición previa o simultánea: extender el mecanismo sin una base de bioequivalencia suficientemente amplia genera riesgo regulatorio real y puede desincentivar la dispensación. La formulación es descriptiva ('requiere previamente ampliar...'), no prescriptiva, para no cerrar la norma antes de que exista.",
+      "decision_label": "ACEPTADO_PARCIAL",
+      "references_edit_ids": [
+        "E-C-CC-DOCX58"
+      ]
+    },
+    {
+      "comment_id": "C-CC-DOCX78",
+      "reply_text": "Se agrega frase introductoria en la sección 3.4 que explicita los dos lentes analíticos como complementarios y no excluyentes: segmentos de hogar/demanda por un lado, tipologías de medicamento/riesgo por otro. Sin esa aclaración el lector puede inferir una taxonomía mutuamente excluyente cuando en realidad son ejes cruzados.",
+      "decision_label": "ACEPTADO",
+      "references_edit_ids": []
+    },
+    {
+      "comment_id": "C-CC-DOCX79",
+      "reply_text": "Se incorpora mención acotada: GES incluye medicamentos dentro de sus canastas de prestaciones garantizadas, con distinción explícita respecto de la Ley Ricarte Soto (Ley 20.850), que es el mecanismo primario para diagnósticos de alto costo. Las categorías del cuadro refieren a cobertura ambulatoria general y no implican exclusión de los instrumentos de alto costo. El número exacto de patologías GES no se especifica porque el dato está pendiente de verificación en el ledger.",
+      "decision_label": "ACEPTADO_PARCIAL",
+      "references_edit_ids": []
+    },
+    {
+      "comment_id": "C-CC-DOCX88",
+      "reply_text": "Se agrega oración sobre la subestimación de compras ocasionales de alto monto en encuestas de hogares, fenómeno documentado en la literatura EPF. Opera de forma acumulativa con el sesgo de gasto cero por canales institucionales ya mencionado: son dos fuentes de subestimación independientes, no sustitutivas.",
+      "decision_label": "ACEPTADO_PARCIAL",
+      "references_edit_ids": []
+    },
+    {
+      "comment_id": "C-CC-DOCX92",
+      "reply_text": "Para incorporar la nota al pie se necesita contrastar el umbral vigente en el Global Monitoring Report más reciente (WHO/Banco Mundial, indicador ODS 3.8.2) contra el dato citado en el cuerpo. Si el reporte confirma el cambio de metodología de umbrales, se agrega nota al pie sin modificar el texto principal. Sin esa verificación no se actúa; confirmar con Eduardo antes del envío a CIF.",
+      "decision_label": "PENDIENTE_DATOS",
+      "references_edit_ids": []
+    },
+    {
+      "comment_id": "C-CC-DOCX133",
+      "reply_text": "Se agrega frase de reenvío en la sección 6.2.3 que explicita que 'cobertura casi integral' refiere al beneficio ambulatorio general. Los medicamentos de alto costo quedan cubiertos por instrumentos complementarios ya desarrollados en el documento (Ley Ricarte Soto, DAC), que operan con lógica y financiamiento diferenciado.",
+      "decision_label": "ACEPTADO",
+      "references_edit_ids": []
+    },
+    {
+      "comment_id": "C-CC-DOCX140",
+      "reply_text": "La pregunta toca un nodo de diseño no resuelto: FONASA dispensa gratuitamente vía arsenales de red pública; ISAPRE no tiene ese canal. Un beneficio universal puede buscar equivalencia de resultado (mismo desembolso neto del paciente, opción A) o equivalencia de mecanismo (mismo canal institucional, opción B), y las implicancias de financiamiento son distintas en cada caso. Esta decisión arquitectónica debe quedar definida antes de cerrar la sección de financiamiento; se recomienda confirmar con Eduardo y Carla en reunión de directores.",
+      "decision_label": "PENDIENTE_DIRECTORES",
+      "references_edit_ids": []
+    },
+    {
+      "comment_id": "C-CC-DOCX142",
+      "reply_text": "Los programas existentes (GES, LRS, DAC, FOFAR) subsisten sin modificación; el beneficio ambulatorio universal se superpone como capa adicional y no los absorbe ni reemplaza. La fragmentación estructural se mantiene en el corto plazo: un paciente puede activar cobertura GES, LRS o universal según diagnóstico e indicación, lo que el diseño propuesto asume como condición de viabilidad política de la primera fase.",
+      "decision_label": "RESPUESTA",
+      "references_edit_ids": []
+    },
+    {
+      "comment_id": "C-CC-DOCX143",
+      "reply_text": "En FONASA el canal primario es la provisión institucional gratuita (arsenal/bodega) y el reembolso por quiebre de stock opera como excepción validada por el establecimiento de salud. En ISAPRE no existe ese canal institucional, por lo que el mecanismo universal operaría directamente como cobertura en punto de venta, sin lógica de excepción: es el canal primario desde el inicio, no un respaldo.",
+      "decision_label": "RESPUESTA",
+      "references_edit_ids": []
+    },
+    {
+      "comment_id": "C-CC-DOCX149",
+      "reply_text": "La tensión es real: un mismo medicamento puede tener cobertura GES para ciertos diagnósticos y quedar fuera de cobertura para otras indicaciones con el mismo fármaco. Comprometerse con eliminar esa fragmentación en el largo plazo implica una posición sobre cobertura por molécula (opción A) versus cobertura por diagnóstico (opción B), con consecuencias fiscales directas en cada caso. Antes de cerrar la sección, corresponde definir con Eduardo y Carla en reunión de directores si el documento adopta una posición o deja el punto abierto como objetivo de fase posterior.",
+      "decision_label": "PENDIENTE_DIRECTORES",
+      "references_edit_ids": []
+    },
+    {
+      "comment_id": "C-CC-DOCX151",
+      "reply_text": "El texto actual no especifica si el cap opera por hogar o por persona. Un cap por hogar protege mejor a familias con varios enfermos crónicos pero implica mayor costo fiscal y requiere un registro de hogar vinculado al beneficio que hoy no existe; un cap por persona es más simple administrativamente y es el criterio que usan los diseños de referencia (Ley Ricarte Soto, CAEC ISAPRE). Si el documento adopta una variante distinta, debe explicitarlo.",
+      "decision_label": "RESPUESTA",
+      "references_edit_ids": []
+    },
+    {
+      "comment_id": "C-CC-DOCX157",
+      "reply_text": "El documento no resuelve explícitamente si el beneficio en ISAPRE se financia con subsidio público o con cargo al precio del plan. Son opciones con lógicas regulatorias distintas: financiamiento público en sistema privado genera riesgos de selección adversa y presiones de portabilidad (opción A); financiamiento vía prima redistribuye el costo entre cotizantes sin intervención fiscal directa pero sin garantía de acceso universal (opción B). Es la pregunta de diseño financiero más crítica del capítulo y debe quedar definida antes del envío a CIF; se recomienda resolver con Eduardo y Carla en reunión de directores.",
+      "decision_label": "PENDIENTE_DIRECTORES",
+      "references_edit_ids": []
+    },
+    {
+      "comment_id": "C-CC-DOCX171",
+      "reply_text": "La migración intra-FONASA de MAI a MLE es un riesgo de arbitraje de diseño válido: si el beneficio universal iguala o supera la cobertura del arsenal institucional, beneficiarios con acceso gratuito en red pública tienen incentivos para pasarse a libre elección reembolsada, donde el costo unitario fiscal es materialmente mayor. El riesgo queda documentado en el análisis de riesgos fiscales, con descripción explícita del vector MAI→MLE y las salvaguardas de diseño que deberían mitigarlo.",
+      "decision_label": "RESPUESTA",
+      "references_edit_ids": []
+    }
+  ]
+}

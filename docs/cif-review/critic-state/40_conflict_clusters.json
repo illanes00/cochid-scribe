@@ -1,0 +1,169 @@
+{
+  "_meta": {
+    "stage": "40_conflict_clusters.json",
+    "saved_at": "2026-04-17T04:26:06.497535",
+    "input_hashes": {},
+    "output_hash": "37e37458b49a405f",
+    "count": 10
+  },
+  "data": [
+    {
+      "cluster_id": "CL-1",
+      "comment_ids": [
+        "C-CC-DOCX101",
+        "C-CC-DOCX114",
+        "C-CC-DOCX115",
+        "C-CC-DOCX122",
+        "C-CC-DOCX123",
+        "C-CC-DOCX129",
+        "C-CC-DOCX131",
+        "C-CC-DOCX145",
+        "C-CC-DOCX173",
+        "C-CC-DOCX33",
+        "C-CC-DOCX34",
+        "C-CC-DOCX40",
+        "C-CC-DOCX42",
+        "C-CC-DOCX45",
+        "C-CC-DOCX47",
+        "C-CC-DOCX96",
+        "C-CC-EMAIL1",
+        "C-CIF1",
+        "C-CIF10",
+        "C-CIF11",
+        "C-CIF12",
+        "C-CIF13",
+        "C-CIF14",
+        "C-CIF4",
+        "C-CIF5",
+        "C-EU-EMAIL1",
+        "C-EU-EMAIL2",
+        "C-EU-SUG29",
+        "C-EU-SUG30",
+        "C-EU-SUG31",
+        "C-EU-SUG32",
+        "EXISTING-EU5",
+        "EXISTING-EU6",
+        "EXISTING-EU7"
+      ],
+      "cluster_type": "section",
+      "section": "2.4"
+    },
+    {
+      "cluster_id": "CL-2",
+      "comment_ids": [
+        "C-CC-DOCX12",
+        "C-CC-DOCX15",
+        "C-CC-DOCX19",
+        "C-CC-DOCX72",
+        "C-CC-DOCX75",
+        "C-CC-DOCX9",
+        "C-CIF2",
+        "C-CIF3",
+        "C-CIF8",
+        "C-CIF9",
+        "C-EU-SUG26",
+        "C-EU-SUG27",
+        "C-EU-SUG28",
+        "C-EU-SUG33",
+        "C-EU-SUG34",
+        "C-EU-SUG35",
+        "C-EU-SUG36",
+        "C-EU-SUG37",
+        "C-EU-SUG38",
+        "C-EU-SUG39",
+        "C-EU-SUG40",
+        "C-EU-SUG41",
+        "C-EU-SUG42",
+        "C-EU-SUG43",
+        "C-EU-SUG44",
+        "C-EU-SUG45",
+        "EXISTING-EU1",
+        "EXISTING-EU2",
+        "EXISTING-EU3"
+      ],
+      "cluster_type": "section",
+      "section": "1.1"
+    },
+    {
+      "cluster_id": "CL-3",
+      "comment_ids": [
+        "C-CIF6",
+        "C-CIF7"
+      ],
+      "cluster_type": "section",
+      "section": "5.3.4"
+    },
+    {
+      "cluster_id": "CL-4",
+      "comment_ids": [
+        "C-CC-DOCX27",
+        "C-CC-DOCX29",
+        "C-CC-DOCX30",
+        "EXISTING-EU4"
+      ],
+      "cluster_type": "section",
+      "section": "2"
+    },
+    {
+      "cluster_id": "CL-5",
+      "comment_ids": [
+        "C-CC-DOCX37",
+        "C-CC-DOCX38"
+      ],
+      "cluster_type": "section",
+      "section": "2.2"
+    },
+    {
+      "cluster_id": "CL-6",
+      "comment_ids": [
+        "C-CC-DOCX53",
+        "C-CC-DOCX54"
+      ],
+      "cluster_type": "section",
+      "section": "2.6.1"
+    },
+    {
+      "cluster_id": "CL-7",
+      "comment_ids": [
+        "C-CC-DOCX56",
+        "C-CC-DOCX57",
+        "C-CC-DOCX58"
+      ],
+      "cluster_type": "section",
+      "section": "2.6.2"
+    },
+    {
+      "cluster_id": "CL-8",
+      "comment_ids": [
+        "C-CC-DOCX78",
+        "C-CC-DOCX79"
+      ],
+      "cluster_type": "section",
+      "section": "3.4"
+    },
+    {
+      "cluster_id": "CL-9",
+      "comment_ids": [
+        "C-CC-DOCX88",
+        "C-CC-DOCX92"
+      ],
+      "cluster_type": "section",
+      "section": "4.2"
+    },
+    {
+      "cluster_id": "CL-10",
+      "comment_ids": [
+        "C-CC-DOCX133",
+        "C-CC-DOCX140",
+        "C-CC-DOCX142",
+        "C-CC-DOCX143",
+        "C-CC-DOCX149",
+        "C-CC-DOCX151",
+        "C-CC-DOCX157",
+        "C-CC-DOCX171"
+      ],
+      "cluster_type": "section",
+      "section": "6.2.3"
+    }
+  ]
+}

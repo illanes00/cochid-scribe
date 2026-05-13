@@ -1,0 +1,468 @@
+/* Espacio Público — Policy Brief CSS
+   Para weasyprint. Tipografías via Google Fonts. Paleta serie health (Crisis Isapres 2023). */
+
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700;800&family=Nunito+Sans:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&display=swap');
+
+@page {
+  size: letter;
+  margin: 0;
+  background: white;
+}
+
+@page interior {
+  margin: 22mm 25mm 22mm 25mm;
+  @top-left {
+    content: "Inclusión sostenible de medicamentos en los planes de salud en Chile";
+    font-family: "Nunito Sans", sans-serif;
+    font-size: 8pt;
+    font-weight: 300;
+    color: #604080;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    border-bottom: 0.5pt solid #CBD5E0;
+    width: 100%;
+    padding-bottom: 4mm;
+  }
+  @top-right {
+    content: "MINUTA TÉCNICA  ·  " counter(page);
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 9pt;
+    font-weight: 600;
+    color: #604080;
+    letter-spacing: 0.1em;
+    border-bottom: 0.5pt solid #CBD5E0;
+    padding-bottom: 4mm;
+  }
+}
+
+/* ---- Cover ---- */
+.cover {
+  page: cover;
+  width: 216mm;
+  height: 279mm;
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(180deg, #E08000 0%, #C06020 25%, #804060 60%, #604080 100%);
+  color: white;
+  position: relative;
+  page-break-after: always;
+  box-sizing: border-box;
+}
+
+.cover .frame {
+  position: absolute;
+  top: 18mm;
+  left: 18mm;
+  right: 18mm;
+  bottom: 18mm;
+  border: 1pt solid rgba(255,255,255,0.85);
+  padding: 14mm 14mm;
+  display: block;
+}
+
+.cover .frame > * {
+  position: relative;
+}
+
+.cover .top-section {
+  text-align: center;
+  margin-bottom: 60mm;
+}
+
+.cover .center-block {
+  text-align: center;
+  margin-bottom: 50mm;
+}
+
+.cover .bottom-section {
+  position: absolute;
+  bottom: 14mm;
+  left: 14mm;
+  right: 14mm;
+  text-align: center;
+}
+
+.cover .series-label {
+  text-align: center;
+  font-family: "Barlow Condensed", sans-serif;
+  font-weight: 700;
+  font-size: 12pt;
+  letter-spacing: 0.18em;
+  line-height: 1.3;
+}
+
+.cover .center-block {
+  text-align: center;
+}
+
+.cover .brief-title {
+  font-family: "Barlow Condensed", sans-serif;
+  font-weight: 800;
+  font-size: 38pt;
+  line-height: 1.05;
+  letter-spacing: -0.005em;
+  margin: 0 0 6mm 0;
+  text-transform: none;
+}
+
+.cover .divider {
+  width: 40mm;
+  height: 1.2pt;
+  background: white;
+  margin: 8mm auto;
+}
+
+.cover .brief-subtitle {
+  font-family: "Nunito Sans", sans-serif;
+  font-weight: 400;
+  font-size: 13pt;
+  letter-spacing: 0.02em;
+  margin: 0;
+}
+
+.cover .author-block {
+  font-family: "Nunito Sans", sans-serif;
+  font-weight: 600;
+  font-size: 12pt;
+  letter-spacing: 0.02em;
+  margin-top: 10mm;
+}
+
+.cover .date-block {
+  font-family: "Barlow Condensed", sans-serif;
+  font-weight: 600;
+  font-size: 11pt;
+  letter-spacing: 0.18em;
+  margin-top: 5mm;
+}
+
+.cover .footer-block {
+  text-align: center;
+  font-family: "Nunito Sans", sans-serif;
+  font-weight: 300;
+  font-size: 8pt;
+  letter-spacing: 0.05em;
+}
+
+.cover .ep-logo {
+  font-family: "Barlow Condensed", sans-serif;
+  font-weight: 800;
+  font-size: 14pt;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 2mm;
+}
+
+.cover .funder-line {
+  font-style: italic;
+  font-size: 7.5pt;
+  margin-top: 3mm;
+  opacity: 0.85;
+}
+
+/* ---- Interior pages ---- */
+.interior {
+  page: interior;
+  font-family: "Nunito Sans", sans-serif;
+  font-size: 10pt;
+  line-height: 1.45;
+  color: #1A202C;
+  text-align: justify;
+  hyphens: auto;
+}
+
+.interior h1 {
+  page-break-before: always;
+  font-family: "Barlow Condensed", sans-serif;
+  font-weight: 700;
+  font-size: 22pt;
+  color: #604080;
+  line-height: 1.1;
+  margin: 0 0 8mm 0;
+  letter-spacing: -0.01em;
+  border-bottom: 1pt solid #804060;
+  padding-bottom: 3mm;
+}
+
+.interior h1:first-child {
+  page-break-before: avoid;
+}
+
+.interior h2 {
+  font-family: "Barlow Condensed", sans-serif;
+  font-weight: 700;
+  font-size: 13pt;
+  color: #804060;
+  margin: 7mm 0 2mm 0;
+  letter-spacing: 0.01em;
+}
+
+.interior h3 {
+  font-family: "Barlow Condensed", sans-serif;
+  font-weight: 600;
+  font-size: 11pt;
+  color: #604080;
+  margin: 5mm 0 1mm 0;
+}
+
+.interior p {
+  margin: 0 0 2.5mm 0;
+}
+
+.interior strong {
+  font-weight: 700;
+  color: #604080;
+}
+
+.interior ol, .interior ul {
+  margin: 2mm 0 4mm 5mm;
+  padding-left: 0;
+}
+
+.interior li {
+  margin-bottom: 1.5mm;
+}
+
+.interior ol li::marker {
+  font-family: "Barlow Condensed", sans-serif;
+  font-weight: 700;
+  color: #C06020;
+}
+
+/* ---- Footnotes ---- */
+.footnote {
+  font-size: 8pt;
+  line-height: 1.3;
+  color: #4A5568;
+  margin-top: 4mm;
+  padding-top: 2mm;
+  border-top: 0.5pt solid #CBD5E0;
+}
+
+.footnote-ref {
+  vertical-align: super;
+  font-size: 7pt;
+  color: #C06020;
+  font-weight: 700;
+}
+
+/* ---- Callouts ---- */
+.callout {
+  background: #FAF5F0;
+  border-left: 3pt solid #C06020;
+  padding: 4mm 5mm;
+  margin: 4mm 0;
+  page-break-inside: avoid;
+}
+
+.callout-title {
+  font-family: "Barlow Condensed", sans-serif;
+  font-weight: 700;
+  font-size: 11pt;
+  color: #804060;
+  letter-spacing: 0.02em;
+  margin-bottom: 2mm;
+  text-transform: uppercase;
+}
+
+.callout ul {
+  margin: 1mm 0 0 4mm;
+}
+
+.callout-data {
+  background: #F0F4F8;
+  border-left: 3pt solid #604080;
+}
+
+.callout-comparative {
+  background: #FFF;
+  border: 0.5pt solid #804060;
+  border-left: 3pt solid #C06020;
+  padding: 5mm 6mm;
+}
+
+.callout-comparative .col-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5mm;
+  margin-top: 2mm;
+}
+
+.callout-comparative h4 {
+  font-family: "Barlow Condensed", sans-serif;
+  font-weight: 700;
+  font-size: 10.5pt;
+  color: #604080;
+  margin: 0 0 2mm 0;
+  border-bottom: 0.5pt solid #CBD5E0;
+  padding-bottom: 1mm;
+}
+
+.callout-comparative h4.iva-side {
+  color: #C06020;
+}
+
+.callout-comparative ul {
+  font-size: 9pt;
+  margin: 0 0 0 4mm;
+}
+
+/* ---- Tables ---- */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 3mm 0 4mm 0;
+  font-size: 9pt;
+}
+
+table thead th {
+  background: #604080;
+  color: white;
+  font-family: "Barlow Condensed", sans-serif;
+  font-weight: 600;
+  font-size: 9.5pt;
+  letter-spacing: 0.02em;
+  padding: 2mm 2mm;
+  text-align: left;
+  border: 0.5pt solid #604080;
+}
+
+table tbody td {
+  padding: 1.8mm 2mm;
+  border-bottom: 0.5pt solid #CBD5E0;
+  vertical-align: top;
+}
+
+table tbody tr:nth-child(even) {
+  background: #F7FAFC;
+}
+
+table tbody td.row-label {
+  font-weight: 600;
+  color: #804060;
+}
+
+/* ---- Decision boxes (page 7) ---- */
+.decision-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5mm;
+  margin-top: 4mm;
+}
+
+.decision-box {
+  border: 0.5pt solid #804060;
+  background: #FAF5F0;
+  padding: 4mm 5mm;
+  page-break-inside: avoid;
+  position: relative;
+}
+
+.decision-box.full-width {
+  grid-column: 1 / span 2;
+}
+
+.decision-box .num {
+  position: absolute;
+  top: 2mm;
+  right: 4mm;
+  font-family: "Barlow Condensed", sans-serif;
+  font-weight: 800;
+  font-size: 28pt;
+  color: rgba(192,96,32,0.18);
+  line-height: 1;
+}
+
+.decision-box h4 {
+  font-family: "Barlow Condensed", sans-serif;
+  font-weight: 700;
+  font-size: 11pt;
+  color: #604080;
+  margin: 0 0 2mm 0;
+  padding-right: 10mm;
+}
+
+.decision-box .question {
+  font-size: 9.5pt;
+  font-weight: 600;
+  color: #1A202C;
+  margin-bottom: 2mm;
+}
+
+.decision-box .criterion {
+  font-style: italic;
+  font-size: 8.5pt;
+  color: #4A5568;
+  border-top: 0.5pt solid #CBD5E0;
+  padding-top: 1.5mm;
+  margin-top: 2mm;
+}
+
+/* ---- Transparency block ---- */
+.transparency {
+  background: #1A365D;
+  color: white;
+  padding: 6mm 7mm;
+  margin-top: 5mm;
+  page-break-inside: avoid;
+}
+
+.transparency h3 {
+  font-family: "Barlow Condensed", sans-serif;
+  font-weight: 700;
+  font-size: 12pt;
+  color: #FAF5F0;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 0 0 3mm 0;
+  border-bottom: 0.5pt solid rgba(255,255,255,0.4);
+  padding-bottom: 2mm;
+}
+
+.transparency p {
+  font-size: 9pt;
+  line-height: 1.45;
+  color: rgba(255,255,255,0.92);
+  margin-bottom: 2.5mm;
+}
+
+.transparency em {
+  color: #FFD699;
+  font-style: italic;
+}
+
+/* ---- Mensajes clave list ---- */
+.mensajes-clave {
+  counter-reset: mensaje;
+  list-style: none;
+  padding-left: 0;
+  margin: 4mm 0;
+}
+
+.mensajes-clave li {
+  position: relative;
+  padding-left: 12mm;
+  margin-bottom: 4mm;
+  counter-increment: mensaje;
+}
+
+.mensajes-clave li::before {
+  content: counter(mensaje);
+  position: absolute;
+  left: 0;
+  top: -1mm;
+  font-family: "Barlow Condensed", sans-serif;
+  font-weight: 800;
+  font-size: 22pt;
+  color: #C06020;
+  line-height: 1;
+}
+
+/* ---- Closing line ---- */
+.closing-line {
+  margin-top: 8mm;
+  text-align: right;
+  font-style: italic;
+  font-size: 8.5pt;
+  color: #4A5568;
+}

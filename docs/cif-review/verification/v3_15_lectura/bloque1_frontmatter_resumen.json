@@ -1,0 +1,128 @@
+{
+  "agent": "lectura_editorial_autor",
+  "bloque": "1 - Frontmatter + Mensajes clave + Resumen ejecutivo",
+  "rango_paragrafos": "P0014 - P0089",
+  "generated_at": "2026-01-01T00:00:00Z",
+  "principio_editorial": "Hacer la entrada del informe más limpia, sin redundancias entre Mensajes clave y Resumen ejecutivo, incorporando dos ejes globales que CIF levantó (innovación farmacéutica con valor sanitario, y judicialización como síntoma estructural) sin convertirlos en capítulos pero sí dejándolos en los mensajes clave.",
+  "edits": [
+    {
+      "id": "LE-001",
+      "type": "replace_paragraph",
+      "locator": {
+        "strategy": "contains",
+        "text": "Espacio Público (2025). Inclusión sostenible de medicamentos"
+      },
+      "new": "Espacio Público (2026). Inclusión sostenible de medicamentos en los planes de salud en Chile. Santiago, Chile: Espacio Público.",
+      "rationale": "La portada indica mayo 2026. La referencia de cita debe coincidir con la fecha de publicación."
+    },
+    {
+      "id": "LE-002",
+      "type": "replace_paragraph",
+      "locator": {
+        "strategy": "contains",
+        "text": "En Chile, los medicamentos no forman parte integral de los planes de salud"
+      },
+      "new": "La magnitud de la brecha responde al diseño más que al nivel de precios. Los programas existentes (GES, Ley Ricarte Soto, DAC, FOFAR) ofrecen coberturas importantes pero acotadas por perímetros clínicos o institucionales. Fuera de esos perímetros, el gasto recae principalmente en los hogares a través del canal retail. En países del cluster OCDE que han reducido el gasto de bolsillo, en cambio, los medicamentos ambulatorios tienen una cobertura con reglas comunes, listas positivas explícitas y protección financiera con topes anuales.",
+      "rationale": "El mensaje 1 (P0039) y el mensaje 2 (P0040) decían lo mismo. El nuevo mensaje 2 mantiene la idea estructural pero la complementa con la observación de mecanismo (diseño vs precios) y la comparación OCDE."
+    },
+    {
+      "id": "LE-003",
+      "type": "replace_paragraph",
+      "locator": {
+        "strategy": "contains",
+        "text": "La implementación convendría que sea gradual"
+      },
+      "new": "Una implementación gradual, informada por evidencia y sostenida en el tiempo resulta coherente con la experiencia internacional. Supone reforzar las reglas de priorización (evaluación de tecnologías sanitarias), la gobernanza e interoperabilidad de datos, y un diseño que integre incentivos a la sustitución por DCI y bioequivalentes, instrumentos de negociación y compra pública, y medidas de mitigación de riesgos operacionales.",
+      "rationale": "La versión previa tenía construcción gramatical forzada ('La implementación convendría que sea gradual'). Reformulada para que sea directa."
+    },
+    {
+      "id": "LE-004",
+      "type": "replace_paragraph",
+      "locator": {
+        "strategy": "contains",
+        "text": "En un horizonte de mediano plazo, convendría que la protección financiera"
+      },
+      "new": "En un horizonte de mediano plazo, el beneficio debería traducirse en protección financiera verificable. Esto supone reglas explícitas, transparencia en la ejecución, monitoreo continuo del impacto presupuestario, del acceso efectivo, de la adherencia y de la equidad distributiva, y ajustes periódicos de la canasta en función de la evidencia.",
+      "rationale": "Eliminado el pleonasmo ('convendría que la protección financiera sea efectiva'). Ahora describe qué significa 'efectiva' en términos operativos concretos."
+    },
+    {
+      "id": "LE-005",
+      "type": "insert_paragraph_after",
+      "anchor": {
+        "strategy": "contains",
+        "text": "En un horizonte de mediano plazo, el beneficio debería traducirse"
+      },
+      "new": "La judicialización de la cobertura, cuando ocurre, conviene interpretarla como síntoma de vacíos del beneficio explícito, no como mecanismo ordinario de acceso. Una canasta adecuada, reglas transparentes y plazos predecibles son las vías para reducir el recurso a tribunales como primer camino a medicamentos de alto costo. Las experiencias comparadas muestran que la protección financiera sostenible descansa en beneficios explícitos, no en litigios caso a caso.",
+      "rationale": "Incorpora la observación global de CIF sobre judicialización como síntoma estructural (comentario original sept 2025). El informe ya la desarrolla en el Cap 3.2.6, pero no aparecía en los mensajes clave. Se agrega como mensaje clave adicional."
+    },
+    {
+      "id": "LE-006",
+      "type": "insert_paragraph_after",
+      "anchor": {
+        "strategy": "contains",
+        "text": "La judicialización de la cobertura, cuando ocurre"
+      },
+      "new": "El diseño del beneficio debería tener un canal explícito para la incorporación de terapias innovadoras con valor sanitario demostrado. Los últimos años han traído tratamientos que cambian la trayectoria de la enfermedad en oncología, enfermedades metabólicas, fibrosis quística y terapias génicas de alto costo. La ausencia de un canal ordinario de evaluación, negociación e incorporación deja a los hogares expuestos y empuja al sistema hacia soluciones caso a caso (judicialización, uso compasivo, programas excepcionales). Un beneficio con evaluación de tecnologías sanitarias sistemática, acuerdos de acceso gestionado y mecanismos de riesgo compartido resulta, desde la evidencia comparada, el arreglo más consistente con la doble exigencia de acceso y sostenibilidad.",
+      "rationale": "Incorpora la observación global de CIF sobre innovación farmacéutica y mecanismos de acceso. Se desarrolla sin citar a CIF; las fuentes primarias (NEJM, NICE, FDA, EMA) quedan en Cap 5 y Cap 7."
+    },
+    {
+      "id": "LE-007",
+      "type": "replace_paragraph",
+      "locator": {
+        "strategy": "contains",
+        "text": "Cuando la provisión pública no cubre una necesidad terapéutica"
+      },
+      "new": "Primero, los medicamentos ambulatorios de alto volumen, donde se concentra una parte sustantiva de la carga cotidiana para los hogares: terapias crónicas y de uso frecuente (por ejemplo, hipertensión, diabetes, dislipidemia, asma, salud mental), además de fármacos de uso común. En este segmento, el riesgo financiero es acumulativo: las compras pequeñas pero repetidas erosionan el presupuesto familiar, aumentan la probabilidad de no adherencia y amplifican inequidades, especialmente en hogares de menores ingresos y personas mayores. Cuando la provisión pública no cubre una necesidad terapéutica, sea por brechas de canasta o por discontinuidades de stock, la demanda se desplaza al canal retail (farmacia privada, farmacia comunitaria o farmacia municipal), donde los hogares absorben la mayor parte del gasto.",
+      "rationale": "Unifica terminología: 'canal retail' como concepto técnico (función HC51 en OECD SHA) y entre paréntesis los subtipos. Además reformula la oración de cierre para que fluya mejor."
+    },
+    {
+      "id": "LE-008",
+      "type": "replace_text_in_paragraph",
+      "locator": {
+        "strategy": "contains",
+        "text": "Cabe precisar que"
+      },
+      "old": "Importa subrayar, no obstante, que \"alto costo\" no equivale a \"baja prevalencia\"",
+      "new": "\"Alto costo\" no equivale a \"baja prevalencia\"",
+      "rationale": "Verbal filler innecesario. El punto se comunica mejor sin el preámbulo."
+    },
+    {
+      "id": "LE-009",
+      "type": "replace_paragraph",
+      "locator": {
+        "strategy": "contains",
+        "text": "Una opción priorizada para la discusión de política es un escenario intermedio"
+      },
+      "new": "Una opción priorizada para la discusión es un escenario intermedio de convergencia OCDE. Su eje estructural sería un Beneficio Farmacéutico Ambulatorio Universal, aplicable a beneficiarios de FONASA e ISAPRE bajo reglas comunes, con lista positiva, copagos protegidos, topes anuales y mecanismos de dispensación y pago consistentes con la sostenibilidad y la gestión de precios. El Capítulo 7 lo desarrolla en detalle como insumo para el debate, sin zanjar preferencias entre los escenarios analizados.",
+      "rationale": "Oración original tenía 60+ palabras. Partida en tres oraciones más respirables; mantiene el contenido pero mejora la lectura en mensajes clave."
+    },
+    {
+      "id": "LE-010",
+      "type": "replace_paragraph",
+      "locator": {
+        "strategy": "contains",
+        "text": "Una opción priorizada para la discusión: Beneficio Farmacéutico Ambulatorio Universal (escenario intermedio)"
+      },
+      "new": "Opción desarrollada: Beneficio Farmacéutico Ambulatorio Universal",
+      "rationale": "Header H3 demasiado largo. Se corta a un título manejable; la línea inferior del cuerpo del resumen ya explica que corresponde al escenario intermedio."
+    }
+  ],
+  "comments_to_add": [
+    {
+      "id": "MI-60",
+      "anchor": {
+        "strategy": "contains",
+        "text": "Mensajes clave"
+      },
+      "body": "[MI-60] Arquitectura de los mensajes clave. Reorganización v3.15: se elimina la redundancia entre mensajes 1 y 2 (ambos decían 'medicamentos fuera del plan salvo GES/LRS/DAC/FOFAR'). Se incorporan dos ejes globales levantados por CIF: (a) judicialización como síntoma de vacío del beneficio explícito, y (b) mecanismo de acceso a innovación farmacéutica con valor sanitario. Estos temas estaban desarrollados en capítulos 3 y 5 pero no aparecían en los mensajes clave."
+    },
+    {
+      "id": "MI-61",
+      "anchor": {
+        "strategy": "contains",
+        "text": "Resumen ejecutivo"
+      },
+      "body": "[MI-61] Revisión editorial del Resumen Ejecutivo. Objetivos: (i) eliminar redundancias con mensajes clave; (ii) reducir oraciones de 60+ palabras; (iii) quitar pleonasmos ('la protección convendría sea efectiva'); (iv) uniformar terminología 'canal retail' como término técnico OECD HC51."
+    }
+  ]
+}

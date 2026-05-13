@@ -170,3 +170,183 @@ Reproducir baseline en DB local:
 - 2026-01-19: **Fase 3 completada (BID)**: Matriz de riesgos agregada (5 riesgos con mitigaciones). Talk-track agregado a 9 slides clave. Estructura verificada (66 slides). Consistencia final revisada. Presentación lista para revisión.
 - 2026-01-19: **QA Final completado (BID)**: Script `verify_bid_claims.py` ejecutado (19 claims actualizados en DB). Reportes regenerados (`registro-claims-bid-cif.md`, `trazabilidad-publicaciones.md`). Checklist QA agregado a `bid-fichas-verificacion.md`. **BID Seguridad listo para revisión editorial.**
 - 2026-01-19: **Fase 6 completada (BID)**: Release notes creado (`docs/bid-release-notes.md`). Datos de visualizaciones compilados (`docs/bid-datos-visualizaciones.md`). Google export disponible (requiere backend activo). **BID SEGURIDAD 100% COMPLETO** (pendiente solo Fase 5: Google sync, que requiere acción del usuario).
+
+---
+
+# PLAN CIF MEDICAMENTOS (2026-01-22)
+
+## Estado Actual
+
+| Componente | Estado | Detalle |
+|------------|--------|---------|
+| **Documento** | ✅ En Scribe | `cif-medicamentos` (resumen + presentación) |
+| **Claims** | ⏳ 26 en draft | Pendiente verificación contra fuentes EPF |
+| **KB (Knowledge Base)** | ✅ Scaffolding creado | Notas de metodología y fuentes |
+| **Google Docs** | ⏳ No linkeado | Requiere folder_id y push inicial |
+| **Presentación** | ✅ En markdown | `docs/cif-medicamentos-presentacion.md` |
+
+## Claims Críticos por Verificar
+
+Los 26 claims en `cif-medicamentos` son principalmente DATA (cuantitativos). Requieren:
+
+| # | Claim | Fuente Esperada | Prioridad |
+|---|-------|-----------------|-----------|
+| 1 | Q1 destina 9.8% de ingreso a medicamentos | EPF 2022-2023, CCIF 06.1.1 | **CRÍTICA** |
+| 2 | Q5 destina 1.9% de ingreso | EPF 2022-2023 | **CRÍTICA** |
+| 3 | Incidencia Q1: 37.5% vs Q5: 63.6% | EPF (variable gasto >0) | ALTA |
+| 4 | Gasto per cápita PPA: $206 USD | OCDE Health Statistics | ALTA |
+| 5 | Gasto bolsillo: $80 per cápita | OCDE/OMS | ALTA |
+| 6 | Digestivo/metabólico: 23.7% | EPF/CCIF | MEDIA |
+| 7 | Antineoplásicos Q1: 0% | EPF (código ATC L) | MEDIA |
+| 8 | Costo fiscal propuesto: 0.13% PIB | Estimación propia | ALTA |
+
+---
+
+## Tareas Pendientes CIF Medicamentos
+
+### Fase 2-CIF — Verificación de Claims
+
+- [ ] **P2-CIF-01** Revisar 26 claims contra datos EPF 2022-2023
+  - Archivo: `cif-medicamentos-resumen.md`
+  - Criterio: fuente, año, universo, definición de indicador
+  - Herramienta: `scripts/verify_bid_claims.py` (adaptar para CIF)
+
+- [ ] **P2-CIF-02** Actualizar estados de claims en DB
+  ```bash
+  # Una vez verificados, actualizar estado:
+  sqlite3 backend/scribe.db "UPDATE claims SET status='verified' WHERE claim_id='C-xxx'"
+  ```
+
+- [ ] **P2-CIF-03** Crear fichas de verificación para claims problemáticos
+  - Similar a `docs/bid-fichas-verificacion.md`
+  - Documentar: fuente → dato → limitaciones
+
+### Fase 4-CIF — Producción Editorial
+
+- [ ] **P4-CIF-01** Reforzar síntesis ejecutiva
+  - Mensaje principal: "El gasto es regresivo: Q1 destina 5x más de su ingreso"
+  - Agregar implicancias para política pública
+
+- [ ] **P4-CIF-02** Clarificar definiciones de indicadores
+  - "Incidencia" = % hogares con gasto > 0 (no es tasa de enfermedad)
+  - "Carga" = gasto/ingreso (no es carga de enfermedad)
+  - Agregar recuadro de definiciones al inicio
+
+- [ ] **P4-CIF-03** Agregar sección de limitaciones
+  - EPF no captura provisión pública (Fonasa, GES, programas)
+  - "0% antineoplásicos en Q1" puede ser cobertura pública, no ausencia
+  - Subreporte en hogares de bajos ingresos
+
+- [ ] **P4-CIF-04** Refinar opciones de política
+  - Separar: (1) acceso, (2) precios, (3) información
+  - Agregar trade-offs por opción
+  - Incluir requisitos de implementación
+
+### Fase 5-CIF — Integración Google Docs
+
+- [ ] **P5-CIF-01** Crear Google Doc vacío en carpeta acordada
+  - Requiere: `folder_id` de Google Drive
+  - Nombrar: "CIF Medicamentos - Resumen Ejecutivo"
+
+- [ ] **P5-CIF-02** Linkear documento Scribe → Google Doc
+  ```bash
+  # Desde frontend: Integraciones → Link to Google Doc
+  # O via API:
+  curl -X POST http://localhost:8000/api/v1/sync/docs/cif-medicamentos/link \
+    -H "Content-Type: application/json" \
+    -d '{"google_doc_id": "GOOGLE_DOC_ID_HERE"}'
+  ```
+
+- [ ] **P5-CIF-03** Push inicial a Google Docs
+  - Preserva claims como highlights amarillos + footnotes con metadata
+  - Preserva citas y formato
+  ```bash
+  curl -X POST http://localhost:8000/api/v1/sync/docs/cif-medicamentos/push
+  ```
+
+- [ ] **P5-CIF-04** Ciclo de revisión colaborativa
+  - Editores revisan en Google Docs
+  - Comentarios y sugerencias en Google
+  - Sincronizar cambios de vuelta a Scribe
+
+- [ ] **P5-CIF-05** Pull final y verificar claims
+  ```bash
+  # Traer cambios de Google → Scribe
+  curl -X POST http://localhost:8000/api/v1/sync/docs/cif-medicamentos/pull
+
+  # Regenerar registro de claims
+  python scripts/generate_claim_register.py --db backend/scribe.db --out docs/registro-claims-cif.md
+  ```
+
+### Fase 6-CIF — Cierre
+
+- [ ] **P6-CIF-01** QA final
+  - Todos los claims verificados o documentados como "pendiente fuente"
+  - KB con notas de evidencia por claim crítico
+  - Snapshot de versión final
+
+- [ ] **P6-CIF-02** Generar release notes
+  - Qué cambió vs baseline
+  - Claims verificados vs rechazados
+  - Decisiones editoriales
+
+- [ ] **P6-CIF-03** Export final
+  - Google Doc listo para publicación
+  - PDF para distribución
+  - Presentación slides actualizada
+
+---
+
+## Flujo de Trabajo con Claims y Google Docs
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│                        SCRIBE (TipTap Editor)                       │
+│                                                                      │
+│  ┌──────────┐   ┌──────────┐   ┌──────────┐   ┌──────────┐         │
+│  │ Markdown │ → │  Claims  │ → │    KB    │ → │ Versions │         │
+│  │ Content  │   │ (marks)  │   │ (notas)  │   │ (snaps)  │         │
+│  └──────────┘   └──────────┘   └──────────┘   └──────────┘         │
+│                      │                                               │
+│                      ▼ PUSH                                         │
+├─────────────────────────────────────────────────────────────────────┤
+│                     GOOGLE DOCS                                     │
+│                                                                      │
+│  ┌──────────────────────────────────────────────────────────────┐  │
+│  │ Claims → Highlight amarillo + Footnote con JSON metadata     │  │
+│  │ Citas  → Texto + Footnote con bibKey                          │  │
+│  │ Formato → Headings, lists, tables preservados                │  │
+│  └──────────────────────────────────────────────────────────────┘  │
+│                      │                                               │
+│                      ▼ PULL                                         │
+├─────────────────────────────────────────────────────────────────────┤
+│                     SCRIBE (Restauración)                          │
+│                                                                      │
+│  Claims restaurados usando "text anchors":                         │
+│  - Busca texto que coincida con claim original (exact o hash)      │
+│  - Re-aplica el mark de claim al texto encontrado                  │
+│  - Registra warnings si no encuentra coincidencia                   │
+└─────────────────────────────────────────────────────────────────────┘
+```
+
+## Comandos Útiles
+
+```bash
+# Ver claims del documento CIF Medicamentos
+sqlite3 backend/scribe.db "SELECT claim_id, status, substr(claim_text, 1, 50) FROM claims WHERE document_id = (SELECT id FROM documents WHERE slug='cif-medicamentos')"
+
+# Contar claims por estado
+sqlite3 backend/scribe.db "SELECT status, COUNT(*) FROM claims WHERE document_id = (SELECT id FROM documents WHERE slug='cif-medicamentos') GROUP BY status"
+
+# Ver estado de sync con Google
+sqlite3 backend/scribe.db "SELECT slug, source_provider, source_id, sync_status, last_synced_at FROM documents WHERE slug='cif-medicamentos'"
+
+# Regenerar trazabilidad
+python scripts/generate_traceability_report.py --db backend/scribe.db --out docs/trazabilidad-publicaciones.md
+```
+
+---
+
+## Registro de sesiones CIF
+
+- 2026-01-22: Plan CIF Medicamentos actualizado. Integración documentada con sistema de claims y Google Docs. 26 claims pendientes de verificación. Siguiente paso: definir folder_id Google Drive y criterio de verificación.

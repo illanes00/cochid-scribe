@@ -1,0 +1,82 @@
+{
+  "agent": "lectura_editorial_autor",
+  "bloque": "7 - Cap 7 Desarrollo Escenario 2 BFAU",
+  "rango_paragrafos": "P0663 - P0853",
+  "generated_at": "2026-01-01T00:00:00Z",
+  "observaciones_generales": "Cap 7 es el capítulo más denso y está bien argumentado. Edits focalizados en formato: 'a)', 'b)' sin espacio; headers con tabs o sin espacio tras número; verbos prescriptivos residuales.",
+  "edits": [
+    {
+      "id": "LE-070",
+      "type": "replace_paragraph",
+      "locator": {
+        "strategy": "prefix",
+        "text": "a) Canasta"
+      },
+      "new": "(a) Canasta explícita (lista positiva) de medicamentos ambulatorios priorizados, con dos módulos complementarios:",
+      "rationale": "Formato lista inconsistente. Uniformar a '(letra) '."
+    },
+    {
+      "id": "LE-071",
+      "type": "replace_paragraph",
+      "locator": {
+        "strategy": "prefix",
+        "text": "b) Reglas"
+      },
+      "new": "(b) Reglas de copago: combinación acotada de monto fijo por receta o ítem y porcentaje, con exenciones definidas (por ejemplo, vulnerabilidad, edad, cronicidad) y reglas de sustitución para asegurar que la cobertura opere sobre alternativas equivalentes.",
+      "rationale": "Formato lista + reemplazo 'y/o' por 'y' (convención EP)."
+    },
+    {
+      "id": "LE-072",
+      "type": "replace_paragraph",
+      "locator": {
+        "strategy": "prefix",
+        "text": "c) Tope"
+      },
+      "new": "(c) Tope (cap) individual o familiar por período (mensual y anual), con reglas post-umbral: una vez alcanzado el cap, el copago se reduce (hasta copago cero o tarifa reducida) para el resto del período.",
+      "rationale": "Formato lista + reemplazo 'mensual y/o anual' por 'mensual y anual'."
+    },
+    {
+      "id": "LE-073",
+      "type": "replace_paragraph",
+      "locator": {
+        "strategy": "prefix",
+        "text": "d) Condiciones"
+      },
+      "new": "(d) Condiciones de uso: guías clínicas, criterios de elegibilidad y reglas de autorización cuando corresponda (especialmente en alto costo), evitando expansión no controlada de indicaciones y garantizando seguridad.",
+      "rationale": "Formato lista."
+    },
+    {
+      "id": "LE-074",
+      "type": "replace_paragraph",
+      "locator": {
+        "strategy": "prefix",
+        "text": "e) Mecanismo"
+      },
+      "new": "(e) Mecanismo operativo para la no dispensación (continuidad de acceso): si el canal institucional no entrega el medicamento por quiebre de stock u otra causa validada, se habilita adquisición en retail con cobertura automática bajo reglas comunes, evitando que una falla operativa se traduzca en compra completa financiada por el hogar.",
+      "rationale": "Formato lista + comillas de no dispensación removidas (la frase ya es clara sin ellas)."
+    },
+    {
+      "id": "LE-075",
+      "type": "replace_text_in_paragraph",
+      "locator": {
+        "strategy": "contains",
+        "text": "el paciente no debiera enfrentar mayor carga financiera"
+      },
+      "old": "el paciente no debiera enfrentar mayor carga financiera",
+      "new": "el paciente no debería enfrentar mayor carga financiera",
+      "rationale": "'Debiera' es conjugación arcaica. 'Debería' es forma estándar actual."
+    },
+    {
+      "id": "LE-076",
+      "type": "replace_text_in_paragraph",
+      "locator": {
+        "strategy": "contains",
+        "text": "Separación de funciones: quienes definen canasta/reglas y quienes negocian convendría que operen"
+      },
+      "old": "quienes definen canasta/reglas y quienes negocian convendría que operen",
+      "new": "convendría que quienes definen la canasta y las reglas, y quienes negocian, operen",
+      "rationale": "Construcción gramatical forzada. Reescritura directa."
+    }
+  ],
+  "comments_to_add": []
+}

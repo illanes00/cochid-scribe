@@ -1,0 +1,427 @@
+{
+  "_meta": {
+    "stage": "50_edit_patches.json",
+    "saved_at": "2026-04-17T05:21:51.927368",
+    "input_hashes": {},
+    "output_hash": "5549b673073eb825",
+    "count": 26
+  },
+  "data": [
+    {
+      "edit_id": "E-C-DOCX33",
+      "source_comment_ids": [
+        "C-CC-DOCX33"
+      ],
+      "scope": "local",
+      "section_anchor": null,
+      "original_text": "Dispensación de medicamentos a pacientes ambulatorios (especialmente de especialidades) y/o en continuidad post alta, frecuentemente asociada a tratamientos complejos, crónicos o de alto costo. Este canal es clave para múltiples coberturas públicas y protocolos clínicos, y puede operar en hospitales y centros de referencia.",
+      "replacement_text": "Dispensación de medicamentos a pacientes ambulatorios (especialmente de especialidades) y/o en continuidad post alta, frecuentemente asociada a tratamientos complejos, crónicos o de alto costo. Es, además, el canal primario de dispensación de medicamentos de alto costo cubiertos por la Ley Ricarte Soto y por el Programa de medicamentos antineoplásicos de alto costo (DAC): en ambos instrumentos, la entrega se realiza típicamente a través de farmacia hospitalaria ambulatoria de la red pública. Este canal es clave para múltiples coberturas públicas y protocolos clínicos, y puede operar en hospitales y centros de referencia.",
+      "find_pattern": null,
+      "replace_with": null,
+      "context_filter": null,
+      "realized_locations": [],
+      "rationale": "El texto ya menciona 'tratamientos complejos, crónicos o de alto costo', pero omite el vínculo explícito con los instrumentos de cobertura (DAC, Ley Ricarte Soto) que operan precisamente a través de este canal. La adición refuerza la coherencia interna con la Sección 2.2 sin ampliar el alcance del párrafo.",
+      "confidence": 0.88
+    },
+    {
+      "edit_id": "E-C-DOCX34",
+      "source_comment_ids": [
+        "C-CC-DOCX34"
+      ],
+      "scope": "local",
+      "section_anchor": null,
+      "original_text": "Canal minorista predominante para compra ambulatoria. Aquí se concentra gran parte del gasto de bolsillo, aunque también puede operar compra con reembolso (planes ISAPRE con beneficios específicos, seguros complementarios) o con mecanismos que reduzcan precio (p. ej., intermediación de CENABAST cuando corresponda).",
+      "replacement_text": "Canal minorista predominante para compra ambulatoria. Aquí se concentra gran parte del gasto de bolsillo, aunque también puede operar compra con reembolso (planes ISAPRE con beneficios específicos, seguros complementarios) o con mecanismos que reduzcan precio (p. ej., intermediación de CENABAST cuando corresponda). En el marco de las GES, las ISAPREs pueden designar farmacias de su red,incluidas cadenas privadas, como puntos de dispensación de medicamentos garantizados, de modo que el canal retail opera también como canal de cobertura formal y no únicamente como circuito de compra directa.",
+      "find_pattern": null,
+      "replace_with": null,
+      "context_filter": null,
+      "realized_locations": [],
+      "rationale": "El texto describe las farmacias privadas exclusivamente como canal de compra directa con gasto de bolsillo, omitiendo su rol como canal de dispensación GES bajo red ISAPRE. Agregar esta precisión mejora la exactitud conceptual y evita que el lector asocie el canal retail con gasto de bolsillo de manera exclusiva.",
+      "confidence": 0.9
+    },
+    {
+      "edit_id": "E-C-DOCX40",
+      "source_comment_ids": [
+        "C-CC-DOCX40"
+      ],
+      "scope": "local",
+      "section_anchor": null,
+      "original_text": "Una particularidad del sistema es que un mismo componente de cobertura puede observarse en distintos ejecutores presupuestarios (por ejemplo, medicamentos asociados a garantías o programas pueden ejecutarse a través de presupuestos hospitalarios, APS y/o compras centralizadas), lo que dificulta la trazabilidad y la comparación si no se especifica con claridad qué se está midiendo (función, financiador o ejecutor).",
+      "replacement_text": "Una particularidad del sistema es que un mismo componente de cobertura puede observarse en distintos ejecutores presupuestarios (por ejemplo, medicamentos asociados a garantías o programas pueden ejecutarse a través de presupuestos hospitalarios, APS y/o compras centralizadas), lo que dificulta la trazabilidad y la comparación si no se especifica con claridad qué se está midiendo (función, financiador o ejecutor).\n\nNota metodológica: una limitación adicional de trazabilidad atañe al financiamiento público mismo. FONASA recibe tanto impuestos generales como la cotización obligatoria del 7%, pero las estadísticas de gasto público en medicamentos no permiten distinguir, en las fuentes disponibles, el componente financiado por cada fuente. Esta indistinción impide estimar con precisión el espacio fiscal disponible ante una expansión del beneficio farmacéutico y debe considerarse al interpretar los escenarios del Capítulo 6.",
+      "find_pattern": null,
+      "replace_with": null,
+      "context_filter": null,
+      "realized_locations": [],
+      "rationale": "Los tres hechos señalados en el comentario son correctos: FONASA recibe impuestos generales y cotización del 7%, el gasto en medicamentos no discrimina entre ambas fuentes, y Servicios de Salud y CENABAST son ejecutores del gasto público. La nota metodológica reconoce la limitación sin modificar el análisis de fondo, en línea con los estándares de transparencia metodológica del informe.",
+      "confidence": 0.92
+    },
+    {
+      "edit_id": "E-C-CIF1",
+      "source_comment_ids": [
+        "C-CIF1"
+      ],
+      "scope": "local",
+      "section_anchor": null,
+      "original_text": "Matriz de coberturas : por subsistema y canal",
+      "replacement_text": "Matriz de coberturas : por subsistema y canal\n\nLa matriz integra los instrumentos descritos en la Sección 2.2 según subsistema (FONASA, ISAPRE) y canal de dispensación (hospitalario ambulatorio, APS, retail, reembolso), con el objeto de identificar vacíos de cobertura y superposiciones. Entre los instrumentos que deben incorporarse explícitamente figura el Programa de medicamentos antineoplásicos de alto costo (DAC), que cubre terapias oncológicas para pacientes de la red pública no amparados por GES o Ley Ricarte Soto, y opera a través de farmacia hospitalaria ambulatoria con compra centralizada. Su omisión subestimaría la cobertura institucional vigente frente a medicamentos de muy alto precio y debilitaría la tesis sobre fragmentación del sistema.",
+      "find_pattern": null,
+      "replace_with": null,
+      "context_filter": null,
+      "realized_locations": [],
+      "rationale": "La sección 2.4 aparece vacía en el documento y omite el DAC como instrumento de cobertura, debilitando la tesis central sobre fragmentación del sistema. Se agrega párrafo introductorio que incorpora explícitamente el DAC en coherencia con la Sección 2.2 y con las referencias al instrumento en capítulos posteriores.",
+      "confidence": 0.78
+    },
+    {
+      "edit_id": "E-C-CIF11",
+      "source_comment_ids": [
+        "C-CIF11"
+      ],
+      "scope": "consistent",
+      "section_anchor": null,
+      "original_text": "",
+      "replacement_text": "",
+      "find_pattern": "e\\.g\\.p\\. ej\\.",
+      "replace_with": "p. ej.",
+      "context_filter": null,
+      "realized_locations": [],
+      "rationale": "La secuencia 'e.g.p. ej.' es una fusión tipográfica de las abreviaturas inglesa ('e.g.') y española ('p. ej.') que produce texto ilegible. El documento usa 'p. ej.' como convención sistemática, por lo que se estandariza a esa forma. Los problemas de numeración de figuras y cifras inconsistentes referidos en el comentario requieren revisión manual con acceso al documento completo y no pueden resolverse desde el extracto disponible.",
+      "confidence": 0.75
+    },
+    {
+      "edit_id": "E-C-EU-EMAIL1",
+      "source_comment_ids": [
+        "C-EU-EMAIL1"
+      ],
+      "scope": "local",
+      "section_anchor": null,
+      "original_text": "En 2022, los hogares financiaron 71% del gasto en fármacos comprados en farmacias (retail) en Chile, cifra elevada en el contexto OCDE. En consecuencia, las mejoras en cobertura explícita, en reglas e incentivos de sustitución por denominación común internacional (DCI) y bioequivalencia, y en reduccines del precio efectivo enfrentado por el paciente precios más accesibles en el canal retail, pueden impactar de manera inmediata el gasto de bolsillo y la continuidad terapéutica.",
+      "replacement_text": "En 2022, los hogares financiaron 71% del gasto en fármacos comprados en farmacias (retail) en Chile, cifra elevada en el contexto OCDE,aunque la comparación entre países requiere cautela: la proporción de gasto en el bolsillo refleja también el diseño institucional de cada sistema (por ejemplo, en sistemas con convenios público-retail integrados como el NHS del Reino Unido, una fracción mayor del gasto en farmacia queda cubierta por el asegurador, reduciendo mecánicamente la cifra OOP sin implicar necesariamente mayor protección financiera intrínseca),. En consecuencia, las mejoras en cobertura explícita, en reglas e incentivos de sustitución por denominación común internacional (DCI) y bioequivalencia, y en precios más accesibles en el canal retail, representan alternativas concretas para reducir el gasto de bolsillo y mejorar la continuidad terapéutica.",
+      "find_pattern": null,
+      "replace_with": null,
+      "context_filter": null,
+      "realized_locations": [],
+      "rationale": "Agrega nota metodológica sobre heterogeneidad institucional en la comparación OOP retail (respondiendo a la observación de Eduardo sobre el caso NHS-UK y la confusión que genera comparar proporciones sin ajustar por diseño del sistema); suaviza la lectura prescriptiva reemplazando 'pueden impactar de manera inmediata' por 'representan alternativas concretas', alineando con la línea Benja. El dato base (71% hogares retail 2022) se preserva; el merge error tipográfico del original ('reduccines del precio efectivo enfrentado por el paciente precios más accesibles') se corrige al reescribir la cláusula.",
+      "confidence": 0.82
+    },
+    {
+      "edit_id": "E-C-CC-DOCX12",
+      "source_comment_ids": [
+        "C-CC-DOCX12"
+      ],
+      "scope": "local",
+      "section_anchor": null,
+      "original_text": "En Chile existe un instrumento de alto impacto (Ley Ricarte Soto) que entrega cobertura financiera integral para diagnósticos y tratamientos incorporados por decreto, con copago cero para quienes cumplen requisitos clínicos. Sin embargo, por diseño, su alcance es acotado y se concentra en tecnologías de muy alto precio y baja prevalencia, por lo que no aborda el conjunto de necesidades ambulatorias frecuentes que generan gasto de bolsillo sostenido.",
+      "replacement_text": "En Chile existen varios instrumentos orientados a proteger frente a medicamentos de alto costo, con roles complementarios: el GES (que en actualizaciones recientes ha incorporado tecnologías de precio elevado, incluyendo fármacos para fibrosis quística y oncológicos), el DAC para medicamentos antineoplásicos de alto costo en la red pública, y,con mayor especificidad y alcance financiero, la Ley Ricarte Soto, que entrega cobertura financiera integral para diagnósticos y tratamientos incorporados por decreto, con copago cero para quienes cumplen requisitos clínicos. Con todo, por diseño, el alcance de estos instrumentos es acotado y se concentra en tecnologías de muy alto precio y baja prevalencia, por lo que no abordan el conjunto de necesidades ambulatorias frecuentes que generan gasto de bolsillo sostenido.",
+      "find_pattern": null,
+      "replace_with": null,
+      "context_filter": null,
+      "realized_locations": [],
+      "rationale": "Carla señala correctamente que GES y DAC también cubren medicamentos de alto costo. Se amplía la descripción para nombrar los tres instrumentos con sus roles complementarios antes de caracterizar LRS, sin reemplazar su descripción central ni cambiar la conclusión del párrafo.",
+      "confidence": 0.88
+    },
+    {
+      "edit_id": "E-C-CIF2",
+      "source_comment_ids": [
+        "C-CIF2"
+      ],
+      "scope": "local",
+      "section_anchor": null,
+      "original_text": "El problema se compone de dos frentes con lógicas distintas:",
+      "replacement_text": "El problema se compone de dos frentes con lógicas distintas (este informe centra su análisis en el frente ambulatorio, por ser el de mayor brecha de política en el contexto chileno; el tratamiento del frente de alto costo es complementario y no exhaustivo):",
+      "find_pattern": null,
+      "replace_with": null,
+      "context_filter": null,
+      "realized_locations": [],
+      "rationale": "Agrega una cláusula aclaratoria que reconoce el foco diferencial del informe como decisión editorial explícita —no como omisión— respondiendo al comentario CIF sobre el menor desarrollo del segmento de alto costo.",
+      "confidence": 0.85
+    },
+    {
+      "edit_id": "E-C-EU-SUG33",
+      "source_comment_ids": [
+        "C-EU-SUG33"
+      ],
+      "scope": "local",
+      "section_anchor": null,
+      "original_text": "Un escenario de ajuste acotado reduce extremos, pero mantiene una alta dependencia del bolsillo;",
+      "replacement_text": "Un escenario de ajuste acotado reduce extremos de ajuste, pero mantiene una alta dependencia del bolsillo;",
+      "find_pattern": null,
+      "replace_with": null,
+      "context_filter": null,
+      "realized_locations": [],
+      "rationale": "Añadir 'de ajuste' precisa que los extremos referidos son los del gasto de bolsillo en el escenario acotado, eliminando la ambigüedad semántica de 'reduce extremos' en un mensaje clave de lectura rápida.",
+      "confidence": 0.97
+    },
+    {
+      "edit_id": "E-C-EU-SUG34",
+      "source_comment_ids": [
+        "C-EU-SUG34"
+      ],
+      "scope": "consistent",
+      "section_anchor": null,
+      "original_text": "",
+      "replacement_text": "",
+      "find_pattern": "e\\.g\\.p\\. ej\\.",
+      "replace_with": "p. ej.",
+      "context_filter": null,
+      "realized_locations": [],
+      "rationale": "El texto 'e.g.p. ej.' es una corrupción de control de cambios que debe resolverse. La convención correcta para un informe íntegramente en español destinado a audiencia chilena de política pública es 'p. ej.', que ya es el estándar usado consistentemente en el resto del documento (secciones 2.2, 3.1, 3.2). No se adopta 'e.g.' como propone Eduardo, por ser convención anglosajona/latina inadecuada para este registro.",
+      "confidence": 0.98
+    },
+    {
+      "edit_id": "E-C-EU-SUG35",
+      "source_comment_ids": [
+        "C-EU-SUG35"
+      ],
+      "scope": "local",
+      "section_anchor": null,
+      "original_text": "La implementación debe ser gradual e informada y gobernada por evidencia.",
+      "replacement_text": "La implementación debe ser gradual e informada por evidencia.",
+      "find_pattern": null,
+      "replace_with": null,
+      "context_filter": null,
+      "realized_locations": [],
+      "rationale": "Eliminar 'y gobernada' suprime la redundancia semántica entre 'informada' y 'gobernada por evidencia' en este contexto, simplificando el mensaje clave sin pérdida de sustancia y mejorando el ritmo de lectura.",
+      "confidence": 0.96
+    },
+    {
+      "edit_id": "E-C-EU-SUG36",
+      "source_comment_ids": [
+        "C-EU-SUG36"
+      ],
+      "scope": "local",
+      "section_anchor": null,
+      "original_text": "comparada sugiere muestra que reducir de manera sostenible",
+      "replacement_text": "comparada sugiere que reducir de manera sostenible",
+      "find_pattern": null,
+      "replace_with": null,
+      "context_filter": null,
+      "realized_locations": [],
+      "rationale": "Resuelve el overlay corrupto conservando 'sugiere' sobre 'muestra': epistemológicamente más apropiado para conclusiones de revisión comparada donde la causalidad no está establecida experimentalmente.",
+      "confidence": 0.96
+    },
+    {
+      "edit_id": "E-C-EU-SUG38",
+      "source_comment_ids": [
+        "C-EU-SUG38"
+      ],
+      "scope": "local",
+      "section_anchor": null,
+      "original_text": "un conjunto de países OCDE de protección farmacéutica intermedia, cluster intermedio, reduciendo",
+      "replacement_text": "un conjunto de países OCDE de protección farmacéutica intermedia, reduciendo",
+      "find_pattern": null,
+      "replace_with": null,
+      "context_filter": null,
+      "realized_locations": [],
+      "rationale": "Elimina el anglicismo 'cluster intermedio' redundante: la descripción expandida ya es suficientemente precisa para el lector objetivo de política pública en español.",
+      "confidence": 0.97
+    },
+    {
+      "edit_id": "E-C-EU-SUG39",
+      "source_comment_ids": [
+        "C-EU-SUG39"
+      ],
+      "scope": "local",
+      "section_anchor": null,
+      "original_text": "en medicamentos ambulatoriosa y hospitalaria), actualizada regularmente",
+      "replacement_text": "en medicamentos ambulatorios y hospitalarios), actualizada regularmente",
+      "find_pattern": null,
+      "replace_with": null,
+      "context_filter": null,
+      "realized_locations": [],
+      "rationale": "Corrige el error tipográfico 'ambulatoriosa' → 'ambulatorios' y restaura concordancia de género masculino plural con el sustantivo rector 'medicamentos'.",
+      "confidence": 0.98
+    },
+    {
+      "edit_id": "E-C-EU-SUG40",
+      "source_comment_ids": [
+        "C-EU-SUG40"
+      ],
+      "scope": "local",
+      "section_anchor": null,
+      "original_text": "evidencia experiencia internacional comparada sugiere",
+      "replacement_text": "evidencia internacional comparada sugiere",
+      "find_pattern": null,
+      "replace_with": null,
+      "context_filter": null,
+      "realized_locations": [],
+      "rationale": "Resuelve el overlay corrupto conservando 'evidencia' sobre 'experiencia': mayor rigor epistémico al connotar datos y estudios sistemáticos revisados, no relatos prácticos.",
+      "confidence": 0.96
+    },
+    {
+      "edit_id": "E-C-EU-SUG41",
+      "source_comment_ids": [
+        "C-EU-SUG41"
+      ],
+      "scope": "local",
+      "section_anchor": null,
+      "original_text": "por brechas de canasta  o existe discontinuidades de por stock, la demanda se desplaza",
+      "replacement_text": "por brechas de canasta o discontinuidades de stock, la demanda se desplaza",
+      "find_pattern": null,
+      "replace_with": null,
+      "context_filter": null,
+      "realized_locations": [],
+      "rationale": "Limpia la frase corrupta preservando ambos conceptos técnicos: 'brechas de canasta' (ya confirmado) y 'discontinuidades de stock' (corregido desde la forma agramatical 'existe discontinuidades de por stock').",
+      "confidence": 0.87
+    },
+    {
+      "edit_id": "E-C-EU-SUG43",
+      "source_comment_ids": [
+        "C-EU-SUG43"
+      ],
+      "scope": "local",
+      "section_anchor": null,
+      "original_text": "en reduccines del precio efectivo enfrentado por el paciente precios más accesibles en el canal retail",
+      "replacement_text": "en reducciones del precio efectivo enfrentado por el paciente en el canal retail",
+      "find_pattern": null,
+      "replace_with": null,
+      "context_filter": null,
+      "realized_locations": [],
+      "rationale": "Acepta la sustitución 'precios más accesibles' → 'reducciones del precio efectivo enfrentado por el paciente', que distingue precio de mercado de precio neto al paciente tras copagos y subsidios. Corrige además el typo 'reduccines' → 'reducciones'. El original_text captura ambas versiones del tracked-change superpuesto.",
+      "confidence": 0.92
+    },
+    {
+      "edit_id": "E-C-EU-SUG44",
+      "source_comment_ids": [
+        "C-EU-SUG44"
+      ],
+      "scope": "local",
+      "section_anchor": null,
+      "original_text": "frecuentes que explican una fracción sustantiva del sostienen el gasto de bolsillo persistente cotidiano.",
+      "replacement_text": "frecuentes que explican una fracción sustantiva del gasto de bolsillo persistente.",
+      "find_pattern": null,
+      "replace_with": null,
+      "context_filter": null,
+      "realized_locations": [],
+      "rationale": "Elimina 'sostienen el' (versión antigua del tracked-change) consolidando la formulación causalmente más cautelosa 'explican una fracción sustantiva del'. Incorpora también la remoción de 'cotidiano' del comment C-EU-SUG45 dado que ambos cambios operan sobre el mismo span; consolidarlos evita conflicto de patches.",
+      "confidence": 0.93
+    },
+    {
+      "edit_id": "E-C-EU-SUG45",
+      "source_comment_ids": [
+        "C-EU-SUG45"
+      ],
+      "scope": "local",
+      "section_anchor": null,
+      "original_text": "el gasto de bolsillo persistente cotidiano.",
+      "replacement_text": "el gasto de bolsillo persistente.",
+      "find_pattern": null,
+      "replace_with": null,
+      "context_filter": null,
+      "realized_locations": [],
+      "rationale": "Patch de respaldo para remover 'cotidiano' (registro coloquial) en favor de 'persistente' (preciso técnicamente). Si E-C-EU-SUG44 ya fue aplicado, este patch no encontrará su original_text y se descartará sin efecto colateral.",
+      "confidence": 0.5
+    },
+    {
+      "edit_id": "E-EXISTING-EU1",
+      "source_comment_ids": [
+        "EXISTING-EU1"
+      ],
+      "scope": "consistent",
+      "section_anchor": null,
+      "original_text": "",
+      "replacement_text": "",
+      "find_pattern": "canal retail",
+      "replace_with": "farmacias privadas",
+      "context_filter": null,
+      "realized_locations": [],
+      "rationale": "Reemplaza jerga de industria 'canal retail' por el término descriptivo 'farmacias privadas', accesible para lectores de política pública no especializados. El propio documento emplea 'farmacias privadas' como término preferido en la sección 2.1 ('Farmacias privadas (cadenas e independientes)'), lo que hace la sustitución consistente con el vocabulario interno del texto.",
+      "confidence": 0.88
+    },
+    {
+      "edit_id": "E-EXISTING-EU2",
+      "source_comment_ids": [
+        "EXISTING-EU2"
+      ],
+      "scope": "structural",
+      "section_anchor": null,
+      "original_text": "Lecciones comparadas: qué hacen los países que han reducido el gasto de bolsillo",
+      "replacement_text": "Lecciones comparadas: qué hacen los países que han reducido el gasto de bolsillo (ver Capítulo 5)",
+      "find_pattern": null,
+      "replace_with": null,
+      "context_filter": null,
+      "realized_locations": [],
+      "rationale": "Agrega referencia de navegación '(ver Capítulo 5)' a la subsección de lecciones comparadas en el resumen ejecutivo, facilitando acceso selectivo de lectores. Implementación parcial: subsecciones restantes del resumen (Capítulos 3–4, 6, 7, 8) requieren patches análogos con sus números de capítulo correspondientes.",
+      "confidence": 0.78
+    },
+    {
+      "edit_id": "E-EXISTING-EU3",
+      "source_comment_ids": [
+        "EXISTING-EU3"
+      ],
+      "scope": "consistent",
+      "section_anchor": null,
+      "original_text": "",
+      "replacement_text": "",
+      "find_pattern": "canal de medicamentos dispensados fuera del hospital",
+      "replace_with": "medicamentos adquiridos en farmacias",
+      "context_filter": null,
+      "realized_locations": [],
+      "rationale": "Reemplaza la perífrasis con jerga 'canal de medicamentos dispensados fuera del hospital' por la expresión directa 'medicamentos adquiridos en farmacias', más comprensible para audiencias de política pública. Aplica la misma regla de consistencia establecida por EXISTING-EU1 para eliminar terminología de canal/distribución de industria.",
+      "confidence": 0.85
+    },
+    {
+      "edit_id": "E-C-CIF6",
+      "source_comment_ids": [
+        "C-CIF6"
+      ],
+      "scope": "consistent",
+      "section_anchor": null,
+      "original_text": "",
+      "replacement_text": "",
+      "find_pattern": "genéricos y biosimilares",
+      "replace_with": "genéricos y biosimilares (estos últimos con criterios de intercambiabilidad propios, distintos a los genéricos)",
+      "context_filter": null,
+      "realized_locations": [],
+      "rationale": "Error técnico sustantivo: biosimilares no son equivalentes a genéricos en sustitución automática. FDA, EMA y otros reguladores mantienen categorías diferenciadas ('interchangeable biosimilar') con evaluación específica. La distinción tiene consecuencias de política directas y aplica a cada instancia del documento donde ambas categorías se equiparan en contextos de DCI/sustitución.",
+      "confidence": 0.8
+    },
+    {
+      "edit_id": "E-C-CC-DOCX27",
+      "source_comment_ids": [
+        "C-CC-DOCX27"
+      ],
+      "scope": "local",
+      "section_anchor": null,
+      "original_text": "En 2022, los hogares financiaron 71% del gasto en fármacos comprados en farmacias (retail) en Chile, cifra elevada en el contexto OCDE.",
+      "replacement_text": "En 2022, los hogares financiaron 71% del gasto en fármacos comprados en farmacias (retail) en Chile, cifra elevada en el contexto OCDE. Esta comparación abarca exclusivamente el canal retail/farmacia ambulatoria: los datos OCDE de referencia excluyen los medicamentos dispensados en establecimientos hospitalarios e institucionales, por lo que la cifra refleja únicamente compras directas en farmacia.",
+      "find_pattern": null,
+      "replace_with": null,
+      "context_filter": null,
+      "realized_locations": [],
+      "rationale": "Corrección metodológica verificada por V-78-retail-2021 (confirmed) y V-us455-ppa-chile (confirmed): los datos OCDE que sustentan la comparación son retail-only. Sin esta precisión, el lector puede interpretar que el 71% refleja el gasto total en medicamentos incluyendo el sector hospitalario, subestimando la protección que el sistema público otorga en ese canal.",
+      "confidence": 0.9
+    },
+    {
+      "edit_id": "E-C-CC-DOCX37",
+      "source_comment_ids": [
+        "C-CC-DOCX37"
+      ],
+      "scope": "local",
+      "section_anchor": null,
+      "original_text": "La cobertura se activa en la red definida por FONASA o por la ISAPRE, y contempla medicamentos conforme a las canastas/guías por problema de salud. El nivel de copago varía según régimen y reglas del beneficio.",
+      "replacement_text": "La cobertura se activa en la red definida por FONASA o por la ISAPRE, y contempla medicamentos conforme a las canastas/guías por problema de salud. El copago varía según régimen: en FONASA, los grupos A y B tienen copago 0%; el grupo C enfrenta 10% y el grupo D, 20% de la prestación garantizada; en ISAPRE, el copago corresponde al 20% del arancel de referencia, con deducibles definidos por ley.",
+      "find_pattern": null,
+      "replace_with": null,
+      "context_filter": null,
+      "realized_locations": [],
+      "rationale": "ACCEPT_PARTIAL del comentario de Carla: el copago GES en FONASA no es uniformemente cero —los grupos C y D pagan 10% y 20%, respectivamente. La edición incorpora el detalle técnico correcto por tramo sin reproducir la simplificación inexacta del comentario original (que lo colapsaba en cero).",
+      "confidence": 0.87
+    },
+    {
+      "edit_id": "E-C-CC-DOCX58",
+      "source_comment_ids": [
+        "C-CC-DOCX58"
+      ],
+      "scope": "local",
+      "section_anchor": null,
+      "original_text": "Complementariamente, se pueden diseñar incentivos para que prescriptores y aseguradores compartan parte del ahorro generado por la sustitución, siempre que se mantenga la calidad y la continuidad de tratamientos.",
+      "replacement_text": "La efectividad de la sustitución obligatoria depende, como condición previa o simultánea, de ampliar la cobertura de medicamentos con acreditación de bioequivalencia e intercambiabilidad por el ISP, cuyo listado actual es aún acotado. Complementariamente, se pueden diseñar incentivos para que prescriptores y aseguradores compartan parte del ahorro generado por la sustitución, siempre que se mantenga la calidad y la continuidad de tratamientos.",
+      "find_pattern": null,
+      "replace_with": null,
+      "context_filter": null,
+      "realized_locations": [],
+      "rationale": "ACCEPT_PARTIAL: el punto técnico-habilitante de Eduardo es sólido —sustitución obligatoria sin base de bioequivalencia ampliada genera riesgo regulatorio real— y se incorpora como cláusula descriptiva ('depende de ampliar…') sin convertirse en prescripción normativa cerrada. El original_text ancla en 'Complementariamente…' para evitar conflicto de ordenamiento con E-C-CIF6, que modifica la oración precedente.",
+      "confidence": 0.83
+    }
+  ]
+}
