@@ -86,6 +86,8 @@ app.add_middleware(
 
 # OIDC setup (Authentik SSO). Loads if client_id is set; logs and skips otherwise.
 if settings.auth_enabled and settings.oidc_client_id:
+    from fastapi import Request as _FastapiRequest
+
     from illanes_auth import OIDCHandler
 
     oidc = OIDCHandler(
@@ -95,11 +97,22 @@ if settings.auth_enabled and settings.oidc_client_id:
         redirect_uri=settings.oidc_redirect_uri,
     )
     oidc.setup_fastapi()
-    # Prefix /api/auth/* to match the cochid-datos convention (and to live under
-    # the same Caddy /api/* reverse_proxy path that already targets the backend).
-    app.get("/api/auth/login")(oidc.fastapi_login)
-    app.get("/api/auth/callback")(oidc.fastapi_callback)
-    app.get("/api/auth/logout")(oidc.fastapi_logout)
+
+    # Wrap OIDCHandler bound methods so FastAPI sees explicit `Request` typing
+    # (the bound method signature `(self, request: Any)` confuses pydantic and
+    # results in 422 Unprocessable Entity instead of a 302 redirect).
+    @app.get("/api/auth/login")
+    async def _auth_login(request: _FastapiRequest):
+        return await oidc.fastapi_login(request)
+
+    @app.get("/api/auth/callback")
+    async def _auth_callback(request: _FastapiRequest):
+        return await oidc.fastapi_callback(request)
+
+    @app.get("/api/auth/logout")
+    async def _auth_logout(request: _FastapiRequest):
+        return await oidc.fastapi_logout(request)
+
     logger.info("auth.oidc.enabled", issuer=settings.oidc_issuer)
 else:
     logger.warning("auth.oidc.disabled", reason="OIDC_CLIENT_ID not set")
