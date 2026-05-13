@@ -1,6 +1,7 @@
 """Application configuration."""
 
 from functools import lru_cache
+from pathlib import Path
 
 from illanes_auth import AuthSettingsMixin
 from pydantic_settings import BaseSettings
@@ -21,6 +22,7 @@ class Settings(AuthSettingsMixin, BaseSettings):
     secret_key: str = "your-secret-key-change-in-production"  # noqa: S105
     algorithm: str = "HS256"
     access_token_expire_minutes: int = 30
+    workspace_access_password: str = ""
 
     # OIDC (Authentik SSO) — disabled by default
     oidc_issuer: str = "https://auth.illanes00.cl/application/o/scribe/"
@@ -31,6 +33,7 @@ class Settings(AuthSettingsMixin, BaseSettings):
 
     # LLM
     anthropic_api_key: str = ""
+    openai_api_key: str = ""
 
     # Google OAuth
     google_client_id: str = ""
@@ -39,6 +42,7 @@ class Settings(AuthSettingsMixin, BaseSettings):
 
     # CORS
     cors_origins: list[str] = ["http://localhost:3000"]
+    workspace_docs_root: str = str(Path(__file__).resolve().parents[2] / "docs")
 
     class Config:
         env_file = ".env"

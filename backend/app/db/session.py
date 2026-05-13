@@ -1,6 +1,7 @@
 """Database session configuration."""
 
 from collections.abc import Generator
+from pathlib import Path
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, declarative_base, sessionmaker
@@ -8,16 +9,38 @@ from sqlalchemy.orm import Session, declarative_base, sessionmaker
 from app.config import get_settings
 
 settings = get_settings()
+BACKEND_ROOT = Path(__file__).resolve().parents[2]
+
+
+def _normalize_database_url(database_url: str) -> str:
+    """Resolve relative SQLite paths against the backend root."""
+    if not database_url.startswith("sqlite:///"):
+        return database_url
+
+    prefix = "sqlite:///"
+    raw_path = database_url[len(prefix):]
+    if not raw_path or raw_path.startswith("/"):
+        return database_url
+
+    path_part, separator, query = raw_path.partition("?")
+    resolved_path = (BACKEND_ROOT / path_part).resolve()
+    normalized = f"{prefix}{resolved_path}"
+    if separator:
+        normalized = f"{normalized}?{query}"
+    return normalized
+
+
+normalized_database_url = _normalize_database_url(settings.database_url)
 
 # SQLite needs different configuration than PostgreSQL
-if settings.database_url.startswith("sqlite"):
+if normalized_database_url.startswith("sqlite"):
     engine = create_engine(
-        settings.database_url,
+        normalized_database_url,
         connect_args={"check_same_thread": False},
     )
 else:
     engine = create_engine(
-        settings.database_url,
+        normalized_database_url,
         pool_pre_ping=True,
         pool_size=5,
         max_overflow=10,
@@ -46,6 +69,7 @@ def init_db() -> None:
         claim,
         comment,
         dataset,
+        dictation_session,
         document,
         document_version,
         export,
@@ -62,7 +86,7 @@ def init_db() -> None:
     from app.core.logging import get_logger
 
     logger = get_logger(__name__)
-    logger.info("db.initialized", database_url=settings.database_url)
+    logger.info("db.initialized", database_url=normalized_database_url)
 
 
 def _ensure_multiuser_columns() -> None:

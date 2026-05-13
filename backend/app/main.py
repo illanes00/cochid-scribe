@@ -17,6 +17,7 @@ from app.api.v1 import (
     claims,
     comments,
     datasets,
+    dictation,
     documents,
     exports,
     google,
@@ -29,6 +30,7 @@ from app.api.v1 import (
     projects,
     review,
     track_changes,
+    workspaces,
 )
 from app.config import get_settings
 from app.core.logging import configure_logging, get_logger
@@ -74,7 +76,13 @@ app.add_middleware(
 )
 
 # Session middleware (required for OIDC and /api/v1/auth/me)
-app.add_middleware(SessionMiddleware, secret_key=settings.secret_key)
+app.add_middleware(
+    SessionMiddleware,
+    secret_key=settings.secret_key,
+    same_site="lax",
+    https_only=settings.environment == "production",
+    max_age=60 * 60 * 8,
+)
 
 # OIDC setup (only if explicitly enabled)
 if settings.oidc_enabled and settings.oidc_client_id:
@@ -115,12 +123,13 @@ app.include_router(review.router, prefix="/api/v1/review", tags=["review"])
 app.include_router(chat.router, prefix="/api/v1/chat", tags=["chat"])
 app.include_router(projects.router, prefix="/api/v1/projects", tags=["projects"])
 app.include_router(track_changes.router, prefix="/api/v1/documents", tags=["track-changes"])
+app.include_router(workspaces.router, prefix="/api/v1/workspaces", tags=["workspaces"])
+app.include_router(dictation.router, prefix="/api/v1/dictation", tags=["dictation"])
 
 # Static uploads
 UPLOAD_DIR = Path(__file__).resolve().parents[1] / "uploads"
 UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 app.mount("/uploads", StaticFiles(directory=str(UPLOAD_DIR)), name="uploads")
-
 
 @app.get("/health")
 async def health_check():
