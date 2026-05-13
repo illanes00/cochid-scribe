@@ -107,6 +107,14 @@ La segunda dimensión corresponde a los medicamentos de costo catastrófico, act
 
 La evidencia de la EPF ejemplifica esta brecha: los medicamentos antineoplásicos (tratamientos contra el cáncer) representan el 1,0% del gasto en medicamentos del Q5, pero están completamente ausentes (0,0%) en el gasto reportado del Q1 (INE, 2023). Este hallazgo puede interpretarse como evidencia de cobertura pública efectiva a través de programas como la Ley Ricarte Soto (que no se registra como gasto de bolsillo), o como indicador de barreras de acceso a tratamientos oncológicos para los hogares más pobres. En cualquier caso, revela una segmentación importante en el acceso a medicamentos de alto costo según nivel socioeconómico.
 
+### 2.3 Judicialización como Indicador de Brechas de Acceso
+
+La judicialización del acceso a medicamentos constituye un síntoma directo de las fallas del sistema de cobertura, no un fenómeno lateral. Vargas-Pelaez et al. (2019) documentan que en Chile la mayoría de las demandas sanitarias se dirigen contra aseguradoras privadas, reflejando las brechas entre la cobertura formal y el acceso efectivo.
+
+En febrero de 2026, la Corte Suprema emitió un fallo que limita el alcance de los recursos de protección para obtener medicamentos no incluidos en los listados oficiales, estableciendo que el acceso judicial individual genera una discriminación de facto frente a quienes no recurren a tribunales (Corte Suprema, 2026). Este fallo subraya la necesidad de mecanismos institucionales de cobertura que no dependan de la capacidad litigiosa de los pacientes.
+
+La persistencia de la judicialización evidencia que, en ausencia de beneficios explícitos suficientes, los pacientes recurren a mecanismos extraordinarios para obtener cobertura, con impactos en la sostenibilidad y equidad del sistema.
+
 ## 3. Comparación Internacional: Lecciones de la OCDE
 
 Chile presenta indicadores de gasto farmacéutico por debajo del promedio OCDE, aunque con una carga de bolsillo similar a la de países desarrollados. El gasto per cápita en medicamentos alcanza los US$206 en paridad de poder adquisitivo (PPA), cifra que representa aproximadamente un tercio de la mediana OCDE, estimada en US$600 (Organización para la Cooperación y el Desarrollo Económicos [OCDE], 2025). Sin embargo, la proporción del gasto que proviene directamente del bolsillo de los hogares (13,3%) es comparable al promedio de países desarrollados como Alemania (13,6%) y Canadá (14,8%).
@@ -125,7 +133,11 @@ Los países de la OCDE que han logrado combinar acceso universal con sostenibili
 
 En el contexto regional, Brasil presenta un gasto per cápita de US$158 con un 18,2% de gasto de bolsillo, mientras que México alcanza US$136 con un 21,0% de bolsillo. Costa Rica muestra el menor gasto per cápita de la región (US$90), pero también la menor proporción de bolsillo (9,2%), reflejando su sistema de salud con mayor cobertura pública (Organización Mundial de la Salud [OMS], 2024).
 
-### 3.1 Lección de Costa Rica
+### 3.1 Innovación con Valor Sanitario
+
+La agenda de cobertura farmacéutica no debe leerse exclusivamente desde la lógica de contención de precios. Existen ejemplos internacionales de innovación que generan simultáneamente valor sanitario y ahorro sistémico: (1) la introducción de biosimilares oncológicos en Europa ha reducido costos de tratamiento entre 20% y 40% sin afectar resultados clínicos; (2) programas integrados de diabetes con cobertura farmacéutica completa y seguimiento digital han demostrado reducciones de hospitalizaciones del 15-25% (Cortez, Medici & Singh, 2023). Estos ejemplos sugieren que la innovación farmacéutica, adecuadamente regulada, puede ser parte de la solución y no solo un factor de costo.
+
+### 3.2 Lección de Costa Rica
 
 El caso de Costa Rica merece atención particular. La Caja Costarricense de Seguro Social (CCSS) provee medicamentos esenciales sin copago a aproximadamente el 95% de la población, logrando cobertura casi universal con un gasto per cápita menor que Chile. Este modelo demuestra que la cobertura farmacéutica universal es viable en países de ingreso medio-alto, y que el nivel de gasto agregado no determina necesariamente la equidad del sistema.
 
@@ -133,9 +145,19 @@ El caso de Costa Rica merece atención particular. La Caja Costarricense de Segu
 
 ## 4. Propuesta: Beneficio Farmacéutico Ambulatorio Universal
 
-Para evaluar la magnitud de estos desafíos y diseñar soluciones, es necesario traducir las lecciones internacionales al contexto chileno.
+Para evaluar la magnitud de estos desafíos y diseñar soluciones, es necesario traducir las lecciones internacionales al contexto chileno. Las medidas disponibles pueden clasificarse según el nivel de reforma que requieren, lo que permite leer la propuesta políticamente y secuenciar implementaciones.
 
-El estudio propone la creación de un Beneficio Farmacéutico Ambulatorio Universal (BFAU) como mecanismo estructural para reducir la inequidad en el acceso a medicamentos. Este beneficio operaría bajo un modelo híbrido con los siguientes componentes centrales.
+### Clasificación de Medidas por Nivel de Reforma Requerida
+
+| Sin reforma legal mayor | Ajustes regulatorios | Rediseño sistémico |
+|-------------------------|---------------------|-------------------|
+| Fortalecer gestión de inventarios en APS | Copagos diferenciados con topes anuales | BFAU universal (FONASA + ISAPRE) |
+| Implementar prescripción electrónica | Listado nacional vinculante vía ETESA | Integración compras CENABAST-ISAPRE |
+| Ampliar formulario nacional de medicamentos | Regulación diferenciada biosimilares | Reforma financiamiento solidario |
+| Mejorar distribución CENABAST | Exenciones de copago para grupos vulnerables | Cobertura de medicamentos costo intermedio |
+| Fortalecer farmacias comunitarias en APS | Trazabilidad y sustitución por genéricos | Articulación BFAU-GES-Ricarte Soto-DAC |
+
+Entre las alternativas analizadas, la creación de un Beneficio Farmacéutico Ambulatorio Universal (BFAU) emerge como una opción estructural. Este beneficio operaría bajo un modelo híbrido con los siguientes componentes centrales, cuya viabilidad y diseño específico requerirán evaluación técnica y deliberación pública.
 
 El primer componente es un listado nacional positivo de medicamentos cubiertos, actualizado mediante un proceso de evaluación de tecnologías sanitarias (ETESA) con criterios de eficacia, seguridad, costo-efectividad y relevancia para la salud pública. Este listado sería vinculante tanto para FONASA como para las ISAPRE, estableciendo un piso común de cobertura farmacéutica para toda la población.
 
@@ -229,7 +251,19 @@ Quinta, los requisitos institucionales son tan importantes como el financiamient
 
 En síntesis, Chile tiene la oportunidad de transitar hacia un sistema de cobertura farmacéutica más equitativo y sostenible. El Beneficio Farmacéutico Ambulatorio Universal propuesto en este documento ofrece un marco conceptual y operativo para esta transición. Su implementación requiere voluntad política, recursos fiscales moderados, y un esfuerzo sostenido de construcción institucional. El costo de no actuar es la perpetuación de un sistema que carga desproporcionadamente a los hogares más vulnerables, donde el gasto en medicamentos compite directamente con otras necesidades básicas como alimentación, vivienda y educación.
 
-## 8. Verificación de Datos
+## 8. Hacia el Seminario de Discusión
+
+Este informe presenta evidencia sobre la inequidad en el acceso a medicamentos en Chile y explora opciones de política para abordarla. Las preguntas clave para el seminario de discusión incluyen:
+
+1. **¿Qué nivel de cobertura farmacéutica es deseable y fiscalmente sostenible?** Los tres escenarios presentados (0,6%, 0,75% y 1,4% del PIB) implican trade-offs distintos entre equidad, costo fiscal y complejidad institucional.
+2. **¿Qué mecanismo de financiamiento equilibra equidad y sostenibilidad?** ¿Copagos diferenciados con topes? ¿Provisión institucional sin copago? ¿Modelo híbrido?
+3. **¿Cómo articular BFAU, GES, Ley Ricarte Soto y DAC?** La fragmentación actual genera brechas de cobertura que se manifiestan en judicialización y gasto catastrófico.
+4. **¿Qué rol debe tener ETESA en la gobernanza del beneficio?** ¿Consultivo o vinculante? ¿Con qué criterios de priorización?
+5. **¿Cómo incorporar innovación farmacéutica sin comprometer sostenibilidad?** Biosimilares, genéricos y medicamentos innovadores requieren marcos regulatorios diferenciados.
+
+Espacio Público presenta estas opciones como insumo para la deliberación pública, no como prescripción de política. El objetivo es contribuir a un debate informado sobre cómo reducir la inequidad en el acceso a medicamentos, reconociendo que la solución final corresponde a los actores del sistema de salud y a la ciudadanía.
+
+## 9. Verificación de Datos
 
 La siguiente tabla resume el estado de verificación de los principales datos citados en este documento:
 
