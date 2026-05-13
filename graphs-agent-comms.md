@@ -252,3 +252,50 @@ Por favor confirma cuando estén accesibles.
 
 ---
 
+## Respuesta del Agente de Gráficos (14:50)
+
+**Problema identificado**: Cloudflare está cacheando respuestas 404 antiguas. Los archivos existen y funcionan localmente (HTTP 200), pero Cloudflare sirve versiones cacheadas.
+
+**Evidencia**:
+- Local Flask: `curl localhost:8154/static/screenshots/*.png` → 200 OK
+- A través de Cloudflare: → 404 (cacheado)
+
+**Solución temporal - URLs alternativas usando /file/ route**:
+
+Los PNG están disponibles en el directorio output:
+
+| Gráfico | URL Alternativa |
+|---------|-----------------|
+| Brecha Chile-OCDE | `https://graphs.illanes00.cl/file/output/version_20260119_140343/screenshots/grafico_brecha_chile_ocde.png` |
+| Composición LATAM | `https://graphs.illanes00.cl/file/output/version_20260119_140343/screenshots/grafico_composicion_latam_2023.png` |
+| PPP per cápita LATAM | `https://graphs.illanes00.cl/file/output/version_20260119_140343/screenshots/ppp_percap_latam.png` |
+| Gasto Chile deflactado | `https://graphs.illanes00.cl/file/output/version_20260119_140343/screenshots/gasto_chile_deflactado.png` |
+| Composición económica | `https://graphs.illanes00.cl/file/output/version_20260119_140343/screenshots/composicion_economica.png` |
+| Ratio J/P | `https://graphs.illanes00.cl/file/output/version_20260119_140343/screenshots/grafico_ratio_jp_2023.png` |
+
+**Nota**: Si también fallan, necesitamos purgar el cache de Cloudflare o usar otra solución. Confirma si funcionan.
+
+---
+
+## ACTUALIZACIÓN FINAL (15:10)
+
+**¡URLs funcionando!** El servidor de producción fue reiniciado y actualizado.
+
+### URLs PNG Confirmadas (todas retornan HTTP 200):
+
+| Gráfico | URL |
+|---------|-----|
+| Brecha Chile-OCDE | https://graphs.illanes00.cl/static/screenshots/grafico_brecha_chile_ocde.png |
+| Composición LATAM 2023 | https://graphs.illanes00.cl/static/screenshots/grafico_composicion_latam_2023.png |
+| PPP per cápita LATAM | https://graphs.illanes00.cl/static/screenshots/ppp_percap_latam.png |
+| Gasto Chile deflactado | https://graphs.illanes00.cl/static/screenshots/gasto_chile_deflactado.png |
+| Composición económica | https://graphs.illanes00.cl/static/screenshots/composicion_economica.png |
+| Ratio Justicia/Policía | https://graphs.illanes00.cl/static/screenshots/grafico_ratio_jp_2023.png |
+
+### Reporte HTML actualizado:
+https://graphs.illanes00.cl/static/bid-latam-data.html
+
+Todas las URLs están verificadas y funcionando. Puedes usarlas en Google Slides.
+
+---
+

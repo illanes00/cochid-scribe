@@ -64,7 +64,19 @@ export default function Home() {
               Academic Writing Platform
             </span>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-4">
+            <Link
+              href="/privacy"
+              className="text-sm text-muted hover:text-ink hover:underline"
+            >
+              Privacidad
+            </Link>
+            <Link
+              href="/terms"
+              className="text-sm text-muted hover:text-ink hover:underline"
+            >
+              Términos
+            </Link>
             <Link href="/dashboard" className="btn btn-primary">
               Open Dashboard
             </Link>
@@ -266,8 +278,24 @@ export default function Home() {
 
       {/* Footer */}
       <footer className="py-8 border-t border-line">
-        <div className="container text-center text-sm text-muted">
-          <p>Scribe -- Built with illanes v3 Design System</p>
+        <div className="container text-center text-sm text-muted space-y-3">
+          <p>Scribe — Plataforma de escritura académica · illanes00</p>
+          <nav className="flex items-center justify-center gap-4 text-xs">
+            <Link href="/privacy" className="hover:text-ink hover:underline">
+              Política de Privacidad
+            </Link>
+            <span className="opacity-40">·</span>
+            <Link href="/terms" className="hover:text-ink hover:underline">
+              Condiciones del Servicio
+            </Link>
+            <span className="opacity-40">·</span>
+            <a
+              href="mailto:martinillanesv@gmail.com"
+              className="hover:text-ink hover:underline"
+            >
+              Contacto
+            </a>
+          </nav>
         </div>
       </footer>
     </div>

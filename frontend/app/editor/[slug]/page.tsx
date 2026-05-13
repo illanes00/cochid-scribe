@@ -14,8 +14,6 @@ import {
   Sparkles,
   MessageCircle,
   FileText,
-  Ruler,
-  LayoutTemplate,
   GitCompare,
   Search,
 } from 'lucide-react'
@@ -33,13 +31,16 @@ import { CommentsPanel } from '@/components/panels/CommentsPanel'
 import { VersionsPanel } from '@/components/panels/VersionsPanel'
 import { TrackChangesPanel } from '@/components/panels/TrackChangesPanel'
 import { ReviewPanel } from '@/components/panels/ReviewPanel'
+import { WorkspaceContextPanel } from '@/components/panels/WorkspaceContextPanel'
+import { DictationPanel } from '@/components/panels/DictationPanel'
 import { GoogleSyncPanel } from '@/components/sync/GoogleSyncPanel'
+import { WorkspaceGate } from '@/components/auth/WorkspaceGate'
 import { useAuth } from '@/lib/auth'
 import { useDocument } from '@/hooks/useDocument'
-import { Claim, Comment, Document, claimsApi, documentsApi, exportsApi, ExportFormat, reviewApi } from '@/lib/api'
+import { Claim, Comment, Document, claimsApi, documentsApi, exportsApi, ExportFormat } from '@/lib/api'
 import { googleApi } from '@/lib/api'
 
-type PanelType = 'claims' | 'bib' | 'ai' | 'chat' | 'comments' | 'versions' | 'outline' | 'changes' | 'review'
+type PanelType = 'claims' | 'bib' | 'ai' | 'chat' | 'comments' | 'versions' | 'outline' | 'changes' | 'review' | 'workspace' | 'dictation'
 
 /**
  * Default TipTap document structure for empty/new documents.
@@ -88,10 +89,12 @@ export default function EditorPage() {
   const params = useParams()
   const slug = params.slug as string
   const isNew = slug === 'new'
-  const { user, authenticated } = useAuth()
+  const isCifWorkspace = slug === 'cif-medicamentos-workspace'
+  const useCifLayout = isCifWorkspace
+  const { user, authenticated, loading: authLoading } = useAuth()
 
   const editorRef = useRef<Editor | null>(null)
-  const [activePanel, setActivePanel] = useState<PanelType>('claims')
+  const [activePanel, setActivePanel] = useState<PanelType>(isCifWorkspace ? 'dictation' : 'claims')
   const [selectedText, setSelectedText] = useState('')
   const [title, setTitle] = useState('')
   const [exporting, setExporting] = useState(false)
@@ -151,6 +154,7 @@ export default function EditorPage() {
   useEffect(() => {
     setActiveClaimId(null)
     setEditorReady(false)
+    setActivePanel(slug === 'cif-medicamentos-workspace' ? 'dictation' : 'claims')
   }, [slug])
 
   useEffect(() => {
@@ -518,11 +522,6 @@ export default function EditorPage() {
   const {
     layout: pageLayout,
     updateLayout: updatePageLayout,
-    toggleRuler,
-    toggleVerticalRuler,
-    togglePageBreaks,
-    toggleHeaderFooter,
-    setFormat: setPageFormat,
   } = usePageLayout(pageLayoutFromDoc)
 
   // Save page layout changes to front_matter
@@ -620,6 +619,14 @@ export default function EditorPage() {
     }
   }, [slug])
 
+  const handleInsertDictation = useCallback(
+    (text: string) => {
+      if (!text || !editorRef.current) return
+      editorRef.current.chain().focus().insertContent(text).run()
+    },
+    []
+  )
+
   const handleGoogleExport = useCallback(async (target: 'docs' | 'slides') => {
     if (!slug || slug === 'new') return
     try {
@@ -634,6 +641,24 @@ export default function EditorPage() {
       setExportError(err instanceof Error ? err.message : 'Google export failed')
     }
   }, [slug])
+
+  const cifSecondaryPanel: PanelType =
+    activePanel === 'comments' ||
+    activePanel === 'review' ||
+    activePanel === 'chat' ||
+    activePanel === 'ai' ||
+    activePanel === 'claims'
+      ? activePanel
+      : 'claims'
+
+  if (useCifLayout && !authLoading && !authenticated) {
+    return (
+      <WorkspaceGate
+        title="Informe CIF protegido"
+        description="Este documento abre solo con sesión autenticada para evitar filtraciones del informe y su corpus."
+      />
+    )
+  }
 
   if (loading) {
     return (
@@ -662,9 +687,17 @@ export default function EditorPage() {
       <header className="border-b border-line bg-paper flex-shrink-0">
         <div className="flex items-center justify-between px-4 py-3">
           <div className="flex items-center gap-4">
-            <Link href="/dashboard" className="text-muted hover:text-ink">
+            <Link href={isCifWorkspace ? "/medicamentos" : "/dashboard"} className="text-muted hover:text-ink">
               <ChevronLeft size={20} />
             </Link>
+            {isCifWorkspace ? (
+              <div className="flex items-center gap-2 flex-wrap">
+                <Link href="/medicamentos" className="btn btn-sm">
+                  Volver a lectura renderizada
+                </Link>
+                <span className="btn btn-sm btn-primary">Editor de reescritura</span>
+              </div>
+            ) : null}
             <input
               type="text"
               value={title || document?.title || ''}
@@ -687,148 +720,155 @@ export default function EditorPage() {
                 Saved {lastSaved.toLocaleTimeString()}
               </span>
             )}
-            <select
-              className="input text-xs w-32"
-              value={docStyle}
-              onChange={(e) => handleStyleChange(e.target.value)}
-              title="Document style"
-            >
-              <option value="modern">Style: Modern</option>
-              <option value="classic">Style: Classic</option>
-              <option value="compact">Style: Compact</option>
-            </select>
-            <select
-              className="input text-xs w-32"
-              value={docFormat}
-              onChange={(e) => handleFormatChange(e.target.value)}
-              title="Document format"
-            >
-              <option value="a4">Format: A4</option>
-              <option value="letter">Format: Letter</option>
-              <option value="wide">Format: Wide</option>
-            </select>
-            <div className="relative">
-              <button
-                className="btn btn-sm"
-                onClick={() => setLayoutMenuOpen((v) => !v)}
-              >
-                Layout
-              </button>
-              {layoutMenuOpen && (
-                <div className="absolute right-0 mt-2 w-56 bg-paper border border-line shadow-sm z-10 p-2 space-y-2">
-                  <div className="text-xs text-muted">Font</div>
-                  <select
-                    className="input text-xs w-full"
-                    value={docFont}
-                    onChange={(e) => handleFontChange(e.target.value)}
+            {isCifWorkspace ? (
+              <div className="text-xs text-muted border border-line px-3 py-2">
+                Modo reescritura CIF: contexto fijo, dictado persistente y panel de apoyo reducido.
+              </div>
+            ) : (
+              <>
+                <select
+                  className="input text-xs w-32"
+                  value={docStyle}
+                  onChange={(e) => handleStyleChange(e.target.value)}
+                  title="Document style"
+                >
+                  <option value="modern">Style: Modern</option>
+                  <option value="classic">Style: Classic</option>
+                  <option value="compact">Style: Compact</option>
+                </select>
+                <select
+                  className="input text-xs w-32"
+                  value={docFormat}
+                  onChange={(e) => handleFormatChange(e.target.value)}
+                  title="Document format"
+                >
+                  <option value="a4">Format: A4</option>
+                  <option value="letter">Format: Letter</option>
+                  <option value="wide">Format: Wide</option>
+                </select>
+                <div className="relative">
+                  <button
+                    className="btn btn-sm"
+                    onClick={() => setLayoutMenuOpen((v) => !v)}
                   >
-                    <option value="sans">Sans</option>
-                    <option value="serif">Serif</option>
-                    <option value="mono">Mono</option>
-                  </select>
-                  <div className="text-xs text-muted">Size</div>
-                  <select
-                    className="input text-xs w-full"
-                    value={docSize}
-                    onChange={(e) => handleSizeChange(e.target.value)}
-                  >
-                    <option value="sm">Small</option>
-                    <option value="md">Medium</option>
-                    <option value="lg">Large</option>
-                  </select>
-                  <div className="text-xs text-muted">Line height</div>
-                  <select
-                    className="input text-xs w-full"
-                    value={docLeading}
-                    onChange={(e) => handleLeadingChange(e.target.value)}
-                  >
-                    <option value="tight">Tight</option>
-                    <option value="normal">Normal</option>
-                    <option value="relaxed">Relaxed</option>
-                  </select>
-                  <div className="text-xs text-muted">Margins</div>
-                  <select
-                    className="input text-xs w-full"
-                    value={docMargin}
-                    onChange={(e) => handleMarginChange(e.target.value)}
-                  >
-                    <option value="narrow">Narrow</option>
-                    <option value="normal">Normal</option>
-                    <option value="wide">Wide</option>
-                  </select>
-
-                  {/* Page Layout Options (visible when page view is enabled) */}
-                  {showPageLayout && (
-                    <>
-                      <div className="border-t border-line my-2 pt-2">
-                        <div className="text-xs text-muted mb-2">Page Layout</div>
-                      </div>
-                      <div className="text-xs text-muted">Page Size</div>
+                    Layout
+                  </button>
+                  {layoutMenuOpen && (
+                    <div className="absolute right-0 mt-2 w-56 bg-paper border border-line shadow-sm z-10 p-2 space-y-2">
+                      <div className="text-xs text-muted">Font</div>
                       <select
                         className="input text-xs w-full"
-                        value={pageLayout.format}
-                        onChange={(e) => handlePageLayoutChange({
-                          ...pageLayout,
-                          format: e.target.value as PageFormat,
-                        })}
+                        value={docFont}
+                        onChange={(e) => handleFontChange(e.target.value)}
                       >
-                        {Object.entries(PAGE_FORMATS).map(([key, value]) => (
-                          <option key={key} value={key}>{value.name}</option>
-                        ))}
+                        <option value="sans">Sans</option>
+                        <option value="serif">Serif</option>
+                        <option value="mono">Mono</option>
                       </select>
-                      <label className="flex items-center gap-2 text-xs cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={pageLayout.showRuler}
-                          onChange={() => handlePageLayoutChange({
-                            ...pageLayout,
-                            showRuler: !pageLayout.showRuler,
-                          })}
-                          className="w-3.5 h-3.5"
-                        />
-                        Show Horizontal Ruler
-                      </label>
-                      <label className="flex items-center gap-2 text-xs cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={pageLayout.showVerticalRuler}
-                          onChange={() => handlePageLayoutChange({
-                            ...pageLayout,
-                            showVerticalRuler: !pageLayout.showVerticalRuler,
-                          })}
-                          className="w-3.5 h-3.5"
-                        />
-                        Show Vertical Ruler
-                      </label>
-                      <label className="flex items-center gap-2 text-xs cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={pageLayout.showPageBreaks}
-                          onChange={() => handlePageLayoutChange({
-                            ...pageLayout,
-                            showPageBreaks: !pageLayout.showPageBreaks,
-                          })}
-                          className="w-3.5 h-3.5"
-                        />
-                        Show Page Breaks
-                      </label>
-                      <label className="flex items-center gap-2 text-xs cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={pageLayout.showHeaderFooter}
-                          onChange={() => handlePageLayoutChange({
-                            ...pageLayout,
-                            showHeaderFooter: !pageLayout.showHeaderFooter,
-                          })}
-                          className="w-3.5 h-3.5"
-                        />
-                        Show Header/Footer
-                      </label>
-                    </>
+                      <div className="text-xs text-muted">Size</div>
+                      <select
+                        className="input text-xs w-full"
+                        value={docSize}
+                        onChange={(e) => handleSizeChange(e.target.value)}
+                      >
+                        <option value="sm">Small</option>
+                        <option value="md">Medium</option>
+                        <option value="lg">Large</option>
+                      </select>
+                      <div className="text-xs text-muted">Line height</div>
+                      <select
+                        className="input text-xs w-full"
+                        value={docLeading}
+                        onChange={(e) => handleLeadingChange(e.target.value)}
+                      >
+                        <option value="tight">Tight</option>
+                        <option value="normal">Normal</option>
+                        <option value="relaxed">Relaxed</option>
+                      </select>
+                      <div className="text-xs text-muted">Margins</div>
+                      <select
+                        className="input text-xs w-full"
+                        value={docMargin}
+                        onChange={(e) => handleMarginChange(e.target.value)}
+                      >
+                        <option value="narrow">Narrow</option>
+                        <option value="normal">Normal</option>
+                        <option value="wide">Wide</option>
+                      </select>
+
+                      {showPageLayout && (
+                        <>
+                          <div className="border-t border-line my-2 pt-2">
+                            <div className="text-xs text-muted mb-2">Page Layout</div>
+                          </div>
+                          <div className="text-xs text-muted">Page Size</div>
+                          <select
+                            className="input text-xs w-full"
+                            value={pageLayout.format}
+                            onChange={(e) => handlePageLayoutChange({
+                              ...pageLayout,
+                              format: e.target.value as PageFormat,
+                            })}
+                          >
+                            {Object.entries(PAGE_FORMATS).map(([key, value]) => (
+                              <option key={key} value={key}>{value.name}</option>
+                            ))}
+                          </select>
+                          <label className="flex items-center gap-2 text-xs cursor-pointer">
+                            <input
+                              type="checkbox"
+                              checked={pageLayout.showRuler}
+                              onChange={() => handlePageLayoutChange({
+                                ...pageLayout,
+                                showRuler: !pageLayout.showRuler,
+                              })}
+                              className="w-3.5 h-3.5"
+                            />
+                            Show Horizontal Ruler
+                          </label>
+                          <label className="flex items-center gap-2 text-xs cursor-pointer">
+                            <input
+                              type="checkbox"
+                              checked={pageLayout.showVerticalRuler}
+                              onChange={() => handlePageLayoutChange({
+                                ...pageLayout,
+                                showVerticalRuler: !pageLayout.showVerticalRuler,
+                              })}
+                              className="w-3.5 h-3.5"
+                            />
+                            Show Vertical Ruler
+                          </label>
+                          <label className="flex items-center gap-2 text-xs cursor-pointer">
+                            <input
+                              type="checkbox"
+                              checked={pageLayout.showPageBreaks}
+                              onChange={() => handlePageLayoutChange({
+                                ...pageLayout,
+                                showPageBreaks: !pageLayout.showPageBreaks,
+                              })}
+                              className="w-3.5 h-3.5"
+                            />
+                            Show Page Breaks
+                          </label>
+                          <label className="flex items-center gap-2 text-xs cursor-pointer">
+                            <input
+                              type="checkbox"
+                              checked={pageLayout.showHeaderFooter}
+                              onChange={() => handlePageLayoutChange({
+                                ...pageLayout,
+                                showHeaderFooter: !pageLayout.showHeaderFooter,
+                              })}
+                              className="w-3.5 h-3.5"
+                            />
+                            Show Header/Footer
+                          </label>
+                        </>
+                      )}
+                    </div>
                   )}
                 </div>
-              )}
-            </div>
+              </>
+            )}
             <button
               className={`btn btn-sm ${trackChanges ? 'btn-primary' : ''}`}
               onClick={() => setTrackChanges((v) => !v)}
@@ -973,168 +1013,309 @@ export default function EditorPage() {
         ) : (
           /* Regular document mode */
           <>
-            {/* Left sidebar - Outline */}
-            <aside className="w-56 border-r border-line bg-paper flex-shrink-0 overflow-hidden">
-              <OutlinePanel editor={editorRef.current} />
-            </aside>
+            {useCifLayout ? (
+              <div className="cif-shell flex-1 overflow-hidden">
+                <aside className="cif-column border-r border-line bg-paper overflow-hidden">
+                  <WorkspaceContextPanel />
+                </aside>
 
-            {/* Editor */}
-            <main className="flex-1 overflow-hidden">
-              {showPageLayout ? (
-                <PagedEditor
-                  editor={editorRef.current}
-                  layout={pageLayout}
-                  documentTitle={document?.title || 'Untitled'}
-                  onLayoutChange={handlePageLayoutChange}
-                >
-                  <TiptapEditor
-                    content={getEditorContent(document)}
-                    onChange={handleContentChange}
-                    onReady={handleEditorReady}
-                    onClaimClick={handleClaimClick}
-                    activeClaimId={activeClaimId}
-                    placeholder="Start writing your document..."
-                    documentSlug={slug}
-                    trackChangesEnabled={trackChanges}
-                    docStyle={docStyle}
-                    docFormat={docFormat}
-                    docFont={docFont}
-                    docSize={docSize}
-                    docLeading={docLeading}
-                    docMargin={docMargin}
-                    commentAnchors={commentAnchors}
-                  />
-                </PagedEditor>
-              ) : (
-                <TiptapEditor
-                  content={getEditorContent(document)}
-                  onChange={handleContentChange}
-                  onReady={handleEditorReady}
-                  onClaimClick={handleClaimClick}
-                  activeClaimId={activeClaimId}
-                  placeholder="Start writing your document..."
-                  documentSlug={slug}
-                  trackChangesEnabled={trackChanges}
-                  docStyle={docStyle}
-                  docFormat={docFormat}
-                  docFont={docFont}
-                  docSize={docSize}
-                  docLeading={docLeading}
-                  docMargin={docMargin}
-                  commentAnchors={commentAnchors}
-                />
-              )}
-            </main>
+                <main className="cif-column flex-1 overflow-hidden border-r border-line bg-bg">
+                  <div className="px-4 py-3 border-b border-line bg-paper">
+                    <div className="text-xs uppercase tracking-[0.18em] text-muted">Editor central</div>
+                    <h2 className="text-base font-semibold mt-1">Reescritura del informe</h2>
+                    <p className="text-xs text-muted mt-1">
+                      Trabaja con el contexto fijo a la izquierda y usa el panel derecho para convertir voz en texto insertable.
+                    </p>
+                  </div>
+                  <div className="flex-1 overflow-hidden">
+                    {showPageLayout ? (
+                      <PagedEditor
+                        editor={editorRef.current}
+                        layout={pageLayout}
+                        documentTitle={document?.title || 'Untitled'}
+                        onLayoutChange={handlePageLayoutChange}
+                      >
+                        <TiptapEditor
+                          content={getEditorContent(document)}
+                          onChange={handleContentChange}
+                          onReady={handleEditorReady}
+                          onClaimClick={handleClaimClick}
+                          activeClaimId={activeClaimId}
+                          placeholder="Start writing your document..."
+                          documentSlug={slug}
+                          trackChangesEnabled={trackChanges}
+                          docStyle={docStyle}
+                          docFormat={docFormat}
+                          docFont={docFont}
+                          docSize={docSize}
+                          docLeading={docLeading}
+                          docMargin={docMargin}
+                          commentAnchors={commentAnchors}
+                        />
+                      </PagedEditor>
+                    ) : (
+                      <TiptapEditor
+                        content={getEditorContent(document)}
+                        onChange={handleContentChange}
+                        onReady={handleEditorReady}
+                        onClaimClick={handleClaimClick}
+                        activeClaimId={activeClaimId}
+                        placeholder="Start writing your document..."
+                        documentSlug={slug}
+                        trackChangesEnabled={trackChanges}
+                        docStyle={docStyle}
+                        docFormat={docFormat}
+                        docFont={docFont}
+                        docSize={docSize}
+                        docLeading={docLeading}
+                        docMargin={docMargin}
+                        commentAnchors={commentAnchors}
+                      />
+                    )}
+                  </div>
+                </main>
+
+                <aside className="cif-column w-[420px] bg-paper flex-shrink-0 flex flex-col">
+                  <div className="min-h-0 flex-[1.25] border-b border-line">
+                    <DictationPanel documentSlug={slug} onInsertText={handleInsertDictation} />
+                  </div>
+                  <div className="min-h-0 flex-1 flex flex-col">
+                    <div className="px-4 py-3 border-b border-line bg-bg">
+                      <div className="text-[11px] uppercase tracking-wide text-muted">Panel de apoyo</div>
+                      <div className="mt-2 flex flex-wrap gap-2">
+                        <CompactPanelButton
+                          active={cifSecondaryPanel === 'claims'}
+                          onClick={() => setActivePanel('claims')}
+                          icon={<CheckCircle size={14} />}
+                          label="Claims"
+                        />
+                        <CompactPanelButton
+                          active={cifSecondaryPanel === 'review'}
+                          onClick={() => setActivePanel('review')}
+                          icon={<Search size={14} />}
+                          label="Review"
+                        />
+                        <CompactPanelButton
+                          active={cifSecondaryPanel === 'comments'}
+                          onClick={() => setActivePanel('comments')}
+                          icon={<MessageCircle size={14} />}
+                          label="Comments"
+                        />
+                        <CompactPanelButton
+                          active={cifSecondaryPanel === 'chat'}
+                          onClick={() => setActivePanel('chat')}
+                          icon={<MessageCircle size={14} />}
+                          label="Chat"
+                        />
+                        <CompactPanelButton
+                          active={cifSecondaryPanel === 'ai'}
+                          onClick={() => setActivePanel('ai')}
+                          icon={<Sparkles size={14} />}
+                          label="AI"
+                        />
+                      </div>
+                    </div>
+                    <div className="flex-1 overflow-hidden">
+                      {cifSecondaryPanel === 'claims' && (
+                        <ClaimsPanel
+                          documentSlug={slug}
+                          onClaimClick={handleClaimClick}
+                          activeClaimId={activeClaimId}
+                        />
+                      )}
+                      {cifSecondaryPanel === 'review' && (
+                        <ReviewPanel
+                          documentSlug={slug}
+                          sourceProvider={document?.source_provider}
+                        />
+                      )}
+                      {cifSecondaryPanel === 'comments' && (
+                        <CommentsPanel
+                          documentSlug={slug}
+                          sourceProvider={document?.source_provider}
+                          onSelectComment={handleCommentSelect}
+                          onCommentsChange={handleCommentsChange}
+                        />
+                      )}
+                      {cifSecondaryPanel === 'chat' && (
+                        <ChatPanel
+                          documentSlug={slug}
+                          documentTitle={document?.title}
+                        />
+                      )}
+                      {cifSecondaryPanel === 'ai' && (
+                        <AIAssistantPanel
+                          selectedText={selectedText}
+                          onApplyRewrite={handleApplyRewrite}
+                        />
+                      )}
+                    </div>
+                  </div>
+                </aside>
+              </div>
+            ) : (
+              <>
+                <aside className="w-56 border-r border-line bg-paper flex-shrink-0 overflow-hidden">
+                  <OutlinePanel editor={editorRef.current} />
+                </aside>
+
+                <main className="flex-1 overflow-hidden">
+                  {showPageLayout ? (
+                    <PagedEditor
+                      editor={editorRef.current}
+                      layout={pageLayout}
+                      documentTitle={document?.title || 'Untitled'}
+                      onLayoutChange={handlePageLayoutChange}
+                    >
+                      <TiptapEditor
+                        content={getEditorContent(document)}
+                        onChange={handleContentChange}
+                        onReady={handleEditorReady}
+                        onClaimClick={handleClaimClick}
+                        activeClaimId={activeClaimId}
+                        placeholder="Start writing your document..."
+                        documentSlug={slug}
+                        trackChangesEnabled={trackChanges}
+                        docStyle={docStyle}
+                        docFormat={docFormat}
+                        docFont={docFont}
+                        docSize={docSize}
+                        docLeading={docLeading}
+                        docMargin={docMargin}
+                        commentAnchors={commentAnchors}
+                      />
+                    </PagedEditor>
+                  ) : (
+                    <TiptapEditor
+                      content={getEditorContent(document)}
+                      onChange={handleContentChange}
+                      onReady={handleEditorReady}
+                      onClaimClick={handleClaimClick}
+                      activeClaimId={activeClaimId}
+                      placeholder="Start writing your document..."
+                      documentSlug={slug}
+                      trackChangesEnabled={trackChanges}
+                      docStyle={docStyle}
+                      docFormat={docFormat}
+                      docFont={docFont}
+                      docSize={docSize}
+                      docLeading={docLeading}
+                      docMargin={docMargin}
+                      commentAnchors={commentAnchors}
+                    />
+                  )}
+                </main>
+              </>
+            )}
           </>
         )}
 
-        {/* Right sidebar */}
-        <aside className="w-80 border-l border-line bg-paper flex-shrink-0 flex flex-col">
-          {/* Panel tabs */}
-          <div className="flex border-b border-line">
-            <PanelTab
-              active={activePanel === 'claims'}
-              onClick={() => setActivePanel('claims')}
-              icon={<CheckCircle size={14} />}
-              label="Claims"
-            />
-            <PanelTab
-              active={activePanel === 'bib'}
-              onClick={() => setActivePanel('bib')}
-              icon={<BookOpen size={14} />}
-              label="Bib"
-            />
-            <PanelTab
-              active={activePanel === 'ai'}
-              onClick={() => setActivePanel('ai')}
-              icon={<Sparkles size={14} />}
-              label="AI"
-            />
-            <PanelTab
-              active={activePanel === 'chat'}
-              onClick={() => setActivePanel('chat')}
-              icon={<MessageCircle size={14} />}
-              label="Chat"
-            />
-            <PanelTab
-              active={activePanel === 'comments'}
-              onClick={() => setActivePanel('comments')}
-              icon={<MessageCircle size={14} />}
-              label="Comments"
-            />
-            <PanelTab
-              active={activePanel === 'versions'}
-              onClick={() => setActivePanel('versions')}
-              icon={<Clock size={14} />}
-              label="Versions"
-            />
-            <PanelTab
-              active={activePanel === 'changes'}
-              onClick={() => setActivePanel('changes')}
-              icon={<GitCompare size={14} />}
-              label="Changes"
-            />
-            <PanelTab
-              active={activePanel === 'review'}
-              onClick={() => setActivePanel('review')}
-              icon={<Search size={14} />}
-              label="Review"
-            />
-          </div>
+        {!useCifLayout && (
+          <aside className="w-80 border-l border-line bg-paper flex-shrink-0 flex flex-col">
+            <div className="flex border-b border-line">
+              <PanelTab
+                active={activePanel === 'claims'}
+                onClick={() => setActivePanel('claims')}
+                icon={<CheckCircle size={14} />}
+                label="Claims"
+              />
+              <PanelTab
+                active={activePanel === 'bib'}
+                onClick={() => setActivePanel('bib')}
+                icon={<BookOpen size={14} />}
+                label="Bib"
+              />
+              <PanelTab
+                active={activePanel === 'ai'}
+                onClick={() => setActivePanel('ai')}
+                icon={<Sparkles size={14} />}
+                label="AI"
+              />
+              <PanelTab
+                active={activePanel === 'chat'}
+                onClick={() => setActivePanel('chat')}
+                icon={<MessageCircle size={14} />}
+                label="Chat"
+              />
+              <PanelTab
+                active={activePanel === 'comments'}
+                onClick={() => setActivePanel('comments')}
+                icon={<MessageCircle size={14} />}
+                label="Comments"
+              />
+              <PanelTab
+                active={activePanel === 'versions'}
+                onClick={() => setActivePanel('versions')}
+                icon={<Clock size={14} />}
+                label="Versions"
+              />
+              <PanelTab
+                active={activePanel === 'changes'}
+                onClick={() => setActivePanel('changes')}
+                icon={<GitCompare size={14} />}
+                label="Changes"
+              />
+              <PanelTab
+                active={activePanel === 'review'}
+                onClick={() => setActivePanel('review')}
+                icon={<Search size={14} />}
+                label="Review"
+              />
+            </div>
 
-          {/* Panel content */}
-          <div className="flex-1 overflow-hidden">
-            {activePanel === 'claims' && (
-              <ClaimsPanel
-                documentSlug={slug}
-                onClaimClick={handleClaimClick}
-                activeClaimId={activeClaimId}
-              />
-            )}
-            {activePanel === 'bib' && (
-              <BibliographyPanel onCite={handleCite} />
-            )}
-            {activePanel === 'ai' && (
-              <AIAssistantPanel
-                selectedText={selectedText}
-                onApplyRewrite={handleApplyRewrite}
-              />
-            )}
-            {activePanel === 'chat' && (
-              <ChatPanel
-                documentSlug={slug}
-                documentTitle={document?.title}
-              />
-            )}
-            {activePanel === 'comments' && (
-              <CommentsPanel
-                documentSlug={slug}
-                sourceProvider={document?.source_provider}
-                onSelectComment={handleCommentSelect}
-                onCommentsChange={handleCommentsChange}
-              />
-            )}
-            {activePanel === 'versions' && (
-              <VersionsPanel
-                documentSlug={slug}
-                onRestore={reloadDocument}
-                currentMarkdown={document?.markdown || ''}
-              />
-            )}
-            {activePanel === 'changes' && (
-              <TrackChangesPanel
-                documentSlug={slug}
-                onChangeResolved={reloadDocument}
-              />
-            )}
-            {activePanel === 'review' && (
-              <ReviewPanel
-                documentSlug={slug}
-                sourceProvider={document?.source_provider}
-              />
-            )}
-          </div>
-        </aside>
+            <div className="flex-1 overflow-hidden">
+              {activePanel === 'claims' && (
+                <ClaimsPanel
+                  documentSlug={slug}
+                  onClaimClick={handleClaimClick}
+                  activeClaimId={activeClaimId}
+                />
+              )}
+              {activePanel === 'bib' && (
+                <BibliographyPanel onCite={handleCite} />
+              )}
+              {activePanel === 'ai' && (
+                <AIAssistantPanel
+                  selectedText={selectedText}
+                  onApplyRewrite={handleApplyRewrite}
+                />
+              )}
+              {activePanel === 'chat' && (
+                <ChatPanel
+                  documentSlug={slug}
+                  documentTitle={document?.title}
+                />
+              )}
+              {activePanel === 'comments' && (
+                <CommentsPanel
+                  documentSlug={slug}
+                  sourceProvider={document?.source_provider}
+                  onSelectComment={handleCommentSelect}
+                  onCommentsChange={handleCommentsChange}
+                />
+              )}
+              {activePanel === 'versions' && (
+                <VersionsPanel
+                  documentSlug={slug}
+                  onRestore={reloadDocument}
+                  currentMarkdown={document?.markdown || ''}
+                />
+              )}
+              {activePanel === 'changes' && (
+                <TrackChangesPanel
+                  documentSlug={slug}
+                  onChangeResolved={reloadDocument}
+                />
+              )}
+              {activePanel === 'review' && (
+                <ReviewPanel
+                  documentSlug={slug}
+                  sourceProvider={document?.source_provider}
+                />
+              )}
+            </div>
+          </aside>
+        )}
       </div>
 
       {/* Status bar */}
@@ -1203,6 +1384,30 @@ function PanelTab({
         border-b-2
         ${active ? 'border-c-blue text-c-blue' : 'border-transparent text-muted hover:text-ink'}
       `}
+    >
+      {icon}
+      {label}
+    </button>
+  )
+}
+
+function CompactPanelButton({
+  active,
+  onClick,
+  icon,
+  label,
+}: {
+  active: boolean
+  onClick: () => void
+  icon: React.ReactNode
+  label: string
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className={`inline-flex items-center gap-1.5 border px-3 py-2 text-xs font-medium ${
+        active ? 'border-c-blue bg-paper text-c-blue' : 'border-line text-muted hover:bg-paper hover:text-ink'
+      }`}
     >
       {icon}
       {label}
