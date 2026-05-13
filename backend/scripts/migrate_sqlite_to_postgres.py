@@ -62,13 +62,34 @@ def _pg_row_count(engine: Engine, table: str) -> int:
         return int(result.scalar() or 0)
 
 
-def _coerce_row(row: sqlite3.Row, sqlite_cols: list[str], pg_cols: set[str]) -> dict[str, Any]:
-    """Map a sqlite row to a dict, only including columns also in the PG table."""
+def _coerce_row(
+    row: sqlite3.Row,
+    sqlite_cols: list[str],
+    pg_cols: set[str],
+    json_cols: set[str] | None = None,
+) -> dict[str, Any]:
+    """Map a sqlite row to a dict, only including columns also in the PG table.
+
+    For columns declared as JSON on the Postgres side, deserialize the SQLite
+    string representation before insert. SQLite stores JSON as TEXT; passing
+    that text straight to a Postgres JSON column results in a double-encoded
+    JSON string (the string itself becomes the JSON value), which breaks any
+    downstream `.get()`-style access.
+    """
+    import json as _json
+
+    json_cols = json_cols or set()
     out: dict[str, Any] = {}
     for col in sqlite_cols:
         if col not in pg_cols:
             continue
-        out[col] = row[col]
+        value = row[col]
+        if col in json_cols and isinstance(value, str) and value:
+            try:
+                value = _json.loads(value)
+            except _json.JSONDecodeError:
+                pass  # leave as-is; Postgres will reject if invalid
+        out[col] = value
     return out
 
 
@@ -132,6 +153,12 @@ def migrate(sqlite_path: str, pg_url: str) -> int:
 
         sqlite_cols = _sqlite_columns(sqlite_conn, name)
         pg_cols = {c.name for c in table.columns}
+        # Identify JSON-typed columns so _coerce_row deserializes them before insert.
+        json_cols: set[str] = set()
+        for c in table.columns:
+            type_str = str(c.type).upper()
+            if "JSON" in type_str:
+                json_cols.add(c.name)
         common_cols = [c for c in sqlite_cols if c in pg_cols]
         if not common_cols:
             print(f"[skip] {name} (no overlapping columns)")
@@ -155,7 +182,7 @@ def migrate(sqlite_path: str, pg_url: str) -> int:
         if before_sqlite > BATCH_THRESHOLD:
             batch: list[dict[str, Any]] = []
             for row in cursor:
-                batch.append(_coerce_row(row, common_cols, pg_cols))
+                batch.append(_coerce_row(row, common_cols, pg_cols, json_cols))
                 if len(batch) >= BATCH_SIZE:
                     ins, skp = _insert_batch(pg_engine, table, batch)
                     inserted_table += ins
@@ -166,7 +193,7 @@ def migrate(sqlite_path: str, pg_url: str) -> int:
                 inserted_table += ins
                 skipped_table += skp
         else:
-            rows = [_coerce_row(r, common_cols, pg_cols) for r in cursor]
+            rows = [_coerce_row(r, common_cols, pg_cols, json_cols) for r in cursor]
             ins, skp = _insert_batch(pg_engine, table, rows)
             inserted_table += ins
             skipped_table += skp
