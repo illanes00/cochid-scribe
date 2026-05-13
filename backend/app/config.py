@@ -8,34 +8,27 @@ from pydantic_settings import BaseSettings
 
 
 class Settings(AuthSettingsMixin, BaseSettings):
-    """Application settings."""
+    """Application settings.
+
+    OIDC/auth fields come from AuthSettingsMixin (oidc_issuer, oidc_client_id,
+    oidc_client_secret, oidc_redirect_uri, oidc_scopes, secret_key,
+    auth_enabled, etc). Defaults from the mixin are intentionally generic —
+    real values arrive via env vars sourced by systemd EnvironmentFile.
+    """
 
     # App
     app_name: str = "Scribe API"
     debug: bool = False
-    environment: str = "development"  # "development" | "production"
+    environment: str = "development"
 
-    # Database (SQLite for development, PostgreSQL for production)
+    # Database
     database_url: str = "sqlite:///./scribe.db"
-
-    # Auth
-    secret_key: str = "your-secret-key-change-in-production"  # noqa: S105
-    algorithm: str = "HS256"
-    access_token_expire_minutes: int = 30
-    workspace_access_password: str = ""
-
-    # OIDC (Authentik SSO) — disabled by default
-    oidc_issuer: str = "https://auth.illanes00.cl/application/o/scribe/"
-    oidc_client_id: str = ""
-    oidc_client_secret: str = ""
-    oidc_redirect_uri: str = "https://scribe.illanes00.cl/auth/callback"
-    oidc_enabled: bool = False
 
     # LLM
     anthropic_api_key: str = ""
     openai_api_key: str = ""
 
-    # Google OAuth
+    # Google OAuth (separate from Authentik SSO)
     google_client_id: str = ""
     google_client_secret: str = ""
     google_redirect_uri: str = "http://localhost:8000/api/v1/integrations/google/callback"

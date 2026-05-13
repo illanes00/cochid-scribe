@@ -41,6 +41,11 @@ class Document(Base):
     owner_id = Column(String(36), ForeignKey("users.id"), nullable=True)
     project_id = Column(String(36), ForeignKey("projects.id"), nullable=True)
 
+    # Access control. private = only owner; shared = any authenticated user
+    # can read; public = anyone (incl. anonymous) can read. Owner is always
+    # the only writer.
+    visibility = Column(String(20), default="private", nullable=False, index=True)
+
     # Google Docs sync fields
     google_revision_id = Column(String(100), nullable=True)
     last_synced_at = Column(DateTime, nullable=True)

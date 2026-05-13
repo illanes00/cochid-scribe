@@ -84,8 +84,8 @@ app.add_middleware(
     max_age=60 * 60 * 8,
 )
 
-# OIDC setup (only if explicitly enabled)
-if settings.oidc_enabled and settings.oidc_client_id:
+# OIDC setup (Authentik SSO). Loads if client_id is set; logs and skips otherwise.
+if settings.auth_enabled and settings.oidc_client_id:
     from illanes_auth import OIDCHandler
 
     oidc = OIDCHandler(
@@ -95,9 +95,14 @@ if settings.oidc_enabled and settings.oidc_client_id:
         redirect_uri=settings.oidc_redirect_uri,
     )
     oidc.setup_fastapi()
-    app.get("/auth/login")(oidc.fastapi_login)
-    app.get("/auth/callback")(oidc.fastapi_callback)
-    app.get("/auth/logout")(oidc.fastapi_logout)
+    # Prefix /api/auth/* to match the cochid-datos convention (and to live under
+    # the same Caddy /api/* reverse_proxy path that already targets the backend).
+    app.get("/api/auth/login")(oidc.fastapi_login)
+    app.get("/api/auth/callback")(oidc.fastapi_callback)
+    app.get("/api/auth/logout")(oidc.fastapi_logout)
+    logger.info("auth.oidc.enabled", issuer=settings.oidc_issuer)
+else:
+    logger.warning("auth.oidc.disabled", reason="OIDC_CLIENT_ID not set")
 
 # Request logging (logs all HTTP requests with timing)
 app.add_middleware(RequestLoggingMiddleware)
