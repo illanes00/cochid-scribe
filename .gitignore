@@ -53,3 +53,39 @@ test.db
 
 # Tooling artifacts
 .playwright-mcp/
+
+# Agent context files (symlinks to global)
+AGENT-CONTEXT.md
+LOCAL-AGENT-CONTEXT.md
+
+# Symlinks to virtualenvs (e.g. backend/venv -> .venv)
+venv
+
+# Frontend coverage reports
+coverage/
+
+# Codex / agent quarantines
+.codex-quarantine-*/
+
+# Root-level npm experiments (Codex installed playwright/vitest at repo root by accident)
+/package.json
+/package-lock.json
+
+# CIF review heavy artifacts (kept in working tree, not in git history)
+docs/cif-review/*.docx
+docs/cif-review/output/
+docs/cif-review/data/
+docs/cif-review/assets/
+docs/cif-review/CIF-EP-*.docx
+docs/cif-review/test-comments.docx
+
+# Bulk review snapshots (large, regeneratable)
+tasks/review-2026-05-06/
+tasks/feedback-2026-05-06/
+
+# Backend uploads (user-uploaded files, runtime data)
+backend/uploads/
+
+# Frontend logs
+frontend/frontend.log
+backend/backend.log
