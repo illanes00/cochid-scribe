@@ -1291,6 +1291,94 @@ export const dictationApi = {
   },
 };
 
+// Projects (incl. thesis ecosystem)
+export type ProjectType = "general" | "thesis" | "paper" | "policy" | "report";
+export type ProjectVisibility = "private" | "shared" | "public";
+
+export interface ProjectChapter {
+  id: string;
+  slug: string;
+  title: string;
+  doc_type: string;
+  status: string;
+  order: number | null;
+  updated_at: string;
+  claim_count: number;
+  verified_count: number;
+}
+
+export interface Project {
+  id: string;
+  slug: string;
+  name: string;
+  description: string | null;
+  org_name: string | null;
+  style_config: Record<string, unknown>;
+  created_by: string | null;
+  created_at: string;
+  project_type: ProjectType;
+  metadata_json: Record<string, unknown> | null;
+  evidence_dashboard_url: string | null;
+  visibility: ProjectVisibility;
+}
+
+export interface ProjectDetail extends Project {
+  chapters: ProjectChapter[];
+  bibliography_count: number;
+  claim_count: number;
+}
+
+export interface ProjectCreate {
+  name: string;
+  slug?: string;
+  description?: string;
+  org_name?: string;
+  style_config?: Record<string, unknown>;
+  project_type?: ProjectType;
+  metadata_json?: Record<string, unknown> | null;
+  evidence_dashboard_url?: string | null;
+  visibility?: ProjectVisibility;
+}
+
+export interface ProjectUpdate {
+  name?: string;
+  description?: string;
+  org_name?: string;
+  style_config?: Record<string, unknown>;
+  project_type?: ProjectType;
+  metadata_json?: Record<string, unknown> | null;
+  evidence_dashboard_url?: string | null;
+  visibility?: ProjectVisibility;
+}
+
+export const projectsApi = {
+  list: (type?: ProjectType): Promise<Project[]> => {
+    const qs = type ? `?type=${type}` : "";
+    return fetchApi(`/api/v1/projects${qs}`);
+  },
+
+  listThesis: (): Promise<Project[]> =>
+    fetchApi(`/api/v1/projects?type=thesis`),
+
+  get: (slug: string): Promise<ProjectDetail> =>
+    fetchApi(`/api/v1/projects/${slug}`),
+
+  create: (data: ProjectCreate): Promise<Project> =>
+    fetchApi(`/api/v1/projects`, {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
+
+  update: (slug: string, data: ProjectUpdate): Promise<Project> =>
+    fetchApi(`/api/v1/projects/${slug}`, {
+      method: "PUT",
+      body: JSON.stringify(data),
+    }),
+
+  delete: (slug: string): Promise<void> =>
+    fetchApi(`/api/v1/projects/${slug}`, { method: "DELETE" }),
+};
+
 // Auth uses Authentik SSO via /api/auth/* (OIDC). The previous
 // password-based workspaceLogin endpoint was removed; the frontend now
 // drives login through window.location to /api/auth/login. See lib/auth.tsx.
@@ -1323,6 +1411,7 @@ export const api = {
   review: reviewApi,
   workspaces: workspacesApi,
   dictation: dictationApi,
+  projects: projectsApi,
   auth: authApi,
 };
 

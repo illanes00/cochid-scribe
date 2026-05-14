@@ -14,7 +14,14 @@ def generate_uuid() -> str:
 
 
 class Project(Base):
-    """Project model grouping documents under an organization or team."""
+    """Project model grouping documents under an organization or team.
+
+    Project supports a small typology — `project_type` distinguishes between
+    a generic project bucket and structured kinds (`thesis`, `paper`,
+    `policy`, `report`). Type-specific extras live in `metadata_json`
+    (NB: not named `metadata` because SQLAlchemy reserves that on Base).
+    Visibility mirrors Document.visibility (`private` | `shared` | `public`).
+    """
 
     __tablename__ = "projects"
 
@@ -27,8 +34,20 @@ class Project(Base):
     created_by = Column(String(36), ForeignKey("users.id"), nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
 
+    # Typology + structured extras
+    project_type = Column(
+        String(20), nullable=False, default="general", index=True
+    )
+    metadata_json = Column(JSON, nullable=True)
+    evidence_dashboard_url = Column(String(500), nullable=True)
+
+    # ACL — same enum as Document.visibility
+    visibility = Column(
+        String(20), nullable=False, default="private", index=True
+    )
+
     def __repr__(self) -> str:
-        return f"<Project(slug={self.slug}, name={self.name})>"
+        return f"<Project(slug={self.slug}, name={self.name}, type={self.project_type})>"
 
 
 class ProjectMember(Base):
