@@ -1,0 +1,9 @@
+# Dependencias y artefactos de build (el dir dist/ se sirve en producción pero
+# se reconstruye desde la fuente; no se versiona). Los public/viz y public/flags
+# SÍ se versionan: son assets de fuente que vite copia al build.
+node_modules/
+
+# Salida de build y todas sus variantes/backups
+dist/
+dist-*/
+dist.bak.*/

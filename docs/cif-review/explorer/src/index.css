@@ -1,0 +1,174 @@
+:root{
+  --ep:#1a365d; --ep2:#2b6cb0; --red:#c53030; --amber:#fef3c7; --amber-ink:#92400e;
+  --g:#f2f4f7; --bd:#d0d5dd; --ink:#1d2939; --muted:#667085;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:'IBM Plex Sans',system-ui,Arial,sans-serif;color:var(--ink);background:#fff;line-height:1.6}
+a{color:var(--ep2)}
+h1,h2,h3{color:var(--ep)}
+code{background:var(--g);padding:1px 5px;border-radius:4px;font-size:.82em;word-break:break-all}
+
+/* topbar + rainbow · logo EP + título centrados, menú centrado debajo */
+.topbar{position:sticky;top:0;z-index:30;background:#fff;border-bottom:1px solid #eef0f3}
+.topbar .brand{display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;
+  text-decoration:none;padding:16px 22px 10px}
+.topbar .brand img{height:46px;width:auto;display:block}
+.topbar .brand-t{font-weight:700;color:var(--ep);font-size:16px;line-height:1.25;max-width:760px}
+.topbar .brand-sub{display:block;font-weight:400;color:var(--muted);font-size:12.5px;margin-top:3px}
+/* menú entre páginas: fila horizontal centrada bajo el logo + título */
+.topnav{display:flex;flex-wrap:wrap;justify-content:center;gap:4px;padding:2px 16px 12px;max-width:1000px;margin:0 auto}
+.topnav a{color:#475467;text-decoration:none;font-size:13px;font-weight:500;padding:6px 12px;
+  border-radius:8px;border:1px solid transparent;white-space:nowrap;transition:background .12s,color .12s}
+.topnav a:hover{background:#f2f4f7;color:var(--ep)}
+.topnav a.active{background:#eaf2fb;color:var(--ep);font-weight:700;border-color:#cfe0f5}
+.rainbow{height:5px;background:linear-gradient(90deg,#F2920B,#B1A35E,#1CA29A,#138691,#196883,#1C4E75,#213366,#4B3B7C,#764494)}
+
+/* layout */
+.layout{display:flex;align-items:flex-start;justify-content:center}
+main{flex:1;min-width:0;max-width:940px;margin:0 auto;padding:8px 34px 90px}
+section{scroll-margin-top:68px;padding-top:18px;margin-top:26px;border-top:1px solid #eef0f3}
+/* multipágina: separación clara entre capítulos dentro de una misma página */
+main > section + section{margin-top:48px;padding-top:30px;border-top:2px solid #e4e7ec}
+main > section:first-child,
+.breadcrumb + section{border-top:0;margin-top:8px;padding-top:8px}
+.ptitle{font-size:28px;line-height:1.2;margin:18px 0 4px}
+.psub{color:var(--muted);font-size:14.5px;margin:0 0 8px}
+.lead{font-size:17px;color:#344054}
+
+/* controles */
+.filterbox{background:#fff;border:1px solid var(--bd);border-radius:10px;padding:10px}
+.filterbox label{font-size:11px;font-weight:600;color:var(--ep);display:block;margin-top:8px}
+select{width:100%;padding:6px 8px;border:1px solid var(--bd);border-radius:6px;font-size:13px;background:#fff}
+.chk{display:flex;gap:6px;align-items:center;font-size:12px;color:var(--ep);margin-top:8px;cursor:pointer}
+.preset{display:block;width:100%;text-align:left;background:#eaf2fb;color:var(--ep);border:1px solid #cfe0f5;border-radius:7px;padding:6px 9px;margin:5px 0;font-size:12px;cursor:pointer}
+.preset:hover{background:#dbeafe}
+
+/* tablas */
+table{border-collapse:collapse;width:100%;font-size:12.5px;margin:10px 0}
+th,td{border:1px solid var(--bd);padding:6px 9px;text-align:right}
+th{background:var(--ep);color:#fff;text-align:center;font-size:11.5px;position:sticky;top:0}
+td:first-child,th:first-child{text-align:left}
+tr:nth-child(even) td{background:#f8fafc}
+td.num{font-variant-numeric:tabular-nums}
+td.hf3{background:#fde8e8;font-weight:600}
+td.pct{background:#eaf2fb;color:var(--ep);font-weight:700}
+td.focus{outline:3px solid var(--red);outline-offset:-3px}
+.tot td{font-weight:700;background:#eef2f7 !important}
+.row-l1 td:first-child{padding-left:28px;color:#475467}
+.row-meds td{background:var(--amber) !important}
+.row-meds td:first-child{color:var(--amber-ink);font-weight:700;border-left:4px solid #f59e0b}
+/* HC.1: contiene fármaco embebido, NO es medicamento puro → marca parcial (solo borde rayado) */
+.row-meds-partial td:first-child{border-left:4px dashed #f59e0b}
+.tag-med{display:inline-block;background:var(--amber);color:var(--amber-ink);border-radius:5px;padding:0 6px;font-size:10.5px;font-weight:700;margin-left:6px}
+.tag-partial{display:inline-block;background:#fff7ed;color:#b54708;border:1px dashed #f59e0b;border-radius:5px;padding:0 6px;font-size:10.5px;margin-left:6px}
+.expander{cursor:pointer;user-select:none;color:var(--ep);font-weight:700}
+.ratio{color:var(--red);font-weight:700}
+
+/* cards / callouts / modales */
+.card{border:1px solid var(--bd);border-left:4px solid var(--ep2);border-radius:8px;padding:13px 16px;margin:12px 0;background:#fcfcfd;font-size:14px}
+.card.warn{border-left-color:var(--red);background:#fff7f7}
+.quote{border-left:3px solid var(--ep);padding:6px 14px;color:#475467;font-style:italic;background:#f8fafc;margin:10px 0;font-size:14px}
+.big{font-size:28px;color:var(--ep);font-weight:700}
+.note{font-size:12px;color:var(--muted)}
+.pill{display:inline-block;background:var(--ep2);color:#fff;border-radius:10px;padding:1px 8px;font-size:11px}
+.est{color:#b54708}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.chartbox{background:#fff;border:1px solid var(--bd);border-radius:10px;padding:12px;margin:12px 0}
+.dl{display:flex;flex-wrap:wrap;gap:9px;margin:12px 0}
+.dl a{background:var(--ep);color:#fff;text-decoration:none;padding:9px 13px;border-radius:8px;font-size:12.5px;font-weight:600}
+.dl a.alt{background:#fff;color:var(--ep);border:1px solid var(--ep)}
+
+.modal-backdrop{position:fixed;inset:0;background:rgba(16,24,40,.5);z-index:50;display:flex;align-items:center;justify-content:center;padding:24px}
+.modal{background:#fff;border-radius:12px;max-width:720px;width:100%;max-height:84vh;overflow:auto;padding:22px 26px;box-shadow:0 20px 50px rgba(0,0,0,.25)}
+.modal h3{margin-top:0}
+.modal .close{float:right;border:0;background:var(--g);border-radius:50%;width:30px;height:30px;cursor:pointer;font-size:16px}
+.badge{display:inline-block;padding:1px 7px;border-radius:6px;font-size:11px;font-weight:600}
+.badge.ok{background:#dcfae6;color:#067647}
+.badge.miss{background:#fee4e2;color:#b42318}
+button.link{background:none;border:0;color:var(--ep2);cursor:pointer;text-decoration:underline;font-size:inherit;padding:0}
+.toggle-h{cursor:pointer;color:var(--ep);font-weight:600;font-size:14px;display:flex;gap:6px;align-items:center}
+
+/* CodeRef: término en español con hover que revela código + definición */
+.coderef{position:relative;border-bottom:1px dotted #94a3b8;cursor:help;outline:none}
+.coderef:hover,.coderef:focus{background:#eaf2fb}
+.coderef .coderef-tip{display:none;position:absolute;left:0;top:calc(100% + 4px);z-index:50;
+  width:max-content;max-width:min(300px,calc(100vw - 32px));background:#1a365d;color:#fff;font-size:12px;font-weight:400;
+  line-height:1.45;padding:8px 10px;border-radius:6px;box-shadow:0 6px 24px rgba(16,24,40,.28);text-align:left;white-space:normal;
+  overflow-wrap:break-word}
+/* el tooltip no debe escaparse por la derecha del viewport: anclar a la derecha del término */
+.coderef.tip-right .coderef-tip{left:auto;right:0}
+.coderef:hover .coderef-tip,.coderef:focus .coderef-tip{display:block}
+.coderef .coderef-tip b{color:#fff}
+.coderef .coderef-code{opacity:.7;font-family:ui-monospace,monospace;font-size:11px}
+
+/* ── multipágina (router): brand, breadcrumb, pager, tarjetas, captions ── */
+
+/* logo como link a Home, sin estilo de <a> */
+.navbar .brand{display:inline-flex;align-items:center;line-height:0}
+.navbar .brand img{display:block}
+
+/* breadcrumb */
+.breadcrumb{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted);margin:6px 0 14px}
+.breadcrumb a{color:var(--ep2);text-decoration:none}
+.breadcrumb a:hover{text-decoration:underline}
+.breadcrumb .sep{color:#cbd2d9}
+.breadcrumb .cur{color:var(--ep);font-weight:600}
+
+/* footer prev/next */
+.pagernav{display:flex;justify-content:space-between;gap:14px;margin-top:48px;padding-top:20px;border-top:2px solid #e4e7ec}
+.pager{display:inline-flex;align-items:center;gap:10px;text-decoration:none;color:var(--ep);border:1px solid var(--bd);
+  border-radius:10px;padding:10px 14px;background:#fcfcfd;max-width:48%;transition:background .12s,border-color .12s}
+.pager:hover{background:#eaf2fb;border-color:#cfe0f5}
+.pager.next{text-align:right;margin-left:auto}
+.pager .arrow{font-size:22px;line-height:1;color:var(--ep2)}
+.pager .pl{display:flex;flex-direction:column;min-width:0}
+.pager .dir{font-size:10.5px;text-transform:uppercase;letter-spacing:.6px;color:#98a2b3}
+.pager .pt{font-size:13px;font-weight:600;color:var(--ep);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* grilla de tarjetas de capítulo (home) */
+.cardgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;margin:16px 0}
+.navcard{display:flex;flex-direction:column;gap:5px;text-decoration:none;border:1px solid var(--bd);
+  border-left:4px solid var(--ep2);border-radius:10px;padding:14px 16px;background:#fcfcfd;
+  transition:background .12s,border-color .12s,box-shadow .12s}
+.navcard:hover{background:#fff;border-left-color:var(--ep);box-shadow:0 4px 16px rgba(16,24,40,.08)}
+.navcard-num{font-size:10.5px;text-transform:uppercase;letter-spacing:.6px;color:#98a2b3;font-weight:600}
+.navcard-title{font-size:15px;font-weight:700;color:var(--ep);line-height:1.25}
+.navcard-blurb{font-size:12.5px;color:var(--muted);line-height:1.45}
+
+/* portada: acciones de entrega (descargar informe, Drive, navegar) */
+.portal{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin:18px 0 22px}
+.portal-card{display:flex;flex-direction:column;gap:4px;text-decoration:none;border:1px solid var(--bd);
+  border-radius:12px;padding:15px 16px;background:#fcfcfd;transition:background .12s,border-color .12s,box-shadow .12s}
+.portal-card:hover{background:#fff;border-color:#cfe0f5;box-shadow:0 4px 16px rgba(16,24,40,.08)}
+.portal-card.primary{background:var(--ep);border-color:var(--ep)}
+.portal-card.primary .portal-t,.portal-card.primary .portal-ico{color:#fff}
+.portal-card.primary .portal-d{color:#cbd9ec}
+.portal-card.primary:hover{background:#16304f}
+.portal-ico{font-size:20px;line-height:1;color:var(--ep2)}
+.portal-t{font-size:15px;font-weight:700;color:var(--ep)}
+.portal-d{font-size:12.5px;color:var(--muted);line-height:1.45}
+
+/* cuadro resumen + teaser (home) */
+.card.summary .summary-q{display:block;font-size:16px;color:var(--ep);margin-bottom:8px}
+.card.summary .summary-list{margin:0 0 8px;padding-left:20px}
+.card.summary .summary-list li{margin:5px 0;font-size:14px;line-height:1.55}
+.card.teaser{border-left-color:var(--red);background:#fff7f7;margin-top:24px}
+
+/* leyenda numerada (Caption): va JUSTO ENCIMA de tabla/gráfico */
+.caption{margin:14px 0 4px;font-size:13px;line-height:1.4}
+.cap-num{font-weight:700;color:var(--ep)}
+.caption .cap-title{color:var(--muted)}
+
+/* contenedores responsive: tablas con scroll horizontal, gráficos sin overflow */
+.tablewrap{overflow-x:auto;max-width:100%}
+.chartbox{max-width:100%;overflow-x:auto}
+.recharts-responsive-container,.recharts-wrapper{max-width:100%}
+img,svg{max-width:100%}
+
+@media(max-width:900px){
+  main{padding:8px 16px 60px} .grid2{grid-template-columns:1fr}
+  .pager{max-width:100%}
+  .cardgrid{grid-template-columns:1fr}
+  .topbar .brand-t{font-size:14px}
+  .topnav a{font-size:12px;padding:5px 9px}
+}
